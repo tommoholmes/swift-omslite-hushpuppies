@@ -132,42 +132,42 @@ async function renderAndCache(req, res) {
 
     server.use(json({ limit: '2mb' }));
 
-    if (fetcher) {
-        const schema = makeRemoteExecutableSchema({
-            schema: await introspectSchema(fetcher),
-            fetcher,
-        });
+    // if (fetcher) {
+    //     const schema = makeRemoteExecutableSchema({
+    //         schema: await introspectSchema(fetcher),
+    //         fetcher,
+    //     });
 
-        const schemas = mergeSchemas({
-            schemas: [schema, AuthSchema],
-            resolvers: resolver,
-        });
+    //     const schemas = mergeSchemas({
+    //         schemas: [schema, AuthSchema],
+    //         resolvers: resolver,
+    //     });
 
-        // handle server graphql endpoint use `/graphql`
-        const serverGraph = new ApolloServer({
-            schema: schemas,
-            context: ({ req }) => req,
-            playground: {
-                endpoint: '/graphql',
-                settings: {
-                    'editor.theme': 'light',
-                },
-            },
-            formatError: (err) => {
-                if (err.message === 'graphql-authorization') {
-                    return {
-                        message: err.message,
-                        extensions: {
-                            category: 'graphql-authorization',
-                        },
-                        status: 401,
-                    };
-                }
-                return err;
-            },
-        });
-        serverGraph.applyMiddleware({ app: server });
-    }
+    //     // handle server graphql endpoint use `/graphql`
+    //     const serverGraph = new ApolloServer({
+    //         schema: schemas,
+    //         context: ({ req }) => req,
+    //         playground: {
+    //             endpoint: '/graphql',
+    //             settings: {
+    //                 'editor.theme': 'light',
+    //             },
+    //         },
+    //         formatError: (err) => {
+    //             if (err.message === 'graphql-authorization') {
+    //                 return {
+    //                     message: err.message,
+    //                     extensions: {
+    //                         category: 'graphql-authorization',
+    //                     },
+    //                     status: 401,
+    //                 };
+    //             }
+    //             return err;
+    //         },
+    //     });
+    //     serverGraph.applyMiddleware({ app: server });
+    // }
 
     server.get('/sitemap.xml', generateXml);
     server.post('/captcha-validation', captchaValidation);
