@@ -63,7 +63,6 @@
     "next": "^9.5.3",
     "next-i18next": "^4.2.1",
     "next-offline": "^5.0.0",
-    "next-transpile-modules": "^4.1.0",
     "next-with-apollo": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "16.13.0",
