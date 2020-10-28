@@ -1,1 +1,0 @@
-Put any extension here. Extension could be modules, helpers, middlewares, etc which are not included in core but supposed to not be edited directly
