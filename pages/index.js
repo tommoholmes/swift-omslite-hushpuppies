@@ -1,11 +1,3 @@
-// import Page from '@core_modules/home/pages/default';
+import Page from '@modules/dashboard/pages/default';
 
-// export default Page;
-
-export default function Index() {
-    return (
-        <div>
-            <p>~ Hello Next.js ~</p>
-        </div>
-    );
-}
+export default Page;
