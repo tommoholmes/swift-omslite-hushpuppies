@@ -16,6 +16,7 @@ module.exports = function (api) {
                         '@root': './',
                         '@core': './core',
                         '@middlewares': './core/middlewares',
+                        '@modules': './core/modules',
                         '@helpers': './core/helpers',
                         '@services': './core/services',
                         '@config': './swift.config.js',
