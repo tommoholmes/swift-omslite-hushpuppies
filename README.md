@@ -1,6 +1,6 @@
-This is SwiftPWA base project bootstrapped with [Next.js](https://nextjs.org/).
+This is SwiftOmsLite base project bootstrapped with [Next.js](https://nextjs.org/).
 
-Demo: [https://swiftpwa.testingnow.me/](https://swiftpwa.testingnow.me/)
+Demo: [https://swiftomslite.testingnow.me/](https://swiftomslite.testingnow.me/)
 
 
 ## Pre-Installation
@@ -26,7 +26,7 @@ const graphqlEndpoint = {
 ```
 
 ## Installation
-You can run SwiftPWA with or without docker.
+You can run SwiftOmsLite with or without docker.
 ### Without Docker
 #### Dev mode
 1. Build static assets (do once only for the first time)
@@ -83,18 +83,9 @@ Alternatively, build and run in one step: `docker-compose -f ./docker/dev/docker
 
 Alternatively, build and run in one step: `docker-compose up --build`
 
-## The SwiftPWA Cores
+## The SwiftOmsLite Cores
 ### Modules
-Core modules are served as a package in separate repo: https://github.com/icubeus/swift-pwa-core
-
-#### SwiftPWA Core Modules Development Approach
-This approach should be done only for the development of [swift-pwa-core](https://github.com/icubeus/swift-pwa-core/) modules. It will help the developers to run the changed code easier.
-1. Clone repo [swift-pwa](https://github.com/icubeus/swift-pwa/) (this repo), then follow the [general installation of SwiftPWA](https://github.com/icubeus/swift-pwa#installation)
-2. Clone repo [swift-pwa-core](https://github.com/icubeus/swift-pwa-core/)
-3. In local directory ~/swift-pwa-core, run: `npm link` or `yarn link`
-4. In local directory ~/swift-pwa, run: `npm link swift-pwa-core` or `yarn link swift-pwa-core`
-5. Any changes in ~/swift-pwa-core will be reflected in ~/swift-pwa/node_modules/swift-pwa-core
-
+Click [here](core/modules/readme.md) for more detail.
 ### Helpers
 Click [here](core/helpers/readme.md) for more detail.
 ### Libraries
