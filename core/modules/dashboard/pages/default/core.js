@@ -1,12 +1,14 @@
+import Layout from '@layout';
+
 const Core = (props) => {
     const {
         Content,
     } = props;
 
     return (
-        <div>
+        <Layout>
             <Content />
-        </div>
+        </Layout>
     );
 };
 
