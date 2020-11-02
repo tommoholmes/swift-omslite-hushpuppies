@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,7 +8,6 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
@@ -40,8 +39,17 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    menuButton: {
+    togleMenuButton: {
         marginRight: 36,
+        width: 24,
+        height: 24,
+        transform: 'translateX(-24px)',
+    },
+    togleMenuIcon: {
+        color: '#bE1f93',
+        borderRadius: '3px',
+        background: '#fff',
+        boxShadow: '0px 3px 6px #DDE1EC',
     },
     hide: {
         display: 'none',
@@ -78,7 +86,6 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
     },
     content: {
-        marginLeft: -miniDrawerWidth,
         flexGrow: 1,
         padding: theme.spacing(3),
     },
@@ -87,16 +94,7 @@ const useStyles = makeStyles((theme) => ({
 const Layout = (props) => {
     const { children } = props;
     const classes = useStyles();
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     return (
         <div className={classes.root}>
@@ -110,13 +108,11 @@ const Layout = (props) => {
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={handleDrawerOpen}
                         edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}
+                        onClick={() => setOpen(!open)}
+                        className={clsx(classes.togleMenuButton)}
                     >
-                        <MenuIcon />
+                        {open ? <ChevronLeftIcon className={classes.togleMenuIcon} /> : <ChevronRightIcon className={classes.togleMenuIcon} />}
                     </IconButton>
                     <Typography variant="h6" noWrap>
                         Mini variant drawer
@@ -136,20 +132,12 @@ const Layout = (props) => {
                     }),
                 }}
             >
-                <div className={classes.toolbar}>
-                    {open && (
-                        <>
-                            <div style={{ padding: '0 8px' }}>
-                                <img src="/assets/img/swiftoms_logo_expanded.png" alt="" style={{ width: '100%' }} />
-                            </div>
-                            <IconButton onClick={handleDrawerClose}>
-                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                            </IconButton>
-                        </>
-                    )}
-                    {!open && (
-                        <img src="/assets/img/swiftoms_logo_collapsed.png" alt="" style={{ margin: 'auto', height: 45 }} />
-                    )}
+                <div className={classes.toolbar} style={{ justifyContent: open ? 'flex-start' : 'center' }}>
+                    <img
+                        src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
+                        style={{ height: 45 }}
+                        alt=""
+                    />
                 </div>
                 <Divider />
                 <List>
