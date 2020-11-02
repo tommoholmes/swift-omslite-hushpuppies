@@ -23,8 +23,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     appBar: {
+        background: '#fff',
+        color: '#8C98A2',
+        boxShadow: 'none',
         marginLeft: miniDrawerWidth,
-        width: `calc(100% - ${miniDrawerWidth}px)`,
+        width: `calc(100% - ${miniDrawerWidth + 1}px)`,
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
@@ -33,14 +36,14 @@ const useStyles = makeStyles((theme) => ({
     },
     appBarShift: {
         marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
+        width: `calc(100% - ${drawerWidth + 1}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
     togleMenuButton: {
-        marginRight: 36,
+        marginRight: -6,
         width: 24,
         height: 24,
         transform: 'translateX(-24px)',
@@ -115,8 +118,28 @@ const Layout = (props) => {
                         {open ? <ChevronLeftIcon className={classes.togleMenuIcon} /> : <ChevronRightIcon className={classes.togleMenuIcon} />}
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Mini variant drawer
+                        Home / Dashboard
                     </Typography>
+                    <div style={{ position: 'fixed', right: 0 }}>
+                        {/* <IconButton aria-label="show 4 new mails" color="inherit">
+                            <Badge badgeContent={4} color="secondary">
+                                <MailIcon />
+                            </Badge>
+                        </IconButton>
+                        <IconButton aria-label="show 17 new notifications" color="inherit">
+                            <Badge badgeContent={17} color="secondary">
+                                <NotificationsIcon />
+                            </Badge>
+                        </IconButton> */}
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-haspopup="true"
+                            color="inherit"
+                        >
+                            Username
+                            <ChevronLeftIcon />
+                        </IconButton>
+                    </div>
                 </Toolbar>
             </AppBar>
             <Drawer
