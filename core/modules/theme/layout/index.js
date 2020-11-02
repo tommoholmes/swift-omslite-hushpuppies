@@ -5,7 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,13 +17,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
+const miniDrawerWidth = 73;
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
     appBar: {
+        marginLeft: miniDrawerWidth,
+        width: `calc(100% - ${miniDrawerWidth}px)`,
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
@@ -77,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
     },
     content: {
+        marginLeft: -miniDrawerWidth,
         flexGrow: 1,
         padding: theme.spacing(3),
     },
@@ -98,7 +100,6 @@ const Layout = (props) => {
 
     return (
         <div className={classes.root}>
-            <CssBaseline />
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
@@ -136,7 +137,19 @@ const Layout = (props) => {
                 }}
             >
                 <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+                    {open && (
+                        <>
+                            <div style={{ padding: '0 8px' }}>
+                                <img src="/assets/img/swiftoms_logo_expanded.png" alt="" style={{ width: '100%' }} />
+                            </div>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                            </IconButton>
+                        </>
+                    )}
+                    {!open && (
+                        <img src="/assets/img/swiftoms_logo_collapsed.png" alt="" style={{ margin: 'auto', height: 45 }} />
+                    )}
                 </div>
                 <Divider />
                 <List>
