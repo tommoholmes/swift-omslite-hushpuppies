@@ -92,6 +92,13 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    menuItem: {
+        borderRadius: '0 26px 26px 0',
+        '&:hover': {
+            background: '#BE1F93',
+            color: '#fff',
+        },
+    },
 }));
 
 const Layout = (props) => {
@@ -155,7 +162,7 @@ const Layout = (props) => {
                     }),
                 }}
             >
-                <div className={classes.toolbar} style={{ justifyContent: open ? 'flex-start' : 'center' }}>
+                <div className={classes.toolbar} style={{ padding: 12, justifyContent: open ? 'flex-start' : 'center' }}>
                     <img
                         src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
                         style={{ height: 45 }}
@@ -165,16 +172,7 @@ const Layout = (props) => {
                 <Divider />
                 <List>
                     {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
+                        <ListItem button key={text} className={classes.menuItem}>
                             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
