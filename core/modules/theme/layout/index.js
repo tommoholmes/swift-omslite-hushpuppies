@@ -12,8 +12,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Collapse from '@material-ui/core/Collapse';
 
 const miniDrawerWidth = 73;
 const drawerWidth = 240;
@@ -109,6 +109,9 @@ const useStyles = makeStyles((theme) => ({
             color: '#fff',
         },
     },
+    menuChildItem: {
+        paddingLeft: 24,
+    },
 }));
 
 const Layout = (props) => {
@@ -165,7 +168,35 @@ const Layout = (props) => {
     );
 
     const Sidebar = () => {
-        const menuList = ['Inbox', 'Starred', 'Send email'];
+        const [expandedMenu, setExpandedMenu] = React.useState();
+        const menuList = [
+            { key: 'dashboard', label: 'Dashboard' },
+            {
+                key: 'oms',
+                label: 'OMS',
+                children: [
+                    { key: 'channel', label: 'Channel' },
+                    { key: 'company', label: 'Company' },
+                ],
+            },
+            {
+                key: 'sales',
+                label: 'Sales',
+                children: [
+                    { key: 'orderQueue', label: 'Order Queue' },
+                    { key: 'shipment', label: 'Shipment' },
+                ],
+            },
+            { key: 'catalogInventory', label: 'Catalog Inventory' },
+            {
+                key: 'userData',
+                label: 'User Data',
+                children: [
+                    { key: 'adminStore', label: 'Admin Store' },
+                    { key: 'customerData', label: 'Customer Data' },
+                ],
+            },
+        ];
         return (
             <Drawer
                 variant="permanent"
@@ -181,11 +212,29 @@ const Layout = (props) => {
                     />
                 </div>
                 <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
-                    {menuList.map((text, index) => (
-                        <ListItem button key={text} className={clsx(classes.menuItem, open ? 'open' : 'close')}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
+                    {menuList.map((menu) => (
+                        <>
+                            <ListItem
+                                button
+                                key={menu.key}
+                                className={clsx(classes.menuItem, open ? 'open' : 'close')}
+                                onClick={() => setExpandedMenu(menu.key)}
+                            >
+                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemText primary={menu.label} />
+                            </ListItem>
+                            {menu && menu.children && menu.children.length && (
+                                <Collapse in={expandedMenu === menu.key} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        {menu.children.map((menuChild) => (
+                                            <ListItem button key={menuChild.key} className={classes.menuChildItem}>
+                                                <ListItemText primary={menuChild.label} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Collapse>
+                            )}
+                        </>
                     ))}
                 </List>
             </Drawer>
