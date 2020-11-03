@@ -12,7 +12,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import Collapse from '@material-ui/core/Collapse';
 
 const miniDrawerWidth = 73;
@@ -102,7 +101,8 @@ const useStyles = makeStyles((theme) => ({
         '&.open': { paddingRight: 16 },
     },
     menuItem: {
-        paddingLeft: 24,
+        marginTop: 8,
+        paddingLeft: 20,
         '&.open': { borderRadius: '0 26px 26px 0' },
         '&:hover': {
             background: '#BE1F93',
@@ -213,14 +213,15 @@ const Layout = (props) => {
                 </div>
                 <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
                     {menuList.map((menu) => (
-                        <>
+                        <div key={menu.key}>
                             <ListItem
                                 button
-                                key={menu.key}
                                 className={clsx(classes.menuItem, open ? 'open' : 'close')}
                                 onClick={() => setExpandedMenu(menu.key)}
                             >
-                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemIcon>
+                                    <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
+                                </ListItemIcon>
                                 <ListItemText primary={menu.label} />
                             </ListItem>
                             {menu && menu.children && menu.children.length && (
@@ -234,7 +235,7 @@ const Layout = (props) => {
                                     </List>
                                 </Collapse>
                             )}
-                        </>
+                        </div>
                     ))}
                 </List>
             </Drawer>
