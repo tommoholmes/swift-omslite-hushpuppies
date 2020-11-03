@@ -6,7 +6,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -98,8 +97,13 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    menuList: {
+        padding: 0,
+        '&.open': { paddingRight: 16 },
+    },
     menuItem: {
-        borderRadius: '0 26px 26px 0',
+        paddingLeft: 24,
+        '&.open': { borderRadius: '0 26px 26px 0' },
         '&:hover': {
             background: '#BE1F93',
             color: '#fff',
@@ -160,31 +164,33 @@ const Layout = (props) => {
         </AppBar>
     );
 
-    const Sidebar = () => (
-        <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
-            classes={{
-                paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
-            }}
-        >
-            <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
-                <img
-                    alt=""
-                    src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
-                />
-            </div>
-            <Divider />
-            <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text} className={classes.menuItem}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List>
-        </Drawer>
-    );
+    const Sidebar = () => {
+        const menuList = ['Inbox', 'Starred', 'Send email'];
+        return (
+            <Drawer
+                variant="permanent"
+                className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
+                classes={{
+                    paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
+                }}
+            >
+                <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
+                    <img
+                        alt=""
+                        src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
+                    />
+                </div>
+                <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
+                    {menuList.map((text, index) => (
+                        <ListItem button key={text} className={clsx(classes.menuItem, open ? 'open' : 'close')}>
+                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItem>
+                    ))}
+                </List>
+            </Drawer>
+        );
+    };
 
     return (
         <div className={classes.root}>
