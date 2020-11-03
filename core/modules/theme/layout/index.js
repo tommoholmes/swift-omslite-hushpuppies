@@ -1,6 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -144,24 +149,27 @@ const Layout = (props) => {
                     Home / Dashboard
                 </Typography>
                 <div style={{ position: 'fixed', right: 0 }}>
-                    {/* <IconButton aria-label="show 4 new mails" color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <MailIcon />
-                        </Badge>
+                    <IconButton aria-label="" color="inherit">
+                        <Brightness2OutlinedIcon />
                     </IconButton>
                     <IconButton aria-label="show 17 new notifications" color="inherit">
                         <Badge badgeContent={17} color="secondary">
-                            <NotificationsIcon />
+                            <NotificationsNoneIcon />
                         </Badge>
-                    </IconButton> */}
-                    <IconButton
-                        aria-label="account of current user"
-                        aria-haspopup="true"
-                        color="inherit"
+                    </IconButton>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{
+                            background: 'transparent',
+                            textTransform: 'none',
+                            boxShadow: 'none',
+                            color: '#8C98A2',
+                        }}
+                        endIcon={<KeyboardArrowDownIcon />}
                     >
                         Username
-                        <ChevronLeftIcon />
-                    </IconButton>
+                    </Button>
                 </div>
             </Toolbar>
         </AppBar>
