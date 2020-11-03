@@ -88,6 +88,12 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
     },
+    swiftOmsLogo: {
+        padding: 12,
+        '&.open': { justifyContent: 'flex-start' },
+        '&.close': { justifyContent: 'center' },
+        '& img': { height: 45 },
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -106,79 +112,84 @@ const Layout = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
+    const Header = () => (
+        <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+                [classes.appBarShift]: open,
+            })}
+        >
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={() => setOpen(!open)}
+                    className={clsx(classes.togleMenuButton)}
+                >
+                    {
+                        open
+                            ? <ChevronLeftIcon className={classes.togleMenuIcon} />
+                            : <ChevronRightIcon className={classes.togleMenuIcon} />
+                    }
+                </IconButton>
+                <Typography variant="h6" noWrap>
+                    Home / Dashboard
+                </Typography>
+                <div style={{ position: 'fixed', right: 0 }}>
+                    {/* <IconButton aria-label="show 4 new mails" color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MailIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton aria-label="show 17 new notifications" color="inherit">
+                        <Badge badgeContent={17} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton> */}
+                    <IconButton
+                        aria-label="account of current user"
+                        aria-haspopup="true"
+                        color="inherit"
+                    >
+                        Username
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </div>
+            </Toolbar>
+        </AppBar>
+    );
+
+    const Sidebar = () => (
+        <Drawer
+            variant="permanent"
+            className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
+            classes={{
+                paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
+            }}
+        >
+            <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
+                <img
+                    alt=""
+                    src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
+                />
+            </div>
+            <Divider />
+            <List>
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    <ListItem button key={text} className={classes.menuItem}>
+                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))}
+            </List>
+        </Drawer>
+    );
+
     return (
         <div className={classes.root}>
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={() => setOpen(!open)}
-                        className={clsx(classes.togleMenuButton)}
-                    >
-                        {open ? <ChevronLeftIcon className={classes.togleMenuIcon} /> : <ChevronRightIcon className={classes.togleMenuIcon} />}
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Home / Dashboard
-                    </Typography>
-                    <div style={{ position: 'fixed', right: 0 }}>
-                        {/* <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton aria-label="show 17 new notifications" color="inherit">
-                            <Badge badgeContent={17} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton> */}
-                        <IconButton
-                            aria-label="account of current user"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            Username
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-                <div className={classes.toolbar} style={{ padding: 12, justifyContent: open ? 'flex-start' : 'center' }}>
-                    <img
-                        src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
-                        style={{ height: 45 }}
-                        alt=""
-                    />
-                </div>
-                <Divider />
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text} className={classes.menuItem}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
+            {Header()}
+            {Sidebar()}
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 {children}
