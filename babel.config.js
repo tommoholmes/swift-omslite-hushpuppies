@@ -16,6 +16,7 @@ module.exports = function (api) {
                         '@root': './',
                         '@core': './core',
                         '@middlewares': './core/middlewares',
+                        '@modules': './core/modules',
                         '@helpers': './core/helpers',
                         '@services': './core/services',
                         '@config': './swift.config.js',
@@ -33,7 +34,7 @@ module.exports = function (api) {
                         '@lib_firebase': './core/lib/firebase',
                         '@i18n': './core/lib/i18n',
 
-                        '@layout': 'swift-pwa-core/core/modules/theme/layout',
+                        '@layout': './core/modules/theme/layout',
 
                         // theme
                         '@theme': './core/theme',

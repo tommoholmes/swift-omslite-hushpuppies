@@ -5,7 +5,6 @@ import fetch from 'isomorphic-unfetch';
 import { graphqlEndpoint, HOST } from '@root/swift.config.js';
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
-import { removeCartId } from '@helper_cartid';
 import { removeIsLoginFlagging } from '@helper_auth';
 import getConfig from 'next/config';
 
@@ -33,7 +32,6 @@ const logoutLink = onError((err) => {
     if (networkError && typeof window !== 'undefined' && graphQLErrors[0].status > 500) {
         window.location.href = '/maintenance';
     } else if (graphQLErrors && graphQLErrors[0] && graphQLErrors[0].status === 401 && typeof window !== 'undefined') {
-        removeCartId();
         removeIsLoginFlagging();
         window.location.href = '/customer/account/login';
     }
