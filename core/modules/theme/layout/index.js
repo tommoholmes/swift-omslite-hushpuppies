@@ -22,7 +22,7 @@ import useStyles from './style';
 const Layout = (props) => {
     const { children } = props;
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
 
     const Header = () => (
         <AppBar
