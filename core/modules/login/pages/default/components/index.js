@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import useStyles from './style';
@@ -16,13 +17,15 @@ const Login = (props) => {
 
     return (
         <div className={clsx(classes.loginContainer)}>
-            <h3>Sign in to your account</h3>
+            <Typography variant="h6" gutterBottom className={classes.textTitle}>
+                Sign in to your account
+            </Typography>
             <form>
                 <div className="row center-xs start-sm">
                     <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
                         <TextField
                             name="email"
-                            label="Email"
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -30,7 +33,7 @@ const Login = (props) => {
                     <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
                         <TextField
                             name="password"
-                            label="Password"
+                            placeholder="Password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}

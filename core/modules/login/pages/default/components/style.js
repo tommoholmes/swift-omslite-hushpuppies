@@ -4,6 +4,9 @@ const useStyles = makeStyles(() => ({
     loginContainer: {
         margin: 36,
     },
+    textTitle: {
+        padding: '12px 6px',
+    },
     formField: {
         padding: 16,
     },
