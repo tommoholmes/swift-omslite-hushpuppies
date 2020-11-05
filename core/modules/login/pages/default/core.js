@@ -9,7 +9,7 @@ const Core = (props) => {
     const [password, setPassword] = React.useState('Password123');
     const [getCustomerToken] = getToken();
     const handleSubmit = () => {
-        const variables = { username: email, password };
+        const variables = { email, password };
         console.log(variables);
         getCustomerToken({
             variables,

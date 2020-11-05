@@ -2,10 +2,10 @@ import { gql } from '@apollo/client';
 
 export const getCustomerToken = gql`
 mutation getToken(
-    $username: String!,
+    $email: String!,
     $password: String!,
 ) {
-  internalGenerateCustomerToken(username: $username, password: $password){
+  internalGenerateCustomerToken(email: $email, password: $password){
       token
     }
   }
