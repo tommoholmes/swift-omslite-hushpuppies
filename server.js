@@ -169,7 +169,7 @@ async function renderAndCache(req, res) {
         serverGraph.applyMiddleware({ app: server });
     }
 
-    server.get('/sitemap.xml', generateXml);
+    // server.get('/sitemap.xml', generateXml);
     server.post('/captcha-validation', captchaValidation);
 
     // add firebase validation
