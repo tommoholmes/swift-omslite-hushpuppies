@@ -6,7 +6,7 @@ const query = `mutation getToken(
         $email: String!,
         $password: String!,
     ) {
-        generateCustomerTokenCustom(email: $email, password: $password){
+        generateCustomerToken(email: $email, password: $password){
         token
         }
     }
@@ -15,11 +15,11 @@ const query = `mutation getToken(
 const internalGenerateCustomerToken = async (parent, { email, password }, context) => {
     const res = await requestGraph(query, { email, password }, context);
     // context.session.destroy();
-    if (res.generateCustomerTokenCustom) {
-        context.session.token = encrypt(res.generateCustomerTokenCustom.token);
+    if (res.generateCustomerToken) {
+        context.session.token = encrypt(res.generateCustomerToken.token);
         return {
-            originalToken: res.generateCustomerTokenCustom.token,
-            token: encrypt(res.generateCustomerTokenCustom.token),
+            originalToken: res.generateCustomerToken.token,
+            token: encrypt(res.generateCustomerToken.token),
             message: 'welcome',
         };
     }
