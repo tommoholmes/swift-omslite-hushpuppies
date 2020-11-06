@@ -4,17 +4,17 @@
 
 const HOST = {
     local: 'http://localhost:3000',
-    dev: 'https://swiftpwa.testingnow.me',
-    stage: 'https://pwa.getswift.asia.dmmy.me',
-    prod: 'https://pwa.getswift.asia',
+    dev: 'https://pwa-oms-lite.testingnow.me',
+    stage: 'https://pwa-oms-lite.testingnow.me',
+    prod: 'https://pwa-oms-lite.testingnow.me',
 };
 
 /* Magento GraphQL Endpoint */
 const graphqlEndpoint = {
-    local: 'https://swiftpwa-be.testingnow.me/graphql',
-    dev: 'https://swiftpwa-be.testingnow.me/graphql',
-    stage: 'https://swiftpwa-be.testingnow.me/graphql',
-    prod: 'https://b2cdemo.getswift.asia/graphql',
+    local: 'https://swiftoms-gql.testingnow.me/graphql',
+    dev: 'https://swiftoms-gql.testingnow.me/graphql',
+    stage: 'https://swiftoms-gql.testingnow.me/graphql',
+    prod: 'https://swiftoms-gql.testingnow.me/graphql',
 };
 
 /* --------------------------------------- */
