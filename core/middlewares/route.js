@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 /* eslint-disable consistent-return */
@@ -8,37 +9,22 @@ import {
     removeLastPathWithoutLogin,
 } from '@helper_auth';
 import Router from 'next/router';
-
 import { modules } from '@config';
 
-export const routeNoAuth = (path) => {
+export const isRouteNeedRedirectWhenLogin = (path) => {
     const route = [
-        '/customer/account/login',
-        '/customer/account/register',
-        '/customer/account/forgotpassword',
+        '/login',
+        '/register',
+        '/forgotpassword',
     ];
-
-    const found = route.find((val) => val === path);
-
-    return typeof found === 'undefined';
+    return !!route.find((val) => val === path);
 };
 
-export const routeWithAuth = (path) => {
+export const isRouteNeedAuth = (path) => {
     const route = [
-        '/aw_rewardpoints/info',
-        '/sales/order/history',
-        '/customer/account/profile',
-        '/customer/account/address',
-        '/awgiftcard/card',
-        '/customer/account/storecredit',
-        '/inboxnotification/notification',
-        '/customer/setting',
-        '/rma/customer',
+        '/',
     ];
-
-    const found = route.find((val) => val === path);
-
-    return typeof found === 'undefined';
+    return !route.length || !!route.find((val) => val === path);
 };
 
 const setLastPathNoAuth = (req, value = '') => {
@@ -70,8 +56,7 @@ const routeMiddleware = (params) => {
     }
 
     if (isLogin) {
-        const allow = routeNoAuth(asPath);
-        if (!allow) {
+        if (isRouteNeedRedirectWhenLogin(asPath)) {
             if (query.redirect && query.redirect !== '') {
                 if (typeof window !== 'undefined') {
                     Router.push(query.redirect);
@@ -91,14 +76,13 @@ const routeMiddleware = (params) => {
             typeof window !== 'undefined' ? removeLastPathWithoutLogin() : setLastPathNoAuth(req, '');
         }
     } else {
-        const allow = routeWithAuth(asPath);
-        if (!allow) {
+        if (isRouteNeedAuth(asPath)) {
             if (typeof window !== 'undefined') {
-                Router.push('/customer/account/login');
+                Router.push('/login');
                 setLastPathWithoutLogin(asPath);
             } else {
                 setLastPathNoAuth(req, asPath);
-                res.redirect('/customer/account/login');
+                res.redirect('/login');
             }
         } else {
             typeof window !== 'undefined' ? removeLastPathWithoutLogin() : setLastPathWithoutLogin(req, '');
