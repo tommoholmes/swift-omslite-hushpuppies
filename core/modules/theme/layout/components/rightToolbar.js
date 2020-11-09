@@ -1,16 +1,26 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import Link from 'next/link';
-import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
+import { removeToken } from '@modules/login/services/graphql';
+import { removeIsLoginFlagging } from '@helper_auth';
+import { useRouter } from 'next/router';
 
-const RightToolbar = (props) => {
-    const { data, handleLogout } = props;
+const RightToolbar = () => {
+    const router = useRouter();
+    const [removeCustomerToken] = removeToken();
+    const handleLogout = () => {
+        removeCustomerToken().then(() => {
+            removeIsLoginFlagging();
+            router.push('/login');
+        }).catch(() => {
+
+        });
+    };
+
     return (
         <ul>
             <li>
