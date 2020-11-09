@@ -1,7 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
-import Badge from '@material-ui/core/Badge';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,13 +8,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
 
 const Layout = (props) => {
@@ -48,29 +44,7 @@ const Layout = (props) => {
                 <Typography variant="h6" noWrap>
                     Home / Dashboard
                 </Typography>
-                <div style={{ position: 'fixed', right: 0 }}>
-                    <IconButton aria-label="" color="inherit">
-                        <Brightness2OutlinedIcon />
-                    </IconButton>
-                    <IconButton aria-label="show 17 new notifications" color="inherit">
-                        <Badge badgeContent={17} color="secondary">
-                            <NotificationsNoneIcon />
-                        </Badge>
-                    </IconButton>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        style={{
-                            background: 'transparent',
-                            textTransform: 'none',
-                            boxShadow: 'none',
-                            color: '#8C98A2',
-                        }}
-                        endIcon={<KeyboardArrowDownIcon />}
-                    >
-                        Username
-                    </Button>
-                </div>
+                <RightToolbar />
             </Toolbar>
         </AppBar>
     );
