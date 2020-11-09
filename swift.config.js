@@ -112,7 +112,7 @@ const expiredDefault = 365;
 const localResolverKey = 'resolver';
 
 const features = {
-    ssrCache: true,
+    ssrCache: false,
     facebookMetaId: {
         enabled: false,
         app_id: '', // if enabled add fb app id here. e.g. 3080154482073095

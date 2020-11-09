@@ -40,14 +40,9 @@ class MyApp extends App {
             lastPathNoAuth = getLastPathWithoutLogin();
         } else {
             isLogin = allcookie.isLogin || 0;
-            console.log(isLogin);
-            lastPathNoAuth = (req.session && typeof req.session !== 'undefined' && req.session.lastPathNoAuth
-                && typeof req.session.lastPathNoAuth !== 'undefined')
-                ? req.session.lastPathNoAuth : '/customer/account';
+            lastPathNoAuth = req && req.session && req.session.lastPathNoAuth ? req.session.lastPathNoAuth : '/login';
         }
         isLogin = parseInt(isLogin);
-        console.log({ isLogin });
-        console.log(ctx);
         routeMiddleware({
             res, req, query, asPath: pathname, isLogin, lastPathNoAuth,
         });
