@@ -12,12 +12,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import Breadcrumb from 'core/modules/common/breadcrumb';
+import { useRouter } from 'next/router';
 import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
 
 const Layout = (props) => {
     const { children } = props;
     const classes = useStyles();
+    const router = useRouter();
     const [open, setOpen] = React.useState(true);
 
     const Header = () => (
@@ -55,13 +57,13 @@ const Layout = (props) => {
     const Sidebar = () => {
         const [expandedMenu, setExpandedMenu] = React.useState();
         const menuList = [
-            { key: 'dashboard', label: 'Dashboard' },
+            { key: 'dashboard', label: 'Dashboard', url: '/' },
             {
                 key: 'oms',
                 label: 'OMS',
                 children: [
                     { key: 'channel', label: 'Channel' },
-                    { key: 'company', label: 'Company' },
+                    { key: 'company', label: 'Company', url: '/oms/company' },
                 ],
             },
             {
@@ -82,6 +84,15 @@ const Layout = (props) => {
                 ],
             },
         ];
+
+        const handleClickParent = (menu) => {
+            setExpandedMenu(menu);
+            if (menu.url) router.push(menu.url);
+        };
+        const handleClickChild = (menu) => {
+            if (menu.url) router.push(menu.url);
+        };
+
         return (
             <Drawer
                 variant="permanent"
@@ -102,7 +113,7 @@ const Layout = (props) => {
                             <ListItem
                                 button
                                 className={clsx(classes.menuItem, open ? 'open' : 'close')}
-                                onClick={() => setExpandedMenu(menu.key)}
+                                onClick={() => handleClickParent(menu)}
                             >
                                 <ListItemIcon>
                                     <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
@@ -110,10 +121,15 @@ const Layout = (props) => {
                                 <ListItemText primary={menu.label} />
                             </ListItem>
                             {menu && menu.children && menu.children.length && (
-                                <Collapse in={expandedMenu === menu.key} timeout="auto" unmountOnExit>
+                                <Collapse in={expandedMenu && expandedMenu.key === menu.key} timeout="auto" unmountOnExit>
                                     <List component="div" disablePadding>
                                         {menu.children.map((menuChild) => (
-                                            <ListItem button key={menuChild.key} className={classes.menuChildItem}>
+                                            <ListItem
+                                                button
+                                                key={menuChild.key}
+                                                className={classes.menuChildItem}
+                                                onClick={() => handleClickChild(menuChild)}
+                                            >
                                                 <ListItemText primary={menuChild.label} />
                                             </ListItem>
                                         ))}
