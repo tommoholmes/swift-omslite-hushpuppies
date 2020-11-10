@@ -4,7 +4,6 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -12,9 +11,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import Breadcrumb from 'core/modules/common/breadcrumb';
 import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
-import Breadcrumbs from 'core/modules/common/Breadcrumb';
 
 const Layout = (props) => {
     const { children } = props;
@@ -43,11 +42,11 @@ const Layout = (props) => {
                     }
                 </IconButton>
 
-                <Breadcrumbs data={[
-                    {"url":"/","label":"Home"},
-                    {"url":"/oms","label":"OMS"},
-                    {"url":"/oms/channel","label":"Channel"}]
-                } />
+                <Breadcrumb data={[
+                    { url: '/', label: 'Home' },
+                    { url: '/oms', label: 'OMS' },
+                    { url: '/oms/channel', label: 'Channel' }]}
+                />
                 <RightToolbar />
             </Toolbar>
         </AppBar>
