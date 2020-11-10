@@ -1,9 +1,17 @@
 import React from 'react';
 
-const CompanyListContent = () => (
-    <div>
-        Company List Content
-    </div>
-);
+const CompanyListContent = (props) => {
+    const { data } = props;
+
+    React.useEffect(() => {
+        console.log(data);
+    }, []);
+
+    return (
+        <div>
+            Company List Content
+        </div>
+    );
+};
 
 export default CompanyListContent;
