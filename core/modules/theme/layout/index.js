@@ -18,6 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import useStyles from './style';
+import Breadcrumbs from 'core/modules/common/Breadcrumb';
 
 const Layout = (props) => {
     const { children } = props;
@@ -45,9 +46,12 @@ const Layout = (props) => {
                             : <ChevronRightIcon className={classes.togleMenuIcon} />
                     }
                 </IconButton>
-                <Typography variant="h6" noWrap>
-                    Home / Dashboard
-                </Typography>
+
+                <Breadcrumbs data={[
+                    {"url":"/","label":"Home"},
+                    {"url":"/oms","label":"OMS"},
+                    {"url":"/oms/channel","label":"Channel"}]
+                } />
                 <div style={{ position: 'fixed', right: 0 }}>
                     <IconButton aria-label="" color="inherit">
                         <Brightness2OutlinedIcon />
