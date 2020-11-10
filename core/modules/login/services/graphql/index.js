@@ -7,6 +7,13 @@ export const getToken = () => useMutation(Schema.getCustomerToken, {
     },
 });
 
+export const removeToken = () => useMutation(Schema.removeToken, {
+    context: {
+        request: 'internal',
+    },
+});
+
 export default {
     getToken,
+    removeToken,
 };
