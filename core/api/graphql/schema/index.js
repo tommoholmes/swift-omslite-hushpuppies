@@ -1,3 +1,3 @@
-const AuthSchema = require('./createCustomerToken');
+const AuthSchema = require('./authSchema');
 
 module.exports = { AuthSchema };
