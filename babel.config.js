@@ -65,8 +65,10 @@ module.exports = function (api) {
                         '@helper_localstorage': './core/helpers/localstorage',
 
                         // commons
+                        '@common_textfield': './core/modules/commons/TextField',
+                        '@common_button': './core/modules/commons/Button',
+
                         // for example:
-                        '@common_button': 'swift-pwa-core/core/modules/commons/Button',
                         '@common_buttonqty': 'swift-pwa-core/core/modules/commons/ButtonQty',
                         '@common_breadcrumb': 'swift-pwa-core/core/modules/commons/Breadcrumb',
                     },
