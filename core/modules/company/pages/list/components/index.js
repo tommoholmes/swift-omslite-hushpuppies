@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import DataTable from '@common_datatable';
 
 const CompanyListContent = (props) => {
     const { data } = props;
@@ -11,23 +11,16 @@ const CompanyListContent = (props) => {
     }, []);
 
     const columns = [
-        { field: 'company_id', headerName: 'Id' },
-        { field: 'company_code', headerName: 'Code' },
-        { field: 'company_name', headerName: 'Name' },
+        { name: 'company_id', title: 'Id' },
+        { name: 'company_code', title: 'Code' },
+        { name: 'company_name', title: 'Name' },
     ];
 
-    const rows = companyList.map(
-        (company) => ({ id: company.company_id, ...company }),
-    );
-
     return (
-        <div style={{ minHeight: 400, width: '100%' }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                checkboxSelection
-            />
-        </div>
+        <DataTable
+            rows={companyList}
+            columns={columns}
+        />
     );
 };
 
