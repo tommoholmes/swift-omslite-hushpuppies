@@ -7,12 +7,8 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             margin: '0 auto',
             width: '100%',
-            height: '768px',
-            maxWidth: 1366,
+            height: '100%',
             position: 'relative',
-            boxShadow: '0px 2px 10px 0px rgb(195 195 195)',
-            MozBoxShadow: '0px 2px 10px 0px rgb(195 195 195)',
-            WebkitBoxShadow: '0px 2px 10px 0px rgb(195 195 195)',
         },
     },
     textTitle: {
@@ -42,13 +38,14 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: '49%',
             float: 'right',
+            height: '100%',
         },
     },
     rightImg: {
         width: '100%',
         objectFit: 'cover',
         [theme.breakpoints.up('sm')]: {
-            height: 768,
+            height: '100%',
         },
     },
     loginContent: {
