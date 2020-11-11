@@ -1,6 +1,9 @@
 /* ------------------------------ */
 /* General
 /* ------------------------------ */
+html, body, #__next{
+    height: 100%;
+}
 body.loading:before {
     content: '';
     position: fixed;
