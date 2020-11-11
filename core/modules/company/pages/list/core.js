@@ -1,26 +1,17 @@
 import Layout from '@layout';
-import { getCompanyList } from '../../services/graphql';
+import { getCompanyList as getCompanyListLazy } from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
-    const pageSize = 3;
-    const currentPage = 1;
-    const { data, loading } = getCompanyList({ pageSize, currentPage });
 
-    if (loading) {
-        return (
-            <Layout>
-                <div>Loading...</div>
-            </Layout>
-        );
-    }
+    const [getCompanyList, { data, loading }] = getCompanyListLazy();
 
     const contentProps = {
+        getCompanyList,
         data,
-        pageSize,
-        currentPage,
+        loading,
     };
 
     return (

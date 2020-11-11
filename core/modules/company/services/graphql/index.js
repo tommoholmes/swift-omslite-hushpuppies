@@ -1,7 +1,7 @@
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import * as Schema from './schema';
 
-export const getCompanyList = (variables) => useQuery(Schema.getCompanyList, {
+export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
     variables,
     context: {
         request: 'internal',
