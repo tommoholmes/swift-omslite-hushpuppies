@@ -21,6 +21,18 @@ const useStyles = makeStyles((theme) => ({
     breadcrumbItem: {
         paddingLeft: 0,
         paddingRight: '5px',
+    },
+    breadcrumbActive: {
+        '&:hover': {
+            fontWeight: 600,
+            borderBottom: '1px solid #000',
+        },
+    },
+    breadcrumbSeparator: {
+        paddingLeft: '5px',
+        '&:hover': {
+            borderBottom: 'none',
+        },
     }
 }));
 
