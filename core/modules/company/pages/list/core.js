@@ -5,7 +5,9 @@ const Core = (props) => {
     const {
         Content,
     } = props;
-    const { data, loading } = getCompanyList({ pageSize: 5, currentPage: 1 });
+    const pageSize = 3;
+    const currentPage = 1;
+    const { data, loading } = getCompanyList({ pageSize, currentPage });
 
     if (loading) {
         return (
@@ -15,9 +17,15 @@ const Core = (props) => {
         );
     }
 
+    const contentProps = {
+        data,
+        pageSize,
+        currentPage,
+    };
+
     return (
         <Layout>
-            <Content data={data} />
+            <Content {...contentProps} />
         </Layout>
     );
 };
