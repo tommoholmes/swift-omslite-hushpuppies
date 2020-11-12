@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
-import Breadcrumbs from 'core/modules/common/Breadcrumb';
+import Breadcrumbs from '@common_breadcrumb';
 
 const Layout = (props) => {
     const { children } = props;

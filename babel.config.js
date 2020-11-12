@@ -67,10 +67,10 @@ module.exports = function (api) {
                         // commons
                         '@common_textfield': './core/modules/commons/TextField',
                         '@common_button': './core/modules/commons/Button',
+                        '@common_breadcrumb': './core/modules/commons/Breadcrumb',
 
                         // for example:
                         '@common_buttonqty': 'swift-pwa-core/core/modules/commons/ButtonQty',
-                        '@common_breadcrumb': 'swift-pwa-core/core/modules/commons/Breadcrumb',
                     },
                 },
             ],
