@@ -1,17 +1,22 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 import React from 'react';
-import DataTable from '@common_datatable';
+import Table from '@common_table';
 
 const CompanyListContent = (props) => {
     const { data, loading, getCompanyList } = props;
     const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
     const companyTotal = data && data.getCompanyList && data.getCompanyList.total_count;
     const initialPageSize = 2;
+    // const columns = [
+    //     { name: 'company_id', title: 'Id' },
+    //     { name: 'company_code', title: 'Code' },
+    //     { name: 'company_name', title: 'Name' },
+    // ];
     const columns = [
-        { name: 'company_id', title: 'Id' },
-        { name: 'company_code', title: 'Code' },
-        { name: 'company_name', title: 'Name' },
+        { field: 'company_id', headerName: 'Id' },
+        { field: 'company_code', headerName: 'Code' },
+        { field: 'company_name', headerName: 'Name' },
     ];
 
     React.useEffect(() => {
@@ -26,12 +31,16 @@ const CompanyListContent = (props) => {
     // }
 
     return (
-        <DataTable
+        // <DataTable
+        //     rows={companyList}
+        //     getRows={(params) => getCompanyList({ variables: params })}
+        //     columns={columns}
+        //     pageSize={initialPageSize}
+        //     totalCount={companyTotal}
+        // />
+        <Table
             rows={companyList}
-            getRows={(params) => getCompanyList({ variables: params })}
             columns={columns}
-            pageSize={initialPageSize}
-            totalCount={companyTotal}
         />
     );
 };

@@ -68,6 +68,7 @@ module.exports = function (api) {
                         '@common_textfield': './core/modules/commons/TextField',
                         '@common_button': './core/modules/commons/Button',
                         '@common_datatable': './core/modules/commons/DataTable',
+                        '@common_table': './core/modules/commons/Table',
 
                         // for example:
                         '@common_buttonqty': 'swift-pwa-core/core/modules/commons/ButtonQty',
