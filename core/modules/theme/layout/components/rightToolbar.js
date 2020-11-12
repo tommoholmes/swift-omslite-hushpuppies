@@ -41,18 +41,18 @@ const RightToolbar = () => {
             <li>
                 <IconButton style={{ padding: 0 }} aria-label="show 17 new notifications" color="inherit">
                     <StyledBadge badgeContent={17} color="secondary">
-                    <img alt="" src={`/assets/img/layout/notification.svg`} />
+                        <img alt="" src={`/assets/img/layout/notification.svg`} />
                     </StyledBadge>
                 </IconButton>
             </li>
             <li>
-                <a href="javascript:void(0);">
+                <a href="#">
                     Username
                     <KeyboardArrowDownIcon style={{ verticalAlign: 'middle', marginLeft: 5 }} />
                 </a>
                 <ul>
                     <li>
-                        <a href="javascript:void(0);" onClick={handleLogout}>
+                        <a href="#" onClick={handleLogout}>
                             Sign Out
                         </a>
                     </li>
