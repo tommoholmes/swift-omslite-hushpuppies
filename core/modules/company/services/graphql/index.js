@@ -6,6 +6,7 @@ export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList,
     context: {
         request: 'internal',
     },
+    fetchPolicy: 'cache-and-network',
 });
 
 export default {
