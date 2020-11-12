@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -15,24 +16,31 @@ const CustomTable = (props) => {
     const {
         columns,
         rows,
+        getRows,
+        loading,
+        initialPage = 0,
+        initialRowsPerPage = 10,
+        count,
     } = props;
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [page, setPage] = React.useState(initialPage);
+    const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
     // methods
     const handleChangePage = (event, newPage) => {
-        console.log(newPage);
         setPage(newPage);
     };
     const handleChangeRowsPerPage = (event) => {
-        console.log(event.target.value);
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
     React.useEffect(() => {
-        console.log({ page });
-    }, [page]);
+        const variables = {
+            pageSize: rowsPerPage,
+            currentPage: page + 1,
+        };
+        getRows({ variables });
+    }, [page, rowsPerPage]);
 
     const renderTableHeader = () => {
         return (
@@ -66,6 +74,7 @@ const CustomTable = (props) => {
                         ))}
                     </TableRow>
                 ))}
+                {/* {loading && <div>Loading...</div>} */}
             </TableBody>
         );
     };
@@ -75,9 +84,9 @@ const CustomTable = (props) => {
             <TableFooter>
                 <TableRow>
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 25, 50]}
+                        rowsPerPageOptions={[5, 10, 25, 100]}
                         colSpan={3}
-                        count={24}
+                        count={count}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         SelectProps={{

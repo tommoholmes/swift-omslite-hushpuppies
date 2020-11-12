@@ -6,23 +6,13 @@ import Table from '@common_table';
 const CompanyListContent = (props) => {
     const { data, loading, getCompanyList } = props;
     const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = data && data.getCompanyList && data.getCompanyList.total_count;
-    const initialPageSize = 2;
-    // const columns = [
-    //     { name: 'company_id', title: 'Id' },
-    //     { name: 'company_code', title: 'Code' },
-    //     { name: 'company_name', title: 'Name' },
-    // ];
+    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+
     const columns = [
         { field: 'company_id', headerName: 'Id' },
         { field: 'company_code', headerName: 'Code' },
         { field: 'company_name', headerName: 'Name' },
     ];
-
-    React.useEffect(() => {
-        const variables = { pageSize: initialPageSize, currentPage: 1 };
-        getCompanyList({ variables });
-    }, []);
 
     // if (!data || loading) {
     //     return (
@@ -31,16 +21,12 @@ const CompanyListContent = (props) => {
     // }
 
     return (
-        // <DataTable
-        //     rows={companyList}
-        //     getRows={(params) => getCompanyList({ variables: params })}
-        //     columns={columns}
-        //     pageSize={initialPageSize}
-        //     totalCount={companyTotal}
-        // />
         <Table
             rows={companyList}
+            getRows={getCompanyList}
+            loading={loading}
             columns={columns}
+            count={companyTotal}
         />
     );
 };
