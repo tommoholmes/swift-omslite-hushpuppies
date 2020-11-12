@@ -8,6 +8,16 @@ import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
 import { removeToken } from '@modules/login/services/graphql';
 import { removeIsLoginFlagging } from '@helper_auth';
 import { useRouter } from 'next/router';
+import { withStyles } from '@material-ui/core/styles';
+
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+        right: 5,
+        top: 3,
+        padding: '0 4px',
+        background: '#BE1F93'
+    },
+}))(Badge);
 
 const RightToolbar = () => {
     const router = useRouter();
@@ -24,21 +34,21 @@ const RightToolbar = () => {
     return (
         <ul>
             <li>
-                <IconButton aria-label="" color="inherit">
-                    <Brightness2OutlinedIcon />
+                <IconButton style={{ padding: 0 }} aria-label="" color="inherit">
+                    <img alt="" src={`/assets/img/layout/moon.svg`} />
                 </IconButton>
             </li>
             <li>
-                <IconButton aria-label="show 17 new notifications" color="inherit">
-                    <Badge badgeContent={17} color="secondary">
-                        <NotificationsNoneIcon />
-                    </Badge>
+                <IconButton style={{ padding: 0 }} aria-label="show 17 new notifications" color="inherit">
+                    <StyledBadge badgeContent={17} color="secondary">
+                    <img alt="" src={`/assets/img/layout/notification.svg`} />
+                    </StyledBadge>
                 </IconButton>
             </li>
             <li>
                 <a href="javascript:void(0);">
                     Username
-                    <KeyboardArrowDownIcon style={{ verticalAlign: 'middle' }} />
+                    <KeyboardArrowDownIcon style={{ verticalAlign: 'middle', marginLeft: 5 }} />
                 </a>
                 <ul>
                     <li>
@@ -64,7 +74,7 @@ const RightToolbar = () => {
                     }
                     li {
                         display: inline-block;
-                        padding: 5px 10px;
+                        padding: 5px 12px;
                         position: relative;
                     }
                     li:hover > ul {
@@ -89,9 +99,11 @@ const RightToolbar = () => {
                         left: 100%;
                     }
                     a {
-                        color: #000;
+                        color: #536777;
                         text-decoration: none;
                         white-space: nowrap;
+                        font-size: 14px;
+                        text-transform: capitalize;
                     }
                     a:hover {
                         border-bottom: 1px dashed #fff;
