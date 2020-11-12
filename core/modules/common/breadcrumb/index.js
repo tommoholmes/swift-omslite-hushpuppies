@@ -3,8 +3,7 @@ import useStyles from './style';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
+import Link from 'next/link';
 
 const CustomBreadcrumb = ({ data = []}) => {
     const styles = useStyles();
@@ -12,12 +11,14 @@ const CustomBreadcrumb = ({ data = []}) => {
         <List className={styles.flexContainer}>
         {data.map((breadcrumb, index) => (
             <div key={breadcrumb.key}>
-                <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbItem}>
-                    <Link underline="none" color="inherit" href={breadcrumb.url}>
-                        <span className={styles.breadcrumbActive}>{`${breadcrumb.label}`}</span>
-                        <span className={styles.breadcrumbSeparator}>{`${index === data.length - 1 ? '' : '/'}`}</span>
+                <ListItem className={styles.breadcrumbItem}>
+                    <Link href={breadcrumb.url}>
+                        <a className={styles.flexContainer}>
+                            <span className={styles.breadcrumbActive}>{`${breadcrumb.label}`}</span>
+                            <span className={styles.breadcrumbSeparator}>{`${index === data.length - 1 ? '' : '/'}`}</span>
+                        </a>
                     </Link>
-                </Breadcrumbs>
+                </ListItem>
             </div>
         ))}
         </List>
