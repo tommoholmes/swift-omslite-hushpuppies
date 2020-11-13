@@ -11,8 +11,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import Breadcrumb from 'core/modules/common/breadcrumb';
 import { useRouter } from 'next/router';
+import Breadcrumb from '@common_breadcrumb';
 import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
 

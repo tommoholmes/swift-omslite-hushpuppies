@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-        marginBottom: 0,
+        marginBottom: 20,
         '& a': {
             cursor: 'pointer',
         },
@@ -10,8 +10,6 @@ const useStyles = makeStyles((theme) => ({
         '& p': {
             marginLeft: 0,
         },
-
-        marginBottom: 20,
     },
     flexContainer: {
         display: 'flex',
@@ -33,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             borderBottom: 'none',
         },
-    }
+    },
 }));
 
 export default useStyles;

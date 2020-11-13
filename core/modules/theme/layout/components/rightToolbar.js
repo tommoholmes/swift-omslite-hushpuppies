@@ -2,20 +2,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
 import { removeToken } from '@modules/login/services/graphql';
 import { removeIsLoginFlagging } from '@helper_auth';
 import { useRouter } from 'next/router';
 import { withStyles } from '@material-ui/core/styles';
 
-const StyledBadge = withStyles((theme) => ({
+const StyledBadge = withStyles(() => ({
     badge: {
         right: 5,
         top: 3,
         padding: '0 4px',
-        background: '#BE1F93'
+        background: '#BE1F93',
     },
 }))(Badge);
 
@@ -35,24 +33,24 @@ const RightToolbar = () => {
         <ul>
             <li>
                 <IconButton style={{ padding: 0 }} aria-label="" color="inherit">
-                    <img alt="" src={`/assets/img/layout/moon.svg`} />
+                    <img alt="" src="/assets/img/layout/moon.svg" />
                 </IconButton>
             </li>
             <li>
                 <IconButton style={{ padding: 0 }} aria-label="show 17 new notifications" color="inherit">
                     <StyledBadge badgeContent={17} color="secondary">
-                    <img alt="" src={`/assets/img/layout/notification.svg`} />
+                        <img alt="" src="/assets/img/layout/notification.svg" />
                     </StyledBadge>
                 </IconButton>
             </li>
             <li>
-                <a href="javascript:void(0);">
+                <a href="#">
                     Username
                     <KeyboardArrowDownIcon style={{ verticalAlign: 'middle', marginLeft: 5 }} />
                 </a>
                 <ul>
                     <li>
-                        <a href="javascript:void(0);" onClick={handleLogout}>
+                        <a href="#" onClick={handleLogout}>
                             Sign Out
                         </a>
                     </li>

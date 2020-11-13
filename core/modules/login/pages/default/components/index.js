@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@common_textfield';
-import Button from '@material-ui/core/Button';
+import Button from '@common_button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import useStyles from './style';
 
