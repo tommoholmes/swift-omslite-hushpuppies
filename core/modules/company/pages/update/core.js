@@ -1,25 +1,40 @@
+/* eslint-disable no-unused-vars */
 import Layout from '@layout';
 import { useRouter } from 'next/router';
+import gqlService from '../../services/graphql';
 
-const Core = (props) => {
+const CreateCore = (props) => {
     const {
         CreateContent,
-        EditContent,
     } = props;
-    const router = useRouter();
 
-    const renderContent = () => {
-        if (router && router.query && router.query.id) {
-            return <EditContent />;
-        }
-        return <CreateContent />;
-    };
+    const [createCompany] = gqlService.createCompany();
 
     return (
         <Layout>
-            {renderContent()}
+            <CreateContent />
         </Layout>
     );
+};
+
+const EditCore = (props) => {
+    const {
+        EditContent,
+    } = props;
+
+    return (
+        <Layout>
+            <EditContent />
+        </Layout>
+    );
+};
+
+const Core = (props) => {
+    const router = useRouter();
+    if (router && router.query && router.query.id) {
+        return <EditCore {...props} />;
+    }
+    return <CreateCore {...props} />;
 };
 
 export default Core;
