@@ -2,6 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
+import Header from './Header';
 
 const CompanyListContent = (props) => {
     const { data, loading, getCompanyList } = props;
@@ -21,13 +22,16 @@ const CompanyListContent = (props) => {
     // }
 
     return (
-        <Table
-            rows={companyList}
-            getRows={getCompanyList}
-            loading={loading}
-            columns={columns}
-            count={companyTotal}
-        />
+        <>
+            <Header />
+            <Table
+                rows={companyList}
+                getRows={getCompanyList}
+                loading={loading}
+                columns={columns}
+                count={companyTotal}
+            />
+        </>
     );
 };
 
