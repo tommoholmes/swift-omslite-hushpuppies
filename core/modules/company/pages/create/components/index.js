@@ -16,34 +16,37 @@ const CompanyCreateContent = (props) => {
     const classes = useStyles();
 
     return (
-        <Paper className={classes.container}>
-            <div className={classes.formField}>
-                <TextField
-                    variant="outlined"
-                    name="code"
-                    label="Company Code"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                />
-            </div>
-            <div className={classes.formField}>
-                <TextField
-                    variant="outlined"
-                    name="name"
-                    label="Company Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-            </div>
-            <div className={classes.formField}>
-                <Button
-                    onClick={handleSubmit}
-                    variant="contained"
-                >
-                    Submit
-                </Button>
-            </div>
-        </Paper>
+        <>
+            <h2 className={classes.title}>Manage Company</h2>
+            <Paper className={classes.container}>
+                <div className={classes.formField}>
+                    <TextField
+                        variant="outlined"
+                        name="code"
+                        label="Company Code"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                    />
+                </div>
+                <div className={classes.formField}>
+                    <TextField
+                        variant="outlined"
+                        name="name"
+                        label="Company Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div className={classes.formField}>
+                    <Button
+                        onClick={handleSubmit}
+                        variant="contained"
+                    >
+                        Submit
+                    </Button>
+                </div>
+            </Paper>
+        </>
     );
 };
 
