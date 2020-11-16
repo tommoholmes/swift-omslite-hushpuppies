@@ -5,7 +5,7 @@ import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import useStyles from './style';
 
-const CompanyCreateContent = (props) => {
+const CompanyEditContent = (props) => {
     const {
         code,
         setCode,
@@ -17,7 +17,7 @@ const CompanyCreateContent = (props) => {
 
     return (
         <>
-            <h2 className={classes.title}>Create Company</h2>
+            <h2 className={classes.title}>Edit Company</h2>
             <Paper className={classes.container}>
                 <div className={classes.formField}>
                     <TextField
@@ -50,4 +50,4 @@ const CompanyCreateContent = (props) => {
     );
 };
 
-export default CompanyCreateContent;
+export default CompanyEditContent;
