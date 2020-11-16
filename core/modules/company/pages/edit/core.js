@@ -20,7 +20,7 @@ const ContentWrapper = (props) => {
             console.log(res);
             // need show succes message
         }).catch((e) => {
-            console.log(e);
+            alert(e);
         });
     };
 
