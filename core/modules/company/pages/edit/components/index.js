@@ -42,7 +42,7 @@ const CompanyEditContent = (props) => {
                         onClick={handleSubmit}
                         variant="contained"
                     >
-                        Submit
+                        Save
                     </Button>
                 </div>
             </Paper>
