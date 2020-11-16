@@ -53,7 +53,6 @@ const CustomTable = (props) => {
                     {columns.map((column, columnIndex) => (
                         <TableCell
                             key={columnIndex}
-                            align={columnIndex ? 'right' : 'left'}
                         >
                             {getComponentOrString(column.headerName)}
                         </TableCell>
@@ -71,7 +70,6 @@ const CustomTable = (props) => {
                         {columns.map((column, columnIndex) => (
                             <TableCell
                                 key={columnIndex}
-                                align={columnIndex ? 'right' : 'left'}
                             >
                                 {getComponentOrString(row[column.field])}
                             </TableCell>
