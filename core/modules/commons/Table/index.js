@@ -42,6 +42,10 @@ const CustomTable = (props) => {
         getRows({ variables });
     }, [page, rowsPerPage]);
 
+    const getComponentOrString = (param) => (
+        typeof param === 'function' ? param() : param
+    );
+
     const renderTableHeader = () => {
         return (
             <TableHead>
@@ -51,7 +55,7 @@ const CustomTable = (props) => {
                             key={columnIndex}
                             align={columnIndex ? 'right' : 'left'}
                         >
-                            {column.headerName}
+                            {getComponentOrString(column.headerName)}
                         </TableCell>
                     ))}
                 </TableRow>
@@ -69,7 +73,7 @@ const CustomTable = (props) => {
                                 key={columnIndex}
                                 align={columnIndex ? 'right' : 'left'}
                             >
-                                {row[column.field]}
+                                {getComponentOrString(row[column.field])}
                             </TableCell>
                         ))}
                     </TableRow>
