@@ -19,6 +19,7 @@ const CompanyListContent = (props) => {
 
     const rows = companyList.map((company) => ({
         ...company,
+        id: company.company_id,
         actions: () => (
             <Link href={`/oms/company/edit/${company.company_code}`}>
                 <a className="link-button">view</a>
@@ -41,6 +42,7 @@ const CompanyListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={companyTotal}
+                showCheckbox
             />
         </>
     );

@@ -10,10 +10,13 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
 import TablePaginationActions from './components/TablePaginationActions';
 
 const CustomTable = (props) => {
     const {
+        showCheckbox = false,
+        primaryKey = 'id',
         columns,
         rows,
         getRows,
@@ -24,6 +27,7 @@ const CustomTable = (props) => {
     } = props;
     const [page, setPage] = React.useState(initialPage);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
+    const [checkedRows, setCheckedRows] = React.useState([]);
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -50,6 +54,7 @@ const CustomTable = (props) => {
         return (
             <TableHead>
                 <TableRow>
+                    {showCheckbox && <TableCell />}
                     {columns.map((column, columnIndex) => (
                         <TableCell
                             key={columnIndex}
@@ -63,10 +68,26 @@ const CustomTable = (props) => {
     };
 
     const renderTableBody = () => {
+        const handleChangeCheckboxRow = (checked, row) => {
+            const i = checkedRows.findIndex((checkedRow) => checkedRow[primaryKey] === row[primaryKey]);
+            if (checked && i < 0) {
+                setCheckedRows([...checkedRows, row]);
+            } else if (!checked && i >= 0) {
+                setCheckedRows(checkedRows.filter((checkedRow) => checkedRow[primaryKey] === row[primaryKey]));
+            }
+        };
         return (
             <TableBody>
                 {rows.map((row, rowIndex) => (
                     <TableRow key={rowIndex}>
+                        {showCheckbox && (
+                            <TableCell>
+                                <Checkbox
+                                    checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
+                                    onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
+                                />
+                            </TableCell>
+                        )}
                         {columns.map((column, columnIndex) => (
                             <TableCell
                                 key={columnIndex}
@@ -87,7 +108,6 @@ const CustomTable = (props) => {
                 <TableRow>
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25, 100]}
-                        colSpan={3}
                         count={count}
                         rowsPerPage={rowsPerPage}
                         page={page}
