@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 import React from 'react';
@@ -27,6 +28,7 @@ const CustomTable = (props) => {
     } = props;
     const [page, setPage] = React.useState(initialPage);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
+    const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
 
     // methods
@@ -51,10 +53,30 @@ const CustomTable = (props) => {
     );
 
     const renderTableHeader = () => {
+        const handleChangeCheckboxAllRows = (checked) => {
+            const newCheckedRows = rows.reduce((accumulator, currentValue) => {
+                const i = accumulator.findIndex((checkedRow) => checkedRow[primaryKey] === currentValue[primaryKey]);
+                if (checked && i < 0) {
+                    accumulator.push(currentValue);
+                } else if (!checked && i >= 0) {
+                    return accumulator.filter((checkedRow) => checkedRow[primaryKey] != currentValue[primaryKey]);
+                }
+                return accumulator;
+            }, checkedRows);
+            setCheckedRows(newCheckedRows);
+            setIsCheckedAllRows(checked);
+        };
         return (
             <TableHead>
                 <TableRow>
-                    {showCheckbox && <TableCell />}
+                    {showCheckbox && (
+                        <TableCell>
+                            <Checkbox
+                                checked={isCheckedAllRows}
+                                onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)}
+                            />
+                        </TableCell>
+                    )}
                     {columns.map((column, columnIndex) => (
                         <TableCell
                             key={columnIndex}
@@ -73,7 +95,7 @@ const CustomTable = (props) => {
             if (checked && i < 0) {
                 setCheckedRows([...checkedRows, row]);
             } else if (!checked && i >= 0) {
-                setCheckedRows(checkedRows.filter((checkedRow) => checkedRow[primaryKey] === row[primaryKey]));
+                setCheckedRows(checkedRows.filter((checkedRow) => checkedRow[primaryKey] != row[primaryKey]));
             }
         };
         return (
