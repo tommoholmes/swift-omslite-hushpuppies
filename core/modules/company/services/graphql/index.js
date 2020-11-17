@@ -13,7 +13,7 @@ export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList,
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyByCode = (variables) => useQuery(Schema.getCompanyByCode, {
+export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
     variables, ...context, ...fetchPolicy,
 });
 
@@ -31,7 +31,7 @@ export const deleteCompany = (variables) => useMutation(Schema.deleteCompany, {
 
 export default {
     getCompanyList,
-    getCompanyByCode,
+    getCompanyById,
     createCompany,
     updateCompany,
     deleteCompany,

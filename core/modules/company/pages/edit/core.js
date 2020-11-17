@@ -8,7 +8,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const company = data.getCompanyByCode;
+    const company = data.getCompanyById;
     const [code, setCode] = React.useState(company.company_code);
     const [name, setName] = React.useState(company.company_name);
     const [updateCompany] = gqlService.updateCompany();
@@ -40,8 +40,8 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyByCode({
-        code: router && router.query && router.query.id,
+    const { loading, data } = gqlService.getCompanyById({
+        id: router && router.query && Number(router.query.id),
     });
 
     if (loading) {

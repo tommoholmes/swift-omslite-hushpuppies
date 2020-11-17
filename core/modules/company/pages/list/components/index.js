@@ -21,7 +21,7 @@ const CompanyListContent = (props) => {
         ...company,
         id: company.company_id,
         actions: () => (
-            <Link href={`/oms/company/edit/${company.company_code}`}>
+            <Link href={`/oms/company/edit/${company.company_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),

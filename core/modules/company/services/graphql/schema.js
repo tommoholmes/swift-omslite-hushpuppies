@@ -24,12 +24,12 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyByCode = gql`
-    query getCompanyByCode(
-        $code: String!,
+export const getCompanyById = gql`
+    query getCompanyById(
+        $id: Int!,
     ){
-        getCompanyByCode(
-            code: $code
+        getCompanyById(
+            id: $id
         ){
             company_code
             company_id
@@ -91,7 +91,7 @@ export const deleteCompany = gql`
 
 export default {
     getCompanyList,
-    getCompanyByCode,
+    getCompanyById,
     createCompany,
     updateCompany,
     deleteCompany,
