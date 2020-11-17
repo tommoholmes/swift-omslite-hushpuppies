@@ -3,6 +3,7 @@ import React from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
+import { useRouter } from 'next/router';
 import useStyles from './style';
 
 const CompanyEditContent = (props) => {
@@ -14,6 +15,7 @@ const CompanyEditContent = (props) => {
         handleSubmit,
     } = props;
     const classes = useStyles();
+    const router = useRouter();
 
     return (
         <>
@@ -38,6 +40,13 @@ const CompanyEditContent = (props) => {
                     />
                 </div>
                 <div className={classes.formField}>
+                    <Button
+                        onClick={() => router.push('/oms/company')}
+                        variant="contained"
+                        style={{ marginRight: 16 }}
+                    >
+                        Back
+                    </Button>
                     <Button
                         onClick={handleSubmit}
                         variant="contained"
