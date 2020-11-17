@@ -18,6 +18,7 @@ const ContentWrapper = (props) => {
             variables,
         }).then((res) => {
             console.log(res);
+            alert('Success edit company!');
             // need show succes message
         }).catch((e) => {
             alert(e);

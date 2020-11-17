@@ -15,6 +15,7 @@ const Core = (props) => {
             variables,
         }).then((res) => {
             console.log(res);
+            alert('Success create new company!');
             // need show succes message
         }).catch((e) => {
             alert(e);
