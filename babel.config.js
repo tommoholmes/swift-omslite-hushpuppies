@@ -69,6 +69,7 @@ module.exports = function (api) {
                         '@common_button': './core/modules/commons/Button',
                         '@common_table': './core/modules/commons/Table',
                         '@common_breadcrumb': './core/modules/commons/Breadcrumb',
+                        '@common_menupopover': './core/modules/commons/MenuPopover',
 
                         // for example:
                         '@common_buttonqty': 'swift-pwa-core/core/modules/commons/ButtonQty',

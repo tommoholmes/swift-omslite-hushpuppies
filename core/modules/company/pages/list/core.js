@@ -1,15 +1,17 @@
 import Layout from '@layout';
-import { getCompanyList as getCompanyListLazy } from '../../services/graphql';
+import gqlService from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
 
-    const [getCompanyList, { data, loading }] = getCompanyListLazy();
+    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
+    const [deleteCompany] = gqlService.deleteCompany();
 
     const contentProps = {
         getCompanyList,
+        deleteCompany,
         data,
         loading,
     };

@@ -12,6 +12,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
+import MenuPopover from '@common_menupopover';
 import TablePaginationActions from './components/TablePaginationActions';
 
 const CustomTable = (props) => {
@@ -21,6 +22,7 @@ const CustomTable = (props) => {
         columns,
         rows,
         getRows,
+        deleteRows,
         loading,
         initialPage = 0,
         initialRowsPerPage = 10,
@@ -40,12 +42,16 @@ const CustomTable = (props) => {
         setPage(0);
     };
 
-    React.useEffect(() => {
+    const fetchRows = () => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
         };
         getRows({ variables });
+    };
+
+    React.useEffect(() => {
+        fetchRows();
     }, [page, rowsPerPage]);
 
     const getComponentOrString = (param) => (
@@ -128,6 +134,22 @@ const CustomTable = (props) => {
         return (
             <TableFooter>
                 <TableRow>
+                    <TableCell>
+                        <MenuPopover
+                            openButton={{ label: 'Actions' }}
+                            menuItems={[
+                                {
+                                    label: 'Delete',
+                                    onClick: async () => {
+                                        // need imporvement later (after gql ready for deleteRows)
+                                        const variables = { [primaryKey]: checkedRows[0][primaryKey] };
+                                        await deleteRows({ variables });
+                                        fetchRows();
+                                    },
+                                },
+                            ]}
+                        />
+                    </TableCell>
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25, 100]}
                         count={count}
@@ -148,7 +170,7 @@ const CustomTable = (props) => {
 
     return (
         <TableContainer component={Paper}>
-            <Table>
+            <Table size="small">
                 {renderTableHeader()}
                 {renderTableBody()}
                 {renderTableFooter()}
