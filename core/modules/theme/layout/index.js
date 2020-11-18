@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -12,14 +11,61 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import Breadcrumbs from '@common_breadcrumb';
+import dynamic from 'next/dynamic';
 import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
-import Breadcrumbs from '@common_breadcrumb';
+
+const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
+const Message = dynamic(() => import('@common_toast'), { ssr: false });
 
 const Layout = (props) => {
-    const { children } = props;
+    const { children, pageConfig } = props;
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+
+    const [state, setState] = useState({
+        backdropLoader: false,
+        toastMessage: {
+            open: false,
+            variant: '',
+            text: '',
+        },
+    });
+
+    const handleLoader = (status = false) => {
+        setState({
+            ...state,
+            backdropLoader: status,
+        });
+    };
+
+    const handelSetToast = (message) => {
+        setState({
+            ...state,
+            toastMessage: {
+                ...state.toastMessage,
+                ...message,
+            },
+        });
+    };
+
+    const handleCloseMessage = () => {
+        setState({
+            ...state,
+            toastMessage: {
+                ...state.toastMessage,
+                open: false,
+            },
+        });
+    };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.backdropLoader = handleLoader;
+            window.toastMessage = handelSetToast;
+        }
+    }, []);
 
     const Header = () => (
         <AppBar
@@ -44,10 +90,10 @@ const Layout = (props) => {
                 </IconButton>
 
                 <Breadcrumbs data={[
-                    {"url":"/","label":"Home"},
-                    {"url":"/oms","label":"OMS"},
-                    {"url":"/oms/channel","label":"Channel"}]
-                } />
+                    { url: '/', label: 'Home' },
+                    { url: '/oms', label: 'OMS' },
+                    { url: '/oms/channel', label: 'Channel' }]}
+                />
                 <RightToolbar />
             </Toolbar>
         </AppBar>
@@ -128,12 +174,33 @@ const Layout = (props) => {
         );
     };
 
+    const showHeader = () => {
+        if (typeof pageConfig === 'undefined' || (pageConfig && typeof pageConfig.header === 'undefined')) {
+            return true;
+        }
+        return pageConfig && pageConfig.header;
+    };
+
+    const showSidebar = () => {
+        if (typeof pageConfig === 'undefined' || (pageConfig && typeof pageConfig.sidebar === 'undefined')) {
+            return true;
+        }
+        return pageConfig && pageConfig.sidebar;
+    };
+
     return (
         <div className={classes.root}>
-            {Header()}
-            {Sidebar()}
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
+            {showHeader() && Header()}
+            {showSidebar() && Sidebar()}
+            <main className={showHeader() ? classes.content : classes.contentNoHeader}>
+                <Loading open={state.backdropLoader} />
+                <Message
+                    open={state.toastMessage.open}
+                    variant={state.toastMessage.variant}
+                    setOpen={handleCloseMessage}
+                    message={state.toastMessage.text}
+                />
+                <div className={showHeader() ? classes.toolbar : ''} />
                 {children}
             </main>
         </div>

@@ -5,6 +5,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        height: '100%',
     },
     appBar: {
         background: '#fff',
@@ -97,6 +98,10 @@ const useStyles = makeStyles((theme) => ({
     },
     menuChildItem: {
         paddingLeft: 24,
+    },
+    contentNoHeader: {
+        flexGrow: 1,
+        padding: 0,
     },
 }));
 
