@@ -8,11 +8,7 @@ import useStyles from './style';
 
 const CompanyCreateContent = (props) => {
     const {
-        code,
-        setCode,
-        name,
-        setName,
-        handleSubmit,
+        formik,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -26,8 +22,10 @@ const CompanyCreateContent = (props) => {
                         variant="outlined"
                         name="code"
                         label="Company Code"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
+                        value={formik.values.code}
+                        onChange={formik.handleChange}
+                        error={!!(formik.touched.code && formik.errors.code)}
+                        helperText={(formik.touched.code && formik.errors.code) || ''}
                     />
                 </div>
                 <div className={classes.formField}>
@@ -35,8 +33,10 @@ const CompanyCreateContent = (props) => {
                         variant="outlined"
                         name="name"
                         label="Company Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        error={!!(formik.touched.name && formik.errors.name)}
+                        helperText={(formik.touched.name && formik.errors.name) || ''}
                     />
                 </div>
                 <div className={classes.formField}>
@@ -48,7 +48,7 @@ const CompanyCreateContent = (props) => {
                         Back
                     </Button>
                     <Button
-                        onClick={handleSubmit}
+                        onClick={formik.handleSubmit}
                         variant="contained"
                     >
                         Submit
