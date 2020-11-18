@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,14 +13,61 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import { useRouter } from 'next/router';
 import Breadcrumb from '@common_breadcrumb';
+import dynamic from 'next/dynamic';
 import RightToolbar from './components/rightToolbar';
 import useStyles from './style';
 
+const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
+const Message = dynamic(() => import('@common_toast'), { ssr: false });
+
 const Layout = (props) => {
-    const { children } = props;
+    const { children, pageConfig } = props;
     const classes = useStyles();
     const router = useRouter();
     const [open, setOpen] = React.useState(true);
+
+    const [state, setState] = useState({
+        backdropLoader: false,
+        toastMessage: {
+            open: false,
+            variant: '',
+            text: '',
+        },
+    });
+
+    const handleLoader = (status = false) => {
+        setState({
+            ...state,
+            backdropLoader: status,
+        });
+    };
+
+    const handelSetToast = (message) => {
+        setState({
+            ...state,
+            toastMessage: {
+                ...state.toastMessage,
+                ...message,
+            },
+        });
+    };
+
+    const handleCloseMessage = () => {
+        setState({
+            ...state,
+            toastMessage: {
+                ...state.toastMessage,
+                open: false,
+            },
+        });
+    };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.backdropLoader = handleLoader;
+            window.toastMessage = handelSetToast;
+        }
+    }, []);
 
     const Header = () => (
         <AppBar
@@ -143,12 +190,33 @@ const Layout = (props) => {
         );
     };
 
+    const showHeader = () => {
+        if (typeof pageConfig === 'undefined' || (pageConfig && typeof pageConfig.header === 'undefined')) {
+            return true;
+        }
+        return pageConfig && pageConfig.header;
+    };
+
+    const showSidebar = () => {
+        if (typeof pageConfig === 'undefined' || (pageConfig && typeof pageConfig.sidebar === 'undefined')) {
+            return true;
+        }
+        return pageConfig && pageConfig.sidebar;
+    };
+
     return (
         <div className={classes.root}>
-            {Header()}
-            {Sidebar()}
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
+            {showHeader() && Header()}
+            {showSidebar() && Sidebar()}
+            <main className={showHeader() ? classes.content : classes.contentNoHeader}>
+                <Loading open={state.backdropLoader} />
+                <Message
+                    open={state.toastMessage.open}
+                    variant={state.toastMessage.variant}
+                    setOpen={handleCloseMessage}
+                    message={state.toastMessage.text}
+                />
+                <div className={showHeader() ? classes.toolbar : ''} />
                 {children}
             </main>
         </div>

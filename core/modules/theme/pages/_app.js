@@ -9,6 +9,7 @@ import { appWithTranslation } from '@i18n';
 import { getLoginInfo, getLastPathWithoutLogin } from '@helper_auth';
 // import PageProgressLoader from '@common_loaders/PageProgress';
 import routeMiddleware from '@middleware_route';
+import LinearProgress from '@common_loaders/PageProgress';
 
 /**
  * Uncomment codes below when firebase push notification configuration is enabled
@@ -103,6 +104,7 @@ class MyApp extends App {
         const { Component, pageProps } = this.props;
         return (
             <>
+                <LinearProgress />
                 <ThemeProvider theme={theme}>
                     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     <CssBaseline />
