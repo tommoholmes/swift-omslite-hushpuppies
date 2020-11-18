@@ -3,6 +3,7 @@ import { getToken } from '@modules/login/services/graphql';
 import { expiredToken } from '@config';
 import { setLogin } from '@helper_auth';
 import { useRouter } from 'next/router';
+import Layout from '@layout';
 
 const Core = (props) => {
     const {
@@ -14,6 +15,7 @@ const Core = (props) => {
     const [getCustomerToken] = getToken();
     const handleSubmit = () => {
         const variables = { email, password };
+        window.backdropLoader(true);
         getCustomerToken({
             variables,
         }).then((res) => {
@@ -23,7 +25,13 @@ const Core = (props) => {
                 router.push('/');
             }
         }).catch((e) => {
-            console.log(e);
+            // console.log(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                variant: 'error',
+                text: e.message.split(':')[0],
+            });
         });
     };
 
@@ -35,8 +43,15 @@ const Core = (props) => {
         handleSubmit,
     };
 
+    const pageConfig = {
+        header: false,
+        sidebar: false,
+    };
+
     return (
-        <Content {...contentProps} />
+        <Layout pageConfig={pageConfig}>
+            <Content {...contentProps} />
+        </Layout>
     );
 };
 
