@@ -7,25 +7,25 @@ import Button from '@common_button';
 import propTypes from 'prop-types';
 
 const ConfirmationDialog = ({
-    open = false, handleYes, handleCancel, dialogTitle, dialogMessage,
+    open = false, onConfirm, onCancel, title, message,
 }) => (
     <Dialog
         open={open}
-        // onClose={handleCancel}
+        // onClose={onCancel}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
     >
-        <DialogTitle id="alert-dialog-title">{dialogTitle}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
             <DialogContentText id="alert-dialog-description">
-                {dialogMessage}
+                {message}
             </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button onClick={handleYes} color="primary">
+            <Button onClick={onConfirm} color="primary">
                 OK
             </Button>
-            <Button onClick={handleCancel} color="primary" autoFocus>
+            <Button onClick={onCancel} color="primary" autoFocus>
                 Cancel
             </Button>
         </DialogActions>
@@ -34,15 +34,15 @@ const ConfirmationDialog = ({
 
 ConfirmationDialog.propTypes = {
     open: propTypes.bool.isRequired,
-    handleYes: propTypes.func.isRequired,
-    handleCancel: propTypes.func.isRequired,
-    dialogTitle: propTypes.string,
-    dialogMessage: propTypes.string,
+    onConfirm: propTypes.func.isRequired,
+    onCancel: propTypes.func.isRequired,
+    title: propTypes.string,
+    message: propTypes.string,
 };
 
 ConfirmationDialog.defaultProps = {
-    dialogTitle: 'Title',
-    dialogMessage: 'Are you Sure ?',
+    title: 'Confirmation',
+    message: 'Are you Sure?',
 };
 
 export default ConfirmationDialog;

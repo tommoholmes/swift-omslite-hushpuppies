@@ -13,6 +13,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import MenuPopover from '@common_menupopover';
+import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
 import TablePaginationActions from './components/TablePaginationActions';
 
 const CustomTable = (props) => {
@@ -29,6 +30,7 @@ const CustomTable = (props) => {
         count,
     } = props;
     const [page, setPage] = React.useState(initialPage);
+    const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
@@ -132,39 +134,47 @@ const CustomTable = (props) => {
 
     const renderTableFooter = () => {
         return (
-            <TableFooter>
-                <TableRow>
-                    <TableCell>
-                        <MenuPopover
-                            openButton={{ label: 'Actions' }}
-                            menuItems={[
-                                {
-                                    label: 'Delete',
-                                    onClick: async () => {
-                                        // need imporvement later (after gql ready for deleteRows)
-                                        const variables = { [primaryKey]: checkedRows[0][primaryKey] };
-                                        await deleteRows({ variables });
-                                        fetchRows();
-                                    },
-                                },
-                            ]}
+            <>
+                <ConfirmDialog
+                    open={openConfirmDialog}
+                    onCancel={() => setOpenConfirmDialog(false)}
+                    onConfirm={async () => {
+                        // need imporvement later (after gql ready for deleteRows)
+                        if (checkedRows && checkedRows.length) {
+                            const variables = { [primaryKey]: checkedRows[0][primaryKey] };
+                            await deleteRows({ variables });
+                            fetchRows();
+                        }
+                        setOpenConfirmDialog(false);
+                    }}
+                    message="Are you sure you want to delete?"
+                />
+                <TableFooter>
+                    <TableRow>
+                        <TableCell>
+                            <MenuPopover
+                                openButton={{ label: 'Actions' }}
+                                menuItems={[
+                                    { label: 'Delete', onClick: () => setOpenConfirmDialog(true) },
+                                ]}
+                            />
+                        </TableCell>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, 100]}
+                            count={count}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                                inputProps: { 'aria-label': 'rows per page' },
+                                native: true,
+                            }}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
                         />
-                    </TableCell>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25, 100]}
-                        count={count}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                            inputProps: { 'aria-label': 'rows per page' },
-                            native: true,
-                        }}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                        ActionsComponent={TablePaginationActions}
-                    />
-                </TableRow>
-            </TableFooter>
+                    </TableRow>
+                </TableFooter>
+            </>
         );
     };
 
