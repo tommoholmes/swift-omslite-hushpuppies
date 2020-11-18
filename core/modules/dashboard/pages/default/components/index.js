@@ -14,7 +14,7 @@ const DashboardContent = () => {
     };
 
     const handleAgree = () => {
-        console.log("I agree!");
+        console.log('I agree!');
         setOpen(false);
     };
 
@@ -26,10 +26,8 @@ const DashboardContent = () => {
             </Button>
             <ConfirmationDelete
                 open={open}
-                handleCancel={handleClose}
-                handleYes={handleAgree}
-                dialogMessage={'Delete Item'}
-                dialogMessage={'Are you sure you want to delete this item?'}
+                onCancel={handleClose}
+                onConfirm={handleAgree}
             />
         </div>
     );

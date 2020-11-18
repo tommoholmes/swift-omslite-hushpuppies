@@ -1,15 +1,16 @@
 import React from 'react';
 import Layout from '@layout';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import gqlService from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
-    const [code, setCode] = React.useState();
-    const [name, setName] = React.useState();
     const [createCompany] = gqlService.createCompany();
-    const handleSubmit = () => {
+
+    const handleSubmit = ({ code, name }) => {
         const variables = { company_code: code, company_name: name };
         createCompany({
             variables,
@@ -22,12 +23,22 @@ const Core = (props) => {
         });
     };
 
+    const formik = useFormik({
+        initialValues: {
+            code: '',
+            name: '',
+        },
+        validationSchema: Yup.object().shape({
+            code: Yup.string().required('Required!'),
+            name: Yup.string().required('Required!'),
+        }),
+        onSubmit: (values) => {
+            handleSubmit(values);
+        },
+    });
+
     const contentProps = {
-        code,
-        setCode,
-        name,
-        setName,
-        handleSubmit,
+        formik,
     };
 
     return (
