@@ -33,7 +33,7 @@ const logoutLink = onError((err) => {
         window.location.href = '/maintenance';
     } else if (graphQLErrors && graphQLErrors[0] && graphQLErrors[0].status === 401 && typeof window !== 'undefined') {
         removeIsLoginFlagging();
-        window.location.href = '/customer/account/login';
+        window.location.href = '/login';
     }
 });
 

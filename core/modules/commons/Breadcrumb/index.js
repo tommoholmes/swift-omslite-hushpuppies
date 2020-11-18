@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import useStyles from './style';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Link from 'next/link';
+import useStyles from './style';
 
-const CustomBreadcrumb = ({ data = []}) => {
+const CustomBreadcrumb = ({ data = [] }) => {
     const styles = useStyles();
     return (
         <List className={styles.flexContainer}>

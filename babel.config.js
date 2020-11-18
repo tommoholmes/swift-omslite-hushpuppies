@@ -67,7 +67,9 @@ module.exports = function (api) {
                         // commons
                         '@common_textfield': './core/modules/commons/TextField',
                         '@common_button': './core/modules/commons/Button',
+                        '@common_table': './core/modules/commons/Table',
                         '@common_breadcrumb': './core/modules/commons/Breadcrumb',
+                        '@common_menupopover': './core/modules/commons/MenuPopover',
                         '@common_loaders': './core/modules/commons/Loaders',
                         '@common_toast': './core/modules/commons/Toast',
 
