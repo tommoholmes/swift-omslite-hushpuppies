@@ -6,31 +6,38 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@common_button';
 import propTypes from 'prop-types';
 
-const ConfirmationDialog = ({
-    open = false, onConfirm, onCancel, title, message,
-}) => (
-    <Dialog
-        open={open}
-        // onClose={onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-    >
-        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {message}
-            </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={onConfirm} color="primary">
-                OK
-            </Button>
-            <Button onClick={onCancel} color="primary" autoFocus>
-                Cancel
-            </Button>
-        </DialogActions>
-    </Dialog>
-);
+const ConfirmationDialog = (props) => {
+    const {
+        open = false, 
+        onConfirm,
+        onCancel,
+        title,
+        message,
+    } = props;
+    return (
+        <Dialog
+            open={open}
+            // onClose={onCancel}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    {message}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onConfirm} color="primary">
+                    OK
+                </Button>
+                <Button onClick={onCancel} color="primary" autoFocus>
+                    Cancel
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
 
 ConfirmationDialog.propTypes = {
     open: propTypes.bool.isRequired,
