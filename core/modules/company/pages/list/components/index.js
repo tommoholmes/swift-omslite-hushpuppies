@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Header from './Header';
 
 const CompanyListContent = (props) => {
-    const { data, loading, getCompanyList, deleteCompany } = props;
+    const { data, loading, getCompanyList, multideleteCompany } = props;
     const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
     const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
 
@@ -39,7 +39,7 @@ const CompanyListContent = (props) => {
             <Table
                 rows={rows}
                 getRows={getCompanyList}
-                deleteRows={deleteCompany}
+                deleteRows={multideleteCompany}
                 loading={loading}
                 columns={columns}
                 count={companyTotal}

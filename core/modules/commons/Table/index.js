@@ -141,7 +141,7 @@ const CustomTable = (props) => {
                     onConfirm={async () => {
                         // need imporvement later (after gql ready for deleteRows)
                         if (checkedRows && checkedRows.length) {
-                            const variables = { [primaryKey]: checkedRows[0][primaryKey] };
+                            const variables = { [primaryKey]: checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
                             await deleteRows({ variables });
                             fetchRows();
                         }
