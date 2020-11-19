@@ -109,7 +109,7 @@ const Layout = (props) => {
                 key: 'oms',
                 label: 'OMS',
                 children: [
-                    { key: 'channel', label: 'Channel' },
+                    { key: 'channel', label: 'Channel', url: '/oms/channel' },
                     { key: 'company', label: 'Company', url: '/oms/company' },
                 ],
             },
