@@ -36,8 +36,8 @@ const MenuPopover = (props) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {menuItems.map((menuItem) => (
-                    <MenuItem onClick={() => handleClickMenuItem(menuItem.onClick)}>
+                {menuItems.map((menuItem, i) => (
+                    <MenuItem key={i} onClick={() => handleClickMenuItem(menuItem.onClick)}>
                         {menuItem.label}
                     </MenuItem>
                 ))}
