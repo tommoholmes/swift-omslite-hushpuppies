@@ -19,7 +19,19 @@ mutation {
 }
 `;
 
+export const getCustomer = gql`
+query{
+  customer{
+    email
+    firstname
+    lastname
+    middlename
+  }
+}
+`;
+
 export default {
     getCustomerToken,
     removeToken,
+    getCustomer,
 };
