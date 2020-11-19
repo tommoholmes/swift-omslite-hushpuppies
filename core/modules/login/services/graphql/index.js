@@ -1,19 +1,24 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import * as Schema from './schema';
 
+const context = {
+    context: { request: 'internal' },
+};
+
 export const getToken = () => useMutation(Schema.getCustomerToken, {
-    context: {
-        request: 'internal',
-    },
+    ...context,
 });
 
 export const removeToken = () => useMutation(Schema.removeToken, {
-    context: {
-        request: 'internal',
-    },
+    ...context,
+});
+
+export const getCustomer = () => useLazyQuery(Schema.getCustomer, {
+    ...context, fetchPolicy: 'no-cache',
 });
 
 export default {
     getToken,
     removeToken,
+    getCustomer,
 };

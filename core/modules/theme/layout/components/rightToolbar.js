@@ -3,8 +3,10 @@
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import { removeToken } from '@modules/login/services/graphql';
+import loginGqlService from '@modules/login/services/graphql';
 import { removeIsLoginFlagging } from '@helper_auth';
+import Cookies from 'js-cookie';
+import { custDataNameCookie } from '@config';
 import { useRouter } from 'next/router';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -19,10 +21,37 @@ const StyledBadge = withStyles(() => ({
 
 const RightToolbar = () => {
     const router = useRouter();
-    const [removeCustomerToken] = removeToken();
+    const [removeCustomerToken] = loginGqlService.removeToken();
+    const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
+    const getCustomerFromGql = () => getCustomerRes
+        && getCustomerRes.data
+        && getCustomerRes.data.customer;
+    const [username, setUsername] = React.useState('');
+    const handleSetUsername = (customer) => {
+        const firstname = customer && customer.firstname;
+        const lastname = customer && customer.lastname;
+        setUsername(`${firstname} ${lastname}`);
+    };
+
+    React.useEffect(() => {
+        if (Cookies.getJSON(custDataNameCookie)) {
+            handleSetUsername(Cookies.getJSON(custDataNameCookie));
+        } else {
+            getCustomer();
+        }
+    }, []);
+
+    React.useEffect(() => {
+        if (getCustomerFromGql()) {
+            Cookies.set(custDataNameCookie, getCustomerFromGql());
+            handleSetUsername(getCustomerFromGql());
+        }
+    }, [getCustomerFromGql()]);
+
     const handleLogout = () => {
         removeCustomerToken().then(() => {
             removeIsLoginFlagging();
+            Cookies.remove(custDataNameCookie);
             router.push('/login');
         }).catch(() => {
 
@@ -45,7 +74,7 @@ const RightToolbar = () => {
             </li>
             <li>
                 <a href="#">
-                    Username
+                    {username}
                     <KeyboardArrowDownIcon style={{ verticalAlign: 'middle', marginLeft: 5 }} />
                 </a>
                 <ul>
