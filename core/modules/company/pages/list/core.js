@@ -7,11 +7,11 @@ const Core = (props) => {
     } = props;
 
     const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
-    const [deleteCompany] = gqlService.deleteCompany();
+    const [multideleteCompany] = gqlService.multideleteCompany();
 
     const contentProps = {
         getCompanyList,
-        deleteCompany,
+        multideleteCompany,
         data,
         loading,
     };

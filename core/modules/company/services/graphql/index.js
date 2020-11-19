@@ -29,10 +29,15 @@ export const deleteCompany = (variables) => useMutation(Schema.deleteCompany, {
     variables, ...context,
 });
 
+export const multideleteCompany = (variables) => useMutation(Schema.multideleteCompany, {
+    variables, ...context,
+});
+
 export default {
     getCompanyList,
     getCompanyById,
     createCompany,
     updateCompany,
     deleteCompany,
+    multideleteCompany,
 };

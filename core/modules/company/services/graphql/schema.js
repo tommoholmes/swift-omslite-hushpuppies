@@ -89,10 +89,21 @@ export const deleteCompany = gql`
     }
 `;
 
+export const multideleteCompany = gql`
+    mutation multideleteCompany (
+        $id: [Int!]!
+    ){
+        multideleteCompany(
+            id: $id
+        )
+    }
+`;
+
 export default {
     getCompanyList,
     getCompanyById,
     createCompany,
     updateCompany,
     deleteCompany,
+    multideleteCompany,
 };
