@@ -40,8 +40,12 @@ const useColumns = (initialColumns) => {
         );
     };
 
+    const resetColumnHidden = () => {
+        setColumns(columns.map((column) => ({ ...column, hidden: false })));
+    };
+
     return {
-        columns, setColumnHidden,
+        columns, setColumnHidden, resetColumnHidden,
     };
 };
 
@@ -63,7 +67,7 @@ const CustomTable = (props) => {
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const { columns, setColumnHidden } = useColumns(props.columns);
+    const { columns, setColumnHidden, resetColumnHidden } = useColumns(props.columns);
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -94,12 +98,12 @@ const CustomTable = (props) => {
         return (
             <>
                 <div>
-                    <Button onClick={() => setExpandedToolbar(expandedToolbar != 'togleColums' ? 'togleColums' : '')}>
+                    <Button onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
                         columns
                     </Button>
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
-                    <Collapse in={expandedToolbar === 'togleColums'}>
+                    <Collapse in={expandedToolbar === 'toggleColums'}>
                         {columns.map((column, index) => (
                             <div key={index} style={{ maxHeight: 'inherit' }}>
                                 <Checkbox
@@ -109,6 +113,9 @@ const CustomTable = (props) => {
                                 {column.headerName}
                             </div>
                         ))}
+                        <Button onClick={resetColumnHidden}>
+                            reset
+                        </Button>
                     </Collapse>
                 </div>
             </>
