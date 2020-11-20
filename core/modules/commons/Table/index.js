@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
@@ -23,29 +24,37 @@ import TablePaginationActions from './components/TablePaginationActions';
 const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
 
 const useColumns = (initialColumns) => {
-    const [columns, setColumns] = React.useState(
-        initialColumns.map((column) => ({
-            ...column,
-            hideable: setTrueIfUndefined(column.hideable),
-            hidden: false,
-        })),
-    );
+    const _initialColumns = initialColumns.map((column) => ({
+        ...column,
+        hideable: setTrueIfUndefined(column.hideable),
+        hidden: false,
+    }));
+    const [columns, setColumns] = React.useState(_initialColumns);
+    const [hiddenColumns, setHiddenColumns] = React.useState(_initialColumns);
 
     const setHiddenColumn = (field, hidden) => {
-        setColumns(
-            columns.map((column) => ({
+        setHiddenColumns(
+            hiddenColumns.map((column) => ({
                 ...column,
                 hidden: field == column.field ? hidden : column.hidden,
             })),
         );
     };
 
+    const applyHiddenColumns = () => {
+        setColumns(columns.map((column, i) => ({
+            ...column,
+            hidden: hiddenColumns[i].hidden,
+        })));
+    };
+
     const resetHiddenColumn = () => {
-        setColumns(columns.map((column) => ({ ...column, hidden: false })));
+        const resetedHiddenColumns = columns.map((column) => ({ ...column, hidden: false }));
+        setHiddenColumns(resetedHiddenColumns);
     };
 
     return {
-        columns, setHiddenColumn, resetHiddenColumn,
+        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
     };
 };
 
@@ -67,7 +76,9 @@ const CustomTable = (props) => {
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const { columns, setHiddenColumn, resetHiddenColumn } = useColumns(props.columns);
+    const {
+        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
+    } = useColumns(props.columns);
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -104,7 +115,7 @@ const CustomTable = (props) => {
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
-                        {columns.map((column, index) => (
+                        {hiddenColumns.map((column, index) => (
                             <div key={index} style={{ maxHeight: 'inherit' }}>
                                 <Checkbox
                                     checked={!column.hidden}
@@ -113,6 +124,9 @@ const CustomTable = (props) => {
                                 {column.headerName}
                             </div>
                         ))}
+                        <Button onClick={applyHiddenColumns}>
+                            apply
+                        </Button>
                         <Button onClick={resetHiddenColumn}>
                             reset
                         </Button>
