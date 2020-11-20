@@ -1,7 +1,9 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 import React from 'react';
+import clsx from 'clsx';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,13 +16,38 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import MenuPopover from '@common_menupopover';
 import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
+import Button from '@common_button';
 import TablePaginationActions from './components/TablePaginationActions';
+
+const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
+
+const useColumns = (initialColumns) => {
+    const [columns, setColumns] = React.useState(
+        initialColumns.map((column) => ({
+            ...column,
+            hideable: setTrueIfUndefined(column.hideable),
+            hidden: false,
+        })),
+    );
+
+    const setColumnHidden = (field, hidden) => {
+        setColumns(
+            columns.map((column) => ({
+                ...column,
+                hidden: field == column.field ? hidden : column.hidden,
+            })),
+        );
+    };
+
+    return {
+        columns, setColumnHidden,
+    };
+};
 
 const CustomTable = (props) => {
     const {
         showCheckbox = false,
         primaryKey = 'id',
-        columns,
         rows,
         getRows,
         deleteRows,
@@ -34,6 +61,8 @@ const CustomTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
+    const [toolbarContentKey, setToolbarContentKey] = React.useState();
+    const { columns, setColumnHidden } = useColumns(props.columns);
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -59,6 +88,31 @@ const CustomTable = (props) => {
     const getComponentOrString = (param) => (
         typeof param === 'function' ? param() : param
     );
+
+    const renderTableToolbar = () => {
+        return (
+            <>
+                <div>
+                    <Button onClick={() => setToolbarContentKey(toolbarContentKey === 'togleColums' ? '' : 'togleColums')}>
+                        columns
+                    </Button>
+                </div>
+                {toolbarContentKey === 'togleColums' && (
+                    <div>
+                        {columns.map((column, index) => (
+                            <div key={index}>
+                                <Checkbox
+                                    checked={!column.hidden}
+                                    onChange={(e) => setColumnHidden(column.field, !e.target.checked)}
+                                />
+                                {column.headerName}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </>
+        );
+    };
 
     const renderTableHeader = () => {
         const handleChangeCheckboxAllRows = (checked) => {
@@ -88,6 +142,7 @@ const CustomTable = (props) => {
                     {columns.map((column, columnIndex) => (
                         <TableCell
                             key={columnIndex}
+                            className={clsx(column.hidden && 'hide')}
                         >
                             {getComponentOrString(column.headerName)}
                         </TableCell>
@@ -121,6 +176,7 @@ const CustomTable = (props) => {
                         {columns.map((column, columnIndex) => (
                             <TableCell
                                 key={columnIndex}
+                                className={clsx(column.hidden && 'hide')}
                             >
                                 {getComponentOrString(row[column.field])}
                             </TableCell>
@@ -180,6 +236,7 @@ const CustomTable = (props) => {
 
     return (
         <TableContainer component={Paper}>
+            {renderTableToolbar()}
             <Table size="small">
                 {renderTableHeader()}
                 {renderTableBody()}
