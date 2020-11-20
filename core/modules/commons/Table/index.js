@@ -17,6 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import MenuPopover from '@common_menupopover';
 import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
 import Button from '@common_button';
+import Collapse from '@material-ui/core/Collapse';
 import TablePaginationActions from './components/TablePaginationActions';
 
 const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
@@ -61,7 +62,7 @@ const CustomTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
-    const [toolbarContentKey, setToolbarContentKey] = React.useState();
+    const [expandedToolbar, setExpandedToolbar] = React.useState();
     const { columns, setColumnHidden } = useColumns(props.columns);
 
     // methods
@@ -93,14 +94,14 @@ const CustomTable = (props) => {
         return (
             <>
                 <div>
-                    <Button onClick={() => setToolbarContentKey(toolbarContentKey === 'togleColums' ? '' : 'togleColums')}>
+                    <Button onClick={() => setExpandedToolbar(expandedToolbar != 'togleColums' ? 'togleColums' : '')}>
                         columns
                     </Button>
                 </div>
-                {toolbarContentKey === 'togleColums' && (
-                    <div>
+                <div style={{ background: '#EBEFF6' }}>
+                    <Collapse in={expandedToolbar === 'togleColums'}>
                         {columns.map((column, index) => (
-                            <div key={index}>
+                            <div key={index} style={{ maxHeight: 'inherit' }}>
                                 <Checkbox
                                     checked={!column.hidden}
                                     onChange={(e) => setColumnHidden(column.field, !e.target.checked)}
@@ -108,8 +109,8 @@ const CustomTable = (props) => {
                                 {column.headerName}
                             </div>
                         ))}
-                    </div>
-                )}
+                    </Collapse>
+                </div>
             </>
         );
     };
