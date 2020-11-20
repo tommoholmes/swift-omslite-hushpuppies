@@ -31,7 +31,7 @@ const useColumns = (initialColumns) => {
         })),
     );
 
-    const setColumnHidden = (field, hidden) => {
+    const setHiddenColumn = (field, hidden) => {
         setColumns(
             columns.map((column) => ({
                 ...column,
@@ -40,12 +40,12 @@ const useColumns = (initialColumns) => {
         );
     };
 
-    const resetColumnHidden = () => {
+    const resetHiddenColumn = () => {
         setColumns(columns.map((column) => ({ ...column, hidden: false })));
     };
 
     return {
-        columns, setColumnHidden, resetColumnHidden,
+        columns, setHiddenColumn, resetHiddenColumn,
     };
 };
 
@@ -67,7 +67,7 @@ const CustomTable = (props) => {
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const { columns, setColumnHidden, resetColumnHidden } = useColumns(props.columns);
+    const { columns, setHiddenColumn, resetHiddenColumn } = useColumns(props.columns);
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -108,12 +108,12 @@ const CustomTable = (props) => {
                             <div key={index} style={{ maxHeight: 'inherit' }}>
                                 <Checkbox
                                     checked={!column.hidden}
-                                    onChange={(e) => setColumnHidden(column.field, !e.target.checked)}
+                                    onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
                                 />
                                 {column.headerName}
                             </div>
                         ))}
-                        <Button onClick={resetColumnHidden}>
+                        <Button onClick={resetHiddenColumn}>
                             reset
                         </Button>
                     </Collapse>
