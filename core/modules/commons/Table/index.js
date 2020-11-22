@@ -112,7 +112,29 @@ const CustomTable = (props) => {
     const renderTableToolbar = () => {
         return (
             <>
-                <div>
+                <div style={{ padding: 16 }}>
+                    <div style={{ display: 'inline-block' }}>
+                        <ConfirmDialog
+                            open={openConfirmDialog}
+                            onCancel={() => setOpenConfirmDialog(false)}
+                            onConfirm={async () => {
+                                // need imporvement later (after gql ready for deleteRows)
+                                if (checkedRows && checkedRows.length) {
+                                    const variables = { [primaryKey]: checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
+                                    await deleteRows({ variables });
+                                    fetchRows();
+                                }
+                                setOpenConfirmDialog(false);
+                            }}
+                            message="Are you sure you want to delete?"
+                        />
+                        <MenuPopover
+                            openButton={{ label: 'Actions' }}
+                            menuItems={[
+                                { label: 'Delete', onClick: () => setOpenConfirmDialog(true) },
+                            ]}
+                        />
+                    </div>
                     <Button onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
                         columns
                     </Button>
@@ -217,30 +239,8 @@ const CustomTable = (props) => {
     const renderTableFooter = () => {
         return (
             <>
-                <ConfirmDialog
-                    open={openConfirmDialog}
-                    onCancel={() => setOpenConfirmDialog(false)}
-                    onConfirm={async () => {
-                        // need imporvement later (after gql ready for deleteRows)
-                        if (checkedRows && checkedRows.length) {
-                            const variables = { [primaryKey]: checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
-                            await deleteRows({ variables });
-                            fetchRows();
-                        }
-                        setOpenConfirmDialog(false);
-                    }}
-                    message="Are you sure you want to delete?"
-                />
                 <TableFooter>
                     <TableRow>
-                        <TableCell>
-                            <MenuPopover
-                                openButton={{ label: 'Actions' }}
-                                menuItems={[
-                                    { label: 'Delete', onClick: () => setOpenConfirmDialog(true) },
-                                ]}
-                            />
-                        </TableCell>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, 100]}
                             count={count}
