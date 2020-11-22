@@ -57,6 +57,7 @@ const useColumns = (initialColumns) => {
     const resetHiddenColumn = () => {
         const resetedHiddenColumns = columns.map((column) => ({ ...column, hidden: false }));
         setHiddenColumns(resetedHiddenColumns);
+        setColumns(resetedHiddenColumns);
     };
 
     return {
@@ -155,10 +156,10 @@ const CustomTable = (props) => {
                                 {column.headerName}
                             </div>
                         ))}
-                        <Button onClick={applyHiddenColumns}>
+                        <Button style={{ margin: '16px 0px 16px 16px' }} onClick={applyHiddenColumns}>
                             apply
                         </Button>
-                        <Button onClick={resetHiddenColumn}>
+                        <Button style={{ margin: '16px 0px 16px 16px' }} onClick={resetHiddenColumn}>
                             reset
                         </Button>
                     </Collapse>
