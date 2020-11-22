@@ -21,8 +21,13 @@ import Button from '@common_button';
 import Collapse from '@material-ui/core/Collapse';
 import TablePaginationActions from './components/TablePaginationActions';
 
+// helpers
 const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
+const getComponentOrString = (param) => (
+    typeof param === 'function' ? param() : param
+);
 
+// custom hooks
 const useColumns = (initialColumns) => {
     const _initialColumns = initialColumns.map((column) => ({
         ...column,
@@ -58,6 +63,7 @@ const useColumns = (initialColumns) => {
     };
 };
 
+// main component
 const CustomTable = (props) => {
     const {
         showCheckbox = false,
@@ -70,6 +76,8 @@ const CustomTable = (props) => {
         initialRowsPerPage = 10,
         count,
     } = props;
+
+    // hooks
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -88,7 +96,6 @@ const CustomTable = (props) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
     const fetchRows = () => {
         const variables = {
             pageSize: rowsPerPage,
@@ -97,13 +104,10 @@ const CustomTable = (props) => {
         getRows({ variables });
     };
 
+    // effects
     React.useEffect(() => {
         fetchRows();
     }, [page, rowsPerPage]);
-
-    const getComponentOrString = (param) => (
-        typeof param === 'function' ? param() : param
-    );
 
     const renderTableToolbar = () => {
         return (
