@@ -20,6 +20,7 @@ import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
 import Button from '@common_button';
 import Collapse from '@material-ui/core/Collapse';
 import TablePaginationActions from './components/TablePaginationActions';
+import useStyles from './style';
 
 // helpers
 const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
@@ -78,6 +79,7 @@ const CustomTable = (props) => {
     } = props;
 
     // hooks
+    const classes = useStyles();
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -111,9 +113,9 @@ const CustomTable = (props) => {
 
     const renderTableToolbar = () => {
         return (
-            <>
-                <div style={{ padding: 16 }}>
-                    <div style={{ display: 'inline-block' }}>
+            <div className={classes.tableToolbar}>
+                <div className="top-buttons-wrapper">
+                    <div className="top-item">
                         <ConfirmDialog
                             open={openConfirmDialog}
                             onCancel={() => setOpenConfirmDialog(false)}
@@ -135,9 +137,11 @@ const CustomTable = (props) => {
                             ]}
                         />
                     </div>
-                    <Button onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
-                        columns
-                    </Button>
+                    <div className="top-item">
+                        <Button onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
+                            columns
+                        </Button>
+                    </div>
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
@@ -158,7 +162,7 @@ const CustomTable = (props) => {
                         </Button>
                     </Collapse>
                 </div>
-            </>
+            </div>
         );
     };
 
