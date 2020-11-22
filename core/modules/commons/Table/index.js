@@ -115,7 +115,7 @@ const CustomTable = (props) => {
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
-                        {hiddenColumns.map((column, index) => (
+                        {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
                             <div key={index} style={{ maxHeight: 'inherit' }}>
                                 <Checkbox
                                     checked={!column.hidden}

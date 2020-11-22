@@ -14,7 +14,7 @@ const CompanyListContent = (props) => {
         { field: 'company_id', headerName: 'Id' },
         { field: 'company_code', headerName: 'Code' },
         { field: 'company_name', headerName: 'Name' },
-        { field: 'actions', headerName: 'Actions' },
+        { field: 'actions', headerName: 'Actions', hideable: false },
     ];
 
     const rows = companyList.map((company) => ({
