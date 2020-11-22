@@ -6,6 +6,10 @@ const useStyles = makeStyles(() => ({
             padding: '16px',
             textAlign: 'right',
         },
+        '& .records-found': {
+            padding: '12px 0',
+            float: 'left',
+        },
         '& .top-item': {
             display: 'inline-block',
         },

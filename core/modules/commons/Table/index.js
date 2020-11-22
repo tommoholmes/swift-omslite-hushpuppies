@@ -115,6 +115,7 @@ const CustomTable = (props) => {
         return (
             <div className={classes.tableToolbar}>
                 <div className="top-buttons-wrapper">
+                    <div className="top-item records-found">{`${count} records found.`}</div>
                     <div className="top-item">
                         <ConfirmDialog
                             open={openConfirmDialog}
