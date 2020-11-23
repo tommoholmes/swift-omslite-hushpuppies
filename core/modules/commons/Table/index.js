@@ -1,7 +1,10 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 import React from 'react';
+import clsx from 'clsx';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,13 +17,59 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import MenuPopover from '@common_menupopover';
 import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
+import Button from '@common_button';
+import Collapse from '@material-ui/core/Collapse';
 import TablePaginationActions from './components/TablePaginationActions';
+import useStyles from './style';
 
+// helpers
+const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
+const getComponentOrString = (param) => (
+    typeof param === 'function' ? param() : param
+);
+
+// custom hooks
+const useColumns = (initialColumns) => {
+    const _initialColumns = initialColumns.map((column) => ({
+        ...column,
+        hideable: setTrueIfUndefined(column.hideable),
+        hidden: false,
+    }));
+    const [columns, setColumns] = React.useState(_initialColumns);
+    const [hiddenColumns, setHiddenColumns] = React.useState(_initialColumns);
+
+    const setHiddenColumn = (field, hidden) => {
+        setHiddenColumns(
+            hiddenColumns.map((column) => ({
+                ...column,
+                hidden: field == column.field ? hidden : column.hidden,
+            })),
+        );
+    };
+
+    const applyHiddenColumns = () => {
+        setColumns(columns.map((column, i) => ({
+            ...column,
+            hidden: hiddenColumns[i].hidden,
+        })));
+    };
+
+    const resetHiddenColumn = () => {
+        const resetedHiddenColumns = columns.map((column) => ({ ...column, hidden: false }));
+        setHiddenColumns(resetedHiddenColumns);
+        setColumns(resetedHiddenColumns);
+    };
+
+    return {
+        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
+    };
+};
+
+// main component
 const CustomTable = (props) => {
     const {
         showCheckbox = false,
         primaryKey = 'id',
-        columns,
         rows,
         getRows,
         deleteRows,
@@ -29,11 +78,18 @@ const CustomTable = (props) => {
         initialRowsPerPage = 10,
         count,
     } = props;
+
+    // hooks
+    const classes = useStyles();
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
+    const [expandedToolbar, setExpandedToolbar] = React.useState();
+    const {
+        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
+    } = useColumns(props.columns);
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -43,7 +99,6 @@ const CustomTable = (props) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
     const fetchRows = () => {
         const variables = {
             pageSize: rowsPerPage,
@@ -52,13 +107,66 @@ const CustomTable = (props) => {
         getRows({ variables });
     };
 
+    // effects
     React.useEffect(() => {
         fetchRows();
     }, [page, rowsPerPage]);
 
-    const getComponentOrString = (param) => (
-        typeof param === 'function' ? param() : param
-    );
+    const renderTableToolbar = () => {
+        return (
+            <div className={classes.tableToolbar}>
+                <div className="top-buttons-wrapper">
+                    <div className="top-item records-found">{`${count} records found.`}</div>
+                    <div className="top-item">
+                        <ConfirmDialog
+                            open={openConfirmDialog}
+                            onCancel={() => setOpenConfirmDialog(false)}
+                            onConfirm={async () => {
+                                // need imporvement later (after gql ready for deleteRows)
+                                if (checkedRows && checkedRows.length) {
+                                    const variables = { [primaryKey]: checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
+                                    await deleteRows({ variables });
+                                    fetchRows();
+                                }
+                                setOpenConfirmDialog(false);
+                            }}
+                            message="Are you sure you want to delete?"
+                        />
+                        <MenuPopover
+                            openButton={{ label: 'Actions' }}
+                            menuItems={[
+                                { label: 'Delete', onClick: () => setOpenConfirmDialog(true) },
+                            ]}
+                        />
+                    </div>
+                    <div className="top-item">
+                        <Button onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
+                            columns
+                        </Button>
+                    </div>
+                </div>
+                <div style={{ background: '#EBEFF6' }}>
+                    <Collapse in={expandedToolbar === 'toggleColums'}>
+                        {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
+                            <div key={index} style={{ maxHeight: 'inherit' }}>
+                                <Checkbox
+                                    checked={!column.hidden}
+                                    onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
+                                />
+                                {column.headerName}
+                            </div>
+                        ))}
+                        <Button style={{ margin: '16px 0px 16px 16px' }} onClick={applyHiddenColumns}>
+                            apply
+                        </Button>
+                        <Button style={{ margin: '16px 0px 16px 16px' }} onClick={resetHiddenColumn}>
+                            reset
+                        </Button>
+                    </Collapse>
+                </div>
+            </div>
+        );
+    };
 
     const renderTableHeader = () => {
         const handleChangeCheckboxAllRows = (checked) => {
@@ -88,6 +196,7 @@ const CustomTable = (props) => {
                     {columns.map((column, columnIndex) => (
                         <TableCell
                             key={columnIndex}
+                            className={clsx(column.hidden && 'hide')}
                         >
                             {getComponentOrString(column.headerName)}
                         </TableCell>
@@ -121,6 +230,7 @@ const CustomTable = (props) => {
                         {columns.map((column, columnIndex) => (
                             <TableCell
                                 key={columnIndex}
+                                className={clsx(column.hidden && 'hide')}
                             >
                                 {getComponentOrString(row[column.field])}
                             </TableCell>
@@ -135,30 +245,8 @@ const CustomTable = (props) => {
     const renderTableFooter = () => {
         return (
             <>
-                <ConfirmDialog
-                    open={openConfirmDialog}
-                    onCancel={() => setOpenConfirmDialog(false)}
-                    onConfirm={async () => {
-                        // need imporvement later (after gql ready for deleteRows)
-                        if (checkedRows && checkedRows.length) {
-                            const variables = { [primaryKey]: checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
-                            await deleteRows({ variables });
-                            fetchRows();
-                        }
-                        setOpenConfirmDialog(false);
-                    }}
-                    message="Are you sure you want to delete?"
-                />
                 <TableFooter>
                     <TableRow>
-                        <TableCell>
-                            <MenuPopover
-                                openButton={{ label: 'Actions' }}
-                                menuItems={[
-                                    { label: 'Delete', onClick: () => setOpenConfirmDialog(true) },
-                                ]}
-                            />
-                        </TableCell>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, 100]}
                             count={count}
@@ -180,6 +268,7 @@ const CustomTable = (props) => {
 
     return (
         <TableContainer component={Paper}>
+            {renderTableToolbar()}
             <Table size="small">
                 {renderTableHeader()}
                 {renderTableBody()}
