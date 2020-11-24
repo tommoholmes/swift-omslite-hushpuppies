@@ -28,6 +28,9 @@ export const updateChannel = (variables) => useMutation(Schema.updateChannel, {
 export const deleteChannel = (variables) => useMutation(Schema.deleteChannel, {
     variables, ...context,
 });
+export const multideleteChannel = (variables) => useMutation(Schema.multideleteChannel, {
+    variables, ...context,
+});
 
 export default {
     getChannelList,
@@ -35,4 +38,5 @@ export default {
     createChannel,
     updateChannel,
     deleteChannel,
+    multideleteChannel,
 };
