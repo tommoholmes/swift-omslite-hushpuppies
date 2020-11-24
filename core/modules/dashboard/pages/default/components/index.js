@@ -1,5 +1,6 @@
 /* eslint-disable arrow-body-style */
 import ConfirmationDelete from 'core/modules/commons/ConfirmDialog';
+import Autocomplete from '@common_autocomplete';
 import Button from '@common_button';
 
 const DashboardContent = () => {
@@ -29,6 +30,10 @@ const DashboardContent = () => {
                 onCancel={handleClose}
                 onConfirm={handleAgree}
             />
+            <br />
+            <br />
+            <br />
+            <Autocomplete />
         </div>
     );
 };
