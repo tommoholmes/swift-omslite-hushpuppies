@@ -21,10 +21,27 @@ const DashboardContent = () => {
 
     return (
         <div>
-            Dashboard Content
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Open alert dialog
-            </Button>
+            <h2>Dashboard Content</h2>
+            <div>
+                <Button buttonType='container' onClick={handleClickOpen}>
+                    Open alert dialog
+                </Button>
+                <Button buttonType='container' onClick={handleClickOpen} style={{ marginLeft: 5 }} >
+                    buttonType: container
+                </Button>
+                <Button buttonType='primary' onClick={handleClickOpen} style={{ marginLeft: 5 }} >
+                    buttonType: primary
+                </Button>
+                <Button buttonType='outlined' onClick={handleClickOpen} style={{ marginLeft: 5 }} >
+                    buttonType: outlined
+                </Button>
+                <Button buttonType='buttonText' onClick={handleClickOpen}>
+                    buttonType: buttonText
+                </Button>
+                <Button buttonType='link' onClick={handleClickOpen}>
+                    buttonType: link
+                </Button>
+            </div>
             <ConfirmationDelete
                 open={open}
                 onCancel={handleClose}
