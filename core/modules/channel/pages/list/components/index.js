@@ -4,16 +4,22 @@ import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Header from './Header';
+import useStyles from './style';
 
 const ChannelListContent = (props) => {
-    const { data, loading, getChannelList, deleteChannel } = props;
+    const classes = useStyles();
+    const { data, loading, getChannelList, multideleteChannel } = props;
     const channelList = (data && data.getChannelList && data.getChannelList.items) || [];
     const channelTotal = (data && data.getChannelList && data.getChannelList.total_count) || 0;
 
     const columns = [
-        { field: 'channel_id', headerName: 'Id' },
-        { field: 'channel_code', headerName: 'Code' },
-        { field: 'channel_name', headerName: 'Name' },
+        { field: 'channel_id', headerName: 'No' },
+        { field: 'channel_code', headerName: 'Channel Code' },
+        { field: 'channel_name', headerName: 'Channel Name' },
+        { field: 'channel_url', headerName: 'URL' },
+        { field: 'token', headerName: 'Token' },
+        { field: 'framework', headerName: 'Framework' },
+        { field: 'rule_type', headerName: 'Rule Type' },
         { field: 'actions', headerName: 'Actions' },
     ];
 
@@ -39,7 +45,7 @@ const ChannelListContent = (props) => {
             <Table
                 rows={rows}
                 getRows={getChannelList}
-                deleteRows={deleteChannel}
+                deleteRows={multideleteChannel}
                 loading={loading}
                 columns={columns}
                 count={channelTotal}
