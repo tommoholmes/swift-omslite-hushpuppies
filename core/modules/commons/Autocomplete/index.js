@@ -28,8 +28,10 @@ function useDebounce(value, delay) {
 const CustomAutocomplete = (props) => {
     const {
         id,
+        error,
         getOptions,
         getOptionsVariables,
+        helperText,
         label,
         labelKey,
         loading,
@@ -83,6 +85,8 @@ const CustomAutocomplete = (props) => {
             {...params}
             label={label}
             variant={variant}
+            error={error}
+            helperText={helperText}
             InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -118,8 +122,10 @@ const CustomAutocomplete = (props) => {
 
 CustomAutocomplete.propTypes = {
     id: PropTypes.string,
+    error: PropTypes.bool,
     getOptions: PropTypes.func,
     getOptionsVariables: PropTypes.object,
+    helperText: PropTypes.string,
     label: PropTypes.string,
     labelKey: PropTypes.string,
     loading: PropTypes.bool,
