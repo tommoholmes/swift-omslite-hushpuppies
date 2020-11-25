@@ -1,7 +1,7 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
-// *https://www.registers.service.gov.uk/registers/country/use-the-api*
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -51,27 +51,16 @@ const CustomAutocomplete = (props) => {
             if (mode === 'lazy' && !(options && options.length)) {
                 getOptions(getOptionsVariables);
             }
-        } else {
-            //
+            if (mode === 'server') {
+                const variables = {
+                    variables: {
+                        ...getOptionsVariables.variables,
+                        ...(query && { querySearch: query }),
+                    },
+                };
+                getOptions(variables);
+            }
         }
-        // if (mode !== 'default') {
-        //     if (open) {
-        //         (async () => {
-        //             setLoading(true);
-
-        //             const response = await fetch(
-        //                 `https://country.register.gov.uk/records.json?page-size=15${query ? `&query=${query}` : ''}`,
-        //             );
-        //             const countries = await response.json();
-        //             setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
-
-        //             setLoading(false);
-        //         })();
-        //         console.log(query);
-        //     } else {
-        //         setOptions([]);
-        //     }
-        // }
     }, [open, debouncedQuery]);
 
     React.useEffect(() => {
