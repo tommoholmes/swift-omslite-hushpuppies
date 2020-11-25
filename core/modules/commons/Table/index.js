@@ -140,7 +140,10 @@ const CustomTable = (props) => {
                         />
                     </div>
                     <div className="top-item">
-                        <Button onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
+                        <Button
+                            className={classes.btn}
+                            onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
+                        >
                             columns
                         </Button>
                     </div>

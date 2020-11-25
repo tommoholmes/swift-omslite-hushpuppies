@@ -7,11 +7,11 @@ const Core = (props) => {
     } = props;
 
     const [getChannelList, { data, loading }] = gqlService.getChannelList();
-    const [deleteChannel] = gqlService.deleteChannel();
+    const [multideleteChannel] = gqlService.multideleteChannel();
 
     const contentProps = {
         getChannelList,
-        deleteChannel,
+        multideleteChannel,
         data,
         loading,
     };
