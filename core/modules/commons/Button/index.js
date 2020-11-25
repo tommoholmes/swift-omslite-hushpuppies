@@ -6,6 +6,7 @@ import useStyles from './style';
 const CustomButton = ({
     variant = 'contained',
     className = {},
+    buttonType = 'primary',
     ...other
 }) => {
     const classes = useStyles();

@@ -11,12 +11,6 @@ const useStyles = makeStyles(() => ({
             background: colorPurple,
         },
     },
-    rounded: {
-        borderRadius: 20,
-        fontWeight: 400,
-        textTransform: 'unset',
-        letterSpacing: 0,
-    },
     outlined: {
         borderRadius: 7,
         background: 'transparent',
@@ -29,6 +23,12 @@ const useStyles = makeStyles(() => ({
         '&:hover': {
             background: 'transparent',
         },
+    },
+    rounded: {
+        borderRadius: 20,
+        fontWeight: 400,
+        textTransform: 'unset',
+        letterSpacing: 0,
     },
     buttonText: {
         background: 'none',
