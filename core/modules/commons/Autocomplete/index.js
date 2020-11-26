@@ -43,6 +43,7 @@ const CustomAutocomplete = (props) => {
         primaryKey,
         value,
         variant,
+        ...others
     } = props;
     const [open, setOpen] = React.useState(false);
     const [query, setQuery] = React.useState();
@@ -108,6 +109,7 @@ const CustomAutocomplete = (props) => {
             options={options}
             loading={loading}
             renderInput={renderInput}
+            {...others}
         />
     );
 };
