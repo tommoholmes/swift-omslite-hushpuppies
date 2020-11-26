@@ -31,6 +31,7 @@ const CustomAutocomplete = (props) => {
         error,
         getOptions,
         getOptionsVariables,
+        getOptionLabel,
         helperText,
         label,
         labelKey,
@@ -97,7 +98,7 @@ const CustomAutocomplete = (props) => {
             style={{ width: 300 }}
             open={open}
             getOptionSelected={(option, selectedValue) => option[primaryKey] === selectedValue[primaryKey]}
-            getOptionLabel={(option) => option && option[labelKey]}
+            getOptionLabel={getOptionLabel || ((option) => option && option[labelKey])}
             onChange={(event, newValue) => onChange(newValue)}
             onInputChange={(e) => setQuery((e && e.target && e.target.value) || '')}
             onOpen={() => setOpen(true)}
@@ -114,6 +115,7 @@ CustomAutocomplete.propTypes = {
     error: PropTypes.bool,
     getOptions: PropTypes.func,
     getOptionsVariables: PropTypes.object,
+    getOptionLabel: PropTypes.func,
     helperText: PropTypes.string,
     label: PropTypes.string,
     labelKey: PropTypes.string,
