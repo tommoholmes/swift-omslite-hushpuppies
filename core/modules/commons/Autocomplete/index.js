@@ -37,6 +37,7 @@ const CustomAutocomplete = (props) => {
         labelKey,
         loading,
         mode,
+        multiple,
         onChange,
         options,
         primaryKey,
@@ -93,12 +94,13 @@ const CustomAutocomplete = (props) => {
 
     return (
         <Autocomplete
-            value={value}
+            value={multiple ? (value || []) : value}
             id={id}
             style={{ width: 300 }}
             open={open}
             getOptionSelected={(option, selectedValue) => option[primaryKey] === selectedValue[primaryKey]}
             getOptionLabel={getOptionLabel || ((option) => option && option[labelKey])}
+            multiple={multiple}
             onChange={(event, newValue) => onChange(newValue)}
             onInputChange={(e) => setQuery((e && e.target && e.target.value) || '')}
             onOpen={() => setOpen(true)}
@@ -121,10 +123,11 @@ CustomAutocomplete.propTypes = {
     labelKey: PropTypes.string,
     loading: PropTypes.bool,
     mode: PropTypes.oneOf(['default', 'lazy', 'server']),
+    multiple: PropTypes.bool,
     onChange: PropTypes.func,
     options: PropTypes.array,
     primaryKey: PropTypes.string,
-    value: PropTypes.object,
+    value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     variant: PropTypes.string,
 };
 
@@ -133,6 +136,7 @@ CustomAutocomplete.defaultProps = {
     labelKey: 'name',
     loading: false,
     mode: 'default',
+    multiple: false,
     options: [],
     primaryKey: 'id',
     value: null,
