@@ -28,6 +28,7 @@ function useDebounce(value, delay) {
 const CustomAutocomplete = (props) => {
     const {
         error,
+        disableCloseOnSelect,
         getOptions,
         getOptionsVariables,
         getOptionLabel,
@@ -99,6 +100,7 @@ const CustomAutocomplete = (props) => {
             getOptionSelected={(option, selectedValue) => option[primaryKey] === selectedValue[primaryKey]}
             getOptionLabel={getOptionLabel || ((option) => option && option[labelKey])}
             multiple={multiple}
+            disableCloseOnSelect={disableCloseOnSelect || multiple}
             onChange={(event, newValue) => onChange(newValue)}
             onInputChange={(e) => setQuery((e && e.target && e.target.value) || '')}
             onOpen={() => setOpen(true)}
@@ -113,6 +115,7 @@ const CustomAutocomplete = (props) => {
 
 CustomAutocomplete.propTypes = {
     error: PropTypes.bool,
+    disableCloseOnSelect: PropTypes.bool,
     getOptions: PropTypes.func,
     getOptionsVariables: PropTypes.object,
     getOptionLabel: PropTypes.func,
