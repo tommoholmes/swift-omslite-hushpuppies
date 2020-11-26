@@ -27,7 +27,6 @@ function useDebounce(value, delay) {
 
 const CustomAutocomplete = (props) => {
     const {
-        id,
         error,
         getOptions,
         getOptionsVariables,
@@ -96,8 +95,6 @@ const CustomAutocomplete = (props) => {
     return (
         <Autocomplete
             value={multiple ? (value || []) : value}
-            id={id}
-            style={{ width: 300 }}
             open={open}
             getOptionSelected={(option, selectedValue) => option[primaryKey] === selectedValue[primaryKey]}
             getOptionLabel={getOptionLabel || ((option) => option && option[labelKey])}
@@ -115,7 +112,6 @@ const CustomAutocomplete = (props) => {
 };
 
 CustomAutocomplete.propTypes = {
-    id: PropTypes.string,
     error: PropTypes.bool,
     getOptions: PropTypes.func,
     getOptionsVariables: PropTypes.object,
