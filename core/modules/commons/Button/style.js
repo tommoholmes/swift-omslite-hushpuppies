@@ -2,7 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const colorPurple = '#BE1F93';
 const useStyles = makeStyles(() => ({
-    container: {
+    primary: {
         borderRadius: 7,
         background: colorPurple,
         color: '#FFFFFF',
@@ -11,19 +11,8 @@ const useStyles = makeStyles(() => ({
             background: colorPurple,
         },
     },
-    primary: {
-        borderRadius: 20,
-        background: colorPurple,
-        color: '#FFFFFF',
-        fontWeight: 400,
-        textTransform: 'unset',
-        letterSpacing: 0,
-        '&:hover': {
-            background: colorPurple,
-        },
-    },
     outlined: {
-        borderRadius: 20,
+        borderRadius: 7,
         background: 'transparent',
         border: `2px solid ${colorPurple}`,
         color: colorPurple,
@@ -34,6 +23,12 @@ const useStyles = makeStyles(() => ({
         '&:hover': {
             background: 'transparent',
         },
+    },
+    rounded: {
+        borderRadius: 20,
+        fontWeight: 400,
+        textTransform: 'unset',
+        letterSpacing: 0,
     },
     buttonText: {
         background: 'none',
