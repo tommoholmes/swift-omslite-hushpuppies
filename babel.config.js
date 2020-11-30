@@ -65,6 +65,7 @@ module.exports = function (api) {
                         '@helper_localstorage': './core/helpers/localstorage',
 
                         // commons
+                        '@common_autocomplete': './core/modules/commons/Autocomplete',
                         '@common_textfield': './core/modules/commons/TextField',
                         '@common_button': './core/modules/commons/Button',
                         '@common_table': './core/modules/commons/Table',
