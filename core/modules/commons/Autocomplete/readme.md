@@ -7,16 +7,16 @@ Autocomplete is module commons to create custom Field Searchable Dropdown view
 
 **1. Import module to your component**
 ```node
-import Password from '@common_autocomplete';
+import Autocomplete from '@common_autocomplete';
 ```
 
 or
 
 ```node
-import Password from '{pathModule}/commons/Autocomplete';
+import Autocomplete from '{pathModule}/commons/Autocomplete';
 ```
 
-**2. Place Password component on your component**
+**2. Place Autocomplete component on your component**
 
 ```node
 ....
