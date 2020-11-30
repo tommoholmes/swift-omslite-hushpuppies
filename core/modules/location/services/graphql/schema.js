@@ -33,6 +33,7 @@ export const getLocationById = gql`
         getLocationById(
             id: $id
         ){
+            loc_id
             company {
                 company_code
                 company_id
@@ -100,6 +101,7 @@ export const createLocation = gql`
                 is_active: $is_active,
             }
         ){
+            loc_id
             company_id
             loc_code
             loc_name
@@ -164,6 +166,7 @@ export const updateLocation = gql`
                 is_active: $is_active,
             }
         ){
+            loc_id
             company_id
             loc_code
             loc_name

@@ -12,6 +12,14 @@ const ContentWrapper = (props) => {
     } = props;
     const location = data.getLocationById;
     const [updateLocation] = gqlService.updateLocation();
+    const optionsYesNo = [
+        { id: 0, name: 'No' },
+        { id: 1, name: 'Yes' },
+    ];
+    const optionsActive = [
+        { id: 0, name: 'Inactive' },
+        { id: 1, name: 'Active' },
+    ];
 
     const handleSubmit = ({
         company,
@@ -34,23 +42,24 @@ const ContentWrapper = (props) => {
 
     }) => {
         const variables = {
-            company,
-            code,
-            name,
-            street,
-            region,
-            city,
-            telephone,
-            postcode,
-            longitude,
-            latitude,
-            zone,
-            warehouse,
-            useFrontend,
-            sircloWarehouse,
-            virtualLocation,
+            id: location.loc_id,
+            company_id: company.company_id,
+            loc_code: code,
+            loc_name: name,
+            loc_street: street,
+            loc_region: region,
+            loc_city: city,
+            loc_telephone: telephone,
+            loc_postcode: postcode,
+            loc_long: longitude,
+            loc_lat: latitude,
+            loc_zone: zone,
+            is_warehouse: warehouse.id,
+            use_in_frontend: useFrontend.id,
+            is_sirclo_warehouse: sircloWarehouse.id,
+            is_virtual_location: virtualLocation.id,
             priority,
-            status,
+            is_active: status.id,
         };
         updateLocation({
             variables,
@@ -65,7 +74,10 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            company: location.company_id || '',
+            company: {
+                company_id: location.company.company_id,
+                company_name: location.company.company_name,
+            },
             code: location.loc_code || '',
             name: location.loc_name || '',
             street: location.loc_street || '',
@@ -76,15 +88,15 @@ const ContentWrapper = (props) => {
             longitude: location.loc_long || '',
             latitude: location.loc_lat || '',
             zone: location.loc_zone || '',
-            warehouse: location.is_warehouse || '',
-            useFrontend: location.use_in_frontend || '',
-            sircloWarehouse: location.is_circlo_warehouse || '',
-            virtualLocation: location.is_virtual_location || '',
+            warehouse: optionsYesNo.find((e) => e.id === location.is_warehouse),
+            useFrontend: optionsYesNo.find((e) => e.id === location.use_in_frontend),
+            sircloWarehouse: optionsYesNo.find((e) => e.id === location.is_sirclo_warehouse),
+            virtualLocation: optionsYesNo.find((e) => e.id === location.is_virtual_location),
             priority: location.priority || '',
-            status: location.is_active || '',
+            status: optionsActive.find((e) => e.id === location.is_active),
         },
         validationSchema: Yup.object().shape({
-            company: Yup.number().required('Required!'),
+            company: Yup.object().required('Required!'),
             code: Yup.string().required('Required!'),
             name: Yup.string().required('Required!'),
             street: Yup.string().required('Required!'),
@@ -95,12 +107,12 @@ const ContentWrapper = (props) => {
             longitude: Yup.string().required('Required!'),
             latitude: Yup.string().required('Required!'),
             zone: Yup.string().required('Required!'),
-            warehouse: Yup.string().nullable(),
-            useFrontend: Yup.number().nullable(),
-            sircloWarehouse: Yup.number().nullable(),
-            virtualLocation: Yup.number().nullable(),
+            warehouse: Yup.object().nullable(),
+            useFrontend: Yup.object().nullable(),
+            sircloWarehouse: Yup.object().nullable(),
+            virtualLocation: Yup.object().nullable(),
             priority: Yup.number().nullable(),
-            status: Yup.number().nullable(),
+            status: Yup.object().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);

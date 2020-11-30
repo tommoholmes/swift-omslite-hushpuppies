@@ -5,6 +5,8 @@ import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Autocomplete from '@common_autocomplete';
+import companyGqlService from '@modules/company/services/graphql';
 import useStyles from './style';
 
 const LocationEditContent = (props) => {
@@ -13,6 +15,15 @@ const LocationEditContent = (props) => {
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
+    const optionsYesNo = [
+        { id: 0, name: 'No' },
+        { id: 1, name: 'Yes' },
+    ];
+    const optionsActive = [
+        { id: 0, name: 'Inactive' },
+        { id: 1, name: 'Active' },
+    ];
 
     return (
         <>
@@ -38,17 +49,20 @@ const LocationEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Company</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="company"
+                        <Autocomplete
+                            mode="lazy"
                             value={formik.values.company}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.company && formik.errors.company)}
-                            helperText={(formik.touched.company && formik.errors.company) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                            onChange={(e) => formik.setFieldValue('company', e)}
+                            loading={getCompanyListRes.loading}
+                            options={
+                                getCompanyListRes
+                                && getCompanyListRes.data
+                                && getCompanyListRes.data.getCompanyList
+                                && getCompanyListRes.data.getCompanyList.items
+                            }
+                            getOptions={getCompanyList}
+                            primaryKey="company_id"
+                            labelKey="company_name"
                         />
                     </div>
                     <div className={classes.formField}>
@@ -225,68 +239,48 @@ const LocationEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Is Warehouse</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="warehouse"
+                        <Autocomplete
                             value={formik.values.warehouse}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('warehouse', e)}
+                            options={optionsYesNo}
                             error={!!(formik.touched.warehouse && formik.errors.warehouse)}
                             helperText={(formik.touched.warehouse && formik.errors.warehouse) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Use in Frontend</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="useFrontend"
+                        <Autocomplete
                             value={formik.values.useFrontend}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('useFrontend', e)}
+                            options={optionsYesNo}
                             error={!!(formik.touched.useFrontend && formik.errors.useFrontend)}
                             helperText={(formik.touched.useFrontend && formik.errors.useFrontend) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Is Sirclo Warehouse</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="sircloWarehouse"
+                        <Autocomplete
                             value={formik.values.sircloWarehouse}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('sircloWarehouse', e)}
+                            options={optionsYesNo}
                             error={!!(formik.touched.sircloWarehouse && formik.errors.sircloWarehouse)}
                             helperText={(formik.touched.sircloWarehouse && formik.errors.sircloWarehouse) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Is Virtual Location</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="virtualLocation"
+                        <Autocomplete
                             value={formik.values.virtualLocation}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('virtualLocation', e)}
+                            options={optionsYesNo}
                             error={!!(formik.touched.virtualLocation && formik.errors.virtualLocation)}
                             helperText={(formik.touched.virtualLocation && formik.errors.virtualLocation) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                     <div className={classes.formField}>
@@ -310,17 +304,12 @@ const LocationEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Status</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="status"
+                        <Autocomplete
                             value={formik.values.status}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('status', e)}
+                            options={optionsActive}
                             error={!!(formik.touched.status && formik.errors.status)}
                             helperText={(formik.touched.status && formik.errors.status) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                 </div>

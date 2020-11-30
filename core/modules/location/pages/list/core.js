@@ -7,11 +7,11 @@ const Core = (props) => {
     } = props;
 
     const [getLocationList, { data, loading }] = gqlService.getLocationList();
-    // const [multideleteLocation] = gqlService.multideleteLocation();
+    const [multideleteLocation] = gqlService.multideleteLocation();
 
     const contentProps = {
         getLocationList,
-        // multideleteLocation,
+        multideleteLocation,
         data,
         loading,
     };

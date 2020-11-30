@@ -30,7 +30,7 @@ const Core = (props) => {
         status,
     }) => {
         const variables = {
-            company_id: company,
+            company_id: company.company_id,
             loc_code: code,
             loc_name: name,
             loc_street: street,
@@ -41,12 +41,12 @@ const Core = (props) => {
             loc_long: longitude,
             loc_lat: latitude,
             loc_zone: zone,
-            is_warehouse: warehouse,
-            use_in_frontend: useFrontend,
-            is_sirclo_warehouse: sircloWarehouse,
-            is_virtual_location: virtualLocation,
+            is_warehouse: warehouse.id,
+            use_in_frontend: useFrontend.id,
+            is_sirclo_warehouse: sircloWarehouse.id,
+            is_virtual_location: virtualLocation.id,
             priority,
-            is_active: status,
+            is_active: status.id,
         };
         createLocation({
             variables,
@@ -61,7 +61,7 @@ const Core = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            company: '',
+            company: null,
             code: '',
             name: '',
             street: '',
@@ -72,15 +72,15 @@ const Core = (props) => {
             longitude: '',
             latitude: '',
             zone: '',
-            warehouse: '',
-            useFrontend: '',
-            sircloWarehouse: '',
-            virtualLocation: '',
-            priority: '',
-            status: '',
+            warehouse: { id: 0, name: 'No' },
+            useFrontend: { id: 0, name: 'No' },
+            sircloWarehouse: { id: 0, name: 'No' },
+            virtualLocation: { id: 0, name: 'No' },
+            priority: null,
+            status: { id: 1, name: 'Active' },
         },
         validationSchema: Yup.object().shape({
-            company: Yup.number().required('Required!'),
+            company: Yup.object().required('Required!'),
             code: Yup.string().required('Required!'),
             name: Yup.string().required('Required!'),
             street: Yup.string().required('Required!'),
@@ -91,15 +91,16 @@ const Core = (props) => {
             longitude: Yup.string().required('Required!'),
             latitude: Yup.string().required('Required!'),
             zone: Yup.string().required('Required!'),
-            warehouse: Yup.string().nullable(),
-            useFrontend: Yup.number().nullable(),
-            sircloWarehouse: Yup.number().nullable(),
-            virtualLocation: Yup.number().nullable(),
+            warehouse: Yup.object().nullable(),
+            useFrontend: Yup.object().nullable(),
+            sircloWarehouse: Yup.object().nullable(),
+            virtualLocation: Yup.object().nullable(),
             priority: Yup.number().nullable(),
-            status: Yup.number().nullable(),
+            status: Yup.object().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
+            // console.log(values);
         },
     });
 
