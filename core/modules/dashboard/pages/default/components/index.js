@@ -22,22 +22,25 @@ const DashboardContent = () => {
         <div>
             <h2>Dashboard Content</h2>
             <div>
-                <Button buttonType='container' onClick={handleClickOpen}>
+                <Button onClick={handleClickOpen}>
                     Open alert dialog
                 </Button>
-                <Button buttonType='container' onClick={handleClickOpen} style={{ marginLeft: 5 }} >
+                <Button buttonType="primary" onClick={handleClickOpen} style={{ marginLeft: 5 }}>
                     buttonType: container
                 </Button>
-                <Button buttonType='primary' onClick={handleClickOpen} style={{ marginLeft: 5 }} >
+                <Button buttonType="primary-rounded" onClick={handleClickOpen} style={{ marginLeft: 5 }}>
                     buttonType: primary
                 </Button>
-                <Button buttonType='outlined' onClick={handleClickOpen} style={{ marginLeft: 5 }} >
+                <Button buttonType="outlined" onClick={handleClickOpen} style={{ marginLeft: 5 }}>
                     buttonType: outlined
                 </Button>
-                <Button buttonType='buttonText' onClick={handleClickOpen}>
+                <Button buttonType="outlined-rounded" onClick={handleClickOpen} style={{ marginLeft: 5 }}>
+                    buttonType: outlined
+                </Button>
+                <Button buttonType="buttonText" onClick={handleClickOpen}>
                     buttonType: buttonText
                 </Button>
-                <Button buttonType='link' onClick={handleClickOpen}>
+                <Button buttonType="link" onClick={handleClickOpen}>
                     buttonType: link
                 </Button>
             </div>
