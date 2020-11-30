@@ -17,6 +17,8 @@ const CustomCart = ({
     data = [],
     className = {},
     chartType = 'line',
+    argumentField,
+    seriesFields = [],
 }) => {
     const classes = useStyles();
     const getClassByType = (type) => {
@@ -29,32 +31,25 @@ const CustomCart = ({
         getClassByType(chartType),
         className,
     );
+    const ComponentSeries = chartType === 'line' ? LineSeries : BarSeries;
     return (
         <Paper className={customClass}>
             <Chart
                 data={data}
                 className={classes.chart}
             >
-                {/* <ArgumentAxis />
-                <ValueAxis />
-
-                <LineSeries valueField="value" argumentField="argument" color="#5719A0" /> */}
-
                 <ArgumentScale factory={scaleBand} />
                 <ArgumentAxis />
                 <ValueAxis />
-                <BarSeries
-                    valueField="value"
-                    argumentField="month"
-                    name="Total Order"
-                    color="#efefef"
-                />
-                <BarSeries
-                    valueField="value1"
-                    argumentField="month"
-                    name="Total Shipment"
-                    color="#c9dde6"
-                />
+                {seriesFields.map((seriesField, i) => (
+                    <ComponentSeries
+                        key={i}
+                        valueField={seriesField.valueField}
+                        argumentField={argumentField}
+                        name={seriesField.name}
+                        color={seriesField.color}
+                    />
+                ))}
                 <Legend />
                 <Stack />
             </Chart>

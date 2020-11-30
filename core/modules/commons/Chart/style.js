@@ -4,6 +4,9 @@ const useStyles = makeStyles(() => ({
     line: {
         boxShadow: 'none',
     },
+    bar: {
+        boxShadow: 'none',
+    },
 }));
 
 export default useStyles;
