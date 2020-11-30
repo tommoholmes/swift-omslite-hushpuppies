@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 import React from 'react';
 import clsx from 'clsx';
@@ -20,6 +19,7 @@ import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
 import Button from '@common_button';
 import Collapse from '@material-ui/core/Collapse';
 import TablePaginationActions from './components/TablePaginationActions';
+import TableFilters from './components/TableFilters';
 import useStyles from './style';
 
 // helpers
@@ -73,7 +73,7 @@ const CustomTable = (props) => {
         rows,
         getRows,
         deleteRows,
-        loading,
+        // loading,
         initialPage = 0,
         initialRowsPerPage = 10,
         count,
@@ -147,6 +147,14 @@ const CustomTable = (props) => {
                             columns
                         </Button>
                     </div>
+                    <div className="top-item">
+                        <Button
+                            className={classes.btn}
+                            onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
+                        >
+                            filters
+                        </Button>
+                    </div>
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
@@ -165,6 +173,9 @@ const CustomTable = (props) => {
                         <Button style={{ margin: '16px 0px 16px 16px' }} onClick={resetHiddenColumn}>
                             reset
                         </Button>
+                    </Collapse>
+                    <Collapse in={expandedToolbar === 'filters'}>
+                        <TableFilters />
                     </Collapse>
                 </div>
             </div>

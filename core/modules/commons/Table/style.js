@@ -12,9 +12,11 @@ const useStyles = makeStyles(() => ({
         '& .records-found': {
             padding: '12px 0',
             float: 'left',
+            marginLeft: '12px',
         },
         '& .top-item': {
             display: 'inline-block',
+            marginRight: '12px',
         },
     },
     btn: {
