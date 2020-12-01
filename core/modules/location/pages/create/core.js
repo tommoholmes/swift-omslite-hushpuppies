@@ -45,7 +45,7 @@ const Core = (props) => {
             use_in_frontend: useFrontend.id,
             is_sirclo_warehouse: sircloWarehouse.id,
             is_virtual_location: virtualLocation.id,
-            priority,
+            priority: Number(priority || null),
             is_active: status.id,
         };
         createLocation({

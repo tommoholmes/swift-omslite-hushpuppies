@@ -58,7 +58,7 @@ const ContentWrapper = (props) => {
             use_in_frontend: useFrontend.id,
             is_sirclo_warehouse: sircloWarehouse.id,
             is_virtual_location: virtualLocation.id,
-            priority,
+            priority: Number(priority || null),
             is_active: status.id,
         };
         updateLocation({
@@ -92,7 +92,7 @@ const ContentWrapper = (props) => {
             useFrontend: optionsYesNo.find((e) => e.id === location.use_in_frontend),
             sircloWarehouse: optionsYesNo.find((e) => e.id === location.is_sirclo_warehouse),
             virtualLocation: optionsYesNo.find((e) => e.id === location.is_virtual_location),
-            priority: location.priority || '',
+            priority: location.priority || null,
             status: optionsActive.find((e) => e.id === location.is_active),
         },
         validationSchema: Yup.object().shape({
