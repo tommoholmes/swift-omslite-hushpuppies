@@ -50,6 +50,7 @@ const LocationCreateContent = (props) => {
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Company</span>
                         </div>
                         <Autocomplete
+                            className={classes.autocompleteRoot}
                             mode="lazy"
                             value={formik.values.company}
                             onChange={(e) => formik.setFieldValue('company', e)}
@@ -240,6 +241,7 @@ const LocationCreateContent = (props) => {
                             <span className={classes.label}>Is Warehouse</span>
                         </div>
                         <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.warehouse}
                             onChange={(e) => formik.setFieldValue('warehouse', e)}
                             options={optionsYesNo}
@@ -252,6 +254,7 @@ const LocationCreateContent = (props) => {
                             <span className={classes.label}>Use in Frontend</span>
                         </div>
                         <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.useFrontend}
                             onChange={(e) => formik.setFieldValue('useFrontend', e)}
                             options={optionsYesNo}
@@ -264,6 +267,7 @@ const LocationCreateContent = (props) => {
                             <span className={classes.label}>Is Sirclo Warehouse</span>
                         </div>
                         <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.sircloWarehouse}
                             onChange={(e) => formik.setFieldValue('sircloWarehouse', e)}
                             options={optionsYesNo}
@@ -276,6 +280,7 @@ const LocationCreateContent = (props) => {
                             <span className={classes.label}>Is Virtual Location</span>
                         </div>
                         <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.virtualLocation}
                             onChange={(e) => formik.setFieldValue('virtualLocation', e)}
                             options={optionsYesNo}
@@ -305,6 +310,7 @@ const LocationCreateContent = (props) => {
                             <span className={classes.label}>Status</span>
                         </div>
                         <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.status}
                             onChange={(e) => formik.setFieldValue('status', e)}
                             options={optionsActive}
