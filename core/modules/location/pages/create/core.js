@@ -79,7 +79,7 @@ const Core = (props) => {
             useFrontend: { id: 0, name: 'No' },
             sircloWarehouse: { id: 0, name: 'No' },
             virtualLocation: { id: 0, name: 'No' },
-            priority: null,
+            priority: '',
             status: { id: 1, name: 'Active' },
         },
         validationSchema: Yup.object().shape({
