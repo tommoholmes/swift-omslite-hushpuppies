@@ -20,6 +20,11 @@ import Autocomplete from '{pathModule}/commons/Autocomplete';
 
 ```node
 ....
+
+    import companyGqlService from '@modules/company/services/graphql';
+
+    ...
+
     const [value, setValue] = React.useState();
     const [valueLazy, setValueLazy] = React.useState();
     const [valueServer, setValueServer] = React.useState();
