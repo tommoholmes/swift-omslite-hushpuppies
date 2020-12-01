@@ -27,9 +27,9 @@ module.exports = withSourceMaps(withOffline({
         //     analyzerMode: 'static',
         //     reportFilename: './analyze/client.html',
         // }));
-        // config.plugins.push(new webpack.ProvidePlugin({
-        //     React: 'react',
-        // }));
+        config.plugins.push(new webpack.ProvidePlugin({
+            React: 'react',
+        }));
         if (!isServer) {
             // eslint-disable-next-line no-param-reassign
             config.resolve.alias['@sentry/node'] = '@sentry/browser';
