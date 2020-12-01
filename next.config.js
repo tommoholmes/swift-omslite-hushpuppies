@@ -6,6 +6,10 @@ const withOffline = require('next-offline');
 const withSourceMaps = require('@zeit/next-source-maps')();
 
 module.exports = withSourceMaps(withOffline({
+    // images: {
+    //     domains: ['thumbor.sirclocdn.xyz'],
+    //     loader: 'default',
+    // },
     publicRuntimeConfig: {
         appEnv: process.env.APP_ENV,
         rootDir: __dirname,
@@ -22,6 +26,9 @@ module.exports = withSourceMaps(withOffline({
         // config.plugins.push(new BundleAnalyzerPlugin({
         //     analyzerMode: 'static',
         //     reportFilename: './analyze/client.html',
+        // }));
+        // config.plugins.push(new webpack.ProvidePlugin({
+        //     React: 'react',
         // }));
         if (!isServer) {
             // eslint-disable-next-line no-param-reassign

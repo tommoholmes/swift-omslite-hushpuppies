@@ -66,7 +66,7 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "lru-cache": "^5.1.1",
-    "next": "^9.5.3",
+    "next": "^10.0.3",
     "next-i18next": "^4.2.1",
     "next-offline": "^5.0.0",
     "next-with-apollo": "^5.0.0",
