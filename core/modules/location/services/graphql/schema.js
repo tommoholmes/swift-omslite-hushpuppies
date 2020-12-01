@@ -188,6 +188,21 @@ export const updateLocation = gql`
     }
 `;
 
+export const getCountries = gql`
+    query{
+        countries{
+            available_regions {
+                code
+                id
+                name
+            }
+            full_name_english
+            full_name_locale
+            id
+        }
+    }
+`;
+
 export const multideleteLocation = gql`
     mutation multideleteLocation (
         $id: [Int!]!
@@ -203,5 +218,6 @@ export default {
     getLocationById,
     createLocation,
     updateLocation,
+    getCountries,
     multideleteLocation,
 };

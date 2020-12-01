@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import companyGqlService from '@modules/company/services/graphql';
+import countriesGqlService from '@modules/location/services/graphql';
 import useStyles from './style';
 
 const LocationCreateContent = (props) => {
@@ -16,6 +17,7 @@ const LocationCreateContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
+    const [getCountries, getCountriesRes] = countriesGqlService.getCountries();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -64,6 +66,27 @@ const LocationCreateContent = (props) => {
                             getOptions={getCompanyList}
                             primaryKey="company_id"
                             labelKey="company_name"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={[classes.label, classes.labelRequired].join(' ')}>Contoh Countries</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
+                            value={formik.values.countries}
+                            onChange={(e) => formik.setFieldValue('countries', e)}
+                            loading={getCountriesRes.loading}
+                            options={
+                                getCountriesRes
+                                && getCountriesRes.data
+                                && getCountriesRes.data.countries
+
+                            }
+                            getOptions={getCountries}
+                            primaryKey="id"
+                            labelKey="full_name_english"
                         />
                     </div>
                     <div className={classes.formField}>
