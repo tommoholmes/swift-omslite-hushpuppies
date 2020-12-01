@@ -2,6 +2,7 @@
 import ConfirmationDelete from 'core/modules/commons/ConfirmDialog';
 import Button from '@common_button';
 import Chart from 'core/modules/commons/Chart';
+import BorderLinearProgress from 'core/modules/commons/ProgressBar';
 
 const DashboardContent = () => {
     const [open, setOpen] = React.useState(false);
@@ -71,6 +72,18 @@ const DashboardContent = () => {
                 margin: '15px 0px', padding: '16px 23px', background: '#FFFFFF', border: '1px solid #ECF0FB', borderRadius: 16,
             }}
             >
+                <div style={{ fontSize: 24, color: '#BE1F93' }}>Best Performing Location</div>
+                <span>Sales Amount &amp; Orders 2020</span>
+                <BorderLinearProgress variant="determinate" value={20} title='Bantul' total="254" />
+                <BorderLinearProgress variant="determinate" value={60} title='Denpasar' total="454" />
+                <BorderLinearProgress variant="determinate" value={45} title='Jakarta Barat' total="300" />
+                <BorderLinearProgress variant="determinate" value={80} title='Jakarta Selatan' total="624" />
+                <BorderLinearProgress variant="determinate" value={30} title='Surabaya' total="273" />
+            </div>
+            <div style={{
+                margin: '15px 0px', padding: '16px 23px', background: '#FFFFFF', border: '1px solid #ECF0FB', borderRadius: 16,
+            }}
+            >
                 <div style={{ fontSize: 24, color: '#BE1F93' }}>Sales Performance</div>
                 <span>October 2020</span>
                 <Chart
@@ -78,7 +91,7 @@ const DashboardContent = () => {
                     chartType="line"
                     argumentField="argument"
                     seriesFields={[
-                        { valueField: 'value', name: '', color: '#5719A0' },
+                        { valueField: 'value', name: 'Argument', color: '#5719A0' },
                     ]}
                 />
             </div>
