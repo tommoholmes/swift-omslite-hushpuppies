@@ -74,6 +74,7 @@ const CustomTable = (props) => {
         getRows,
         deleteRows,
         // loading,
+        initialFilters = [],
         initialPage = 0,
         initialRowsPerPage = 10,
         count,
@@ -81,6 +82,7 @@ const CustomTable = (props) => {
 
     // hooks
     const classes = useStyles();
+    const [filters, setFilters] = React.useState(initialFilters);
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -103,6 +105,7 @@ const CustomTable = (props) => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
+            filters,
         };
         getRows({ variables });
     };
@@ -110,7 +113,7 @@ const CustomTable = (props) => {
     // effects
     React.useEffect(() => {
         fetchRows();
-    }, [page, rowsPerPage]);
+    }, [page, rowsPerPage, filters]);
 
     const renderTableToolbar = () => {
         return (
@@ -175,7 +178,7 @@ const CustomTable = (props) => {
                         </Button>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
-                        <TableFilters />
+                        <TableFilters filters={filters} setFilters={setFilters} />
                     </Collapse>
                 </div>
             </div>
