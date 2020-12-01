@@ -112,6 +112,7 @@ const Layout = (props) => {
                     { key: 'channel', label: 'Channel', url: '/oms/channel' },
                     { key: 'company', label: 'Company', url: '/oms/company' },
                     { key: 'location', label: 'Location', url: '/oms/location' },
+                    { key: 'source', label: 'Source', url: '/oms/source' },
                 ],
             },
             {
