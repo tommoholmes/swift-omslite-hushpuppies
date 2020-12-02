@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-lonely-if */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/destructuring-assignment */
@@ -81,6 +82,7 @@ const CustomAutocomplete = (props) => {
             helperText={helperText}
             InputProps={{
                 ...params.InputProps,
+                autoComplete: 'no-autocomplete',
                 endAdornment: (
                     <>
                         {loading ? (
@@ -89,6 +91,10 @@ const CustomAutocomplete = (props) => {
                         {params.InputProps.endAdornment}
                     </>
                 ),
+            }}
+            inputProps={{
+                ...params.inputProps,
+                autoComplete: 'no-autocomplete',
             }}
         />
     );
