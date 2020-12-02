@@ -12,9 +12,24 @@ const ContentWrapper = (props) => {
     } = props;
     const channel = data.getChannelById;
     const [updateChannel] = gqlService.updateChannel();
+    const optionsFramework = [
+        { id: 0, name: 'M1' },
+        { id: 1, name: 'M2' },
+        { id: 2, name: 'Pos' },
+        { id: 3, name: 'Marketplace' },
+        { id: 4, name: 'TADA' },
+        { id: 5, name: 'Others' },
+    ];
+    const optionsType = [
+        { id: 0, name: 'Default' },
+        { id: 1, name: 'Location priority per city' },
+        { id: 2, name: 'Longitude latitude' },
+        { id: 3, name: 'Priotiy by zone' },
+        { id: 4, name: 'Disable' },
+    ];
 
     const handleSubmit = ({
-        code, name, notes, url, token, endPoint, deltaStock, framework, type, shipment, invoice, refund, creditmemo,
+        code, name, notes, url, token, endPoint, deltaStock, framework, type, virtualStock, shipment, invoice, refund, creditmemo,
     }) => {
         const variables = {
             id: channel.channel_id,
@@ -25,8 +40,9 @@ const ContentWrapper = (props) => {
             token,
             end_point: endPoint,
             delta_stock_url: deltaStock,
-            framework,
-            rule_type: type,
+            framework: framework.name,
+            rule_type: type.name,
+            virtual_stock: virtualStock.map((e) => ({ vs_id: e.vs_id })),
             webhook_shipment_complete: shipment,
             webhook_invoice: invoice,
             webhook_rma_refund: refund,
@@ -52,8 +68,9 @@ const ContentWrapper = (props) => {
             token: channel.token || '',
             endPoint: channel.end_point || '',
             deltaStock: channel.delta_stock_url || '',
-            framework: channel.framework || '',
-            type: channel.rule_type || '',
+            framework: optionsFramework.find((e) => e.name === channel.framework),
+            type: optionsType.find((e) => e.name === channel.rule_type),
+            virtualStock: channel.virtual_stock || [],
             shipment: channel.webhook_shipment_complete || '',
             invoice: channel.webhook_invoice || '',
             refund: channel.webhook_rma_refund || '',
@@ -62,8 +79,9 @@ const ContentWrapper = (props) => {
         validationSchema: Yup.object().shape({
             code: Yup.string().nullable().required('Required!'),
             name: Yup.string().nullable().required('Required!'),
-            framework: Yup.string().nullable().required('Required!'),
-            type: Yup.string().nullable().required('Required!'),
+            framework: Yup.object().nullable().required('Required!'),
+            type: Yup.object().nullable().required('Required!'),
+            virtualStock: Yup.array().nullable(),
             notes: Yup.string().nullable(),
             url: Yup.string().nullable(),
             token: Yup.string().nullable(),

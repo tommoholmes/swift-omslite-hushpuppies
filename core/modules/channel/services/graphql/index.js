@@ -24,6 +24,9 @@ export const createChannel = (variables) => useMutation(Schema.createChannel, {
 export const updateChannel = (variables) => useMutation(Schema.updateChannel, {
     variables, ...context,
 });
+export const getVirtualStockList = (variables) => useLazyQuery(Schema.getVirtualStockList, {
+    variables, ...context, ...fetchPolicy,
+});
 
 export const deleteChannel = (variables) => useMutation(Schema.deleteChannel, {
     variables, ...context,
@@ -37,6 +40,7 @@ export default {
     getChannelById,
     createChannel,
     updateChannel,
+    getVirtualStockList,
     deleteChannel,
     multideleteChannel,
 };

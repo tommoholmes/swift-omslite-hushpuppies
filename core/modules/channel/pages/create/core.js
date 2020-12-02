@@ -11,7 +11,20 @@ const Core = (props) => {
     const [createChannel] = gqlService.createChannel();
 
     const handleSubmit = ({
-        code, name, notes, url, token, endPoint, deltaStock, framework, type, shipment, invoice, refund, creditmemo,
+        code,
+        name,
+        notes,
+        url,
+        token,
+        endPoint,
+        deltaStock,
+        framework,
+        type,
+        virtualStock,
+        shipment,
+        invoice,
+        refund,
+        creditmemo,
     }) => {
         const variables = {
             channel_code: code,
@@ -21,8 +34,9 @@ const Core = (props) => {
             token,
             end_point: endPoint,
             delta_stock_url: deltaStock,
-            framework,
-            rule_type: type,
+            framework: framework.name,
+            rule_type: type.name,
+            virtual_stock: virtualStock.map((e) => ({ vs_id: e.vs_id })),
             webhook_shipment_complete: shipment,
             webhook_invoice: invoice,
             webhook_rma_refund: refund,
@@ -48,8 +62,9 @@ const Core = (props) => {
             token: '',
             endPoint: '',
             deltaStock: '',
-            framework: '',
-            type: '',
+            framework: { id: 0, name: 'M1' },
+            type: { id: 0, name: 'Default' },
+            virtualStock: [],
             shipment: '',
             invoice: '',
             refund: '',
@@ -58,8 +73,9 @@ const Core = (props) => {
         validationSchema: Yup.object().shape({
             code: Yup.string().required('Required!'),
             name: Yup.string().required('Required!'),
-            framework: Yup.string().required('Required!'),
-            type: Yup.string().required('Required!'),
+            framework: Yup.object().required('Required!'),
+            type: Yup.object().required('Required!'),
+            virtualStock: Yup.array().nullable(),
             notes: Yup.string().nullable(),
             url: Yup.string().nullable(),
             token: Yup.string().nullable(),
@@ -72,6 +88,7 @@ const Core = (props) => {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
+            // console.log(values);
         },
     });
 
