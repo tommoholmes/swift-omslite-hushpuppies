@@ -98,7 +98,7 @@ const CustomAutocomplete = (props) => {
             value={multiple ? (value || []) : value}
             open={open}
             getOptionSelected={(option, selectedValue) => option[primaryKey] === selectedValue[primaryKey]}
-            getOptionLabel={getOptionLabel || ((option) => option && option[labelKey])}
+            getOptionLabel={getOptionLabel || ((option) => (option && option[labelKey]) || '')}
             multiple={multiple}
             disableCloseOnSelect={disableCloseOnSelect || multiple}
             onChange={(event, newValue) => onChange(newValue)}
