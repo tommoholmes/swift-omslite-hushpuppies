@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import companyGqlService from '@modules/company/services/graphql';
+import locationGqlService from '@modules/location/services/graphql';
 import useStyles from './style';
 
 const LocationEditContent = (props) => {
@@ -16,6 +17,8 @@ const LocationEditContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
+    const [getCountries, getCountriesRes] = locationGqlService.getCountries();
+    const [getCountry, getCountryRes] = locationGqlService.getCountry();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -23,6 +26,13 @@ const LocationEditContent = (props) => {
     const optionsActive = [
         { id: 0, name: 'Inactive' },
         { id: 1, name: 'Active' },
+    ];
+    const optionsZone = [
+        { id: 0, name: 'Jawa' },
+        { id: 1, name: 'Sumatera' },
+        { id: 2, name: 'Sulawesi' },
+        { id: 3, name: 'Kalimantan' },
+        { id: 4, name: 'Papua' },
     ];
 
     return (
@@ -119,19 +129,47 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Country</span>
+                            <span className={[classes.label, classes.labelRequired].join(' ')}> Country</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="region"
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
+                            value={formik.values.countries}
+                            onChange={(e) => formik.setFieldValue('countries', e)}
+                            loading={getCountriesRes.loading}
+                            options={
+                                getCountriesRes
+                                && getCountriesRes.data
+                                && getCountriesRes.data.countries
+                            }
+                            getOptions={getCountries}
+                            primaryKey="id"
+                            labelKey="full_name_english"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={[classes.label, classes.labelRequired].join(' ')}> Province</span>
+                        </div>
+                        <Autocomplete
+                            disabled={!(formik.values.countries && formik.values.countries.id)}
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
                             value={formik.values.region}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.region && formik.errors.region)}
-                            helperText={(formik.touched.region && formik.errors.region) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                            onChange={(e) => formik.setFieldValue('region', e)}
+                            loading={getCountryRes.loading}
+                            options={
+                                getCountryRes
+                                && getCountryRes.data
+                                && getCountryRes.data.country
+                                && getCountryRes.data.country.available_regions
+                            }
+                            getOptions={getCountry}
+                            getOptionsVariables={
+                                { variables: { id: formik.values.countries && formik.values.countries.id } }
+                            }
+                            primaryKey="id"
+                            labelKey="name"
                         />
                     </div>
                     <div className={classes.formField}>
@@ -221,19 +259,15 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Zona</span>
+                            <span className={classes.label}>Zona</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="zone"
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.zone}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('zone', e)}
+                            options={optionsZone}
                             error={!!(formik.touched.zone && formik.errors.zone)}
                             helperText={(formik.touched.zone && formik.errors.zone) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                     <div className={classes.formField}>
