@@ -7,6 +7,9 @@ const useStyles = makeStyles(() => ({
     bar: {
         boxShadow: 'none',
     },
+    none: {
+        display: 'none',
+    },
 }));
 
 export default useStyles;
