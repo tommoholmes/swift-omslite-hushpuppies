@@ -130,7 +130,7 @@ const CustomAutocomplete = (props) => {
             onInputChange={(e) => setQuery((e && e.target && e.target.value) || '')}
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
-            options={options}
+            options={options || []}
             loading={loading}
             renderInput={renderInput}
             {...others}
