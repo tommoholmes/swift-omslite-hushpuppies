@@ -18,13 +18,18 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 60,
     },
     textInput: {
-        paddingLeft: 15,
         width: '100%',
     },
     formField: {
         padding: 0,
-        paddingBottom: 16,
+        paddingBottom: 25,
         position: 'relative',
+    },
+    headerLogin: {
+        [theme.breakpoints.down('xs')]: {
+            width: 296,
+            margin: '20px auto 0',
+        },
     },
     containLeft: {
         [theme.breakpoints.up('sm')]: {
@@ -35,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     containRight: {
+        [theme.breakpoints.down('xs')]: {
+            display: 'none',
+        },
         [theme.breakpoints.up('sm')]: {
             width: '49%',
             float: 'right',
@@ -63,12 +71,15 @@ const useStyles = makeStyles((theme) => ({
             left: '15%',
         },
         [theme.breakpoints.down('xs')]: {
-            margin: '0 auto',
+            margin: '20% auto',
+            maxWidth: 280,
         },
     },
     btnLogin: {
         background: colorPurple,
         borderRadius: 7,
+        padding: 6,
+        width: '100%',
         '&:hover': {
             background: colorPurple,
         },
