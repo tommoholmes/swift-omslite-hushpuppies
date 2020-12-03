@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable eqeqeq */
@@ -105,7 +106,13 @@ const CustomTable = (props) => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
-            filters,
+            filters: filters.reduce((accumulator, currentValue) => {
+                accumulator[currentValue.field] = {
+                    ...accumulator[currentValue.field],
+                    [currentValue.type]: currentValue.value,
+                };
+                return accumulator;
+            }, {}),
         };
         getRows({ variables });
     };

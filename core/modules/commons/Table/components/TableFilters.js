@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable arrow-body-style */
@@ -10,18 +11,18 @@ const TableFilters = (props) => {
     const { fields } = props;
     const [filters, setFilters] = React.useState(props.filters);
     const getFilterValueByField = (field) => {
-        const index = filters.findIndex((filter) => filter.field === field);
+        const index = filters.findIndex((filter) => filter.name === field.name);
         return index >= 0 ? filters[index].value : '';
     };
     const setFilterValueByField = (field, value) => {
-        const index = filters.findIndex((filter) => filter.field === field);
+        const index = filters.findIndex((filter) => filter.name === field.name);
         if (index >= 0) {
             setFilters(filters.map((filter) => ({
                 ...filter,
-                ...(filter.field === field && { value }),
+                ...(filter.name === field.name && { ...field, value }),
             })));
         } else {
-            setFilters([...filters, { field, value }]);
+            setFilters([...filters, { ...field, value }]);
         }
     };
 
@@ -66,12 +67,12 @@ TableFilters.propTypes = {
 
 TableFilters.defaultProps = {
     fields: [
-        { name: 'noFrom', label: 'No From' },
-        { name: 'noTo', label: 'No To' },
-        { name: 'name', label: 'Name' },
-        { name: 'code', label: 'Code' },
-        { name: 'framework', label: 'Framework' },
-        { name: 'ruleType', label: 'RuleType' },
+        { field: 'no', name: 'noFrom', type: 'from', label: 'No From' },
+        { field: 'no', name: 'noTo', type: 'to', label: 'No To' },
+        { field: 'name', name: 'name', type: 'match', label: 'Name' },
+        { field: 'code', name: 'code', type: 'match', label: 'Code' },
+        { field: 'framework', name: 'framework', type: 'match', label: 'Framework' },
+        { field: 'ruleType', name: 'ruleType', type: 'match', label: 'RuleType' },
     ],
 };
 
