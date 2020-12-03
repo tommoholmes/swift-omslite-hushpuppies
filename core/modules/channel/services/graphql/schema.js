@@ -49,6 +49,10 @@ export const getChannelById = gql`
             webhook_invoice
             webhook_rma_refund
             webhook_creditmemo
+            virtual_stock {
+                vs_id
+                vs_name
+            }
         }
     }
 `;
@@ -64,6 +68,7 @@ export const createChannel = gql`
         $delta_stock_url: String,
         $framework: String,
         $rule_type: String,
+        $virtual_stock: [VirtualStockAssignment],
         $webhook_shipment_complete: String,
         $webhook_invoice: String,
         $webhook_rma_refund: String,
@@ -80,6 +85,7 @@ export const createChannel = gql`
                 delta_stock_url: $delta_stock_url,
                 framework: $framework,
                 rule_type: $rule_type,
+                virtual_stock: $virtual_stock,
                 webhook_shipment_complete: $webhook_shipment_complete,
                 webhook_invoice: $webhook_invoice,
                 webhook_rma_refund: $webhook_rma_refund,
@@ -96,6 +102,10 @@ export const createChannel = gql`
             delta_stock_url
             framework
             rule_type
+            virtual_stock {
+                vs_id
+                vs_name
+            }
             webhook_shipment_complete
             webhook_invoice
             webhook_rma_refund
@@ -116,6 +126,7 @@ export const updateChannel = gql`
         $delta_stock_url: String,
         $framework: String,
         $rule_type: String,
+        $virtual_stock: [VirtualStockAssignment],
         $webhook_shipment_complete: String,
         $webhook_invoice: String,
         $webhook_rma_refund: String,
@@ -133,6 +144,7 @@ export const updateChannel = gql`
                 delta_stock_url: $delta_stock_url,
                 framework: $framework,
                 rule_type: $rule_type,
+                virtual_stock: $virtual_stock,
                 webhook_shipment_complete: $webhook_shipment_complete,
                 webhook_invoice: $webhook_invoice,
                 webhook_rma_refund: $webhook_rma_refund,
@@ -149,12 +161,39 @@ export const updateChannel = gql`
             delta_stock_url
             framework
             rule_type
+            virtual_stock {
+                vs_id
+                vs_name
+            }
             webhook_shipment_complete
             webhook_invoice
             webhook_rma_refund
             webhook_creditmemo
         }
     }
+`;
+
+export const getVirtualStockList = gql`
+query getVirtualStockList(
+    $pageSize: Int!,
+    $currentPage: Int!,
+){
+    getVirtualStockList(
+        pageSize: $pageSize,
+        currentPage: $currentPage
+    ){
+        items {
+            vs_id
+            vs_name
+        }
+        total_count
+        page_info {
+            page_size
+            current_page
+            total_pages
+        }
+    }
+}
 `;
 
 export const deleteChannel = gql`
@@ -182,6 +221,7 @@ export default {
     getChannelById,
     createChannel,
     updateChannel,
+    getVirtualStockList,
     deleteChannel,
     multideleteChannel,
 };

@@ -5,6 +5,8 @@ import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Autocomplete from '@common_autocomplete';
+import channelGqlService from '@modules/channel/services/graphql';
 import useStyles from './style';
 
 const ChannelEditContent = (props) => {
@@ -13,6 +15,22 @@ const ChannelEditContent = (props) => {
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const [getVirtualStockList, getVirtualStockListRes] = channelGqlService.getVirtualStockList();
+    const optionsFramework = [
+        { id: 0, name: 'M1' },
+        { id: 1, name: 'M2' },
+        { id: 2, name: 'Pos' },
+        { id: 3, name: 'Marketplace' },
+        { id: 4, name: 'TADA' },
+        { id: 5, name: 'Others' },
+    ];
+    const optionsType = [
+        { id: 0, name: 'Default' },
+        { id: 1, name: 'Location priority per city' },
+        { id: 2, name: 'Longitude latitude' },
+        { id: 3, name: 'Priotiy by zone' },
+        { id: 4, name: 'Disable' },
+    ];
 
     return (
         <>
@@ -158,34 +176,48 @@ const ChannelEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Framework</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="framework"
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.framework}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('framework', e)}
+                            options={optionsFramework}
                             error={!!(formik.touched.framework && formik.errors.framework)}
                             helperText={(formik.touched.framework && formik.errors.framework) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Rule Type</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="type"
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.type}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.type && formik.errors.type)}
+                            onChange={(e) => formik.setFieldValue('type', e)}
+                            options={optionsType}
+                            error={!!(formik.touched.stype && formik.errors.type)}
                             helperText={(formik.touched.type && formik.errors.type) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}> Virtual Stock</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
+                            multiple
+                            value={formik.values.virtualStock}
+                            onChange={(e) => formik.setFieldValue('virtualStock', e)}
+                            loading={getVirtualStockListRes.loading}
+                            options={
+                                getVirtualStockListRes
+                                && getVirtualStockListRes.data
+                                && getVirtualStockListRes.data.getVirtualStockList
+                                && getVirtualStockListRes.data.getVirtualStockList.items
+                            }
+                            getOptions={getVirtualStockList}
+                            primaryKey="vs_id"
+                            labelKey="vs_name"
                         />
                     </div>
                 </div>

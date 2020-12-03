@@ -81,6 +81,18 @@ const useStyles = makeStyles(() => ({
         display: 'inline-block',
         marginTop: 10,
     },
+    autocompleteRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            borderRadius: 20,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+    },
 }));
 
 export default useStyles;
