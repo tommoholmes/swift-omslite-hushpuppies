@@ -23,6 +23,15 @@ const ChannelListContent = (props) => {
         { field: 'actions', headerName: 'Actions' },
     ];
 
+    const filters = [
+        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', value: '' },
+        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', value: '' },
+        { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', value: '' },
+        { field: 'channel_url', name: 'channel_url', type: 'match', label: 'Channel Url', value: '' },
+        { field: 'framework', name: 'framework', type: 'match', label: 'Framework', value: '' },
+        { field: 'ruleType', name: 'ruleType', type: 'match', label: 'RuleType', value: '' },
+    ];
+
     const rows = channelList.map((channel) => ({
         ...channel,
         id: channel.channel_id,
@@ -43,6 +52,7 @@ const ChannelListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
                 getRows={getChannelList}
                 deleteRows={multideleteChannel}

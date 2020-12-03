@@ -76,7 +76,7 @@ const CustomTable = (props) => {
         getRows,
         deleteRows,
         // loading,
-        initialFilters = [],
+        filters: initialFilters = [],
         initialPage = 0,
         initialRowsPerPage = 10,
         count,
@@ -107,7 +107,7 @@ const CustomTable = (props) => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
-            filters: filters.reduce((accumulator, currentValue) => {
+            filter: filters.reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = {
                     ...accumulator[currentValue.field],
                     [currentValue.type]: currentValue.value,

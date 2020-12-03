@@ -6,6 +6,14 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import PropTypes from 'prop-types';
 
+const renderFilterComponent = ({ getFilterValueByField, setFilterValueByField, field }) => (
+    <TextField
+        variant="outlined"
+        value={getFilterValueByField(field)}
+        onChange={(e) => setFilterValueByField(field, e.target.value)}
+    />
+);
+
 const TableFilters = (props) => {
     const { initialFilters, setParentFilters } = props;
 
@@ -40,11 +48,7 @@ const TableFilters = (props) => {
                     <div>
                         {field.label}
                     </div>
-                    <TextField
-                        variant="outlined"
-                        value={getFilterValueByField(field)}
-                        onChange={(e) => setFilterValueByField(field, e.target.value)}
-                    />
+                    {renderFilterComponent({ getFilterValueByField, setFilterValueByField, field })}
                 </div>
             ))}
             <div style={{ padding: 12 }}>
@@ -61,7 +65,8 @@ const TableFilters = (props) => {
                     buttonType="link"
                     onClick={() => {
                         if (!emptyFiltersField) {
-                            setFilters([]);
+                            const resetedFilters = filters.map((filter) => ({ ...filter, value: '' }));
+                            setFilters(resetedFilters);
                             setParentFilters([]);
                         }
                     }}
