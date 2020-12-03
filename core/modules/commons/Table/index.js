@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/destructuring-assignment */
@@ -185,7 +186,7 @@ const CustomTable = (props) => {
                         </Button>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
-                        <TableFilters filters={filters} setFilters={setFilters} />
+                        <TableFilters initialFilters={initialFilters} setParentFilters={setFilters} />
                     </Collapse>
                 </div>
             </div>

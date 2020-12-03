@@ -1,5 +1,4 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable arrow-body-style */
 import React from 'react';
@@ -8,8 +7,13 @@ import Button from '@common_button';
 import PropTypes from 'prop-types';
 
 const TableFilters = (props) => {
-    const { fields } = props;
-    const [filters, setFilters] = React.useState(props.filters);
+    const { initialFilters, setParentFilters } = props;
+
+    // state
+    const [filters, setFilters] = React.useState(initialFilters);
+    const emptyFiltersField = filters && !filters.length;
+
+    // methods
     const getFilterValueByField = (field) => {
         const index = filters.findIndex((filter) => filter.name === field.name);
         return index >= 0 ? filters[index].value : '';
@@ -28,7 +32,10 @@ const TableFilters = (props) => {
 
     return (
         <div style={{ padding: 12 }}>
-            {fields.map((field, i) => (
+            {emptyFiltersField && (
+                <div style={{ padding: 12 }}>Filter fields is empty.</div>
+            )}
+            {filters.map((field, i) => (
                 <div key={i} style={{ padding: 12, display: 'inline-block' }}>
                     <div>
                         {field.label}
@@ -43,15 +50,20 @@ const TableFilters = (props) => {
             <div style={{ padding: 12 }}>
                 <Button
                     buttonType="primary-rounded"
-                    onClick={() => props.setFilters(filters.filter((e) => e.value))}
+                    onClick={() => {
+                        // only set filters which have value
+                        if (!emptyFiltersField) setParentFilters(filters.filter((e) => e.value));
+                    }}
                 >
                     Apply Filters
                 </Button>
                 <Button
                     buttonType="link"
                     onClick={() => {
-                        setFilters([]);
-                        props.setFilters([]);
+                        if (!emptyFiltersField) {
+                            setFilters([]);
+                            setParentFilters([]);
+                        }
                     }}
                 >
                     Clear Filters
@@ -62,18 +74,11 @@ const TableFilters = (props) => {
 };
 
 TableFilters.propTypes = {
-    fields: PropTypes.array,
+    initialFilters: PropTypes.array,
 };
 
 TableFilters.defaultProps = {
-    fields: [
-        { field: 'no', name: 'noFrom', type: 'from', label: 'No From' },
-        { field: 'no', name: 'noTo', type: 'to', label: 'No To' },
-        { field: 'name', name: 'name', type: 'match', label: 'Name' },
-        { field: 'code', name: 'code', type: 'match', label: 'Code' },
-        { field: 'framework', name: 'framework', type: 'match', label: 'Framework' },
-        { field: 'ruleType', name: 'ruleType', type: 'match', label: 'RuleType' },
-    ],
+    initialFilters: [],
 };
 
 export default TableFilters;
