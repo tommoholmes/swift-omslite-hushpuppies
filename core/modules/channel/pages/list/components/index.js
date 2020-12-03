@@ -3,6 +3,7 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
+import Autocomplete from '@common_autocomplete';
 import Header from './Header';
 import useStyles from './style';
 
@@ -23,13 +24,35 @@ const ChannelListContent = (props) => {
         { field: 'actions', headerName: 'Actions' },
     ];
 
+    const optionsRuleType = [
+        { id: 0, name: 'Default' },
+        { id: 1, name: 'Location priority per city' },
+        { id: 2, name: 'Longitude latitude' },
+        { id: 3, name: 'Priotiy by zone' },
+        { id: 4, name: 'Disable' },
+    ];
+
     const filters = [
         { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', value: '' },
         { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', value: '' },
         { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', value: '' },
         { field: 'channel_url', name: 'channel_url', type: 'match', label: 'Channel Url', value: '' },
         { field: 'framework', name: 'framework', type: 'match', label: 'Framework', value: '' },
-        { field: 'ruleType', name: 'ruleType', type: 'match', label: 'RuleType', value: '' },
+        {
+            field: 'ruleType',
+            name: 'ruleType',
+            type: 'eq',
+            label: 'RuleType',
+            value: '',
+            component: ({ getFilterValueByField, setFilterValueByField, field }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsRuleType.find((e) => e.name === getFilterValueByField(field))}
+                    onChange={(e) => setFilterValueByField(field, e && e.name)}
+                    options={optionsRuleType}
+                />
+            ),
+        },
     ];
 
     const rows = channelList.map((channel) => ({

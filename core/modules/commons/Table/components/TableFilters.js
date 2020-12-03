@@ -6,7 +6,7 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import PropTypes from 'prop-types';
 
-const renderFilterComponent = ({ getFilterValueByField, setFilterValueByField, field }) => (
+const defaultFilterComponent = ({ getFilterValueByField, setFilterValueByField, field }) => (
     <TextField
         variant="outlined"
         value={getFilterValueByField(field)}
@@ -38,6 +38,8 @@ const TableFilters = (props) => {
         }
     };
 
+    const getFilterComponent = (component) => component || defaultFilterComponent;
+
     return (
         <div style={{ padding: 12 }}>
             {emptyFiltersField && (
@@ -48,7 +50,7 @@ const TableFilters = (props) => {
                     <div>
                         {field.label}
                     </div>
-                    {renderFilterComponent({ getFilterValueByField, setFilterValueByField, field })}
+                    {getFilterComponent(field.component)({ getFilterValueByField, setFilterValueByField, field })}
                 </div>
             ))}
             <div style={{ padding: 12 }}>
