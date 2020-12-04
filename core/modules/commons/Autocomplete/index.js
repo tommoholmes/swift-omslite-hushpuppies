@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-lonely-if */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/destructuring-assignment */
@@ -7,6 +8,14 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
+
+function usePrevious(value) {
+    const ref = React.useRef();
+    React.useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+}
 
 // debounced value will change only once every certain delay (ms)
 function useDebounce(value, delay) {
@@ -48,10 +57,13 @@ const CustomAutocomplete = (props) => {
     const [open, setOpen] = React.useState(false);
     const [query, setQuery] = React.useState();
     const debouncedQuery = useDebounce(query, 500);
+    const prevGetOptionsVariables = usePrevious(getOptionsVariables);
+    const [allowGetOptions, setAllowGetOptions] = React.useState(true);
 
     React.useEffect(() => {
         if (open) {
-            if (mode === 'lazy' && !(options && options.length)) {
+            if (mode === 'lazy' && allowGetOptions) {
+                setAllowGetOptions(false);
                 getOptions(getOptionsVariables);
             }
             if (mode === 'server') {
@@ -72,6 +84,14 @@ const CustomAutocomplete = (props) => {
         }
     }, [open]);
 
+    React.useEffect(() => {
+        const prev = JSON.stringify(prevGetOptionsVariables);
+        const current = JSON.stringify(getOptionsVariables);
+        // need better deep comparison
+        // setAllowGetOptions when there is change in getOptionsVariables
+        if (prev !== current) setAllowGetOptions(true);
+    }, [getOptionsVariables]);
+
     const renderInput = (params) => (
         <TextField
             {...params}
@@ -81,6 +101,7 @@ const CustomAutocomplete = (props) => {
             helperText={helperText}
             InputProps={{
                 ...params.InputProps,
+                autoComplete: 'no-autocomplete',
                 endAdornment: (
                     <>
                         {loading ? (
@@ -89,6 +110,10 @@ const CustomAutocomplete = (props) => {
                         {params.InputProps.endAdornment}
                     </>
                 ),
+            }}
+            inputProps={{
+                ...params.inputProps,
+                autoComplete: 'no-autocomplete',
             }}
         />
     );
@@ -105,7 +130,7 @@ const CustomAutocomplete = (props) => {
             onInputChange={(e) => setQuery((e && e.target && e.target.value) || '')}
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
-            options={options}
+            options={options || []}
             loading={loading}
             renderInput={renderInput}
             {...others}

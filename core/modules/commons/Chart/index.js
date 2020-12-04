@@ -50,7 +50,7 @@ const CustomCart = ({
                         color={seriesField.color}
                     />
                 ))}
-                <Legend />
+                <Legend position="bottom" />
                 <Stack />
             </Chart>
         </Paper>

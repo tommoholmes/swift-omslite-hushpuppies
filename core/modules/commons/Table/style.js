@@ -12,9 +12,11 @@ const useStyles = makeStyles(() => ({
         '& .records-found': {
             padding: '12px 0',
             float: 'left',
+            marginLeft: '12px',
         },
         '& .top-item': {
             display: 'inline-block',
+            marginRight: '12px',
         },
     },
     btn: {
@@ -29,6 +31,14 @@ const useStyles = makeStyles(() => ({
             background: 'unset',
             boxShadow: 'none',
         },
+    },
+    arrowDown: {
+        transition: 'all .2s linear',
+        transform: 'rotate(90deg)',
+    },
+    arrowUp: {
+        transition: 'all .2s linear',
+        transform: 'rotate(-90deg)',
     },
 }));
 
