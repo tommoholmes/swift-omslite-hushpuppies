@@ -98,7 +98,7 @@ const CustomTable = (props) => {
     );
     const [sorts, setSorts] = React.useState(
         props.columns
-            .filter((column) => column.enableSort)
+            .filter((column) => column.sortable)
             .map(({ field, initialSort }) => ({ field, value: initialSort || 'ASC' })),
     );
 
@@ -252,8 +252,8 @@ const CustomTable = (props) => {
                             className={clsx(column.hidden && 'hide')}
                             style={{ whiteSpace: 'nowrap' }}
                         >
-                            {!column.enableSort && getComponentOrString(column.headerName)}
-                            {column.enableSort && (
+                            {!column.sortable && getComponentOrString(column.headerName)}
+                            {column.sortable && (
                                 <Button
                                     onClick={() => setSortByField(column.field)}
                                     style={{ marginLeft: -16 }}
