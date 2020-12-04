@@ -32,6 +32,14 @@ const useStyles = makeStyles(() => ({
             boxShadow: 'none',
         },
     },
+    arrowDown: {
+        transition: 'all .2s linear',
+        transform: 'rotate(90deg)',
+    },
+    arrowUp: {
+        transition: 'all .2s linear',
+        transform: 'rotate(-90deg)',
+    },
 }));
 
 export default useStyles;

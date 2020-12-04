@@ -15,10 +15,10 @@ const ChannelListContent = (props) => {
     const channelTotal = (data && data.getChannelList && data.getChannelList.total_count) || 0;
 
     const columns = [
-        { field: 'channel_id', headerName: 'No' },
-        { field: 'channel_code', headerName: 'Channel Code' },
-        { field: 'channel_name', headerName: 'Channel Name' },
-        { field: 'channel_url', headerName: 'URL' },
+        { field: 'channel_id', headerName: 'No', enableSort: true, initialSort: 'ASC' },
+        { field: 'channel_code', headerName: 'Channel Code', enableSort: true, initialSort: 'DESC' },
+        { field: 'channel_name', headerName: 'Channel Name', enableSort: true },
+        { field: 'channel_url', headerName: 'URL', enableSort: true },
         { field: 'token', headerName: 'Token' },
         { field: 'framework', headerName: 'Framework' },
         { field: 'rule_type', headerName: 'Rule Type' },

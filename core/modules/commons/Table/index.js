@@ -1,3 +1,4 @@
+/* eslint-disable no-confusing-arrow */
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
@@ -20,6 +21,7 @@ import MenuPopover from '@common_menupopover';
 import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
 import Button from '@common_button';
 import Collapse from '@material-ui/core/Collapse';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import TablePaginationActions from './components/TablePaginationActions';
 import TableFilters from './components/TableFilters';
 import useStyles from './style';
@@ -94,6 +96,11 @@ const CustomTable = (props) => {
     const {
         columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
     } = useColumns(props.columns);
+    const [sorts, setSorts] = React.useState(
+        props.columns
+            .filter((column) => column.enableSort)
+            .map(({ field, initialSort }) => ({ field, value: initialSort || 'ASC' })),
+    );
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -114,6 +121,10 @@ const CustomTable = (props) => {
                 };
                 return accumulator;
             }, {}),
+            sort: sorts.reduce((accumulator, currentValue) => {
+                accumulator[currentValue.field] = currentValue.value;
+                return accumulator;
+            }, {}),
         };
         getRows({ variables });
     };
@@ -121,7 +132,7 @@ const CustomTable = (props) => {
     // effects
     React.useEffect(() => {
         fetchRows();
-    }, [page, rowsPerPage, filters]);
+    }, [page, rowsPerPage, filters, sorts]);
 
     const renderTableToolbar = () => {
         return (
@@ -207,6 +218,16 @@ const CustomTable = (props) => {
             setCheckedRows(newCheckedRows);
             setIsCheckedAllRows(checked);
         };
+        const setSortByField = (field) => {
+            setSorts(sorts.map((sort) => ({
+                ...sort,
+                ...((sort.field === field) && { value: sort.value === 'ASC' ? 'DESC' : 'ASC' }),
+            })));
+        };
+        const getArrowClass = (field) => {
+            const sort = sorts.find((e) => e.field === field);
+            return sort.value === 'ASC' ? classes.arrowDown : classes.arrowUp;
+        };
         return (
             <TableHead>
                 <TableRow>
@@ -222,8 +243,19 @@ const CustomTable = (props) => {
                         <TableCell
                             key={columnIndex}
                             className={clsx(column.hidden && 'hide')}
+                            style={{ whiteSpace: 'nowrap' }}
                         >
-                            {getComponentOrString(column.headerName)}
+                            {!column.enableSort && getComponentOrString(column.headerName)}
+                            {column.enableSort && (
+                                <Button
+                                    onClick={() => setSortByField(column.field)}
+                                    style={{ marginLeft: -16 }}
+                                    buttonType="link"
+                                    endIcon={<ArrowRightAltIcon className={getArrowClass(column.field)} />}
+                                >
+                                    {column.headerName}
+                                </Button>
+                            )}
                         </TableCell>
                     ))}
                 </TableRow>
