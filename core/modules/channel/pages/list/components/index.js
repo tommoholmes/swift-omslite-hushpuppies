@@ -16,10 +16,10 @@ const ChannelListContent = (props) => {
 
     const columns = [
         { field: 'channel_id', headerName: 'No', enableSort: true, initialSort: 'ASC' },
-        { field: 'channel_code', headerName: 'Channel Code', enableSort: true, initialSort: 'DESC' },
-        { field: 'channel_name', headerName: 'Channel Name', enableSort: true },
-        { field: 'channel_url', headerName: 'URL', enableSort: true },
-        { field: 'token', headerName: 'Token' },
+        { field: 'channel_code', headerName: 'Channel Code', enableSort: true, initialSort: 'DESC', hideable: true },
+        { field: 'channel_name', headerName: 'Channel Name', enableSort: true, hideable: true },
+        { field: 'channel_url', headerName: 'URL', enableSort: true, hideable: true },
+        { field: 'token', headerName: 'Token', hideable: true },
         { field: 'framework', headerName: 'Framework' },
         { field: 'rule_type', headerName: 'Rule Type' },
         { field: 'actions', headerName: 'Actions' },

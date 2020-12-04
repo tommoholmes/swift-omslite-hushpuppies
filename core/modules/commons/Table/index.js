@@ -27,7 +27,6 @@ import TableFilters from './components/TableFilters';
 import useStyles from './style';
 
 // helpers
-const setTrueIfUndefined = (value) => typeof value === 'undefined' || !!value;
 const getComponentOrString = (param) => (
     typeof param === 'function' ? param() : param
 );
@@ -36,7 +35,6 @@ const getComponentOrString = (param) => (
 const useColumns = (initialColumns) => {
     const _initialColumns = initialColumns.map((column) => ({
         ...column,
-        hideable: setTrueIfUndefined(column.hideable),
         hidden: false,
     }));
     const [columns, setColumns] = React.useState(_initialColumns);
@@ -182,21 +180,28 @@ const CustomTable = (props) => {
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
-                        {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
-                            <div key={index} style={{ maxHeight: 'inherit' }}>
-                                <Checkbox
-                                    checked={!column.hidden}
-                                    onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
-                                />
-                                {column.headerName}
+                        <div style={{ padding: 12 }}>
+                            {!(hiddenColumns.find((c) => c.hideable)) && (
+                                <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
+                            )}
+                            {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
+                                <div key={index} style={{ maxHeight: 'inherit', display: 'inline-block', paddingRight: 24 }}>
+                                    <Checkbox
+                                        checked={!column.hidden}
+                                        onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
+                                    />
+                                    {column.headerName}
+                                </div>
+                            ))}
+                            <div style={{ padding: 12 }}>
+                                <Button buttonType="primary-rounded" onClick={applyHiddenColumns}>
+                                    Apply
+                                </Button>
+                                <Button buttonType="link" onClick={resetHiddenColumn}>
+                                    Reset
+                                </Button>
                             </div>
-                        ))}
-                        <Button style={{ margin: '16px 0px 16px 16px' }} onClick={applyHiddenColumns}>
-                            apply
-                        </Button>
-                        <Button style={{ margin: '16px 0px 16px 16px' }} onClick={resetHiddenColumn}>
-                            reset
-                        </Button>
+                        </div>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
                         <TableFilters initialFilters={filters} setParentFilters={setFilters} />
