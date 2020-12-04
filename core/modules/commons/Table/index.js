@@ -86,7 +86,6 @@ const CustomTable = (props) => {
 
     // hooks
     const classes = useStyles();
-    const [filters, setFilters] = React.useState(initialFilters);
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -96,6 +95,9 @@ const CustomTable = (props) => {
     const {
         columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
     } = useColumns(props.columns);
+    const [filters, setFilters] = React.useState(
+        initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })),
+    );
     const [sorts, setSorts] = React.useState(
         props.columns
             .filter((column) => column.enableSort)
@@ -114,7 +116,7 @@ const CustomTable = (props) => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
-            filter: filters.reduce((accumulator, currentValue) => {
+            filter: filters.filter((e) => e.value).reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = {
                     ...accumulator[currentValue.field],
                     [currentValue.type]: currentValue.value,
@@ -197,7 +199,7 @@ const CustomTable = (props) => {
                         </Button>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
-                        <TableFilters initialFilters={initialFilters} setParentFilters={setFilters} />
+                        <TableFilters initialFilters={filters} setParentFilters={setFilters} />
                     </Collapse>
                 </div>
             </div>

@@ -59,7 +59,7 @@ const TableFilters = (props) => {
                     buttonType="primary-rounded"
                     onClick={() => {
                         // only set filters which have value
-                        if (!emptyFiltersField) setParentFilters(filters.filter((e) => e.value));
+                        if (!emptyFiltersField) setParentFilters(filters);
                     }}
                 >
                     Apply Filters

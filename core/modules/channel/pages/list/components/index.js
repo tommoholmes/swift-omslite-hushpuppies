@@ -26,16 +26,16 @@ const ChannelListContent = (props) => {
     ];
 
     const filters = [
-        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', value: '' },
-        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', value: '' },
-        { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', value: '' },
-        { field: 'channel_url', name: 'channel_url', type: 'match', label: 'Channel Url', value: '' },
+        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', initialValue: '12' },
+        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', initialValue: '67' },
+        { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', initialValue: '' },
+        { field: 'channel_url', name: 'channel_url', type: 'match', label: 'Channel Url', initialValue: 'zz' },
         {
             field: 'framework',
             name: 'framework',
             type: 'in',
             label: 'Framework',
-            value: '',
+            initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
@@ -51,7 +51,7 @@ const ChannelListContent = (props) => {
             name: 'ruleType',
             type: 'eq',
             label: 'RuleType',
-            value: '',
+            initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
