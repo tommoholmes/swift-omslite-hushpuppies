@@ -36,14 +36,12 @@ const ChannelListContent = (props) => {
             type: 'in',
             label: 'Framework',
             value: '',
-            component: ({ getFilterValueByField, setFilterValueByField, field }) => (
+            component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
                     multiple
-                    value={(getFilterValueByField(field) || []).map((option) => optionsFramework.find((e) => e.name === option))}
-                    onChange={(selectedOptions) => setFilterValueByField(
-                        field, (selectedOptions || []).map((option) => option && option.name),
-                    )}
+                    value={(filterValue || []).map((option) => optionsFramework.find((e) => e.name === option))}
+                    onChange={(newValue) => setFilterValue((newValue || []).map((option) => option && option.name))}
                     options={optionsFramework}
                 />
             ),
@@ -54,11 +52,11 @@ const ChannelListContent = (props) => {
             type: 'eq',
             label: 'RuleType',
             value: '',
-            component: ({ getFilterValueByField, setFilterValueByField, field }) => (
+            component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
-                    value={optionsRuleType.find((e) => e.name === getFilterValueByField(field))}
-                    onChange={(e) => setFilterValueByField(field, e && e.name)}
+                    value={optionsRuleType.find((e) => e.name === filterValue)}
+                    onChange={(newValue) => setFilterValue(newValue && newValue.name)}
                     options={optionsRuleType}
                 />
             ),

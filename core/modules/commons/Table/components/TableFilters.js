@@ -6,11 +6,11 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import PropTypes from 'prop-types';
 
-const defaultFilterComponent = ({ getFilterValueByField, setFilterValueByField, field }) => (
+const defaultFilterComponent = ({ filterValue, setFilterValue }) => (
     <TextField
         variant="outlined"
-        value={getFilterValueByField(field)}
-        onChange={(e) => setFilterValueByField(field, e.target.value)}
+        value={filterValue}
+        onChange={(e) => setFilterValue(e.target.value)}
     />
 );
 
@@ -38,8 +38,6 @@ const TableFilters = (props) => {
         }
     };
 
-    const getFilterComponent = (component) => component || defaultFilterComponent;
-
     return (
         <div style={{ padding: 12 }}>
             {emptyFiltersField && (
@@ -50,7 +48,10 @@ const TableFilters = (props) => {
                     <div>
                         {field.label}
                     </div>
-                    {getFilterComponent(field.component)({ getFilterValueByField, setFilterValueByField, field })}
+                    {(field.component || defaultFilterComponent)({
+                        get filterValue() { return getFilterValueByField(field); },
+                        setFilterValue: (value) => setFilterValueByField(field, value),
+                    })}
                 </div>
             ))}
             <div style={{ padding: 12 }}>
