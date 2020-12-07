@@ -111,10 +111,15 @@ const CustomTable = (props) => {
         setPage(0);
     };
     const fetchRows = () => {
+        const isEmpty = (value) => {
+            if ([undefined, null, '', false].includes(value)) return true;
+            if (value && value.length <= 0) return true;
+            return false;
+        };
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
-            filter: filters.filter((e) => e.value).reduce((accumulator, currentValue) => {
+            filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = {
                     ...accumulator[currentValue.field],
                     [currentValue.type]: currentValue.value,

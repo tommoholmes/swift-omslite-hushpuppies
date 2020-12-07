@@ -26,10 +26,10 @@ const ChannelListContent = (props) => {
     ];
 
     const filters = [
-        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', initialValue: '12' },
-        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', initialValue: '67' },
+        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', initialValue: '' },
+        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', initialValue: '' },
         { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', initialValue: '' },
-        { field: 'channel_url', name: 'channel_url', type: 'match', label: 'Channel Url', initialValue: 'zz' },
+        { field: 'channel_url', name: 'channel_url', type: 'eq', label: 'Channel Url', initialValue: '' },
         {
             field: 'framework',
             name: 'framework',
