@@ -22,6 +22,7 @@ import ConfirmDialog from 'core/modules/commons/ConfirmDialog';
 import Button from '@common_button';
 import Collapse from '@material-ui/core/Collapse';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 import TablePaginationActions from './components/TablePaginationActions';
 import TableFilters from './components/TableFilters';
 import useStyles from './style';
@@ -99,7 +100,7 @@ const CustomTable = (props) => {
     const [sorts, setSorts] = React.useState(
         props.columns
             .filter((column) => column.sortable)
-            .map(({ field, initialSort }) => ({ field, value: initialSort || 'ASC' })),
+            .map(({ field, initialSort }) => ({ field, value: initialSort })),
     );
 
     // methods
@@ -127,7 +128,7 @@ const CustomTable = (props) => {
                 return accumulator;
             }, {}),
             sort: sorts.reduce((accumulator, currentValue) => {
-                accumulator[currentValue.field] = currentValue.value;
+                accumulator[currentValue.field] = currentValue.value || undefined;
                 return accumulator;
             }, {}),
         };
@@ -239,12 +240,14 @@ const CustomTable = (props) => {
             setSorts(sorts.map((sort) => ({
                 ...sort,
                 ...((sort.field === field) && { value: sort.value === 'ASC' ? 'DESC' : 'ASC' }),
+                ...((sort.field != field) && { value: undefined }),
             })));
         };
-        const getArrowClass = (field) => {
+        const getSortValue = (field) => {
             const sort = sorts.find((e) => e.field === field);
-            return sort.value === 'ASC' ? classes.arrowDown : classes.arrowUp;
+            return sort && sort.value;
         };
+        const getArrowClass = (field) => getSortValue(field) === 'ASC' ? classes.arrowDown : classes.arrowUp;
         return (
             <TableHead>
                 <TableRow>
@@ -268,7 +271,11 @@ const CustomTable = (props) => {
                                     onClick={() => setSortByField(column.field)}
                                     style={{ marginLeft: -16 }}
                                     buttonType="link"
-                                    endIcon={<ArrowRightAltIcon className={getArrowClass(column.field)} />}
+                                    endIcon={
+                                        getSortValue(column.field)
+                                            ? <ArrowRightAltIcon className={getArrowClass(column.field)} />
+                                            : <ImportExportIcon style={{ opacity: 0.3 }} />
+                                    }
                                 >
                                     {column.headerName}
                                 </Button>
