@@ -113,6 +113,7 @@ const Layout = (props) => {
                     { key: 'company', label: 'Company', url: '/oms/company' },
                     { key: 'location', label: 'Location', url: '/oms/location' },
                     { key: 'source', label: 'Source', url: '/oms/source' },
+                    { key: 'notification', label: 'Notification', url: '/oms/notification' },
                 ],
             },
             {
