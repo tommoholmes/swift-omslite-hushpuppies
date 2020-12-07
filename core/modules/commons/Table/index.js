@@ -100,7 +100,7 @@ const CustomTable = (props) => {
     const [sorts, setSorts] = React.useState(
         props.columns
             .filter((column) => column.sortable)
-            .map(({ field, initialSort }) => ({ field, value: initialSort })),
+            .map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
     );
 
     // methods
