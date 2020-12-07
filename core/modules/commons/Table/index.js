@@ -181,9 +181,11 @@ const CustomTable = (props) => {
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
                         <div style={{ padding: 12 }}>
-                            <div style={{ padding: 12 }}>
-                                {`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}
-                            </div>
+                            {(hiddenColumns.find((c) => c.hideable)) && (
+                                <div style={{ padding: 12 }}>
+                                    {`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}
+                                </div>
+                            )}
                             {!(hiddenColumns.find((c) => c.hideable)) && (
                                 <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
                             )}
