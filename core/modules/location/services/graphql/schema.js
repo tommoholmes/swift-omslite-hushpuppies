@@ -197,7 +197,7 @@ export const getCountries = gql`
                 name
             }
             full_name_english
-            full_name_locale
+            # full_name_locale
             id
         }
     }

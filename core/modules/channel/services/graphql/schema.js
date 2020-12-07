@@ -4,10 +4,14 @@ export const getChannelList = gql`
     query getChannelList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: ChannelFilterInput,
+        $sort: ChannelSortInput,
     ){
         getChannelList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 channel_id

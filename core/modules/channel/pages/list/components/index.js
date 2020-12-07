@@ -15,21 +15,21 @@ const ChannelListContent = (props) => {
     const channelTotal = (data && data.getChannelList && data.getChannelList.total_count) || 0;
 
     const columns = [
-        { field: 'channel_id', headerName: 'No', sortable: true, initialSort: 'ASC' },
-        { field: 'channel_code', headerName: 'Channel Code', sortable: true, initialSort: 'DESC', hideable: true },
+        { field: 'channel_id', headerName: 'No', sortable: true, initialSort: 'ASC', hideable: true },
+        { field: 'channel_code', headerName: 'Channel Code', hideable: true },
         { field: 'channel_name', headerName: 'Channel Name', sortable: true, hideable: true },
-        { field: 'channel_url', headerName: 'URL', sortable: true, hideable: true },
+        { field: 'channel_url', headerName: 'URL', hideable: true },
         { field: 'token', headerName: 'Token', hideable: true },
-        { field: 'framework', headerName: 'Framework' },
-        { field: 'rule_type', headerName: 'Rule Type' },
-        { field: 'actions', headerName: 'Actions' },
+        { field: 'framework', headerName: 'Framework', hideable: true },
+        { field: 'rule_type', headerName: 'Rule Type', hideable: true },
+        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
-        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', initialValue: '12' },
-        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', initialValue: '67' },
+        { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', initialValue: '' },
+        { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', initialValue: '' },
         { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', initialValue: '' },
-        { field: 'channel_url', name: 'channel_url', type: 'match', label: 'Channel Url', initialValue: 'zz' },
+        { field: 'channel_url', name: 'channel_url', type: 'eq', label: 'Channel Url', initialValue: '' },
         {
             field: 'framework',
             name: 'framework',
