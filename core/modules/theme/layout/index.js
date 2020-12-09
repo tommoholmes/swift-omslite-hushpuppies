@@ -136,8 +136,12 @@ const Layout = (props) => {
         ];
 
         const handleClickParent = (menu) => {
-            setExpandedMenu(menu);
-            if (menu.url) router.push(menu.url);
+            if (menu.key === (expandedMenu && expandedMenu.key)) {
+                setExpandedMenu(null);
+            } else {
+                setExpandedMenu(menu);
+                if (menu.url) router.push(menu.url);
+            }
         };
         const handleClickChild = (menu) => {
             if (menu.url) router.push(menu.url);
@@ -162,7 +166,11 @@ const Layout = (props) => {
                         <div key={menu.key}>
                             <ListItem
                                 button
-                                className={clsx(classes.menuItem, open ? 'open' : 'close')}
+                                className={clsx(
+                                    classes.menuItem,
+                                    open ? 'open' : 'close',
+                                    menu.key === (expandedMenu && expandedMenu.key) && 'expanded',
+                                )}
                                 onClick={() => handleClickParent(menu)}
                             >
                                 <ListItemIcon>
