@@ -47,10 +47,10 @@ const ChannelListContent = (props) => {
             ),
         },
         {
-            field: 'ruleType',
-            name: 'ruleType',
+            field: 'rule_ype',
+            name: 'rule_ype',
             type: 'eq',
-            label: 'RuleType',
+            label: 'Rule Type',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
