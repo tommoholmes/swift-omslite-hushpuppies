@@ -106,6 +106,10 @@ const useStyles = makeStyles((theme) => ({
             color: '#BE1F93',
             fontWeight: 'bold',
         },
+        '&:hover span': {
+            color: '#BE1F93',
+            fontWeight: 'bold',
+        },
     },
     contentNoHeader: {
         flexGrow: 1,

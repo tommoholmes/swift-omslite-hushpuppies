@@ -133,9 +133,11 @@ const Layout = (props) => {
 
     useEffect(() => {
         const activeMenu = mappedMenuList.find((e) => e.url === (router && router.pathname));
-        setActiveChildMenu(activeMenu);
-        if (activeMenu.parentKey) {
+        if (activeMenu && activeMenu.parentKey) {
+            setActiveChildMenu(activeMenu);
             setActiveParentMenu(mappedMenuList.find((e) => e.key === activeMenu.parentKey));
+        } else {
+            setActiveParentMenu(activeMenu);
         }
     }, [router]);
 
