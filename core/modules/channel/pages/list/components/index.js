@@ -47,8 +47,8 @@ const ChannelListContent = (props) => {
             ),
         },
         {
-            field: 'rule_ype',
-            name: 'rule_ype',
+            field: 'rule_type',
+            name: 'rule_type',
             type: 'eq',
             label: 'Rule Type',
             initialValue: '',
