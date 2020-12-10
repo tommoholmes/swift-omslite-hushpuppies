@@ -1,17 +1,10 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { useRouter } from 'next/router';
-import Breadcrumb from '@common_breadcrumb';
 import dynamic from 'next/dynamic';
-import RightToolbar from './components/rightToolbar';
 import Sidebar from './components/sidebar';
 import useStyles from './style';
+import Header from './components/header';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
@@ -136,40 +129,6 @@ const Layout = (props) => {
         }
     }, [router]);
 
-    const Header = () => {
-        const getBreadcrumb = () => {
-            const activeMenu = mappedMenuList.find((e) => e.url === router.pathname);
-            return (activeMenu && activeMenu.breadcrumb) || [];
-        };
-        return (
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={() => setOpen(!open)}
-                        className={clsx(classes.togleMenuButton)}
-                    >
-                        {
-                            open
-                                ? <ChevronLeftIcon className={classes.togleMenuIcon} />
-                                : <ChevronRightIcon className={classes.togleMenuIcon} />
-                        }
-                    </IconButton>
-
-                    <Breadcrumb data={[{ url: '/', label: 'Home' }, ...getBreadcrumb()]} />
-                    <RightToolbar />
-                </Toolbar>
-            </AppBar>
-        );
-    };
-
     const showHeader = () => {
         if (typeof pageConfig === 'undefined' || (pageConfig && typeof pageConfig.header === 'undefined')) {
             return true;
@@ -186,7 +145,13 @@ const Layout = (props) => {
 
     return (
         <div className={classes.root}>
-            {showHeader() && Header()}
+            {showHeader() && (
+                <Header
+                    mappedMenuList={mappedMenuList}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            )}
             {showSidebar() && (
                 <Sidebar
                     activeParentMenu={activeParentMenu}
