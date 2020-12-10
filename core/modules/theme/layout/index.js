@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
@@ -25,7 +26,7 @@ const Layout = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [open, setOpen] = React.useState(true);
-
+    const [expandedMenu, setExpandedMenu] = React.useState();
     const [state, setState] = useState({
         backdropLoader: false,
         toastMessage: {
@@ -34,6 +35,65 @@ const Layout = (props) => {
             text: '',
         },
     });
+    const menuList = [
+        { key: 'dashboard', label: 'Dashboard', url: '/' },
+        {
+            key: 'oms',
+            label: 'OMS',
+            children: [
+                { key: 'channel', label: 'Channel', url: '/oms/channel' },
+                { key: 'company', label: 'Company', url: '/oms/company' },
+                { key: 'location', label: 'Location', url: '/oms/location' },
+                { key: 'source', label: 'Source', url: '/oms/source' },
+                { key: 'notification', label: 'Notification', url: '/oms/notification' },
+            ],
+        },
+        {
+            key: 'sales',
+            label: 'Sales',
+            children: [
+                { key: 'orderQueue', label: 'Order Queue' },
+                { key: 'shipment', label: 'Shipment' },
+            ],
+        },
+        {
+            key: 'catalogInventory',
+            label: 'Catalog Inventory',
+            children: [
+                { key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
+            ],
+        },
+        {
+            key: 'userData',
+            label: 'User Data',
+            children: [
+                { key: 'adminStore', label: 'Admin Store' },
+                { key: 'customerData', label: 'Customer Data' },
+            ],
+        },
+    ];
+    const mappedMenuList = menuList.reduce((accumulator, parent) => {
+        const parentBreadcrumb = { url: parent.url || '', label: parent.label };
+        const mappedParent = {
+            key: parent.key,
+            url: parent.url || '',
+            breadcrumb: [parentBreadcrumb],
+        };
+        accumulator.push(mappedParent);
+        if (parent && parent.children && parent.children.length) {
+            const mappedChildren = parent.children.map((child) => {
+                const childBreadcrumb = [parentBreadcrumb, { url: child.url || '', label: child.label }];
+                return {
+                    key: child.key,
+                    url: child.url || '',
+                    parentKey: parent.key,
+                    breadcrumb: childBreadcrumb,
+                };
+            });
+            accumulator = [...accumulator, ...mappedChildren];
+        }
+        return accumulator;
+    }, []);
 
     const handleLoader = (status = false) => {
         setState({
@@ -69,78 +129,51 @@ const Layout = (props) => {
         }
     }, []);
 
-    const Header = () => (
-        <AppBar
-            position="fixed"
-            className={clsx(classes.appBar, {
-                [classes.appBarShift]: open,
-            })}
-        >
-            <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={() => setOpen(!open)}
-                    className={clsx(classes.togleMenuButton)}
-                >
-                    {
-                        open
-                            ? <ChevronLeftIcon className={classes.togleMenuIcon} />
-                            : <ChevronRightIcon className={classes.togleMenuIcon} />
-                    }
-                </IconButton>
+    useEffect(() => {
+        const activeMenu = mappedMenuList.find((e) => e.url === (router && router.pathname));
+        if (activeMenu.parentKey) {
+            const activeParentMenu = mappedMenuList.find((e) => e.key === activeMenu.parentKey);
+            setExpandedMenu(activeParentMenu);
+        } else {
+            setExpandedMenu(activeMenu);
+        }
+    }, [router]);
 
-                <Breadcrumb data={[
-                    { url: '/', label: 'Home' },
-                    { url: '/oms', label: 'OMS' },
-                    { url: '/oms/channel', label: 'Channel' }]}
-                />
-                <RightToolbar />
-            </Toolbar>
-        </AppBar>
-    );
+    const Header = () => {
+        const getBreadcrumb = () => {
+            const activeMenu = mappedMenuList.find((e) => e.url === router.pathname);
+            return (activeMenu && activeMenu.breadcrumb) || [];
+        };
+        return (
+            <AppBar
+                position="fixed"
+                className={clsx(classes.appBar, {
+                    [classes.appBarShift]: open,
+                })}
+            >
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={() => setOpen(!open)}
+                        className={clsx(classes.togleMenuButton)}
+                    >
+                        {
+                            open
+                                ? <ChevronLeftIcon className={classes.togleMenuIcon} />
+                                : <ChevronRightIcon className={classes.togleMenuIcon} />
+                        }
+                    </IconButton>
+
+                    <Breadcrumb data={[{ url: '/', label: 'Home' }, ...getBreadcrumb()]} />
+                    <RightToolbar />
+                </Toolbar>
+            </AppBar>
+        );
+    };
 
     const Sidebar = () => {
-        const [expandedMenu, setExpandedMenu] = React.useState();
-        const menuList = [
-            { key: 'dashboard', label: 'Dashboard', url: '/' },
-            {
-                key: 'oms',
-                label: 'OMS',
-                children: [
-                    { key: 'channel', label: 'Channel', url: '/oms/channel' },
-                    { key: 'company', label: 'Company', url: '/oms/company' },
-                    { key: 'location', label: 'Location', url: '/oms/location' },
-                    { key: 'source', label: 'Source', url: '/oms/source' },
-                    { key: 'notification', label: 'Notification', url: '/oms/notification' },
-                ],
-            },
-            {
-                key: 'sales',
-                label: 'Sales',
-                children: [
-                    { key: 'orderQueue', label: 'Order Queue' },
-                    { key: 'shipment', label: 'Shipment' },
-                ],
-            },
-            {
-                key: 'catalogInventory',
-                label: 'Catalog Inventory',
-                children: [
-                    { key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
-                ],
-            },
-            {
-                key: 'userData',
-                label: 'User Data',
-                children: [
-                    { key: 'adminStore', label: 'Admin Store' },
-                    { key: 'customerData', label: 'Customer Data' },
-                ],
-            },
-        ];
-
         const handleClickParent = (menu) => {
             if (menu.key === (expandedMenu && expandedMenu.key)) {
                 setExpandedMenu(null);
