@@ -95,13 +95,17 @@ const useStyles = makeStyles((theme) => ({
             background: '#BE1F93',
             color: '#fff',
         },
-        '&.expanded': {
+        '&.active': {
             background: '#BE1F93',
             color: '#fff',
         },
     },
     menuChildItem: {
         paddingLeft: 76,
+        '&.active span': {
+            color: '#BE1F93',
+            fontWeight: 'bold',
+        },
     },
     contentNoHeader: {
         flexGrow: 1,

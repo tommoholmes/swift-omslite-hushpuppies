@@ -26,7 +26,9 @@ const Layout = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [open, setOpen] = React.useState(true);
-    const [expandedMenu, setExpandedMenu] = React.useState();
+    const [activeParentMenu, setActiveParentMenu] = React.useState();
+    const [activeChildMenu, setActiveChildMenu] = React.useState();
+
     const [state, setState] = useState({
         backdropLoader: false,
         toastMessage: {
@@ -131,11 +133,9 @@ const Layout = (props) => {
 
     useEffect(() => {
         const activeMenu = mappedMenuList.find((e) => e.url === (router && router.pathname));
+        setActiveChildMenu(activeMenu);
         if (activeMenu.parentKey) {
-            const activeParentMenu = mappedMenuList.find((e) => e.key === activeMenu.parentKey);
-            setExpandedMenu(activeParentMenu);
-        } else {
-            setExpandedMenu(activeMenu);
+            setActiveParentMenu(mappedMenuList.find((e) => e.key === activeMenu.parentKey));
         }
     }, [router]);
 
@@ -175,10 +175,10 @@ const Layout = (props) => {
 
     const Sidebar = () => {
         const handleClickParent = (menu) => {
-            if (menu.key === (expandedMenu && expandedMenu.key)) {
-                setExpandedMenu(null);
+            if (menu.key === (activeParentMenu && activeParentMenu.key)) {
+                setActiveParentMenu(null);
             } else {
-                setExpandedMenu(menu);
+                setActiveParentMenu(menu);
                 if (menu.url) router.push(menu.url);
             }
         };
@@ -208,7 +208,7 @@ const Layout = (props) => {
                                 className={clsx(
                                     classes.menuItem,
                                     open ? 'open' : 'close',
-                                    menu.key === (expandedMenu && expandedMenu.key) && 'expanded',
+                                    menu.key === (activeParentMenu && activeParentMenu.key) && 'active',
                                 )}
                                 onClick={() => handleClickParent(menu)}
                             >
@@ -218,13 +218,16 @@ const Layout = (props) => {
                                 <ListItemText primary={menu.label} />
                             </ListItem>
                             {menu && menu.children && menu.children.length && (
-                                <Collapse in={expandedMenu && expandedMenu.key === menu.key} timeout="auto" unmountOnExit>
+                                <Collapse in={activeParentMenu && activeParentMenu.key === menu.key} timeout="auto" unmountOnExit>
                                     <List component="div" disablePadding>
                                         {menu.children.map((menuChild) => (
                                             <ListItem
                                                 button
                                                 key={menuChild.key}
-                                                className={classes.menuChildItem}
+                                                className={clsx(
+                                                    classes.menuChildItem,
+                                                    menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
+                                                )}
                                                 onClick={() => handleClickChild(menuChild)}
                                             >
                                                 <ListItemText primary={menuChild.label} />
