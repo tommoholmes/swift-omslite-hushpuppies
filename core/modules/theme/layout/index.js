@@ -1,21 +1,16 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
 import { useRouter } from 'next/router';
 import Breadcrumb from '@common_breadcrumb';
 import dynamic from 'next/dynamic';
 import RightToolbar from './components/rightToolbar';
+import Sidebar from './components/sidebar';
 import useStyles from './style';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
@@ -175,76 +170,6 @@ const Layout = (props) => {
         );
     };
 
-    const Sidebar = () => {
-        const handleClickParent = (menu) => {
-            if (menu.key === (activeParentMenu && activeParentMenu.key)) {
-                setActiveParentMenu(null);
-            } else {
-                setActiveParentMenu(menu);
-                if (menu.url) router.push(menu.url);
-            }
-        };
-        const handleClickChild = (menu) => {
-            if (menu.url) router.push(menu.url);
-        };
-
-        return (
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
-                classes={{
-                    paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
-                }}
-            >
-                <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
-                    <img
-                        alt=""
-                        src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
-                    />
-                </div>
-                <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
-                    {menuList.map((menu) => (
-                        <div key={menu.key}>
-                            <ListItem
-                                button
-                                className={clsx(
-                                    classes.menuItem,
-                                    open ? 'open' : 'close',
-                                    menu.key === (activeParentMenu && activeParentMenu.key) && 'active',
-                                )}
-                                onClick={() => handleClickParent(menu)}
-                            >
-                                <ListItemIcon>
-                                    <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
-                                </ListItemIcon>
-                                <ListItemText primary={menu.label} />
-                            </ListItem>
-                            {menu && menu.children && menu.children.length && (
-                                <Collapse in={activeParentMenu && activeParentMenu.key === menu.key} timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        {menu.children.map((menuChild) => (
-                                            <ListItem
-                                                button
-                                                key={menuChild.key}
-                                                className={clsx(
-                                                    classes.menuChildItem,
-                                                    menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
-                                                )}
-                                                onClick={() => handleClickChild(menuChild)}
-                                            >
-                                                <ListItemText primary={menuChild.label} />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Collapse>
-                            )}
-                        </div>
-                    ))}
-                </List>
-            </Drawer>
-        );
-    };
-
     const showHeader = () => {
         if (typeof pageConfig === 'undefined' || (pageConfig && typeof pageConfig.header === 'undefined')) {
             return true;
@@ -262,7 +187,15 @@ const Layout = (props) => {
     return (
         <div className={classes.root}>
             {showHeader() && Header()}
-            {showSidebar() && Sidebar()}
+            {showSidebar() && (
+                <Sidebar
+                    activeParentMenu={activeParentMenu}
+                    setActiveParentMenu={setActiveParentMenu}
+                    activeChildMenu={activeChildMenu}
+                    open={open}
+                    menuList={menuList}
+                />
+            )}
             <main className={showHeader() ? classes.content : classes.contentNoHeader}>
                 <Loading open={state.backdropLoader} />
                 <Message

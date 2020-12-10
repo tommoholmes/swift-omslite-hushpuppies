@@ -42,74 +42,9 @@ const useStyles = makeStyles((theme) => ({
     hide: {
         display: 'none',
     },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-    },
-    drawerOpen: {
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
-        },
-    },
-    toolbar: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-    },
-    swiftOmsLogo: {
-        padding: 12,
-        '&.open': { justifyContent: 'flex-start' },
-        '&.close': { justifyContent: 'center' },
-        '& img': { height: 45 },
-    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-    },
-    menuList: {
-        padding: 0,
-        '&.open': { paddingRight: 16 },
-    },
-    menuItem: {
-        marginTop: 8,
-        paddingLeft: 20,
-        '&.open': { borderRadius: '0 26px 26px 0' },
-        '&:hover': {
-            background: '#BE1F93',
-            color: '#fff',
-        },
-        '&.active': {
-            background: '#BE1F93',
-            color: '#fff',
-        },
-    },
-    menuChildItem: {
-        paddingLeft: 76,
-        '&.active span': {
-            color: '#BE1F93',
-            fontWeight: 'bold',
-        },
-        '&:hover span': {
-            color: '#BE1F93',
-            fontWeight: 'bold',
-        },
     },
     contentNoHeader: {
         flexGrow: 1,
