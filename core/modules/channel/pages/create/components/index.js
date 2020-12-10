@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
+import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
 import useStyles from './style';
 
 const ChannelCreateContent = (props) => {
@@ -16,21 +17,6 @@ const ChannelCreateContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [getVirtualStockList, getVirtualStockListRes] = channelGqlService.getVirtualStockList();
-    const optionsFramework = [
-        { id: 0, name: 'M1' },
-        { id: 1, name: 'M2' },
-        { id: 2, name: 'Pos' },
-        { id: 3, name: 'Marketplace' },
-        { id: 4, name: 'TADA' },
-        { id: 5, name: 'Others' },
-    ];
-    const optionsType = [
-        { id: 0, name: 'Default' },
-        { id: 1, name: 'Location priority per city' },
-        { id: 2, name: 'Longitude latitude' },
-        { id: 3, name: 'Priotiy by zone' },
-        { id: 4, name: 'Disable' },
-    ];
 
     return (
         <>
@@ -193,7 +179,7 @@ const ChannelCreateContent = (props) => {
                             className={classes.autocompleteRoot}
                             value={formik.values.type}
                             onChange={(e) => formik.setFieldValue('type', e)}
-                            options={optionsType}
+                            options={optionsRuleType}
                             error={!!(formik.touched.stype && formik.errors.type)}
                             helperText={(formik.touched.type && formik.errors.type) || ''}
                         />
