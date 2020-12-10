@@ -124,7 +124,13 @@ const Layout = (props) => {
                     { key: 'shipment', label: 'Shipment' },
                 ],
             },
-            { key: 'catalogInventory', label: 'Catalog Inventory' },
+            {
+                key: 'catalogInventory',
+                label: 'Catalog Inventory',
+                children: [
+                    { key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
+                ],
+            },
             {
                 key: 'userData',
                 label: 'User Data',
