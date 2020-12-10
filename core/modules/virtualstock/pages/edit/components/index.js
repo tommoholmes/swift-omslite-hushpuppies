@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import virtualStockGqlService from '@modules/virtualstock/services/graphql';
+import channelGqlService from '@modules/channel/services/graphql';
+import { optionsPriorityEnable, optionsPriorityType, optionsFramework } from '@modules/virtualstock/helpers';
 import useStyles from './style';
 
 const VirtualStockEditContent = (props) => {
@@ -16,6 +18,7 @@ const VirtualStockEditContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [getLocationList, getLocationListRes] = virtualStockGqlService.getLocationList();
+    const [getChannelList, getChannelListRes] = channelGqlService.getChannelList();
 
     return (
         <>
@@ -72,6 +75,93 @@ const VirtualStockEditContent = (props) => {
                             }}
                         />
                     </div>
+                </div>
+                <div className={classes.content}>
+                    <h2 className={classes.title}>Priority</h2>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Enable Priority</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.priorityEnable}
+                            onChange={(e) => formik.setFieldValue('priorityEnable', e)}
+                            options={optionsPriorityEnable}
+                            error={!!(formik.touched.priorityEnable && formik.errors.priorityEnable)}
+                            helperText={(formik.touched.priorityEnable && formik.errors.priorityEnable) || ''}
+                        />
+                    </div>
+                    {(formik.values.priorityEnable && formik.values.priorityEnable.id === 1) ? (
+                        <>
+                            <div className={classes.formField}>
+                                <div className={classes.divLabel}>
+                                    <span className={classes.label}>Priority Type</span>
+                                </div>
+                                <Autocomplete
+                                    className={classes.autocompleteRoot}
+                                    value={formik.values.priorityType}
+                                    onChange={(e) => formik.setFieldValue('priorityType', e)}
+                                    options={optionsPriorityType}
+                                    error={!!(formik.touched.priorityType && formik.errors.priorityType)}
+                                    helperText={(formik.touched.priorityType && formik.errors.priorityType) || ''}
+                                />
+                            </div>
+                            {(formik.values.priorityEnable && formik.values.priorityType.name === 'channel') ? (
+                                <div className={classes.formField}>
+                                    <div className={classes.divLabel}>
+                                        <span className={classes.label}>Channel</span>
+                                    </div>
+                                    <Autocomplete
+                                        className={classes.autocompleteRoot}
+                                        mode="lazy"
+                                        value={formik.values.channelPriority}
+                                        onChange={(e) => formik.setFieldValue('channelPriority', e)}
+                                        loading={getChannelListRes.loading}
+                                        options={
+                                            getChannelListRes
+                                            && getChannelListRes.data
+                                            && getChannelListRes.data.getChannelList
+                                            && getChannelListRes.data.getChannelList.items
+                                        }
+                                        getOptions={getChannelList}
+                                        primaryKey="channel_id"
+                                        labelKey="channel_name"
+                                    />
+                                </div>
+                            ) : (
+                                <div className={classes.formField}>
+                                    <div className={classes.divLabel}>
+                                        <span className={classes.label}>Framework</span>
+                                    </div>
+                                    <Autocomplete
+                                        className={classes.autocompleteRoot}
+                                        value={formik.values.frameworkPriority}
+                                        onChange={(e) => formik.setFieldValue('frameworkPriority', e)}
+                                        options={optionsFramework}
+                                        error={!!(formik.touched.frameworkPriority && formik.errors.frameworkPriority)}
+                                        helperText={(formik.touched.frameworkPriority && formik.errors.frameworkPriority) || ''}
+                                    />
+                                </div>
+                            )}
+                            <div className={classes.formField}>
+                                <div className={classes.divLabel}>
+                                    <span className={classes.label}>Minimal Stock</span>
+                                </div>
+                                <TextField
+                                    className={classes.fieldRoot}
+                                    variant="outlined"
+                                    name="minStock"
+                                    value={formik.values.minStock}
+                                    onChange={formik.handleChange}
+                                    error={!!(formik.touched.minStock && formik.errors.minStock)}
+                                    helperText={(formik.touched.minStock && formik.errors.minStock) || ''}
+                                    InputProps={{
+                                        className: classes.fieldInput,
+                                    }}
+                                />
+                            </div>
+                        </>
+                    ) : null}
                 </div>
                 <div className={classes.content}>
                     <h2 className={classes.title}>Locations</h2>

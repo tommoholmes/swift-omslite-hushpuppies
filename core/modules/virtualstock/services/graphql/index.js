@@ -24,6 +24,9 @@ export const createVirtualStock = (variables) => useMutation(Schema.createVirtua
 export const updateVirtualStock = (variables) => useMutation(Schema.updateVirtualStock, {
     variables, ...context,
 });
+export const getChannelList = (variables) => useLazyQuery(Schema.getChannelList, {
+    variables, ...context, ...fetchPolicy,
+});
 export const getLocationList = (variables) => useLazyQuery(Schema.getLocationList, {
     variables, ...context, ...fetchPolicy,
 });
@@ -40,6 +43,7 @@ export default {
     getVirtualStockById,
     createVirtualStock,
     updateVirtualStock,
+    getChannelList,
     getLocationList,
     deleteVirtualStock,
     multideleteVirtualStock,

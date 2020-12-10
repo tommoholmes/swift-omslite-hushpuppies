@@ -34,6 +34,10 @@ export const getVirtualStockById = gql`
             vs_name
             notes
             is_priority_enable
+            priority_type
+            channel_priority
+            framework_priority
+            min_stock
             location{
                 loc_id
                 loc_code
@@ -72,6 +76,11 @@ export const updateVirtualStock = gql`
         $id: Int!,
         $vs_name: String!,
         $notes: String,
+        $is_priority_enable: Int,
+        $priority_type: String,
+        $framework_priority: String,
+        $channel_priority: String,
+        $min_stock: Int,
         $location: [AssignLocation],
     ){
         updateVirtualStock(
@@ -80,14 +89,52 @@ export const updateVirtualStock = gql`
                 vs_name: $vs_name,
                 notes: $notes,
                 location: $location,
+                is_priority_enable: $is_priority_enable,
+                priority_type: $priority_type,
+                framework_priority: $framework_priority,
+                channel_priority: $channel_priority,
+                min_stock: $min_stock,
             }
         ){
             vs_name
             notes
+            is_priority_enable
+            priority_type
+            channel_priority
+            framework_priority
+            min_stock
             location{
                 loc_id
                 loc_code
                 loc_name
+            }
+        }
+    }
+`;
+
+export const getChannelList = gql`
+    query getChannelList(
+        $pageSize: Int!,
+        $currentPage: Int!
+    ){
+        getChannelList(
+            pageSize: $pageSize,
+            currentPage: $currentPage,
+        ){
+            items {
+                channel_id
+                channel_code
+                channel_name
+                channel_url
+                token
+                framework
+                rule_type
+            }
+            total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
             }
         }
     }
@@ -142,6 +189,7 @@ export default {
     getVirtualStockById,
     createVirtualStock,
     updateVirtualStock,
+    getChannelList,
     getLocationList,
     deleteVirtualStock,
     multideleteVirtualStock,
