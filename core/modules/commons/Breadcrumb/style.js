@@ -22,8 +22,9 @@ const useStyles = makeStyles(() => ({
     },
     breadcrumbActive: {
         '&:hover': {
-            fontWeight: 600,
-            borderBottom: '1px solid #000',
+            color: '#be1f93',
+            borderBottom: '1px solid #be1f93',
+            marginBottom: '-1px',
         },
     },
     breadcrumbSeparator: {
