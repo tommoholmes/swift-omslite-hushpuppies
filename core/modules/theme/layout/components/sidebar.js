@@ -2,10 +2,13 @@ import React from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import Hidden from '@material-ui/core/Hidden';
 import { useRouter } from 'next/router';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -33,6 +36,20 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9) + 1,
         },
+    },
+    togleMenuButton: {
+        width: 24,
+        height: 24,
+        position: 'absolute',
+        top: '16px',
+        right: '16px',
+    },
+    togleMenuIcon: {
+        fontSize: 32,
+        color: '#bE1f93',
+        borderRadius: '3px',
+        background: '#fff',
+        boxShadow: '0px 3px 6px #DDE1EC',
     },
     toolbar: {
         display: 'flex',
@@ -84,6 +101,7 @@ const Sidebar = ({
     activeChildMenu,
     setActiveChildMenu,
     open,
+    setOpen,
     menuList,
 }) => {
     const router = useRouter();
@@ -101,20 +119,25 @@ const Sidebar = ({
         if (menu.url) router.push(menu.url);
     };
 
-    return (
-        <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
-            classes={{
-                paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
-            }}
-        >
+    const SidebarContent = () => (
+        <>
             <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
                 <img
                     alt=""
                     src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
                 />
             </div>
+            <Hidden smUp>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={() => setOpen(false)}
+                    className={clsx(classes.togleMenuButton)}
+                >
+                    <ChevronLeftIcon className={classes.togleMenuIcon} />
+                </IconButton>
+            </Hidden>
             <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
                 {menuList.map((menu) => (
                     <div key={menu.key}>
@@ -154,7 +177,38 @@ const Sidebar = ({
                     </div>
                 ))}
             </List>
-        </Drawer>
+        </>
+    );
+
+    return (
+        <>
+            <Hidden smUp>
+                <Drawer
+                    variant="temporary"
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
+                    classes={{
+                        paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
+                    }}
+                    ModalProps={{ keepMounted: true }}
+                >
+                    {SidebarContent()}
+                </Drawer>
+            </Hidden>
+            <Hidden xsDown>
+                <Drawer
+                    variant="permanent"
+                    open={open}
+                    className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
+                    classes={{
+                        paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
+                    }}
+                >
+                    {SidebarContent()}
+                </Drawer>
+            </Hidden>
+        </>
     );
 };
 
