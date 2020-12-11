@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
         right: '16px',
     },
     togleMenuIcon: {
-        fontSize: 32,
+        fontSize: 27,
         color: '#bE1f93',
         borderRadius: '3px',
         background: '#fff',

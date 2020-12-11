@@ -3,12 +3,14 @@
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import loginGqlService from '@modules/login/services/graphql';
 import { removeIsLoginFlagging } from '@helper_auth';
 import Cookies from 'js-cookie';
 import { custDataNameCookie } from '@config';
 import { useRouter } from 'next/router';
 import { withStyles } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
 
 const StyledBadge = withStyles(() => ({
     badge: {
@@ -74,8 +76,13 @@ const RightToolbar = () => {
             </li>
             <li>
                 <a href="#">
-                    {username}
-                    <KeyboardArrowDownIcon style={{ verticalAlign: 'middle', marginLeft: 5 }} />
+                    <Hidden xsDown implementation="css">
+                        {username}
+                        <KeyboardArrowDownIcon style={{ verticalAlign: 'middle', marginLeft: 5 }} />
+                    </Hidden>
+                    <Hidden smUp implementation="css">
+                        <AccountCircleOutlinedIcon style={{ transform: 'translateY(2px)', fontSize: 27 }} />
+                    </Hidden>
                 </a>
                 <ul>
                     <li>
@@ -103,6 +110,7 @@ const RightToolbar = () => {
                         display: inline-block;
                         padding: 5px 12px;
                         position: relative;
+                        vertical-align: middle;
                     }
                     li:hover > ul {
                         display: block;

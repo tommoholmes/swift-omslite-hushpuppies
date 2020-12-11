@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import Breadcrumb from '@common_breadcrumb';
+import Hidden from '@material-ui/core/Hidden';
 import Sidebar from './components/sidebar';
 import useStyles from './style';
 import Header from './components/header';
@@ -85,6 +87,12 @@ const Layout = (props) => {
         return accumulator;
     }, []);
 
+    const getBreadcrumbData = () => {
+        const activeMenu = mappedMenuList.find((e) => e.url === router.pathname);
+        const activeMenuBreadcrumb = (activeMenu && activeMenu.breadcrumb) || [];
+        return [{ url: '/', label: 'Home' }, ...activeMenuBreadcrumb];
+    };
+
     const handleLoader = (status = false) => {
         setState({
             ...state,
@@ -149,6 +157,7 @@ const Layout = (props) => {
             {showHeader() && (
                 <Header
                     mappedMenuList={mappedMenuList}
+                    breadcrumbData={getBreadcrumbData()}
                     open={open}
                     setOpen={setOpen}
                 />
@@ -174,6 +183,9 @@ const Layout = (props) => {
                 />
                 {/* necessary for content to be below app bar */}
                 <div className={showHeader() ? classes.toolbar : ''} />
+                <Hidden smUp implementation="css">
+                    <Breadcrumb data={getBreadcrumbData()} />
+                </Hidden>
                 {children}
             </main>
         </div>

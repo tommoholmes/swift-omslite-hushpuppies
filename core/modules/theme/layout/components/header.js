@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Hidden from '@material-ui/core/Hidden';
-import { useRouter } from 'next/router';
 import Breadcrumb from '@common_breadcrumb';
 import { makeStyles } from '@material-ui/core/styles';
 import RightToolbar from './rightToolbar';
 import { miniDrawerWidth, drawerWidth } from '../helpers';
 
 const useStyles = makeStyles((theme) => ({
+    swiftOmsLogo: {
+        padding: '12px 24px 12px 0px',
+        borderRight: '1px solid #dde1ec',
+        '& img': { height: 36, verticalAlign: 'middle' },
+    },
     appBar: {
         background: '#fff',
         color: '#8C98A2',
@@ -44,31 +48,24 @@ const useStyles = makeStyles((theme) => ({
         transform: 'translateX(-24px)',
         [theme.breakpoints.down('xs')]: {
             marginRight: 0,
-            transform: 'translateX(12px)',
+            transform: 'translate(0px, -2px)',
         },
     },
     togleMenuIcon: {
+        fontSize: 27,
         color: '#bE1f93',
         borderRadius: '3px',
         background: '#fff',
         boxShadow: '0px 3px 6px #DDE1EC',
-        [theme.breakpoints.down('xs')]: {
-            fontSize: 32,
-        },
     },
 }));
 
 const Header = ({
-    mappedMenuList,
+    breadcrumbData,
     open,
     setOpen,
 }) => {
-    const router = useRouter();
     const classes = useStyles();
-    const getBreadcrumb = () => {
-        const activeMenu = mappedMenuList.find((e) => e.url === router.pathname);
-        return (activeMenu && activeMenu.breadcrumb) || [];
-    };
 
     const HeaderMobile = () => (
         <AppBar
@@ -76,6 +73,9 @@ const Header = ({
             className={clsx(classes.appBar)}
         >
             <Toolbar>
+                <div className={clsx(classes.swiftOmsLogo, open ? 'open' : 'close')}>
+                    <img alt="" src="/assets/img/swiftoms_logo_collapsed.png" />
+                </div>
                 <IconButton
                     color="inherit"
                     aria-label="open drawer"
@@ -112,7 +112,7 @@ const Header = ({
                     }
                 </IconButton>
 
-                <Breadcrumb data={[{ url: '/', label: 'Home' }, ...getBreadcrumb()]} />
+                <Breadcrumb data={breadcrumbData} />
                 <RightToolbar />
             </Toolbar>
         </AppBar>
