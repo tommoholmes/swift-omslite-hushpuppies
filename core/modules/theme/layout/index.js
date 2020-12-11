@@ -171,6 +171,7 @@ const Layout = (props) => {
                     setOpen={handleCloseMessage}
                     message={state.toastMessage.text}
                 />
+                {/* necessary for content to be below app bar */}
                 <div className={showHeader() ? classes.toolbar : ''} />
                 {children}
             </main>
