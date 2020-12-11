@@ -13,7 +13,7 @@ const Layout = (props) => {
     const { children, pageConfig } = props;
     const classes = useStyles();
     const router = useRouter();
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
     const [activeParentMenu, setActiveParentMenu] = React.useState();
     const [activeChildMenu, setActiveChildMenu] = React.useState();
 
@@ -116,6 +116,7 @@ const Layout = (props) => {
         if (typeof window !== 'undefined') {
             window.backdropLoader = handleLoader;
             window.toastMessage = handelSetToast;
+            if (window.innerWidth >= 768) setOpen(true);
         }
     }, []);
 
