@@ -82,6 +82,7 @@ const Sidebar = ({
     activeParentMenu,
     setActiveParentMenu,
     activeChildMenu,
+    setActiveChildMenu,
     open,
     menuList,
 }) => {
@@ -96,6 +97,7 @@ const Sidebar = ({
         }
     };
     const handleClickChild = (menu) => {
+        setActiveChildMenu(menu);
         if (menu.url) router.push(menu.url);
     };
 

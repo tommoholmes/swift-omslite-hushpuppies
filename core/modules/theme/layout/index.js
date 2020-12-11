@@ -157,6 +157,7 @@ const Layout = (props) => {
                     activeParentMenu={activeParentMenu}
                     setActiveParentMenu={setActiveParentMenu}
                     activeChildMenu={activeChildMenu}
+                    setActiveChildMenu={setActiveChildMenu}
                     open={open}
                     menuList={menuList}
                 />
