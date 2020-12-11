@@ -180,33 +180,41 @@ const Sidebar = ({
         </>
     );
 
+    const SidebarMobile = () => (
+        <Drawer
+            variant="temporary"
+            open={open}
+            onClose={() => setOpen(false)}
+            className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
+            classes={{
+                paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
+            }}
+            ModalProps={{ keepMounted: true }}
+        >
+            {SidebarContent()}
+        </Drawer>
+    );
+
+    const SidebarDesktop = () => (
+        <Drawer
+            variant="permanent"
+            open={open}
+            className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
+            classes={{
+                paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
+            }}
+        >
+            {SidebarContent()}
+        </Drawer>
+    );
+
     return (
         <>
             <Hidden smUp>
-                <Drawer
-                    variant="temporary"
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
-                    classes={{
-                        paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
-                    }}
-                    ModalProps={{ keepMounted: true }}
-                >
-                    {SidebarContent()}
-                </Drawer>
+                {SidebarMobile()}
             </Hidden>
             <Hidden xsDown>
-                <Drawer
-                    variant="permanent"
-                    open={open}
-                    className={clsx(classes.drawer, open ? classes.drawerOpen : classes.drawerClose)}
-                    classes={{
-                        paper: clsx(open ? classes.drawerOpen : classes.drawerClose),
-                    }}
-                >
-                    {SidebarContent()}
-                </Drawer>
+                {SidebarDesktop()}
             </Hidden>
         </>
     );
