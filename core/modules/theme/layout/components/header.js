@@ -17,6 +17,12 @@ const useStyles = makeStyles((theme) => ({
         borderRight: '1px solid #dde1ec',
         '& img': { height: 36, verticalAlign: 'middle' },
     },
+    appBarShiftDesktop: {
+        backgroundColor: '#fff',
+        position: 'fixed',
+        width: '100vw',
+        height: 64,
+    },
     appBar: {
         background: '#fff',
         color: '#8C98A2',
@@ -124,6 +130,7 @@ const Header = ({
                 {HeaderMobile()}
             </Hidden>
             <Hidden xsDown implementation="css">
+                <div className={classes.appBarShiftDesktop} />
                 {HeaderDesktop()}
             </Hidden>
         </>
