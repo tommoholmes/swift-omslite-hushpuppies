@@ -4,10 +4,14 @@ export const getLocationList = gql`
     query getLocationList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: LocationFilterInput,
+        $sort: LocationSortInput,
     ){
         getLocationList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 loc_id
