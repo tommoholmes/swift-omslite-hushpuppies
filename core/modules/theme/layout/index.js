@@ -183,9 +183,11 @@ const Layout = (props) => {
                 />
                 {/* necessary for content to be below app bar */}
                 <div className={showHeader() ? classes.toolbar : ''} />
-                <Hidden smUp implementation="css">
-                    <Breadcrumb data={getBreadcrumbData()} />
-                </Hidden>
+                {showHeader() && (
+                    <Hidden smUp implementation="css">
+                        <Breadcrumb data={getBreadcrumbData()} />
+                    </Hidden>
+                )}
                 {children}
             </main>
         </div>
