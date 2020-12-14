@@ -36,6 +36,7 @@ const Layout = (props) => {
                 { key: 'channel', label: 'Channel', url: '/oms/channel' },
                 { key: 'company', label: 'Company', url: '/oms/company' },
                 { key: 'location', label: 'Location', url: '/oms/location' },
+                { key: 'prioritylocation', label: 'Priority Location', url: '/oms/prioritylocation' },
                 { key: 'source', label: 'Source', url: '/oms/source' },
                 { key: 'notification', label: 'Notification', url: '/oms/notification' },
             ],
