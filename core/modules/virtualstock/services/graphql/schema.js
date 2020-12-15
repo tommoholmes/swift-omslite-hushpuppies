@@ -35,7 +35,11 @@ export const getVirtualStockById = gql`
             notes
             is_priority_enable
             priority_type
-            channel_priority
+            channel_priority{
+                channel_id
+                channel_code
+                channel_name
+            }
             framework_priority
             min_stock
             location{
@@ -100,7 +104,11 @@ export const updateVirtualStock = gql`
             notes
             is_priority_enable
             priority_type
-            channel_priority
+            channel_priority{
+                channel_id
+                channel_code
+                channel_name
+            }
             framework_priority
             min_stock
             location{
