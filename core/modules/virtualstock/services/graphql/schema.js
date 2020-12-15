@@ -4,10 +4,14 @@ export const getVirtualStockList = gql`
     query getVirtualStockList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: VirtualStockFilterInput,
+        $sort: VirtualStockSortInput,
     ){
         getVirtualStockList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 vs_id

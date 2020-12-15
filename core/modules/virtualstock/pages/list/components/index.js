@@ -3,8 +3,6 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Autocomplete from '@common_autocomplete';
-import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
 import Header from './Header';
 import useStyles from './style';
 
@@ -23,7 +21,7 @@ const VirtualStockListContent = (props) => {
     const filters = [
         { field: 'vs_id', name: 'vs_id_from', type: 'from', label: 'From', initialValue: '' },
         { field: 'vs_id', name: 'vs_id_to', type: 'to', label: 'To', initialValue: '' },
-        { field: 'vs_name', name: 'vs_name', type: 'match', label: 'Name', initialValue: '' },
+        { field: 'vs_name', name: 'vs_name', type: 'like', label: 'Name', initialValue: '' },
     ];
 
     const rows = virtualStockList.map((virtualStock) => ({
