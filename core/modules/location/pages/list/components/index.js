@@ -13,12 +13,21 @@ const LocationListContent = (props) => {
     const locationTotal = (data && data.getLocationList && data.getLocationList.total_count) || 0;
 
     const columns = [
-        { field: 'loc_id', headerName: 'ID' },
-        { field: 'loc_code', headerName: 'Code' },
-        { field: 'loc_name', headerName: 'Name' },
-        { field: 'loc_city', headerName: 'City' },
-        { field: 'loc_street', headerName: 'Address' },
-        { field: 'actions', headerName: 'Actions' },
+        { field: 'loc_id', headerName: 'ID', sortable: true, initialSort: 'ASC', hideable: true },
+        { field: 'loc_code', headerName: 'Code', sortable: true, hideable: true },
+        { field: 'loc_name', headerName: 'Name', hideable: true },
+        { field: 'loc_city', headerName: 'City', hideable: true },
+        { field: 'loc_street', headerName: 'Address', hideable: true },
+        { field: 'actions', headerName: 'Actions', hideable: true },
+    ];
+
+    const filters = [
+        { field: 'loc_id', name: 'loc_id_from', type: 'from', label: 'No From', initialValue: '' },
+        { field: 'loc_id', name: 'loc_id_to', type: 'to', label: 'No To', initialValue: '' },
+        { field: 'loc_code', name: 'loc_code', type: 'like', label: 'Code', initialValue: '' },
+        { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Name', initialValue: '' },
+        { field: 'loc_city', name: 'loc_city', type: 'like', label: 'City', initialValue: '' },
+        { field: 'loc_street', name: 'loc_street', type: 'like', label: 'Adress', initialValue: '' },
     ];
 
     const rows = locationList.map((location) => ({
@@ -41,6 +50,7 @@ const LocationListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
                 getRows={getLocationList}
                 deleteRows={multideleteLocation}
