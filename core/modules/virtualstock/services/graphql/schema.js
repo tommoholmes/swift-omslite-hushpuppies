@@ -4,10 +4,14 @@ export const getVirtualStockList = gql`
     query getVirtualStockList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: VirtualStockFilterInput,
+        $sort: VirtualStockSortInput,
     ){
         getVirtualStockList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 vs_id
@@ -35,7 +39,11 @@ export const getVirtualStockById = gql`
             notes
             is_priority_enable
             priority_type
-            channel_priority
+            channel_priority{
+                channel_id
+                channel_code
+                channel_name
+            }
             framework_priority
             min_stock
             location{
@@ -100,7 +108,11 @@ export const updateVirtualStock = gql`
             notes
             is_priority_enable
             priority_type
-            channel_priority
+            channel_priority{
+                channel_id
+                channel_code
+                channel_name
+            }
             framework_priority
             min_stock
             location{
