@@ -81,6 +81,8 @@ const CustomTable = (props) => {
         initialPage = 0,
         initialRowsPerPage = 10,
         count,
+        actions,
+        hideActions = false,
     } = props;
 
     // hooks
@@ -102,6 +104,7 @@ const CustomTable = (props) => {
             .filter((column) => column.sortable)
             .map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
     );
+    const [activeAction, setActiveAction] = React.useState();
 
     // methods
     const handleChangePage = (event, newPage) => {
@@ -141,32 +144,46 @@ const CustomTable = (props) => {
     }, [page, rowsPerPage, filters, sorts]);
 
     const renderTableToolbar = () => {
+        const toolbarActions = actions || [
+            {
+                label: 'Delete',
+                message: 'Are you sure you want to delete?',
+                onClick: async (_checkedRows) => {
+                    const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
+                    await deleteRows({ variables });
+                },
+            },
+        ];
         return (
             <div className={classes.tableToolbar}>
                 <div className="top-buttons-wrapper">
                     <div className="top-item records-found">{`${count} records found.`}</div>
-                    <div className="top-item">
-                        <ConfirmDialog
-                            open={openConfirmDialog}
-                            onCancel={() => setOpenConfirmDialog(false)}
-                            onConfirm={async () => {
-                                // need imporvement later (after gql ready for deleteRows)
-                                if (checkedRows && checkedRows.length) {
-                                    const variables = { [primaryKey]: checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
-                                    await deleteRows({ variables });
-                                    fetchRows();
-                                }
-                                setOpenConfirmDialog(false);
-                            }}
-                            message="Are you sure you want to delete?"
-                        />
-                        <MenuPopover
-                            openButton={{ label: 'Actions' }}
-                            menuItems={[
-                                { label: 'Delete', onClick: () => setOpenConfirmDialog(true) },
-                            ]}
-                        />
-                    </div>
+                    {!hideActions && (
+                        <div className="top-item">
+                            <ConfirmDialog
+                                open={openConfirmDialog}
+                                onCancel={() => setOpenConfirmDialog(false)}
+                                onConfirm={async () => {
+                                    if (checkedRows && checkedRows.length) {
+                                        await activeAction.onClick(checkedRows);
+                                        fetchRows();
+                                    }
+                                    setOpenConfirmDialog(false);
+                                }}
+                                message={activeAction && activeAction.message}
+                            />
+                            <MenuPopover
+                                openButton={{ label: 'Actions' }}
+                                menuItems={toolbarActions.map((action) => ({
+                                    label: action.label,
+                                    onClick: () => {
+                                        setOpenConfirmDialog(true);
+                                        setActiveAction(action);
+                                    },
+                                }))}
+                            />
+                        </div>
+                    )}
                     <div className="top-item">
                         <Button
                             className={classes.btn}
