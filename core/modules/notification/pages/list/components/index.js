@@ -2,14 +2,12 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Link from 'next/link';
-import Autocomplete from '@common_autocomplete';
 import Header from './Header';
 import useStyles from './style';
 
 const NotificationListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getNotificationList } = props;
+    const { data, loading, getNotificationList, multiReadNotification } = props;
     const notificationList = (data && data.getNotificationList && data.getNotificationList.items) || [];
     const notificationTotal = (data && data.getNotificationList && data.getNotificationList.total_count) || 0;
 
@@ -29,6 +27,17 @@ const NotificationListContent = (props) => {
         { field: 'message', name: 'message', type: 'match', label: 'Messages', initialValue: '' },
     ];
 
+    const actions = [
+        {
+            label: 'Mark as Read',
+            message: 'Are you sure you want to continue?',
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await multiReadNotification({ variables });
+            },
+        },
+    ];
+
     const rows = notificationList.map((notification) => ({
         ...notification,
         id: notification.id,
@@ -45,6 +54,7 @@ const NotificationListContent = (props) => {
             <Header />
             <Table
                 filters={filters}
+                actions={actions}
                 rows={rows}
                 getRows={getNotificationList}
                 loading={loading}

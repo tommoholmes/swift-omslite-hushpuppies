@@ -7,8 +7,10 @@ const Core = (props) => {
     } = props;
 
     const [getNotificationList, { data, loading }] = gqlService.getNotificationList();
+    const [multiReadNotification] = gqlService.multiReadNotification();
 
     const contentProps = {
+        multiReadNotification,
         getNotificationList,
         data,
         loading,

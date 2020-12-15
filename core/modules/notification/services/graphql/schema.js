@@ -44,7 +44,18 @@ export const getNotificationById = gql`
     }
 `;
 
+export const multiReadNotification = gql`
+    mutation multiReadNotification (
+        $id: [Int!]!
+    ){
+        multiReadNotification(
+            id: $id
+        )
+    }
+`;
+
 export default {
     getNotificationList,
     getNotificationById,
+    multiReadNotification,
 };

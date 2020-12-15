@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -17,7 +17,12 @@ export const getNotificationById = (variables) => useQuery(Schema.getNotificatio
     variables, ...context, ...fetchPolicy,
 });
 
+export const multiReadNotification = (variables) => useMutation(Schema.multiReadNotification, {
+    variables, ...context,
+});
+
 export default {
     getNotificationList,
     getNotificationById,
+    multiReadNotification,
 };
