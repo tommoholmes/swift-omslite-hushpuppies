@@ -48,7 +48,7 @@ export const multiReadNotification = gql`
     mutation multiReadNotification (
         $id: [Int!]!
     ){
-        multiReadNotification(
+        multireadNotification(
             id: $id
         )
     }
