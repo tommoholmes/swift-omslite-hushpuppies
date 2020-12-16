@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Breadcrumb from '@common_breadcrumb';
@@ -18,15 +18,13 @@ const Layout = (props) => {
     const [open, setOpen] = React.useState(false);
     const [activeParentMenu, setActiveParentMenu] = React.useState();
     const [activeChildMenu, setActiveChildMenu] = React.useState();
-
-    const [state, setState] = useState({
-        backdropLoader: false,
-        toastMessage: {
-            open: false,
-            variant: '',
-            text: '',
-        },
+    const [backdropLoader, setBackdropLoader] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState({
+        open: false,
+        variant: '',
+        text: '',
     });
+
     const menuList = [
         { key: 'dashboard', label: 'Dashboard', url: '/' },
         {
@@ -94,37 +92,14 @@ const Layout = (props) => {
         return [{ url: '/', label: 'Home' }, ...activeMenuBreadcrumb];
     };
 
-    const handleLoader = (status = false) => {
-        setState({
-            ...state,
-            backdropLoader: status,
-        });
-    };
-
-    const handelSetToast = (message) => {
-        setState({
-            ...state,
-            toastMessage: {
-                ...state.toastMessage,
-                ...message,
-            },
-        });
-    };
-
     const handleCloseMessage = () => {
-        setState({
-            ...state,
-            toastMessage: {
-                ...state.toastMessage,
-                open: false,
-            },
-        });
+        setToastMessage({ ...toastMessage, open: false });
     };
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            window.backdropLoader = handleLoader;
-            window.toastMessage = handelSetToast;
+            window.backdropLoader = setBackdropLoader;
+            window.toastMessage = setToastMessage;
             if (window.innerWidth >= 768) setOpen(true);
         }
     }, []);
@@ -175,12 +150,12 @@ const Layout = (props) => {
                 />
             )}
             <main className={showHeader() ? classes.content : classes.contentNoHeader}>
-                <Loading open={state.backdropLoader} />
+                <Loading open={backdropLoader} />
                 <Message
-                    open={state.toastMessage.open}
-                    variant={state.toastMessage.variant}
+                    open={toastMessage.open}
+                    variant={toastMessage.variant}
                     setOpen={handleCloseMessage}
-                    message={state.toastMessage.text}
+                    message={toastMessage.text}
                 />
                 {/* necessary for content to be below app bar */}
                 <div className={showHeader() ? classes.toolbar : ''} />
