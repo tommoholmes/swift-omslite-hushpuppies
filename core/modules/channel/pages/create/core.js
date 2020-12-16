@@ -2,12 +2,14 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
+    const router = useRouter();
     const [createChannel] = gqlService.createChannel();
 
     const handleSubmit = ({
@@ -42,14 +44,24 @@ const Core = (props) => {
             webhook_rma_refund: refund,
             webhook_creditmemo: creditmemo,
         };
+        window.backdropLoader(true);
         createChannel({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success create new channel');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success create new channel!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/oms/channel'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
