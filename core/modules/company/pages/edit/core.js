@@ -10,19 +10,30 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const company = data.getCompanyById;
     const [updateCompany] = gqlService.updateCompany();
 
     const handleSubmit = ({ code, name }) => {
         const variables = { id: company.company_id, company_code: code, company_name: name };
+        window.backdropLoader(true);
         updateCompany({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success edit company!');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit company!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/oms/company'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 

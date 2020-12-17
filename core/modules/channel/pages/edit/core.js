@@ -11,6 +11,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const channel = data.getChannelById;
     const [updateChannel] = gqlService.updateChannel();
 
@@ -34,14 +35,24 @@ const ContentWrapper = (props) => {
             webhook_rma_refund: refund,
             webhook_creditmemo: creditmemo,
         };
+        window.backdropLoader(true);
         updateChannel({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success edit Channel');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit company!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/oms/company'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
