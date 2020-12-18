@@ -8,6 +8,8 @@ const bgGreen = '#EBFFE2';
 const borderGreen = '#51C519';
 const bgBlack = '#000';
 const borderBlack = '#435179';
+const bgBlue = '#e2edff';
+const borderBlue = '#2f6bcc';
 
 const useStyles = makeStyles(() => ({
     statusFailed: {
@@ -40,6 +42,14 @@ const useStyles = makeStyles(() => ({
         borderColor: borderBlack,
         borderRadius: 20,
         color: '#ffffff',
+        textAlign: 'center',
+    },
+    statusAllocating: {
+        backgroundColor: bgBlue,
+        border: '1px solid',
+        borderColor: borderBlue,
+        borderRadius: 20,
+        color: borderBlue,
         textAlign: 'center',
     },
 }));

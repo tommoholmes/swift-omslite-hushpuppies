@@ -84,6 +84,9 @@ const OrderQueueListContent = (props) => {
         if (status === 'new') {
             return classes.statusProcessing;
         }
+        if (status === 'allocating') {
+            return classes.statusAllocating;
+        }
         return classes.statusSuccess;
     };
     const getClassByChannelOrderStatus = (channel_order_status) => {
