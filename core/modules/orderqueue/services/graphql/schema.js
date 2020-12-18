@@ -88,7 +88,20 @@ export const getOrderQueueById = gql`
     }
 `;
 
+export const setReallocation = gql`
+    mutation setReallocation(
+        $id: Int!,
+        $type: String!,
+    ){
+        setReallocation(
+            id: $id,
+            type: $type,
+        )
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
+    setReallocation,
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@layout';
-// import * as Yup from 'yup';
+import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
@@ -11,26 +11,25 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const orderqueue = data.getOrderQueueById;
-    // const [updateChannel] = gqlService.updateChannel();
+    const [setReallocation] = gqlService.setReallocation();
 
-    // const handleSubmit = ({
-    //     code, name,
-    // }) => {
-    //     const variables = {
-    //         id: channel.channel_id,
-    //         channel_code: code,
-    //         channel_name: name,
-    //     };
-    //     updateChannel({
-    //         variables,
-    //     }).then((res) => {
-    //         console.log(res);
-    //         alert('Success edit Channel');
-    //         // need show succes message
-    //     }).catch((e) => {
-    //         alert(e);
-    //     });
-    // };
+    const handleSubmit = ({
+        type,
+    }) => {
+        const variables = {
+            id: orderqueue.id,
+            type,
+        };
+        setReallocation({
+            variables,
+        }).then((res) => {
+            console.log(res);
+            alert('Success edit Channel');
+            // need show succes message
+        }).catch((e) => {
+            alert(e);
+        });
+    };
 
     const orderQueue = {
         lastUpdated: orderqueue.last_updated,
@@ -62,24 +61,35 @@ const ContentWrapper = (props) => {
         grandTotal: orderqueue.channel_grand_total,
     };
 
-    const formik = useFormik({
-        // initialValues: {
-        //     lastUpdated: orderqueue.last_updated || '',
-        //     status: orderqueue.status || '',
-        //     channelOrderId: orderqueue.channel_order_increment_id || '',
-        // },
-        // validationSchema: Yup.object().shape({
-        //     code: Yup.string().nullable().required('Required!'),
-        //     name: Yup.string().nullable().required('Required!'),
+    const formikAllocation = useFormik({
+        initialValues: {
+            type: 'allocation',
+        },
+        validationSchema: Yup.object().shape({
+            type: Yup.string().nullable().required('Required!'),
+        }),
+        onSubmit: (values) => {
+            handleSubmit(values);
+            console.log(values);
+        },
+    });
 
-        // }),
-        // onSubmit: (values) => {
-        //     handleSubmit(values);
-        // },
+    const formikNew = useFormik({
+        initialValues: {
+            type: 'new',
+        },
+        validationSchema: Yup.object().shape({
+            type: Yup.string().nullable().required('Required!'),
+        }),
+        onSubmit: (values) => {
+            handleSubmit(values);
+            console.log(values);
+        },
     });
 
     const contentProps = {
-        formik,
+        formikAllocation,
+        formikNew,
         orderQueue,
     };
 

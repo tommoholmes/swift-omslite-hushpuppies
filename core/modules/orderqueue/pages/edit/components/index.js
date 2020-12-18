@@ -8,7 +8,8 @@ import useStyles from './style';
 
 const OrderQueueEditContent = (props) => {
     const {
-        formik,
+        formikAllocation,
+        formikNew,
         orderQueue,
     } = props;
     const classes = useStyles();
@@ -50,7 +51,7 @@ const OrderQueueEditContent = (props) => {
                                             <td className={classes.td}>
                                                 <Button
                                                     className={classes.btn}
-                                                    // onClick=
+                                                    onClick={formikAllocation.handleSubmit}
                                                     variant="contained"
                                                 >
                                                     Set As Reallocation
@@ -60,10 +61,10 @@ const OrderQueueEditContent = (props) => {
                                             <td className={classes.td}>
                                                 <Button
                                                     className={classes.btn}
-                                                    // onClick=
+                                                    onClick={formikNew.handleSubmit}
                                                     variant="contained"
                                                 >
-                                                    Set As New
+                                                    set as new
                                                 </Button>
                                             </td>
                                         )}
