@@ -10,6 +10,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const location = data.getLocationById;
     const [updateLocation] = gqlService.updateLocation();
     const optionsYesNo = [
@@ -70,14 +71,24 @@ const ContentWrapper = (props) => {
             priority: Number(priority || null),
             is_active: status.id,
         };
+        window.backdropLoader(true);
         updateLocation({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success edit Location');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit Location',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/oms/location'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
