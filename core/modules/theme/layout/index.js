@@ -43,7 +43,7 @@ const Layout = (props) => {
             key: 'sales',
             label: 'Sales',
             children: [
-                { key: 'orderQueue', label: 'Order Queue' },
+                { key: 'orderQueue', label: 'Order Queue', url: '/sales/orderqueue' },
                 { key: 'shipment', label: 'Shipment' },
             ],
         },
