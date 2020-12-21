@@ -22,8 +22,8 @@ const LocationListContent = (props) => {
     ];
 
     const filters = [
-        { field: 'loc_id', name: 'loc_id_from', type: 'from', label: 'No From', initialValue: '' },
-        { field: 'loc_id', name: 'loc_id_to', type: 'to', label: 'No To', initialValue: '' },
+        { field: 'loc_id', name: 'loc_id_from', type: 'from', label: 'ID From', initialValue: '' },
+        { field: 'loc_id', name: 'loc_id_to', type: 'to', label: 'ID To', initialValue: '' },
         { field: 'loc_code', name: 'loc_code', type: 'like', label: 'Code', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Name', initialValue: '' },
         { field: 'loc_city', name: 'loc_city', type: 'like', label: 'City', initialValue: '' },
