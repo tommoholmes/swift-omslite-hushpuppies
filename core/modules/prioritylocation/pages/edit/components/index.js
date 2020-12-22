@@ -75,11 +75,11 @@ const PriorityLocationEditContent = (props) => {
                                 getCityListRes
                                 && getCityListRes.data
                                 && getCityListRes.data.getCityList
-                                && getCityListRes.data.getCityList.label.map((e) => ({ id: e, label: e }))
+                                && getCityListRes.data.getCityList.items
                             }
                             getOptions={getCityList}
                             primaryKey="id"
-                            labelKey="label"
+                            labelKey="city"
                         />
                     </div>
                     <div className={classes.formField}>

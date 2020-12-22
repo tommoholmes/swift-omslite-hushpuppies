@@ -2,12 +2,14 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
+    const router = useRouter();
     const [createPriorityLocation] = gqlService.createPriorityLocation();
 
     const handleSubmit = ({
@@ -18,18 +20,28 @@ const Core = (props) => {
     }) => {
         const variables = {
             channel_code: channelCode.channel_code,
-            city: city.label,
+            city: city.city,
             loc_code: locationCode.loc_code,
             priority,
         };
+        window.backdropLoader(true);
         createPriorityLocation({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success create new channel');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success create new priority location!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/oms/prioritylocation'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
@@ -48,7 +60,6 @@ const Core = (props) => {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
-            // console.log(values);
         },
     });
 

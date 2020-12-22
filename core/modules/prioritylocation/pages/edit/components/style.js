@@ -4,7 +4,7 @@ const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 0',
         borderRadius: 16,
@@ -42,6 +42,9 @@ const useStyles = makeStyles(() => ({
     divLabel: {
         width: 300,
         display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            width: 140,
+        },
     },
     label: {
         color: colorText,
@@ -66,6 +69,9 @@ const useStyles = makeStyles(() => ({
     fieldRoot: {
         width: 'calc(100% - 300px)',
         verticalAlign: 'middle',
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
     },
     fieldInput: {
         border: '1px solid',
@@ -91,6 +97,9 @@ const useStyles = makeStyles(() => ({
             border: '1px solid',
             height: 36,
             padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
         },
     },
 }));
