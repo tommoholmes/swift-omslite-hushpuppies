@@ -19,8 +19,8 @@ const VirtualStockListContent = (props) => {
     ];
 
     const filters = [
-        { field: 'vs_id', name: 'vs_id_from', type: 'from', label: 'From', initialValue: '' },
-        { field: 'vs_id', name: 'vs_id_to', type: 'to', label: 'To', initialValue: '' },
+        { field: 'vs_id', name: 'vs_id_from', type: 'from', label: 'ID From', initialValue: '' },
+        { field: 'vs_id', name: 'vs_id_to', type: 'to', label: 'ID To', initialValue: '' },
         { field: 'vs_name', name: 'vs_name', type: 'like', label: 'Name', initialValue: '' },
     ];
 
