@@ -20,14 +20,24 @@ const ContentWrapper = (props) => {
             id: orderqueue.id,
             type,
         };
+        window.backdropLoader(true);
         setReallocation({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success edit Channel');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit order status',
+                variant: 'success',
+            });
+            setTimeout(() => window.location.reload(true), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
