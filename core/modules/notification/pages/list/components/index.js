@@ -21,10 +21,10 @@ const NotificationListContent = (props) => {
     ];
 
     const filters = [
-        { field: 'id', name: 'id_from', type: 'from', label: 'From', initialValue: '1' },
-        { field: 'id', name: 'id_to', type: 'to', label: 'To', initialValue: '30' },
-        { field: 'entity_type', name: 'entity_type', type: 'match', label: 'Type', initialValue: '' },
-        { field: 'message', name: 'message', type: 'match', label: 'Messages', initialValue: '' },
+        { field: 'id', name: 'id_from', type: 'from', label: 'ID From', initialValue: '1' },
+        { field: 'id', name: 'id_to', type: 'to', label: 'ID To', initialValue: '30' },
+        { field: 'entity_type', name: 'entity_type', type: 'like', label: 'Type', initialValue: '' },
+        { field: 'message', name: 'message', type: 'like', label: 'Messages', initialValue: '' },
     ];
 
     const actions = [
