@@ -11,6 +11,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const virtualStock = data.getVirtualStockById;
     const [updateVirtualStock] = gqlService.updateVirtualStock();
 
@@ -35,14 +36,24 @@ const ContentWrapper = (props) => {
             min_stock: Number(minStock || null),
             location: location.map((e) => ({ loc_id: e.loc_id })),
         };
+        window.backdropLoader(true);
         updateVirtualStock({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success edit VirtualStock');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit VirtualStock',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/cataloginventory/virtualstock'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 

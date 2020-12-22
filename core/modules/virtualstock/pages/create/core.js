@@ -2,12 +2,14 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
+    const router = useRouter();
     const [createVirtualStock] = gqlService.createVirtualStock();
 
     const handleSubmit = ({
@@ -20,14 +22,24 @@ const Core = (props) => {
             notes,
             location: location.map((e) => ({ loc_id: e.loc_id })),
         };
+        window.backdropLoader(true);
         createVirtualStock({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success create new VirtualStock');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success create new VirtualStock',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/cataloginventory/virtualstock'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
