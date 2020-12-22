@@ -14,30 +14,29 @@ const PriorityLocationListContent = (props) => {
 
     const columns = [
         { field: 'id', headerName: 'ID', sortable: true, initialSort: 'ASC' },
-        { field: 'channel_code', headerName: 'Channel Code', sortable: true, hideable: true },
-        { field: 'province', headerName: 'Province', sortable: true, hideable: true },
-        { field: 'city', headerName: 'City', sortable: true, hideable: true },
-        { field: 'priority', headerName: 'Priority', sortable: true, hideable: true },
-        { field: 'loc_code', headerName: 'Location Code', sortable: true, hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'channel_code', headerName: 'Channel Code', sortable: true },
+        { field: 'province', headerName: 'Province', sortable: true },
+        { field: 'city', headerName: 'City', sortable: true },
+        { field: 'priority', headerName: 'Priority', sortable: true },
+        { field: 'loc_code', headerName: 'Location Code', sortable: true },
+        { field: 'actions', headerName: 'Actions' },
     ];
 
     const filters = [
-        { field: 'id', name: 'id_from', type: 'from', label: 'No From', initialValue: '' },
-        { field: 'id', name: 'id_to', type: 'to', label: 'No To', initialValue: '' },
-        { field: 'channel_code', name: 'channel_code', type: 'match', label: 'Channel Code', initialValue: '' },
-        { field: 'province', name: 'province', type: 'match', label: 'Province', initialValue: '' },
-        { field: 'city', name: 'city', type: 'match', label: 'City', initialValue: '' },
-        { field: 'priority', name: 'priority', type: 'match', label: 'Priority', initialValue: '' },
-        { field: 'loc_code', name: 'loc_code', type: 'match', label: 'Location Code', initialValue: '' },
-        // { field: 'channel_url', name: 'channel_url', type: 'eq', label: 'Channel Url', initialValue: '' },
+        { field: 'id', name: 'id_from', type: 'from', label: 'ID From', initialValue: '' },
+        { field: 'id', name: 'id_to', type: 'to', label: 'ID To', initialValue: '' },
+        { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel Code', initialValue: '' },
+        { field: 'province', name: 'province', type: 'like', label: 'Province', initialValue: '' },
+        { field: 'city', name: 'city', type: 'like', label: 'City', initialValue: '' },
+        { field: 'priority', name: 'priority', type: 'eq', label: 'Priority', initialValue: '' },
+        { field: 'loc_code', name: 'loc_code', type: 'like', label: 'Location Code', initialValue: '' },
     ];
 
     const rows = priorityLocationList.map((priorityLocation) => ({
         ...priorityLocation,
         id: priorityLocation.id,
         channel_code: priorityLocation.channel_code.channel_code,
-        province: priorityLocation.province.name,
+        province: priorityLocation.province.code,
         city: priorityLocation.city.city,
         loc_code: priorityLocation.loc_code.loc_code,
         actions: () => (

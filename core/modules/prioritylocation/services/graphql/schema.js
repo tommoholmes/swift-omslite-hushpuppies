@@ -4,10 +4,14 @@ export const getPriorityLocationList = gql`
     query getPriorityLocationList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: PriorityLocationFilterInput,
+        $sort: PriorityLocationSortInput,
     ){
         getPriorityLocationList(
             pageSize: $pageSize,
             currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 id
