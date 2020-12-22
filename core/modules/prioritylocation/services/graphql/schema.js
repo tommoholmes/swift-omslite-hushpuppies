@@ -55,11 +55,27 @@ export const getPriorityLocationById = gql`
             id: $id
         ){
             id
-            channel_code
-            province
-            city
+            channel_code{
+                channel_code
+                channel_id
+                channel_name
+            }
+            province{
+                code
+                id
+                name
+            }
+            city{
+                city
+                id
+                value
+            }
             priority
-            loc_code
+            loc_code{
+                loc_code
+                loc_country_id
+                loc_name
+            }
         }
     }
 `;
@@ -79,10 +95,22 @@ export const createPriorityLocation = gql`
                 priority: $priority,
             }
         ){
-            channel_code
-            city
-            loc_code
+            channel_code{
+                channel_code
+                channel_id
+                channel_name
+            }
+            city{
+                city
+                id
+                value
+            }
             priority
+            loc_code{
+                loc_code
+                loc_country_id
+                loc_name
+            }
         }
     }
 `;
@@ -104,10 +132,22 @@ export const updatePriorityLocation = gql`
                 priority: $priority,
             }
         ){
-            channel_code
-            city
-            loc_code
+            channel_code{
+                channel_code
+                channel_id
+                channel_name
+            }
+            city{
+                city
+                id
+                value
+            }
             priority
+            loc_code{
+                loc_code
+                loc_country_id
+                loc_name
+            }
         }
     }
 `;
@@ -141,11 +181,25 @@ export const getChannelList = gql`
 `;
 
 export const getCityList = gql`
-    query{
-        getCityList{
-            id
-            label
-            value
+    query getCityList(
+        $pageSize: Int!,
+        $currentPage: Int!,
+    ){
+        getCityList(
+            pageSize: $pageSize,
+            currentPage: $currentPage
+        ){
+            items {
+                id
+                city
+                value
+            }
+            total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
+            }
         }
     }
 `;

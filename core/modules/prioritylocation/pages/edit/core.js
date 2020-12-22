@@ -10,6 +10,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const priorityLocation = data.getPriorityLocationById;
     const [updatePriorityLocation] = gqlService.updatePriorityLocation();
 
@@ -23,31 +24,36 @@ const ContentWrapper = (props) => {
         const variables = {
             id: priorityLocation.id,
             channel_code: channelCode.channel_code,
-            city: city.label,
-            location: locationCode.location,
+            city: city.city,
+            loc_code: locationCode.loc_code,
             priority,
         };
+        window.backdropLoader(true);
         updatePriorityLocation({
             variables,
-        }).then((res) => {
-            console.log(res);
-            alert('Success edit PriorityLocation');
-            // need show succes message
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit priotiy location!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/oms/prioritylocation'), 250);
         }).catch((e) => {
-            alert(e);
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
         });
     };
 
     const formik = useFormik({
         initialValues: {
-            channelCode: {
-                channel_code: priorityLocation.channel_code,
-                channel_name: priorityLocation.channel_name,
-            },
-            city: {
-                label: priorityLocation.city,
-            },
-            locationCode: priorityLocation.locationCode,
+            channelCode: priorityLocation.channel_code,
+            city: priorityLocation.city,
+            locationCode: priorityLocation.loc_code,
             priority: priorityLocation.priority || '',
         },
         validationSchema: Yup.object().shape({
@@ -58,7 +64,6 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
-            // console.log(values);
         },
     });
 
