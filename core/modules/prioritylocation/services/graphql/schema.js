@@ -11,11 +11,27 @@ export const getPriorityLocationList = gql`
         ){
             items {
                 id
-                channel_code
-                province
-                city
+                channel_code{
+                    channel_code
+                    channel_id
+                    channel_name
+                }
+                province{
+                    code
+                    id
+                    name
+                }
+                city{
+                    city
+                    id
+                    value
+                }
                 priority
-                loc_code
+                loc_code{
+                    loc_code
+                    loc_country_id
+                    loc_name
+                }
             }
             total_count
             page_info {

@@ -36,6 +36,10 @@ const PriorityLocationListContent = (props) => {
     const rows = priorityLocationList.map((priorityLocation) => ({
         ...priorityLocation,
         id: priorityLocation.id,
+        channel_code: priorityLocation.channel_code.channel_code,
+        province: priorityLocation.province.name,
+        city: priorityLocation.city.city,
+        loc_code: priorityLocation.loc_code.loc_code,
         actions: () => (
             <Link href={`/oms/prioritylocation/edit/${priorityLocation.id}`}>
                 <a className="link-button">view</a>
