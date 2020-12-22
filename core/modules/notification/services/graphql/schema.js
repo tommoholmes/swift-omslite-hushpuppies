@@ -4,10 +4,14 @@ export const getNotificationList = gql`
     query getNotificationList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: NotificationFilterInput,
+        $sort: NotificationSortInput,
     ){
         getNotificationList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 id
