@@ -4,10 +4,14 @@ export const getSourceList = gql`
     query getSourceList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: SourceFilterInput,
+        $sort: SourceSortInput,
     ){
         getSourceList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 source_id
