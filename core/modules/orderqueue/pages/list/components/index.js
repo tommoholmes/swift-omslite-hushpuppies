@@ -5,6 +5,7 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import orderQueueGqlService from '@modules/orderqueue/services/graphql';
+import channelGqlService from '@modules/channel/services/graphql';
 import Header from './Header';
 import useStyles from './style';
 
@@ -57,7 +58,35 @@ const OrderQueueListContent = (props) => {
         //         />
         //     ),
         // },
-        { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel Code', initialValue: '' },
+        // { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel Code', initialValue: '' },
+        {
+            field: 'channel_code',
+            name: 'channel_code',
+            type: 'eq',
+            label: 'Channel Code',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => {
+                const [getChannelList, getChannelListRes] = channelGqlService.getChannelList();
+                const channelOptions = (getChannelListRes
+                    && getChannelListRes.data
+                    && getChannelListRes.data.getChannelList
+                    && getChannelListRes.data.getChannelList.items) || [];
+                const primaryKey = 'channel_code';
+                const labelKey = 'channel_name';
+                return (
+                    <Autocomplete
+                        mode="lazy"
+                        style={{ width: 228 }}
+                        getOptions={getChannelList}
+                        value={channelOptions.find((e) => e[primaryKey] === filterValue)}
+                        onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
+                        options={channelOptions}
+                        primaryKey={primaryKey}
+                        labelKey={labelKey}
+                    />
+                );
+            },
+        },
         // {
         //     field: 'status',
         //     name: 'status',
