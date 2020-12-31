@@ -218,6 +218,21 @@ export const getCountry = gql`
     }
 `;
 
+export const getCityListByRegionCode = gql`
+    query getCityListByRegionCode(
+        $regionCode: String!,
+    ){
+        getCityListByRegionCode(regionCode: $regionCode){
+            items {
+                city
+                id
+                value
+            }
+            total_count
+        }
+    }
+`;
+
 export const multideleteLocation = gql`
     mutation multideleteLocation (
         $id: [Int!]!
@@ -235,5 +250,6 @@ export default {
     updateLocation,
     getCountries,
     getCountry,
+    getCityListByRegionCode,
     multideleteLocation,
 };

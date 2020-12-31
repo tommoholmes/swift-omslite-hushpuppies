@@ -33,6 +33,10 @@ export const getCountry = (variables) => useLazyQuery(Schema.getCountry, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const getCityListByRegionCode = (variables) => useLazyQuery(Schema.getCityListByRegionCode, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export const multideleteLocation = (variables) => useMutation(Schema.multideleteLocation, {
     variables, ...context,
 });
@@ -44,5 +48,6 @@ export default {
     updateLocation,
     getCountries,
     getCountry,
+    getCityListByRegionCode,
     multideleteLocation,
 };

@@ -19,6 +19,7 @@ const LocationEditContent = (props) => {
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
+    const [getCityListByRegionCode, getCityListByRegionCodeRes] = locationGqlService.getCityListByRegionCode();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -172,7 +173,33 @@ const LocationEditContent = (props) => {
                             labelKey="name"
                         />
                     </div>
+                    {/* getCityListByRegionCode */}
                     <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={[classes.label, classes.labelRequired].join(' ')}>City</span>
+                        </div>
+                        <Autocomplete
+                            disabled={!(formik.values.region && formik.values.region.id)}
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
+                            value={formik.values.city}
+                            onChange={(e) => formik.setFieldValue('city', e)}
+                            loading={getCityListByRegionCodeRes.loading}
+                            options={
+                                getCityListByRegionCodeRes
+                                && getCityListByRegionCodeRes.data
+                                && getCityListByRegionCodeRes.data.getCityListByRegionCode
+                                && getCityListByRegionCodeRes.data.getCityListByRegionCode.items
+                            }
+                            getOptions={getCityListByRegionCode}
+                            getOptionsVariables={
+                                { variables: { regionCode: formik.values.region && formik.values.region.code } }
+                            }
+                            primaryKey="id"
+                            labelKey="value"
+                        />
+                    </div>
+                    {/* <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>City</span>
                         </div>
@@ -188,7 +215,7 @@ const LocationEditContent = (props) => {
                                 className: classes.fieldInput,
                             }}
                         />
-                    </div>
+                    </div> */}
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Telephone</span>

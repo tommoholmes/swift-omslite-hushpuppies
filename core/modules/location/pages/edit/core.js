@@ -58,7 +58,7 @@ const ContentWrapper = (props) => {
             loc_street: street,
             full_name_english: countries.id,
             loc_region: region.name,
-            loc_city: city,
+            loc_city: city && city.value,
             loc_telephone: telephone,
             loc_postcode: postcode,
             loc_long: longitude,
@@ -106,7 +106,9 @@ const ContentWrapper = (props) => {
                 id: 'ID',
             },
             region: {
+                // graphql should return id, code, name
                 id: 611,
+                code: 'ID-BA',
                 name: 'Bali',
             },
             city: location.loc_city || '',
