@@ -102,6 +102,7 @@ const ContentWrapper = (props) => {
             name: location.loc_name || '',
             street: location.loc_street || '',
             countries: {
+                // graphql should return id, name of country
                 full_name_english: 'Indonesia',
                 id: 'ID',
             },
@@ -112,8 +113,6 @@ const ContentWrapper = (props) => {
                 name: 'Bali',
             },
             city: {
-                // id: location.loc_city_id,
-                // value: location.loc_city,
                 // graphql should return id, value of city
                 id: '26395',
                 value: 'Badung, Kuta Selatan, Benoa',
