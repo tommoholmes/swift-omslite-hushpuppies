@@ -19,6 +19,7 @@ const LocationEditContent = (props) => {
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
+    const [getCityListByRegionCode, getCityListByRegionCodeRes] = locationGqlService.getCityListByRegionCode();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -34,6 +35,7 @@ const LocationEditContent = (props) => {
         { id: 3, name: 'Kalimantan' },
         { id: 4, name: 'Papua' },
     ];
+    const isIndonesia = () => formik && formik.values && formik.values.countries && formik.values.countries.id === 'ID';
 
     return (
         <>
@@ -135,7 +137,11 @@ const LocationEditContent = (props) => {
                             className={classes.autocompleteRoot}
                             mode="lazy"
                             value={formik.values.countries}
-                            onChange={(e) => formik.setFieldValue('countries', e)}
+                            onChange={(e) => {
+                                formik.setFieldValue('countries', e);
+                                formik.setFieldValue('region', null);
+                                formik.setFieldValue('city', null);
+                            }}
                             loading={getCountriesRes.loading}
                             options={
                                 getCountriesRes
@@ -145,49 +151,105 @@ const LocationEditContent = (props) => {
                             getOptions={getCountries}
                             primaryKey="id"
                             labelKey="full_name_english"
+                            error={!!(formik.touched.countries && formik.errors.countries)}
+                            helperText={(formik.touched.countries && formik.errors.countries) || ''}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}> Province</span>
                         </div>
-                        <Autocomplete
-                            disabled={!(formik.values.countries && formik.values.countries.id)}
-                            className={classes.autocompleteRoot}
-                            mode="lazy"
-                            value={formik.values.region}
-                            onChange={(e) => formik.setFieldValue('region', e)}
-                            loading={getCountryRes.loading}
-                            options={
-                                getCountryRes
-                                && getCountryRes.data
-                                && getCountryRes.data.country
-                                && getCountryRes.data.country.available_regions
-                            }
-                            getOptions={getCountry}
-                            getOptionsVariables={
-                                { variables: { id: formik.values.countries && formik.values.countries.id } }
-                            }
-                            primaryKey="id"
-                            labelKey="name"
-                        />
+                        {isIndonesia() && (
+                            <Autocomplete
+                                disabled={!(formik.values.countries && formik.values.countries.id)}
+                                className={classes.autocompleteRoot}
+                                mode="lazy"
+                                value={formik.values.region}
+                                onChange={(e) => {
+                                    formik.setFieldValue('region', e);
+                                    formik.setFieldValue('city', null);
+                                }}
+                                loading={getCountryRes.loading}
+                                options={
+                                    getCountryRes
+                                    && getCountryRes.data
+                                    && getCountryRes.data.country
+                                    && getCountryRes.data.country.available_regions
+                                }
+                                getOptions={getCountry}
+                                getOptionsVariables={
+                                    { variables: { id: formik.values.countries && formik.values.countries.id } }
+                                }
+                                primaryKey="id"
+                                labelKey="name"
+                                error={!!(formik.touched.region && formik.errors.region)}
+                                helperText={(formik.touched.region && formik.errors.region) || ''}
+                            />
+                        )}
+                        {!isIndonesia() && (
+                            <TextField
+                                className={classes.fieldRoot}
+                                variant="outlined"
+                                name="region"
+                                value={(formik.values.region && formik.values.region.name) || ''}
+                                onChange={(e) => {
+                                    formik.setFieldValue('region', {
+                                        id: e.target.value, name: e.target.value,
+                                    });
+                                }}
+                                error={!!(formik.touched.region && formik.errors.region)}
+                                helperText={(formik.touched.region && formik.errors.region) || ''}
+                                InputProps={{ className: classes.fieldInput }}
+                            />
+                        )}
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>City</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="city"
-                            value={formik.values.city}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.city && formik.errors.city)}
-                            helperText={(formik.touched.city && formik.errors.city) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
-                        />
+                        {isIndonesia() && (
+                            <Autocomplete
+                                disabled={
+                                    !(formik.values.countries && formik.values.countries.id)
+                                    || !(formik.values.region && formik.values.region.id)
+                                }
+                                className={classes.autocompleteRoot}
+                                mode="lazy"
+                                value={formik.values.city}
+                                onChange={(e) => formik.setFieldValue('city', e)}
+                                loading={getCityListByRegionCodeRes.loading}
+                                options={
+                                    getCityListByRegionCodeRes
+                                    && getCityListByRegionCodeRes.data
+                                    && getCityListByRegionCodeRes.data.getCityListByRegionCode
+                                    && getCityListByRegionCodeRes.data.getCityListByRegionCode.items
+                                }
+                                getOptions={getCityListByRegionCode}
+                                getOptionsVariables={
+                                    { variables: { regionCode: formik.values.region && formik.values.region.code } }
+                                }
+                                primaryKey="id"
+                                labelKey="value"
+                                error={!!(formik.touched.city && formik.errors.city)}
+                                helperText={(formik.touched.city && formik.errors.city) || ''}
+                            />
+                        )}
+                        {!isIndonesia() && (
+                            <TextField
+                                className={classes.fieldRoot}
+                                variant="outlined"
+                                name="city"
+                                value={(formik.values.city && formik.values.city.value) || ''}
+                                onChange={(e) => {
+                                    formik.setFieldValue('city', {
+                                        id: e.target.value, value: e.target.value,
+                                    });
+                                }}
+                                error={!!(formik.touched.city && formik.errors.city)}
+                                helperText={(formik.touched.city && formik.errors.city) || ''}
+                                InputProps={{ className: classes.fieldInput }}
+                            />
+                        )}
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
