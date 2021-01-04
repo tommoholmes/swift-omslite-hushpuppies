@@ -136,7 +136,11 @@ const LocationEditContent = (props) => {
                             className={classes.autocompleteRoot}
                             mode="lazy"
                             value={formik.values.countries}
-                            onChange={(e) => formik.setFieldValue('countries', e)}
+                            onChange={(e) => {
+                                formik.setFieldValue('countries', e);
+                                formik.setFieldValue('region', null);
+                                formik.setFieldValue('city', null);
+                            }}
                             loading={getCountriesRes.loading}
                             options={
                                 getCountriesRes
@@ -157,7 +161,10 @@ const LocationEditContent = (props) => {
                             className={classes.autocompleteRoot}
                             mode="lazy"
                             value={formik.values.region}
-                            onChange={(e) => formik.setFieldValue('region', e)}
+                            onChange={(e) => {
+                                formik.setFieldValue('region', e);
+                                formik.setFieldValue('city', null);
+                            }}
                             loading={getCountryRes.loading}
                             options={
                                 getCountryRes
@@ -173,13 +180,15 @@ const LocationEditContent = (props) => {
                             labelKey="name"
                         />
                     </div>
-                    {/* getCityListByRegionCode */}
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>City</span>
                         </div>
                         <Autocomplete
-                            disabled={!(formik.values.region && formik.values.region.id)}
+                            disabled={
+                                !(formik.values.countries && formik.values.countries.id)
+                                || !(formik.values.region && formik.values.region.id)
+                            }
                             className={classes.autocompleteRoot}
                             mode="lazy"
                             value={formik.values.city}

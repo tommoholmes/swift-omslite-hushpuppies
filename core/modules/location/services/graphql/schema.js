@@ -224,9 +224,32 @@ export const getCityListByRegionCode = gql`
     ){
         getCityListByRegionCode(regionCode: $regionCode){
             items {
+                id
+                value
+            }
+            total_count
+        }
+    }
+`;
+
+export const getCityList = gql`
+    query getCityList(
+        $filter: CityFilterInput,
+    ){
+        getCityList(
+            filter: $filter,
+            pageSize: 100,
+            currentPage: 1,
+        ){
+            items {
                 city
                 id
                 value
+            }
+            page_info {
+                current_page
+                page_size
+                total_pages
             }
             total_count
         }
@@ -251,5 +274,6 @@ export default {
     getCountries,
     getCountry,
     getCityListByRegionCode,
+    getCityList,
     multideleteLocation,
 };

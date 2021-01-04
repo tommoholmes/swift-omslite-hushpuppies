@@ -106,12 +106,18 @@ const ContentWrapper = (props) => {
                 id: 'ID',
             },
             region: {
-                // graphql should return id, code, name
+                // graphql should return id, code, name of region
                 id: 611,
                 code: 'ID-BA',
                 name: 'Bali',
             },
-            city: location.loc_city || '',
+            city: {
+                // id: location.loc_city_id,
+                // value: location.loc_city,
+                // graphql should return id, value of city
+                id: '26395',
+                value: 'Badung, Kuta Selatan, Benoa',
+            },
             telephone: location.loc_telephone || '',
             postcode: location.loc_postcode || '',
             longitude: location.loc_long || '',
