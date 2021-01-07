@@ -181,12 +181,10 @@ export const getChannelList = gql`
 `;
 
 export const getCityList = gql`
-    query getCityList(
-        $currentPage: Int!,
-    ){
+    query getCityList{
         getCityList(
             pageSize: 694,
-            currentPage: $currentPage,
+            currentPage: 1,
         ){
             items {
                 id
