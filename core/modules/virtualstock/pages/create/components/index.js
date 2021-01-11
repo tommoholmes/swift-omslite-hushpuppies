@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import virtualStockGqlService from '@modules/virtualstock/services/graphql';
+import clsx from 'clsx';
 import useStyles from './style';
 
 const VirtualStockCreateContent = (props) => {
@@ -40,7 +41,7 @@ const VirtualStockCreateContent = (props) => {
                     <h2 className={classes.title}>General Information</h2>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Name</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Name</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
