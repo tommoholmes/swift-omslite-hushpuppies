@@ -15,7 +15,7 @@ const HeaderContent = (props) => {
                 className={classes.buttonAdd}
                 onClick={() => router.push('/oms/prioritylocation/create')}
             >
-                Create Priority Locationl
+                Create Priority Location
             </Button>
         </div>
     );
