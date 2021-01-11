@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        [theme.breakpoints.down('xs')]: {
+            padding: 0,
+        },
     },
     contentNoHeader: {
         flexGrow: 1,

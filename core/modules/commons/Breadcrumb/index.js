@@ -2,12 +2,13 @@
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Link from 'next/link';
+import clsx from 'clsx';
 import useStyles from './style';
 
 const CustomBreadcrumb = ({ data = [] }) => {
     const styles = useStyles();
     return (
-        <List className={styles.flexContainer}>
+        <List className={clsx(styles.flexContainer, styles.containerMobile)}>
             {data.map((breadcrumb, index) => (
                 <div key={index}>
                     <ListItem className={styles.breadcrumbItem}>

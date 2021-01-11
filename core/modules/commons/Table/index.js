@@ -213,7 +213,7 @@ const CustomTable = (props) => {
                                 <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
                             )}
                             {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
-                                <div key={index} style={{ maxHeight: 'inherit', display: 'inline-block', paddingRight: 24 }}>
+                                <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
                                     <Checkbox
                                         checked={!column.hidden}
                                         onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
@@ -367,11 +367,13 @@ const CustomTable = (props) => {
     return (
         <TableContainer component={Paper}>
             {renderTableToolbar()}
-            <Table size="small">
-                {renderTableHeader()}
-                {renderTableBody()}
-                {renderTableFooter()}
-            </Table>
+            <div className={classes.mainTable}>
+                <Table size="small">
+                    {renderTableHeader()}
+                    {renderTableBody()}
+                </Table>
+            </div>
+            {renderTableFooter()}
         </TableContainer>
     );
 };

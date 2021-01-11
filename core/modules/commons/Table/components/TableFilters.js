@@ -44,7 +44,7 @@ const TableFilters = (props) => {
                 <div style={{ padding: 12 }}>Filter fields is empty.</div>
             )}
             {filters.map((field, i) => (
-                <div key={i} style={{ padding: 12, display: 'inline-block' }}>
+                <div className="col-filter" key={i} style={{ padding: 12, display: 'inline-block' }}>
                     <div>
                         {field.label}
                     </div>
