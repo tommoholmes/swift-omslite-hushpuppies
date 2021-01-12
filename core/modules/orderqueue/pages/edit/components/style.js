@@ -5,7 +5,7 @@ const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
 const borderColor = '#DDE1EC';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 0',
         borderRadius: 16,
@@ -17,6 +17,9 @@ const useStyles = makeStyles(() => ({
         height: 36,
         width: 42,
         marginBottom: 6,
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 18,
+        },
     },
     titleTop: {
         fontSize: 24,
