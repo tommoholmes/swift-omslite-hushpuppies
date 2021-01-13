@@ -8,6 +8,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
 import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
+import clsx from 'clsx';
 import useStyles from './style';
 
 const ChannelEditContent = (props) => {
@@ -210,10 +211,10 @@ const ChannelEditContent = (props) => {
                 <div className={classes.content}>
                     <h2 className={classes.title}>Shipment Webhook</h2>
                     <div className={classes.formField}>
-                        <div className={[classes.divLabel, classes.labelNote].join(' ')}>
+                        <div className={classes.divLabel}>
                             <span className={classes.label}>Callback URL on Shipment Complete</span>
                         </div>
-                        <div className={classes.fieldRoot} style={{ display: 'inline-block' }}>
+                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
                             <TextField
                                 style={{ width: '100%' }}
                                 variant="outlined"
@@ -234,7 +235,7 @@ const ChannelEditContent = (props) => {
                             <span className={classes.label}>Callback URL on Invoice</span>
                         </div>
                         <TextField
-                            className={classes.fieldRoot}
+                            className={clsx(classes.fieldRoot, classes.fieldRootDesc)}
                             variant="outlined"
                             name="invoice"
                             value={formik.values.invoice}
@@ -254,7 +255,7 @@ const ChannelEditContent = (props) => {
                             <span className={classes.label}>Callback URL on Refund</span>
                         </div>
                         <TextField
-                            className={classes.fieldRoot}
+                            className={clsx(classes.fieldRoot, classes.fieldRootDesc)}
                             variant="outlined"
                             name="refund"
                             value={formik.values.refund}
@@ -274,7 +275,7 @@ const ChannelEditContent = (props) => {
                             <span className={classes.label}>Callback URL on Creditmemo</span>
                         </div>
                         <TextField
-                            className={classes.fieldRoot}
+                            className={clsx(classes.fieldRoot, classes.fieldRootDesc)}
                             variant="outlined"
                             name="creditmemo"
                             value={formik.values.creditmemo}

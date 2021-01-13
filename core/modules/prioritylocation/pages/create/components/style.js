@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
         height: 36,
         width: 42,
         marginBottom: 6,
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 18,
+        },
     },
     titleTop: {
         fontSize: 24,
@@ -43,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         width: 300,
         display: 'inline-block',
         [theme.breakpoints.down('xs')]: {
-            width: 140,
+            width: 115,
         },
     },
     label: {
@@ -70,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
         width: 'calc(100% - 300px)',
         verticalAlign: 'middle',
         [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
+            width: 'calc(100% - 115px)',
         },
     },
     fieldInput: {
@@ -99,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
             padding: '0 9px',
         },
         [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
+            width: 'calc(100% - 115px)',
         },
     },
 }));

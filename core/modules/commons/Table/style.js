@@ -3,11 +3,14 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 const colorText = '#536777';
 const colorBorder = '#435179';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     tableToolbar: {
         '& .top-buttons-wrapper': {
             padding: '16px',
             textAlign: 'right',
+            [theme.breakpoints.down('xs')]: {
+                textAlign: 'unset',
+            },
         },
         '& .records-found': {
             padding: '12px 0',
@@ -17,6 +20,39 @@ const useStyles = makeStyles(() => ({
         '& .top-item': {
             display: 'inline-block',
             marginRight: '12px',
+            '& .MuiButton-text': {
+                border: '1px solid',
+                borderColor: colorBorder,
+                color: colorText,
+                textTransform: 'capitalize',
+            },
+        },
+        '& .top-item.records-found': {
+            [theme.breakpoints.down('xs')]: {
+                display: 'block',
+                float: 'none',
+            },
+        },
+        '& .boxColumn': {
+            display: 'inline-block',
+            [theme.breakpoints.down('xs')]: {
+                display: 'block',
+            },
+        },
+        '& .MuiCollapse-wrapperInner .col-filter': {
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
+            '& .MuiAutocomplete-root': {
+                [theme.breakpoints.down('xs')]: {
+                    width: '100% !important',
+                },
+            },
+        },
+        '& .MuiCollapse-wrapperInner .col-filter .MuiTextField-root': {
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
         },
     },
     btn: {
@@ -39,6 +75,9 @@ const useStyles = makeStyles(() => ({
     arrowUp: {
         transition: 'all .2s linear',
         transform: 'rotate(-90deg)',
+    },
+    mainTable: {
+        overflowX: 'scroll',
     },
 }));
 

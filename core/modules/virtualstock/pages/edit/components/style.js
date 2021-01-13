@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
         height: 36,
         width: 42,
         marginBottom: 6,
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 18,
+        },
     },
     titleTop: {
         fontSize: 24,
