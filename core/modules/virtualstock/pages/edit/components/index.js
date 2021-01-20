@@ -171,7 +171,7 @@ const VirtualStockEditContent = (props) => {
                             <span className={classes.label}> Assigned Locations</span>
                         </div>
                         <Autocomplete
-                            className={classes.autocompleteRoot}
+                            className={clsx(classes.autocompleteRoot, classes.autocompleteMulti)}
                             mode="lazy"
                             multiple
                             value={formik.values.location}
