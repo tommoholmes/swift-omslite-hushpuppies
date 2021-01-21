@@ -190,7 +190,7 @@ const ChannelCreateContent = (props) => {
                             <span className={classes.label}> Virtual Stock</span>
                         </div>
                         <Autocomplete
-                            className={classes.autocompleteRoot}
+                            className={clsx(classes.autocompleteRoot, classes.autocompleteMulti)}
                             mode="lazy"
                             multiple
                             value={formik.values.virtualStock}

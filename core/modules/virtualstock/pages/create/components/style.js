@@ -105,6 +105,13 @@ const useStyles = makeStyles((theme) => ({
             width: 'calc(100% - 140px)',
         },
     },
+    autocompleteMulti: {
+        '& .MuiOutlinedInput-root': {
+            height: 'auto',
+            paddingTop: 8,
+            paddingBottom: 8,
+        },
+    },
 }));
 
 export default useStyles;
