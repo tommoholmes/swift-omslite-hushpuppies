@@ -4,6 +4,7 @@ import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import clsx from 'clsx';
 import useStyles from './style';
 
 const OrderQueueEditContent = (props) => {
@@ -36,13 +37,19 @@ const OrderQueueEditContent = (props) => {
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <h5 className={classes.title}>Order & Account Information</h5>
-                    {/* <h2 className={classes.title}>Order #number (The order confirmation email is not sent)</h2> */}
-                    <div className={classes.contentLeft}>
+                    <div className={clsx(classes.contentLeft, classes.contentRight)}>
                         <table className={classes.table}>
                             <tbody>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Order Date</td>
                                     <td className={classes.td}>{orderQueue.lastUpdated}</td>
+                                    <td />
+                                    <td className={classes.td}>Customer Name</td>
+                                    <td className={classes.td}>
+                                        {orderQueue.firstnameShip}
+                                        {' '}
+                                        {orderQueue.lastnameShip}
+                                    </td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Order Status</td>
@@ -73,38 +80,21 @@ const OrderQueueEditContent = (props) => {
                                     ) : (
                                         <td className={classes.td}>{orderQueue.status}</td>
                                     )}
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Channel Order ID</td>
-                                    <td className={classes.td}>{orderQueue.channelOrderId}</td>
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Channel Name</td>
-                                    <td className={classes.td}>{orderQueue.channelCode}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className={classes.contentLeft}>
-                        <table className={classes.table}>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Customer Name</td>
-                                    <td className={classes.td}>
-                                        {orderQueue.firstnameShip}
-                                        {' '}
-                                        {orderQueue.lastnameShip}
-                                    </td>
-                                </tr>
-                                <tr className={classes.tr}>
+                                    <td />
                                     <td className={classes.td}>Email</td>
                                     <td className={classes.td}>{orderQueue.email}</td>
                                 </tr>
                                 <tr className={classes.tr}>
+                                    <td className={classes.td}>Channel Order ID</td>
+                                    <td className={classes.td}>{orderQueue.channelOrderId}</td>
+                                    <td />
                                     <td className={classes.td} />
                                     <td className={classes.td}>(The order confirmation email is not sent)</td>
                                 </tr>
                                 <tr className={classes.tr}>
+                                    <td className={classes.td}>Channel Name</td>
+                                    <td className={classes.td}>{orderQueue.channelCode}</td>
+                                    <td />
                                     <td className={classes.td}>Customer Group</td>
                                     <td className={classes.td}>{orderQueue.customerGroup}</td>
                                 </tr>
@@ -152,11 +142,11 @@ const OrderQueueEditContent = (props) => {
                 </div>
                 <div className={classes.content}>
                     <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Payment Information</h5>
+                        <h5 className={clsx(classes.title, 'title-information')}>Payment Information</h5>
                         <span className={classes.orderLabel}>{orderQueue.channelPaymentMethod}</span>
                     </div>
                     <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Shipping & Handling Information</h5>
+                        <h5 className={clsx(classes.title, 'title-information')}>Shipping & Handling Information</h5>
                         <span className={classes.orderLabel}>{orderQueue.channelShippingMethod}</span>
                     </div>
                 </div>

@@ -9,6 +9,17 @@ const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 0',
         borderRadius: 16,
+        '& .title-information': {
+            [theme.breakpoints.down('xs')]: {
+                height: 75,
+            },
+            [theme.breakpoints.up('sm')]: {
+                height: 75,
+            },
+            [theme.breakpoints.up('md')]: {
+                height: 'auto',
+            },
+        },
     },
     btnBack: {
         display: 'inline-block',
@@ -66,6 +77,20 @@ const useStyles = makeStyles((theme) => ({
         width: '50%',
         verticalAlign: 'top',
     },
+    contentRight: {
+        width: '100%',
+        '& tr td:nth-child(3)': {
+            [theme.breakpoints.up('sm')]: {
+                width: '10%',
+            },
+            [theme.breakpoints.up('md')]: {
+                width: '17%',
+            },
+        },
+        '& tr td:first-child, tr td:nth-child(4)': {
+            paddingRight: 8,
+        },
+    },
     table: {
         borderCollapse: 'collapse',
         width: '100%',
@@ -73,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
     tr: {
         borderBottom: '1px solid',
         borderBottomColor: borderColor,
+        verticalAlign: 'top',
     },
     th: {
         textAlign: 'left',
