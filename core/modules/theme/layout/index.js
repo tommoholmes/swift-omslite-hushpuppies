@@ -35,7 +35,6 @@ const Layout = (props) => {
                 { key: 'company', label: 'Company', url: '/oms/company' },
                 { key: 'location', label: 'Location', url: '/oms/location' },
                 { key: 'prioritylocation', label: 'Priority Location', url: '/oms/prioritylocation' },
-                { key: 'source', label: 'Source', url: '/oms/source' },
                 { key: 'notification', label: 'Notification', url: '/oms/notification' },
             ],
         },
@@ -51,6 +50,7 @@ const Layout = (props) => {
             key: 'catalogInventory',
             label: 'Catalog Inventory',
             children: [
+                { key: 'source', label: 'Source', url: '/cataloginventory/source' },
                 { key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
             ],
         },
