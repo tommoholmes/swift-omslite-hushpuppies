@@ -20,7 +20,7 @@ const SourceExport = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/oms/source')}
+                onClick={() => router.push('/cataloginventory/source')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

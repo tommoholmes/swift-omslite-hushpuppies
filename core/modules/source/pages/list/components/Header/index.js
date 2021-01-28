@@ -13,19 +13,19 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Manage Source</h2>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/oms/source/importdata')}
+                onClick={() => router.push('/cataloginventory/source/importdata')}
             >
                 Import Data Source
             </Button>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/oms/source/import')}
+                onClick={() => router.push('/cataloginventory/source/import')}
             >
                 Import
             </Button>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/oms/source/export')}
+                onClick={() => router.push('/cataloginventory/source/export')}
             >
                 Export
             </Button>
