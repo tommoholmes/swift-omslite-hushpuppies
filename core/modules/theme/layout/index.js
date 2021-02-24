@@ -44,14 +44,24 @@ const Layout = (props) => {
             children: [
                 { key: 'orderQueue', label: 'Order Queue', url: '/sales/orderqueue' },
                 { key: 'shipment', label: 'Shipment' },
+                { key: 'orderreallocation', label: 'Order Reallocation' },
+                { key: 'creditmemos', label: 'Credit Memos' },
+                { key: 'managerma', label: 'Manage RMA' },
+                { key: 'rmastatuses', label: 'RMA Statuses' },
             ],
         },
         {
             key: 'catalogInventory',
             label: 'Catalog Inventory',
             children: [
+                { key: 'productList', label: 'Product List' },
                 { key: 'source', label: 'Source', url: '/cataloginventory/source' },
-                { key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
+                { key: 'virtualLocationInventory', label: 'Virtual Location Inventory' },
+                { key: 'virtualStock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
+                { key: 'virtualStockQuantity', label: 'Virtual Stock Quantity' },
+                { key: 'stockTransfer', label: 'Stock Transfer' },
+                { key: 'locationPriceUpload', label: 'Location Price Upload' },
+                { key: 'updateStockByFileHistory', label: 'Update Stock by File History' },
             ],
         },
         {
@@ -60,6 +70,67 @@ const Layout = (props) => {
             children: [
                 { key: 'adminStore', label: 'Admin Store' },
                 { key: 'customerData', label: 'Customer Data' },
+            ],
+        },
+        {
+            key: 'marketplace',
+            label: 'Marketplace',
+            children: [
+                { key: 'marketPlace', label: 'Marketplace', url: '/marketplace/marketplace' },
+                { key: 'store', label: 'Store', url: '/marketplace/store' },
+                { key: 'warehouse', label: 'Warehouse', url: '/marketplace/warehouse' },
+                { key: 'productCategory', label: 'Product Category', url: '/marketplace/productcategory' },
+                { key: 'attributeSetmapping', label: 'Attribute Set Mapping', url: '/marketplace/attributesetmapping' },
+                { key: 'productAttributeMapping', label: 'Product Attribute Mapping', url: '/marketplace/productattributemapping' },
+                { key: 'productStatus', label: 'Product Status', url: '/marketplace/productstatus' },
+            ],
+        },
+        {
+            key: 'tada',
+            label: 'TADA',
+            children: [
+                { key: 'tadacCategory', label: 'Tada Category', url: '/tada/tadacategory' },
+                { key: 'configuration', label: 'Configuration', url: '/tada/configuration' },
+                { key: 'shippingCompany', label: 'Shipping Company', url: '/tada/shippingcompany' },
+            ],
+        },
+        {
+            key: 'vendorPortal',
+            label: 'Vendor Portal',
+            children: [
+                { key: 'requestVendor', label: 'Request Vendor' },
+                { key: 'managevendor', label: 'Manage Vendor' },
+                { key: 'productUploadMaster', label: 'Product Upload Master' },
+                { key: 'productApproval', label: 'Product Approval' },
+            ],
+        },
+        {
+            key: 'reports',
+            label: 'Reports',
+            children: [
+                { key: 'orderReport', label: 'Order Report' },
+                { key: 'salesOrder', label: 'Sales Order' },
+                { key: 'salesOverview', label: 'Sales Overview' },
+                { key: 'productPerformance', label: 'Product Performance' },
+                { key: 'salesByPaymentType', label: 'Sales By Payment Type' },
+                { key: 'salesByShippingType', label: 'Sales by Shipping Type' },
+                { key: 'top10BestPerformingSkus', label: 'Top 10 Best Performing SKUs' },
+            ],
+        },
+        {
+            key: 'configurations',
+            label: 'Configurations',
+            children: [
+                { key: 'integrations', label: 'Intergrations' },
+                { key: 'shipments', label: 'Shipments' },
+            ],
+        },
+        {
+            key: 'tools',
+            label: 'Tools',
+            children: [
+                { key: 'clitools', label: 'CLI Tools', url: '/tools/clitools' },
+                { key: 'history', label: 'History' },
             ],
         },
     ];
