@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Manage CLI Tools</h2>
+            <h2 className={classes.title}>Manage History</h2>
         </div>
     );
 };
