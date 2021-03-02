@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -16,8 +16,12 @@ export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList,
 export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
     variables, ...context, ...fetchPolicy,
 });
+export const createCompany = (variables) => useMutation(Schema.createCompany, {
+    variables, ...context,
+});
 
 export default {
     getCompanyList,
     getCompanyById,
+    createCompany,
 };

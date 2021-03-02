@@ -11,12 +11,6 @@ const HeaderContent = (props) => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Manage CLI Tools</h2>
-            {/* <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/oms/company/create')}
-            >
-                Create Company
-            </Button> */}
         </div>
     );
 };
