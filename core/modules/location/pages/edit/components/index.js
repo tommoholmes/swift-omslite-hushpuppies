@@ -8,6 +8,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import companyGqlService from '@modules/company/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
+import clsx from 'clsx';
 import useStyles from './style';
 
 const LocationEditContent = (props) => {
@@ -20,7 +21,6 @@ const LocationEditContent = (props) => {
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
     const [getCityList, getCityListRes] = locationGqlService.getCityList();
-    // const [getCityListByRegionCode, getCityListByRegionCodeRes] = locationGqlService.getCityListByRegionCode();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -60,7 +60,7 @@ const LocationEditContent = (props) => {
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Company</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Company</span>
                         </div>
                         <Autocomplete
                             className={classes.autocompleteRoot}
@@ -81,7 +81,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Code</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Code</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -98,7 +98,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Name</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Name</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -115,7 +115,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Adress</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Adress</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -132,7 +132,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}> Country</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}> Country</span>
                         </div>
                         <Autocomplete
                             className={classes.autocompleteRoot}
@@ -158,7 +158,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}> Province</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}> Province</span>
                         </div>
                         {isIndonesia() && (
                             <Autocomplete
@@ -206,7 +206,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>City</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>City</span>
                         </div>
                         {isIndonesia() && (
                             <Autocomplete
@@ -259,7 +259,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Telephone</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Telephone</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -276,7 +276,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Zip Code</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Zip Code</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -293,7 +293,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Longitude</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Longitude</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -310,7 +310,7 @@ const LocationEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={[classes.label, classes.labelRequired].join(' ')}>Latitude</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Latitude</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
