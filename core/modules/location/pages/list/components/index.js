@@ -33,6 +33,7 @@ const LocationListContent = (props) => {
     const rows = locationList.map((location) => ({
         ...location,
         id: location.loc_id,
+        loc_city: location.loc_city.label,
         actions: () => (
             <Link href={`/oms/location/edit/${location.loc_id}`}>
                 <a className="link-button">view</a>
