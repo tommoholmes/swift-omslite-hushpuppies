@@ -17,7 +17,10 @@ export const getLocationList = gql`
                 loc_id
                 loc_code
                 loc_name
-                loc_city
+                loc_city{
+                    id
+                    label
+                }
                 loc_street
             }
             total_count
@@ -47,8 +50,14 @@ export const getLocationById = gql`
             loc_code
             loc_name
             loc_street
-            loc_region
-            loc_city
+            loc_region{
+                id
+                label
+            }
+            loc_city{
+                id
+                label
+            }
             loc_telephone
             loc_postcode
             loc_long
@@ -110,8 +119,14 @@ export const createLocation = gql`
             loc_code
             loc_name
             loc_street
-            loc_region
-            loc_city
+            loc_region{
+                id
+                label
+            }
+            loc_city{
+                id
+                label
+            }
             loc_telephone
             loc_postcode
             loc_long
@@ -175,8 +190,14 @@ export const updateLocation = gql`
             loc_code
             loc_name
             loc_street
-            loc_region
-            loc_city
+            loc_region{
+                id
+                label
+            }
+            loc_city{
+                id
+                label
+            }
             loc_telephone
             loc_postcode
             loc_long
@@ -237,7 +258,7 @@ export const getCityList = gql`
         $filter: CityFilterInput,
     ){
         getCityList(
-            filter: $filter,
+            filter:  $filter,
             pageSize: 100,
             currentPage: 1,
         ){

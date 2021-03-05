@@ -19,6 +19,7 @@ const LocationCreateContent = (props) => {
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
+    const [getCityList, getCityListRes] = locationGqlService.getCityList();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -176,17 +177,31 @@ const LocationCreateContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={[classes.label, classes.labelRequired].join(' ')}>City</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="city"
+                        <Autocomplete
+                            disabled={!(formik.values.region && formik.values.region.id)}
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
                             value={formik.values.city}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.city && formik.errors.city)}
-                            helperText={(formik.touched.city && formik.errors.city) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                            onChange={(e) => formik.setFieldValue('city', e)}
+                            loading={getCityListRes.loading}
+                            options={
+                                getCityListRes
+                                && getCityListRes.data
+                                && getCityListRes.data.getCityList
+                                && getCityListRes.data.getCityList.items
+                            }
+                            getOptions={getCityList}
+                            getOptionsVariables={
+                                {
+                                    variables: {
+                                        filter: {
+                                            region_code: { eq: formik.values.region && formik.values.region.code },
+                                        },
+                                    },
+                                }
+                            }
+                            primaryKey="id"
+                            labelKey="city"
                         />
                     </div>
                     <div className={classes.formField}>

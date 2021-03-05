@@ -19,7 +19,8 @@ const LocationEditContent = (props) => {
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
-    const [getCityListByRegionCode, getCityListByRegionCodeRes] = locationGqlService.getCityListByRegionCode();
+    const [getCityList, getCityListRes] = locationGqlService.getCityList();
+    // const [getCityListByRegionCode, getCityListByRegionCodeRes] = locationGqlService.getCityListByRegionCode();
     const optionsYesNo = [
         { id: 0, name: 'No' },
         { id: 1, name: 'Yes' },
@@ -210,26 +211,31 @@ const LocationEditContent = (props) => {
                         {isIndonesia() && (
                             <Autocomplete
                                 disabled={
-                                    !(formik.values.countries && formik.values.countries.id)
-                                    || !(formik.values.region && formik.values.region.id)
+                                    !(formik.values.region && formik.values.region.id)
                                 }
                                 className={classes.autocompleteRoot}
                                 mode="lazy"
                                 value={formik.values.city}
                                 onChange={(e) => formik.setFieldValue('city', e)}
-                                loading={getCityListByRegionCodeRes.loading}
+                                loading={getCityListRes.loading}
                                 options={
-                                    getCityListByRegionCodeRes
-                                    && getCityListByRegionCodeRes.data
-                                    && getCityListByRegionCodeRes.data.getCityListByRegionCode
-                                    && getCityListByRegionCodeRes.data.getCityListByRegionCode.items
+                                    getCityListRes
+                                    && getCityListRes.data
+                                    && getCityListRes.data.getCityList
+                                    && getCityListRes.data.getCityList.items
                                 }
-                                getOptions={getCityListByRegionCode}
+                                getOptions={getCityList}
                                 getOptionsVariables={
-                                    { variables: { regionCode: formik.values.region && formik.values.region.code } }
+                                    {
+                                        variables: {
+                                            filter: {
+                                                region_code: { eq: formik.values.region && formik.values.region.code },
+                                            },
+                                        },
+                                    }
                                 }
                                 primaryKey="id"
-                                labelKey="value"
+                                labelKey="city"
                                 error={!!(formik.touched.city && formik.errors.city)}
                                 helperText={(formik.touched.city && formik.errors.city) || ''}
                             />
