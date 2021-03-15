@@ -1,62 +1,74 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-// import { useRouter } from 'next/router';
-// import gqlService from '@modules/location/services/graphql';
+import { useRouter } from 'next/router';
+import gqlService from '../../services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
-    // const router = useRouter();
-    // const [getLocationList] = gqlService.getLocationList();
+    const router = useRouter();
+    const [uploadSource] = gqlService.uploadSource();
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
 
-    // const handleSubmit = ({
-    //     code,
-    //     name,
-    // }) => {
-    //     const variables = {
-    //         loc_code : code,
-    //         loc_name : name,
-    //     };
-    //     window.backdropLoader(true);
-    //     getLocationList({
-    //         variables,
-    //     }).then(() => {
-    //         window.backdropLoader(false);
-    //         window.toastMessage({
-    //             open: true,
-    //             text: 'Success Export Source',
-    //             variant: 'success',
-    //         });
-    //         setTimeout(() => router.push('/oms/source'), 250);
-    //     }).catch((e) => {
-    //         window.backdropLoader(false);
-    //         window.toastMessage({
-    //             open: true,
-    //             text: e.message,
-    //             variant: 'error',
-    //         });
-    //     });
-    // };
+    useEffect(() => {
+        downloadList();
+    }, []);
+
+    const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
+
+    const handleSubmit = ({
+        binary,
+    }) => {
+        const variables = {
+            binary,
+        };
+        window.backdropLoader(true);
+        uploadSource({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success Export Source',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/cataloginventory/source'), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
 
     const formik = useFormik({
         initialValues: {
-            code: '',
-            name: '',
+            binary: '',
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            binary: Yup.string().required('Required!'),
         }),
-        // onSubmit: (values) => {
-        //     handleSubmit(values);
-        // },
+        onSubmit: (values) => {
+            handleSubmit(values);
+        },
     });
+
+    const handleDropFile = (files) => {
+        const fileName = files[0].file.name;
+        const { baseCode } = files[0];
+        formik.setFieldValue('filename', fileName);
+        formik.setFieldValue('binary', baseCode);
+    };
 
     const contentProps = {
         formik,
+        urlDownload,
+        handleDropFile,
     };
 
     return (
