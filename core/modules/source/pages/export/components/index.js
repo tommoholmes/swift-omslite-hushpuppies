@@ -43,8 +43,8 @@ const SourceExport = (props) => {
                         <Autocomplete
                             className={classes.autocompleteRoot}
                             mode="lazy"
-                            value={formik.values.name}
-                            onChange={(e) => formik.setFieldValue('name', e)}
+                            value={formik.values.location}
+                            onChange={(e) => formik.setFieldValue('location', e)}
                             loading={getLocationListRes.loading}
                             options={
                                 getLocationListRes
@@ -53,7 +53,7 @@ const SourceExport = (props) => {
                                 && getLocationListRes.data.getLocationList.items
                             }
                             getOptions={getLocationList}
-                            primaryKey="loc_code"
+                            primaryKey="loc_id"
                             labelKey="loc_name"
                         />
                     </div>
