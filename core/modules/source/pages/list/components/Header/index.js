@@ -15,7 +15,7 @@ const HeaderContent = (props) => {
                 className={classes.buttonAdd}
                 onClick={() => router.push('/cataloginventory/source/importdata')}
             >
-                Import Data Source
+                Create Source
             </Button>
             <Button
                 className={classes.buttonAdd}

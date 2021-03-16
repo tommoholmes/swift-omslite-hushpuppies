@@ -54,7 +54,42 @@ export const getSourceById = gql`
     }
 `;
 
+export const uploadSource = gql`
+    mutation uploadSource(
+        $binary: String!,
+    ){
+        uploadSource(
+            input: {
+                binary: $binary,
+            }
+        )
+    }
+`;
+
+export const downloadSampleCsv = gql`
+    mutation downloadSampleCsv(
+        $type: String!,
+    ){
+        downloadSampleCsv(
+            type: $type,
+        )
+    }
+`;
+
+export const downloadSource = gql`
+    mutation downloadSource(
+        $location_id: Int!,
+    ){
+        downloadSource(
+            location_id: $location_id,
+        )
+    }
+`;
+
 export default {
     getSourceList,
     getSourceById,
+    uploadSource,
+    downloadSampleCsv,
+    downloadSource,
 };

@@ -73,6 +73,7 @@ module.exports = function (api) {
                         '@common_menupopover': './core/modules/commons/MenuPopover',
                         '@common_loaders': './core/modules/commons/Loaders',
                         '@common_toast': './core/modules/commons/Toast',
+                        '@common_dropfile': './core/modules/commons/DropFile',
 
                         // for example:
                         '@common_buttonqty': 'swift-pwa-core/core/modules/commons/ButtonQty',
