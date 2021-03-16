@@ -120,7 +120,7 @@ const Layout = (props) => {
             key: 'configurations',
             label: 'Configurations',
             children: [
-                { key: 'integrations', label: 'Intergrations', url: '/configurations/integrations' },
+                { key: 'integrations', label: 'Integrations', url: '/configurations/integrations' },
                 { key: 'shipments', label: 'Shipments', url: '/configurations/shipments' },
             ],
         },
