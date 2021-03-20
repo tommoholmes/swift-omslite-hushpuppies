@@ -88,7 +88,7 @@ const Layout = (props) => {
             key: 'tada',
             label: 'TADA',
             children: [
-                { key: 'tadacCategory', label: 'Tada Category', url: '/tada/tadacategory' },
+                { key: 'tadaCategory', label: 'Tada Category', url: '/tada/tadacategory' },
                 { key: 'configuration', label: 'Configuration', url: '/tada/configuration' },
                 { key: 'shippingCompany', label: 'Shipping Company', url: '/tada/shippingcompany' },
             ],
