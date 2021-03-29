@@ -82,6 +82,7 @@ const Layout = (props) => {
                 { key: 'attributeSetmapping', label: 'Attribute Set Mapping', url: '/marketplace/attributesetmapping' },
                 { key: 'productAttributeMapping', label: 'Product Attribute Mapping', url: '/marketplace/productattributemapping' },
                 { key: 'productStatus', label: 'Product Status', url: '/marketplace/productstatus' },
+                { key: 'updateStockHistory', label: 'Update Stock History', url: '/marketplace/updatestockhistory' },
             ],
         },
         {
