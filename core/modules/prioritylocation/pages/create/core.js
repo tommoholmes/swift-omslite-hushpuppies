@@ -22,7 +22,7 @@ const Core = (props) => {
             channel_code: channelCode.channel_code,
             city: city.city,
             loc_code: locationCode.loc_code,
-            priority,
+            priority: Number(priority),
         };
         window.backdropLoader(true);
         createPriorityLocation({
@@ -50,13 +50,13 @@ const Core = (props) => {
             channelCode: null,
             city: null,
             locationCode: null,
-            priority: '',
+            priority: null,
         },
         validationSchema: Yup.object().shape({
             channelCode: Yup.object().nullable(),
             city: Yup.object().nullable(),
             locationCode: Yup.object().nullable(),
-            priority: Yup.string().nullable(),
+            priority: Yup.number().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
