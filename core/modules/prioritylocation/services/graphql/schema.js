@@ -85,7 +85,7 @@ export const createPriorityLocation = gql`
         $channel_code: String,
         $city: String,
         $loc_code: String,
-        $priority: String,
+        $priority: Int,
     ){
         createPriorityLocation(
             input: {
@@ -121,7 +121,7 @@ export const updatePriorityLocation = gql`
         $channel_code: String,
         $city: String,
         $loc_code: String,
-        $priority: String,
+        $priority: Int,
     ){
         updatePriorityLocation(
             id: $id,
@@ -214,7 +214,10 @@ export const getLocationList = gql`
                 loc_id
                 loc_code
                 loc_name
-                loc_city
+                loc_city{
+                    id
+                    label
+                }
                 loc_street
             }
             total_count
