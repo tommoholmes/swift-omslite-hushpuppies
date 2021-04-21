@@ -12,22 +12,26 @@ const Core = (props) => {
     } = props;
 
     const router = useRouter();
-    const [createCompany] = gqlService.createCompany();
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
+    const [addQueueJob] = gqlService.addQueueJob();
+    const [getQueueList, { data, loading }] = gqlService.getQueueList();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { company_code: code, company_name: name };
+    const handleSubmit = ({
+        id,
+    }) => {
+        const variables = {
+            entity_id: id.entity_id,
+        };
         window.backdropLoader(true);
-        createCompany({
+        addQueueJob({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success create new company!',
+                text: 'Success add command!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/oms/company'), 250);
+            window.location.reload();
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -40,21 +44,19 @@ const Core = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: '',
-            name: '',
+            id: null,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            id: Yup.object().required('Required!'),
         }),
         onSubmit: (values) => {
-            // handleSubmit(values);
+            handleSubmit(values);
             console.log(values);
         },
     });
 
     const contentProps = {
-        getCompanyList,
+        getQueueList,
         data,
         loading,
         formik,

@@ -1,65 +1,59 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getQueueList = gql`
+    query getQueueList(
         $pageSize: Int!,
         $currentPage: Int!,
     ){
-        getCompanyList(
+        getQueueList(
             pageSize: $pageSize,
             currentPage: $currentPage
         ){
             items {
-                company_id
-                company_code
-                company_name
+                id
+                title
+                status
+                created_at
+                execute_at
+                finish_at
+                command
             }
-            total_count
             page_info {
-                page_size
                 current_page
+                page_size
                 total_pages
             }
+            total_count
         }
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
-        $id: Int!,
-    ){
-        getCompanyById(
-            id: $id
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+export const getIcubeCommandLineList = gql`
+    query{
+        getIcubeCommandLineList{
+            entity_id
+            command
+            title
         }
     }
 `;
 
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
+export const addQueueJob = gql`
+    mutation addQueueJob(
+        $entity_id: Int!
     ){
-        createCompany(
+        addQueueJob(
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                entity_id: $entity_id
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            entity_id
         }
     }
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
+    getQueueList,
+    getIcubeCommandLineList,
+    addQueueJob,
 };
