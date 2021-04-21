@@ -2,36 +2,34 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Link from 'next/link';
-import TextField from '@common_textfield';
+// import TextField from '@common_textfield';
 import Button from '@common_button';
 import Autocomplete from '@common_autocomplete';
 import Paper from '@material-ui/core/Paper';
-import { useRouter } from 'next/router';
-import { optionsCommand } from '@modules/clitools/helpers';
+import clitoolsGqlService from '@modules/clitools/services/graphql';
 import Header from './Header';
 import useStyles from './style';
 
 const clitoolsListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany, formik } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getQueueList, formik } = props;
+    const queueList = (data && data.getQueueList && data.getQueueList.items) || [];
+    const queueTotal = (data && data.getQueueList && data.getQueueList.total_count) || 0;
     const classes = useStyles();
-    const router = useRouter();
+    const [getIcubeCommandLineList, getIcubeCommandLineListRes] = clitoolsGqlService.getIcubeCommandLineList();
 
     const columns = [
-        { field: 'company_id', headerName: 'ID', sortable: true },
-        { field: 'company_code', headerName: 'Title' },
-        { field: 'company_code', headerName: 'Status', hideable: true },
-        { field: 'company_code', headerName: 'Created At', hideable: true },
-        { field: 'company_code', headerName: 'Execute At', hideable: true },
-        { field: 'company_code', headerName: 'Finished At', hideable: true },
-        { field: 'company_code', headerName: 'Command', hideable: true },
+        { field: 'id', headerName: 'ID', sortable: true },
+        { field: 'title', headerName: 'Title' },
+        { field: 'status', headerName: 'Status', hideable: true },
+        { field: 'created_at', headerName: 'Created At', hideable: true },
+        { field: 'execute_at', headerName: 'Execute At', hideable: true },
+        { field: 'finish_at', headerName: 'Finished At', hideable: true },
+        { field: 'command', headerName: 'Command', hideable: true },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = queueList.map((queue) => ({
+        ...queue,
+        id: queue.id,
     }));
 
     // if (!data || loading) {
@@ -52,14 +50,21 @@ const clitoolsListContent = (props) => {
                         </div>
                         <Autocomplete
                             className={classes.autocompleteRoot}
-                            value={formik.values.name}
-                            onChange={(e) => formik.setFieldValue('name', e)}
-                            options={optionsCommand}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            mode="lazy"
+                            value={formik.values.id}
+                            onChange={(e) => formik.setFieldValue('id', e)}
+                            loading={getIcubeCommandLineListRes.loading}
+                            options={
+                                getIcubeCommandLineListRes
+                                && getIcubeCommandLineListRes.data
+                                && getIcubeCommandLineListRes.data.getIcubeCommandLineList
+                            }
+                            getOptions={getIcubeCommandLineList}
+                            primaryKey="entity_id"
+                            labelKey="title"
                         />
                     </div>
-                    <div className={classes.formField}>
+                    {/* <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Additional Command</span>
                         </div>
@@ -75,7 +80,7 @@ const clitoolsListContent = (props) => {
                                 className: classes.fieldInput,
                             }}
                         />
-                    </div>
+                    </div> */}
                     <Button
                         className={classes.btn}
                         onClick={formik.handleSubmit}
@@ -87,12 +92,10 @@ const clitoolsListContent = (props) => {
             </Paper>
             <Table
                 rows={rows}
-                getRows={getCompanyList}
-                deleteRows={multideleteCompany}
+                getRows={getQueueList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
-                showCheckbox
+                count={queueTotal}
             />
         </>
     );

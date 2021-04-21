@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -9,19 +9,20 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getQueueList = (variables) => useLazyQuery(Schema.getQueueList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getIcubeCommandLineList = (variables) => useLazyQuery(Schema.getIcubeCommandLineList, {
     variables, ...context, ...fetchPolicy,
 });
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
+
+export const addQueueJob = (variables) => useMutation(Schema.addQueueJob, {
     variables, ...context,
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
+    getQueueList,
+    getIcubeCommandLineList,
+    addQueueJob,
 };
