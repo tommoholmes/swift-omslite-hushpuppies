@@ -1,109 +1,127 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getWarehouseList = gql`
+    query getWarehouseList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: WarehouseFilterInput,
+        $sort: WarehouseSortInput,
     ){
-        getCompanyList(
+        getWarehouseList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
-            }
-            total_count
-            page_info {
-                page_size
+                id
+                channel_code{
+                    channel_code
+                    channel_name
+                }
+                marketplace_warehouse_id     
+                loc_id {
+                    loc_id
+                    loc_code
+                    loc_name
+                }
+              }
+              page_info {
                 current_page
+                page_size
                 total_pages
-            }
+              }
+              total_count
         }
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getWarehouseById = gql`
+    query getWarehouseById(
         $id: Int!,
     ){
-        getCompanyById(
+        getWarehouseById(
             id: $id
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            id
+            channel_code{
+                channel_code
+                channel_name
+            }
+            marketplace_warehouse_id
+            loc_id{
+                loc_id
+                loc_code
+                loc_name
+            }
         }
     }
 `;
 
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
+export const createWarehouse = gql`
+    mutation createWarehouse(
+        $channel_code: String!,
+        $marketplace_warehouse_id: String!,
+        $loc_id: Int!,
     ){
-        createCompany(
+        createWarehouse(
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                channel_code: $channel_code,
+                marketplace_warehouse_id: $marketplace_warehouse_id,
+                loc_id: $loc_id,
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            channel_code{
+                channel_code
+            }
+            marketplace_warehouse_id
+            loc_id{
+                loc_id
+            }
         }
     }
 `;
 
-export const updateCompany = gql`
-    mutation updateCompany(
+export const updateWarehouse = gql`
+    mutation updateWarehouse(
         $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
+        $channel_code: String!,
+        $marketplace_warehouse_id: String!,
+        $loc_id: Int!,
     ){
-        updateCompany(
+        updateWarehouse(
             id: $id,
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                channel_code: $channel_code,
+                marketplace_warehouse_id: $marketplace_warehouse_id,
+                loc_id: $loc_id,
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            channel_code{
+                channel_code
+            }
+            marketplace_warehouse_id
+            loc_id{
+                loc_id
+            }
         }
     }
 `;
 
-export const deleteCompany = gql`
-    mutation deleteCompany (
-        $id: Int!
-    ){
-        deleteCompany(
-            id: $id
-        )
-    }
-`;
-
-export const multideleteCompany = gql`
-    mutation multideleteCompany (
+export const multideleteWarehouse = gql`
+    mutation multideleteWarehouse (
         $id: [Int!]!
     ){
-        multideleteCompany(
+        multideleteWarehouse(
             id: $id
         )
     }
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getWarehouseList,
+    getWarehouseById,
+    createWarehouse,
+    updateWarehouse,
+    multideleteWarehouse,
 };

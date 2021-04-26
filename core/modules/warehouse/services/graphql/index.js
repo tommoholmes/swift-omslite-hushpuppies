@@ -9,35 +9,30 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getWarehouseList = (variables) => useLazyQuery(Schema.getWarehouseList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getWarehouseById = (variables) => useQuery(Schema.getWarehouseById, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
+export const createWarehouse = (variables) => useMutation(Schema.createWarehouse, {
     variables, ...context,
 });
 
-export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
+export const updateWarehouse = (variables) => useMutation(Schema.updateWarehouse, {
     variables, ...context,
 });
 
-export const deleteCompany = (variables) => useMutation(Schema.deleteCompany, {
-    variables, ...context,
-});
-
-export const multideleteCompany = (variables) => useMutation(Schema.multideleteCompany, {
+export const multideleteWarehouse = (variables) => useMutation(Schema.multideleteWarehouse, {
     variables, ...context,
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getWarehouseList,
+    getWarehouseById,
+    createWarehouse,
+    updateWarehouse,
+    multideleteWarehouse,
 };
