@@ -5,18 +5,22 @@ import Table from '@common_table';
 import Header from './Header';
 
 const MarketplaceListContent = (props) => {
-    const { data, loading, getCompanyList } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getMarketplaceList } = props;
+    const marketplaceList = (data && data.getMarketplaceList && data.getMarketplaceList.items) || [];
+    const marketplaceTotal = (data && data.getMarketplaceList && data.getMarketplaceList.total_count) || 0;
 
     const columns = [
-        { field: 'company_code', headerName: 'Marketplace Code' },
-        { field: 'company_name', headerName: 'Marketplace Name' },
+        { field: 'marketplace_code', headerName: 'Marketplace Code', sortable: true, hideable: true },
+        { field: 'marketplace_name', headerName: 'Marketplace Name', sortable: true, hideable: true },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const filters = [
+        { field: 'marketplace_code', name: 'marketplace_code', type: 'like', label: 'Marketplace Code', initialValue: '' },
+        { field: 'marketplace_name', name: 'marketplace_name', type: 'like', label: 'Marketplace Name', initialValue: '' },
+    ];
+
+    const rows = marketplaceList.map((marketplace) => ({
+        ...marketplace,
     }));
 
     // if (!data || loading) {
@@ -29,11 +33,12 @@ const MarketplaceListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
-                getRows={getCompanyList}
+                getRows={getMarketplaceList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={marketplaceTotal}
             />
         </>
     );

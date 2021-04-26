@@ -9,10 +9,10 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getMarketplaceList = (variables) => useLazyQuery(Schema.getMarketplaceList, {
     variables, ...context, ...fetchPolicy,
 });
 
 export default {
-    getCompanyList,
+    getMarketplaceList,
 };

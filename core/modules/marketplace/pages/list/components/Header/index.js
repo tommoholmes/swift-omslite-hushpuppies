@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 import React from 'react';
-import Button from '@common_button';
 import { useRouter } from 'next/router';
 import useStyles from './style';
 

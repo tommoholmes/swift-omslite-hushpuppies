@@ -1,29 +1,32 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getMarketplaceList = gql`
+    query getMarketplaceList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: MarketplaceFilterInput,
+        $sort: MarketplaceSortInput,
     ){
-        getCompanyList(
+        getMarketplaceList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
+                marketplace_code
+                marketplace_name
             }
-            total_count
             page_info {
-                page_size
                 current_page
+                page_size
                 total_pages
             }
+            total_count
         }
     }
 `;
 
 export default {
-    getCompanyList,
+    getMarketplaceList,
 };
