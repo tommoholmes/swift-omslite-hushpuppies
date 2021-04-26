@@ -10,45 +10,63 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    // const router = useRouter();
-    const company = data.getCompanyById;
-    // const [updateCompany] = gqlService.updateCompany();
+    const router = useRouter();
+    const warehouse = data.getWarehouseById;
+    const [updateWarehouse] = gqlService.updateWarehouse();
 
-    // const handleSubmit = ({ code, name }) => {
-    //     const variables = { id: company.company_id, company_code: code, company_name: name };
-    //     window.backdropLoader(true);
-    //     updateCompany({
-    //         variables,
-    //     }).then(() => {
-    //         window.backdropLoader(false);
-    //         window.toastMessage({
-    //             open: true,
-    //             text: 'Success edit company!',
-    //             variant: 'success',
-    //         });
-    //         setTimeout(() => router.push('/marketplace/warehouse'), 250);
-    //     }).catch((e) => {
-    //         window.backdropLoader(false);
-    //         window.toastMessage({
-    //             open: true,
-    //             text: e.message,
-    //             variant: 'error',
-    //         });
-    //     });
-    // };
+    const handleSubmit = ({
+        channel,
+        marketplace,
+        location,
+    }) => {
+        const variables = {
+            id: warehouse.id,
+            channel_code: channel.channel_code,
+            marketplace_warehouse_id: marketplace,
+            loc_id: location.loc_id,
+        };
+        window.backdropLoader(true);
+        updateWarehouse({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit Warehouse!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/marketplace/warehouse'), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
+            channel: {
+                channel_code: warehouse.channel_code.channel_code,
+                channel_name: warehouse.channel_code.channel_name,
+            },
+            marketplace: warehouse.marketplace_warehouse_id || '',
+            location: {
+                loc_id: warehouse.loc_id.loc_id,
+                loc_code: warehouse.loc_id.loc_code,
+                loc_name: warehouse.loc_id.loc_name,
+            },
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            channel: Yup.object().nullable(),
+            marketplace: Yup.string().nullable(),
+            location: Yup.object().nullable(),
         }),
-        // onSubmit: (values) => {
-        // handleSubmit(values);
-        // },
+        onSubmit: (values) => {
+            handleSubmit(values);
+        },
     });
 
     const contentProps = {
@@ -62,7 +80,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getWarehouseById({
         id: router && router.query && Number(router.query.id),
     });
 

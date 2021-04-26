@@ -6,10 +6,10 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
+    const [getStoreList, { data, loading }] = gqlService.getStoreList();
 
     const contentProps = {
-        getCompanyList,
+        getStoreList,
         data,
         loading,
     };

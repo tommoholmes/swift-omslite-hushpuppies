@@ -9,7 +9,7 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getStoreList = (variables) => useLazyQuery(Schema.getStoreList, {
     variables, ...context, ...fetchPolicy,
 });
 
@@ -22,7 +22,7 @@ export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
 });
 
 export default {
-    getCompanyList,
+    getStoreList,
     getCompanyById,
     updateCompany,
 };

@@ -6,26 +6,36 @@ import Link from 'next/link';
 import Header from './Header';
 
 const WarehouseListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getWarehouseList, multideleteWarehouse } = props;
+    const warehouseList = (data && data.getWarehouseList && data.getWarehouseList.items) || [];
+    const warehouseTotal = (data && data.getWarehouseList && data.getWarehouseList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_name', headerName: 'Marketplace' },
-        { field: 'company_code', headerName: 'Marketplace Warehouse ID' },
-        { field: 'company_name', headerName: 'Location' },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'id', headerName: 'ID', sortable: true, hideable: true, initialSort: 'ASC' },
+        { field: 'channel_code', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'marketplace_warehouse_id', headerName: 'Marketplace Warehouse ID', sortable: true, hideable: true },
+        { field: 'loc_id', headerName: 'Location', sortable: true, hideable: true },
+        { field: 'actions', headerName: 'Actions' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const filters = [
+        { field: 'id', name: 'id', type: 'from', label: 'ID', initialValue: '' },
+        { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel', initialValue: '' },
+        { field: 'marketplace_warehouse_id', name: 'marketplace_warehouse_id', type: 'like', label: 'Marketplace Warehouse ID', initialValue: '' },
+        { field: 'loc_id', name: 'loc_id', type: 'from', label: 'Location', initialValue: '' },
+    ];
+
+    const rows = warehouseList.map((warehouse) => ({
+        ...warehouse,
+        id: warehouse.id,
+        channel_code: warehouse.channel_code.channel_name,
+        loc_id: `${warehouse.loc_id.loc_code} - ${warehouse.loc_id.loc_name}`,
         actions: () => (
-            <Link href={`/marketplace/warehouse/edit/${company.company_id}`}>
+            <Link href={`/marketplace/warehouse/edit/${warehouse.id}`}>
                 <a className="link-button">Edit</a>
             </Link>
         ),
+
     }));
 
     // if (!data || loading) {
@@ -38,12 +48,13 @@ const WarehouseListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
-                getRows={getCompanyList}
-                deleteRows={multideleteCompany}
+                getRows={getWarehouseList}
+                deleteRows={multideleteWarehouse}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={warehouseTotal}
                 showCheckbox
             />
         </>

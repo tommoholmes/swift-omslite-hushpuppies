@@ -1,25 +1,31 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getStoreList = gql`
+    query getStoreList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: StoreFilterInput,
+        $sort: StoreSortInput,
     ){
-        getCompanyList(
+        getStoreList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
+                id
+                channel_store_id
+                name
+                telephone
+                category
             }
-            total_count
             page_info {
-                page_size
                 current_page
+                page_size
                 total_pages
             }
+            total_count
         }
     }
 `;
@@ -61,7 +67,7 @@ export const updateCompany = gql`
 `;
 
 export default {
-    getCompanyList,
+    getStoreList,
     getCompanyById,
     updateCompany,
 };

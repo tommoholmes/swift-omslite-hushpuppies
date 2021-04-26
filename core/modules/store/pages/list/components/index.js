@@ -6,24 +6,32 @@ import Link from 'next/link';
 import Header from './Header';
 
 const StoreListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getStoreList } = props;
+    const storeList = (data && data.getStoreList && data.getStoreList.items) || [];
+    const storeTotal = (data && data.getStoreList && data.getStoreList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_id', headerName: 'Store ID' },
-        { field: 'company_name', headerName: 'Name' },
-        { field: 'company_id', headerName: 'Telephone' },
-        { field: 'company_code', headerName: 'Category' },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'id', headerName: 'ID', sortable: true, hideable: true, initialSort: 'ASC' },
+        { field: 'channel_store_id', headerName: 'Store ID', sortable: true, hideable: true },
+        { field: 'name', headerName: 'Name', sortable: true, hideable: true },
+        { field: 'telephone', headerName: 'Telephone', sortable: true, hideable: true },
+        { field: 'category', headerName: 'Category', sortable: true, hideable: true },
+        { field: 'actions', headerName: 'Actions' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const filters = [
+        { field: 'id', name: 'id', type: 'from', label: 'ID', initialValue: '' },
+        { field: 'channel_store_id', name: 'channel_store_id', type: 'from', label: 'Store ID', initialValue: '' },
+        { field: 'name', name: 'name', type: 'like', label: 'Name', initialValue: '' },
+        { field: 'telephone', name: 'telephone', type: 'like', label: 'Telephone', initialValue: '' },
+        { field: 'category', name: 'category', type: 'like', label: 'Category', initialValue: '' },
+    ];
+
+    const rows = storeList.map((store) => ({
+        ...store,
+        id: store.id,
         actions: () => (
-            <Link href={`/marketplace/store/edit/${company.company_id}`}>
+            <Link href={`/marketplace/store/edit/${store.id}`}>
                 <a className="link-button">View</a>
             </Link>
         ),
@@ -39,11 +47,12 @@ const StoreListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
-                getRows={getCompanyList}
+                getRows={getStoreList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={storeTotal}
             />
         </>
     );
