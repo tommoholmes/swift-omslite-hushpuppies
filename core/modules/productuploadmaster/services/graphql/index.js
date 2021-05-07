@@ -1,0 +1,23 @@
+import { useMutation } from '@apollo/client';
+import * as Schema from './schema';
+
+const context = {
+    context: { request: 'internal' },
+};
+
+// const fetchPolicy = {
+//     fetchPolicy: 'cache-and-network',
+// };
+
+export const uploadSource = (variables) => useMutation(Schema.uploadSource, {
+    variables, ...context,
+});
+
+export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
+    variables, ...context,
+});
+
+export default {
+    uploadSource,
+    downloadSampleCsv,
+};
