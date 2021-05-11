@@ -5,20 +5,20 @@ import Table from '@common_table';
 import Header from './Header';
 
 const ProductCategoryListContent = (props) => {
-    const { data, loading, getCompanyList } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getProductCategoryList } = props;
+    const productCategoryList = (data && data.getProductCategoryList && data.getProductCategoryList.items) || [];
+    const productCategoryTotal = (data && data.getProductCategoryList && data.getProductCategoryList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_name', headerName: 'Marketplace' },
-        { field: 'company_id', headerName: 'Category ID' },
-        { field: 'company_name', headerName: 'Category Name' },
+        { field: 'entity_id', headerName: 'ID' },
+        { field: 'marketplace_code', headerName: 'Marketplace' },
+        { field: 'marketplace_category_id', headerName: 'Category ID' },
+        { field: 'marketplace_category_name', headerName: 'Category Name' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = productCategoryList.map((productCategory) => ({
+        ...productCategory,
+        id: productCategory.entity_id,
     }));
 
     // if (!data || loading) {
@@ -32,10 +32,10 @@ const ProductCategoryListContent = (props) => {
             <Header />
             <Table
                 rows={rows}
-                getRows={getCompanyList}
+                getRows={getProductCategoryList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={productCategoryTotal}
                 showCheckbox
             />
         </>
