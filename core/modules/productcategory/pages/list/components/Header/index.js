@@ -19,7 +19,7 @@ const HeaderContent = (props) => {
             </Button>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/marketplace/productcategory/update')}
+                onClick={() => router.push('/marketplace/productcategory/updatestatus')}
             >
                 Update Status
             </Button>

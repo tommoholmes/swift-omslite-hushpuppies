@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -9,10 +9,20 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getProductCategoryList = (variables) => useLazyQuery(Schema.getProductCategoryList, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const uploadStatusProductCategory = (variables) => useMutation(Schema.uploadStatusProductCategory, {
+    variables, ...context,
+});
+
+export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
+    variables, ...context,
+});
+
 export default {
-    getCompanyList,
+    getProductCategoryList,
+    uploadStatusProductCategory,
+    downloadSampleCsv,
 };
