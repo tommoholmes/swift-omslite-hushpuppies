@@ -5,21 +5,21 @@ import Table from '@common_table';
 import Header from './Header';
 
 const ProductMappingListContent = (props) => {
-    const { data, loading, getCompanyList } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getProductAttributeList, multideleteProductAttribute } = props;
+    const productAttributeList = (data && data.getProductAttributeList && data.getProductAttributeList.items) || [];
+    const productAttributeTotal = (data && data.getProductAttributeList && data.getProductAttributeList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_code', headerName: 'Marketplace Code' },
-        { field: 'company_code', headerName: 'Marketplace Category' },
-        { field: 'company_name', headerName: 'Marketplace Attribute Name' },
-        { field: 'company_code', headerName: 'Attribute Code' },
+        { field: 'entity_id', headerName: 'ID' },
+        { field: 'marketplace_code', headerName: 'Marketplace Code' },
+        { field: 'unknown', headerName: 'Marketplace Category' },
+        { field: 'marketplace_attribute_name', headerName: 'Marketplace Attribute Name' },
+        { field: 'unknown', headerName: 'Attribute Code' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = productAttributeList.map((productAttribute) => ({
+        ...productAttribute,
+        id: productAttribute.entity_id,
     }));
 
     // if (!data || loading) {
@@ -33,10 +33,11 @@ const ProductMappingListContent = (props) => {
             <Header />
             <Table
                 rows={rows}
-                getRows={getCompanyList}
+                getRows={getProductAttributeList}
+                deleteRows={multideleteProductAttribute}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={productAttributeTotal}
                 showCheckbox
             />
         </>

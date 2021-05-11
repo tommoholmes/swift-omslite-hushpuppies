@@ -1,18 +1,18 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getProductAttributeList = gql`
+    query getProductAttributeList(
         $pageSize: Int!,
         $currentPage: Int!,
     ){
-        getCompanyList(
+        getProductAttributeList(
             pageSize: $pageSize,
             currentPage: $currentPage
         ){
             items {
-                company_id
-                company_code
-                company_name
+                entity_id
+                marketplace_code
+                marketplace_attribute_name
             }
             total_count
             page_info {
@@ -24,6 +24,41 @@ export const getCompanyList = gql`
     }
 `;
 
+export const multideleteProductAttribute = gql`
+    mutation multideleteProductAttribute (
+        $id: [Int!]!
+    ){
+        multideleteProductAttribute(
+            id: $id
+        )
+    }
+`;
+
+export const uploadStatusProductCategory = gql`
+    mutation uploadStatusProductCategory(
+        $binary: String!,
+    ){
+        uploadStatusProductCategory(
+            input: {
+                binary: $binary,
+            }
+        )
+    }
+`;
+
+export const downloadSampleCsv = gql`
+    mutation downloadSampleCsv(
+        $type: String!,
+    ){
+        downloadSampleCsv(
+            type: $type,
+        )
+    }
+`;
+
 export default {
-    getCompanyList,
+    getProductAttributeList,
+    multideleteProductAttribute,
+    uploadStatusProductCategory,
+    downloadSampleCsv,
 };
