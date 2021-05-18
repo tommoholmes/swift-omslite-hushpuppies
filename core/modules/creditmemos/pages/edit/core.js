@@ -1,7 +1,5 @@
 import React from 'react';
 import Layout from '@layout';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
@@ -10,49 +8,22 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const creditmemo = data.getCreditMemoById;
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
-        window.backdropLoader(true);
-        updateCompany({
-            variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit company!',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/oms/company'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
+    const creditmemoDetail = {
+        id: creditmemo.order_id,
+        orderDate: creditmemo.order_date,
+        name: creditmemo.bill_to_name,
+        status: creditmemo.status,
+        channelOrder: creditmemo.channel_order,
+        billing: creditmemo.billing_address,
+        shipping: creditmemo.shipping_address,
+        item: creditmemo.creditmemo_items,
+        grandTotal: creditmemo.base_grand_total,
     };
 
-    const formik = useFormik({
-        initialValues: {
-            code: company.company_code,
-            name: company.company_name,
-        },
-        validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
-        }),
-        onSubmit: (values) => {
-            handleSubmit(values);
-        },
-    });
-
     const contentProps = {
-        formik,
+        creditmemoDetail,
     };
 
     return (
@@ -62,7 +33,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getCreditMemoById({
         id: router && router.query && Number(router.query.id),
     });
 
