@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -9,35 +9,15 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getShipmentList = (variables) => useLazyQuery(Schema.getShipmentList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getShipmentById = (variables) => useQuery(Schema.getShipmentById, {
     variables, ...context, ...fetchPolicy,
-});
-
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
-    variables, ...context,
-});
-
-export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
-    variables, ...context,
-});
-
-export const deleteCompany = (variables) => useMutation(Schema.deleteCompany, {
-    variables, ...context,
-});
-
-export const multideleteCompany = (variables) => useMutation(Schema.multideleteCompany, {
-    variables, ...context,
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getShipmentList,
+    getShipmentById,
 };
