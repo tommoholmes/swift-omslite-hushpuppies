@@ -7,9 +7,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
 import useStyles from './style';
 
-const managermaEditContent = (props) => {
+const ManageRmaEditContent = (props) => {
     const {
-        formik,
+        rmaDetail,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -40,28 +40,32 @@ const managermaEditContent = (props) => {
                             <tbody>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Status</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.status}</td>
                                     <td />
                                     <td className={classes.td}>Customer Name</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.name}</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Request Date</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.createdAt}</td>
                                     <td />
                                     <td className={classes.td}>Customer Email</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.email}</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Last Update</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.updatedAt}</td>
                                     <td />
                                     <td className={classes.td}>Shipping Address</td>
                                     <td className={classes.td}>Masih Kosong</td>
                                 </tr>
                                 <tr className={classes.tr}>
+                                    <td className={classes.td}>Channel Order</td>
+                                    <td className={classes.td}>{rmaDetail.channelOrder}</td>
+                                </tr>
+                                <tr className={classes.tr}>
                                     <td className={classes.td}>Return Type</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.return}</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Refund Type</td>
@@ -86,25 +90,49 @@ const managermaEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Return Stock</th>
                             </tr>
-                            <tr>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                            </tr>
+                            {rmaDetail.item.map((e) => (
+                                <tr>
+                                    <td className={classes.td}>
+                                        {e.name}
+                                        <br />
+                                        <span className={classes.spanLabel} style={{ display: 'inline-block' }}>SKU:</span>
+                                        {' '}
+                                        {e.sku}
+                                        <br />
+                                        <span className={classes.spanLabel} style={{ display: 'inline-block' }}>Price:</span>
+                                        {' '}
+                                        {e.price}
+                                    </td>
+                                    <td className={classes.td}>{e.qty}</td>
+                                    <td className={classes.td}>
+                                        <span className={classes.spanLabel} style={{ display: 'inline-block' }}>Package Condition:</span>
+                                        {' '}
+                                        {e.package_condition}
+                                        <br />
+                                        <span className={classes.spanLabel} style={{ display: 'inline-block' }}>Reason:</span>
+                                        {' '}
+                                        {e.reason}
+                                    </td>
+                                    <td className={classes.td}>{e.status_code}</td>
+                                    {(e.return_stock === 1) ? (
+                                        <td className={classes.td}>Yes</td>
+                                    ) : (
+                                        <td className={classes.td}>No</td>
+                                    )}
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
                 <div className={classes.content}>
                     <h5 className={classes.title}>Messages</h5>
                     <ul>
-                        <li>kosong ini</li>
-                        <span>kosong</span>
-                        <li>kosong ini</li>
-                        <span>kosong</span>
-                        <li>kosong ini</li>
-                        <span>kosong</span>
+                        {rmaDetail.message.map((e) => (
+                            <li style={{ marginBottom: 10 }}>
+                                <span className={classes.spanLabel}>{e.created_at}</span>
+                                <span>{e.text}</span>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </Paper>
@@ -112,4 +140,4 @@ const managermaEditContent = (props) => {
     );
 };
 
-export default managermaEditContent;
+export default ManageRmaEditContent;

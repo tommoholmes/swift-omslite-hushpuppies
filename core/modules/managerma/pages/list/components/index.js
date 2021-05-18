@@ -5,27 +5,27 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Header from './Header';
 
-const CompanyListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+const ManageRmaListContent = (props) => {
+    const { data, loading, getRmaList } = props;
+    const rmaList = (data && data.getRmaList && data.getRmaList.items) || [];
+    const rmaTotal = (data && data.getRmaList && data.getRmaList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'Request #' },
-        { field: 'company_id', headerName: 'Channel Order #' },
-        { field: 'company_id', headerName: 'Status', hideable: true },
-        { field: 'company_id', headerName: 'Origin Location(s)', hideable: true },
-        { field: 'company_id', headerName: 'Customer', hideable: true },
-        { field: 'company_id', headerName: 'Created At', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        // { field: 'request', headerName: 'Request #' },
+        { field: 'channel_order_increment_id', headerName: 'Channel Order #', hideable: true },
+        { field: 'status_code', headerName: 'Status', hideable: true },
+        { field: 'loc_name', headerName: 'Origin Location(s)', hideable: true },
+        { field: 'customer_email', headerName: 'Customer', hideable: true },
+        { field: 'created_at', headerName: 'Created At', hideable: true },
+        { field: 'actions', headerName: 'Actions' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = rmaList.map((rma) => ({
+        ...rma,
+        id: rma.id,
         actions: () => (
-            <Link href={`/sales/managerma/edit/${company.company_id}`}>
-                <a className="link-button">view</a>
+            <Link href={`/sales/managerma/edit/${rma.id}`}>
+                <a className="link-button">Edit</a>
             </Link>
         ),
     }));
@@ -41,15 +41,13 @@ const CompanyListContent = (props) => {
             <Header />
             <Table
                 rows={rows}
-                getRows={getCompanyList}
-                deleteRows={multideleteCompany}
+                getRows={getRmaList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
-                showCheckbox
+                count={rmaTotal}
             />
         </>
     );
 };
 
-export default CompanyListContent;
+export default ManageRmaListContent;
