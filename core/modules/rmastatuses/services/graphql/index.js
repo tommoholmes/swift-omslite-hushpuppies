@@ -9,35 +9,20 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getRmaStatusList = (variables) => useLazyQuery(Schema.getRmaStatusList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getRmaStatusByCode = (variables) => useQuery(Schema.getRmaStatusByCode, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
-    variables, ...context,
-});
-
-export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
-    variables, ...context,
-});
-
-export const deleteCompany = (variables) => useMutation(Schema.deleteCompany, {
-    variables, ...context,
-});
-
-export const multideleteCompany = (variables) => useMutation(Schema.multideleteCompany, {
+export const updateRmaStatus = (variables) => useMutation(Schema.updateRmaStatus, {
     variables, ...context,
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getRmaStatusList,
+    getRmaStatusByCode,
+    updateRmaStatus,
 };

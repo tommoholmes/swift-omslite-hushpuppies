@@ -5,24 +5,24 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Header from './Header';
 
-const CompanyListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+const RmaStatusesListContent = (props) => {
+    const { data, loading, getRmaStatusList } = props;
+    const rmaStatusesList = (data && data.getRmaStatusList && data.getRmaStatusList.items) || [];
+    const rmaStatusesTotal = (data && data.getRmaStatusList && data.getRmaStatusList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'Code' },
-        { field: 'company_id', headerName: 'Title' },
-        { field: 'company_id', headerName: 'Position', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'status_code', headerName: 'Code', hideable: true },
+        { field: 'status_label', headerName: 'Title', hideable: true },
+        { field: 'position', headerName: 'Position', hideable: true },
+        { field: 'actions', headerName: 'Actions' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = rmaStatusesList.map((rmaStatuses) => ({
+        ...rmaStatuses,
+        id: rmaStatuses.status_code,
         actions: () => (
-            <Link href={`/sales/rmastatuses/edit/${company.company_id}`}>
-                <a className="link-button">view</a>
+            <Link href={`/sales/rmastatuses/edit/${rmaStatuses.status_code}`}>
+                <a className="link-button">View</a>
             </Link>
         ),
     }));
@@ -38,15 +38,13 @@ const CompanyListContent = (props) => {
             <Header />
             <Table
                 rows={rows}
-                getRows={getCompanyList}
-                deleteRows={multideleteCompany}
+                getRows={getRmaStatusList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
-                showCheckbox
+                count={rmaStatusesTotal}
             />
         </>
     );
 };
 
-export default CompanyListContent;
+export default RmaStatusesListContent;

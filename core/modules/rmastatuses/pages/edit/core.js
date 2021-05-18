@@ -3,30 +3,52 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
+import { optionsInItem, optionsEmailCustomer, optionsEmailAdmin } from '@modules/rmastatuses/helpers';
 import gqlService from '../../services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
         Content,
+        data,
     } = props;
-    const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
+    const router = useRouter();
+    const rmastatuses = data.getRmaStatusByCode;
+    const [updateRmaStatus] = gqlService.updateRmaStatus();
+
+    const handleSubmit = ({
+        code,
+        label,
+        position,
+        inItem,
+        messageText,
+        emailCustomer,
+        customerText,
+        emailAdmin,
+        adminText,
+    }) => {
+        const variables = {
+            status_code: code,
+            status_label: label,
+            position: Number(position),
+            in_item: inItem.id,
+            message_text: messageText,
+            is_email_customer: emailCustomer.id,
+            email_customer_text: customerText,
+            is_email_admin: emailAdmin.id,
+            email_admin_text: adminText,
+        };
         window.backdropLoader(true);
-        updateCompany({
+        updateRmaStatus({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success edit company!',
+                text: 'Success edit Rma Status!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/oms/company'), 250);
+            setTimeout(() => router.push('/sales/rmastatuses'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -39,12 +61,25 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
+            code: rmastatuses.status_code,
+            label: rmastatuses.status_label,
+            position: rmastatuses.position,
+            inItem: optionsInItem.find((e) => e.id === rmastatuses.in_item),
+            messageText: rmastatuses.message_text,
+            emailCustomer: optionsEmailCustomer.find((e) => e.id === rmastatuses.is_email_customer),
+            customerText: rmastatuses.email_customer_text,
+            emailAdmin: optionsEmailAdmin.find((e) => e.id === rmastatuses.is_email_admin),
+            adminText: rmastatuses.email_admin_text,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            label: Yup.string().nullable(),
+            position: Yup.number().nullable(),
+            inItem: Yup.object().required('required!'),
+            messageText: Yup.string().nullable(),
+            emailCustomer: Yup.object().required('required!'),
+            customerText: Yup.string().nullable(),
+            emailAdmin: Yup.object().required('required!'),
+            adminText: Yup.string().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
@@ -62,8 +97,8 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
-        id: router && router.query && Number(router.query.id),
+    const { loading, data } = gqlService.getRmaStatusByCode({
+        status_code: router && router.query && String(router.query.id),
     });
 
     if (loading) {

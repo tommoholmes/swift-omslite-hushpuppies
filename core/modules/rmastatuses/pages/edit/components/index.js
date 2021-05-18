@@ -3,12 +3,14 @@ import React from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Autocomplete from '@common_autocomplete';
+import { optionsInItem, optionsEmailCustomer, optionsEmailAdmin } from '@modules/rmastatuses/helpers';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useStyles from './style';
 
-const rmastatusesEditContent = (props) => {
+const RmaStatusesEditContent = (props) => {
     const {
         formik,
     } = props;
@@ -37,7 +39,7 @@ const rmastatusesEditContent = (props) => {
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Status Code</span>
+                            <span className={classes.label}>Status Code</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -54,16 +56,16 @@ const rmastatusesEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Status Label</span>
+                            <span className={classes.label}>Status Label</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
+                            name="label"
+                            value={formik.values.label}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            error={!!(formik.touched.label && formik.errors.label)}
+                            helperText={(formik.touched.label && formik.errors.label) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -71,16 +73,16 @@ const rmastatusesEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Position</span>
+                            <span className={classes.label}>Position</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="position"
+                            value={formik.values.position}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.position && formik.errors.position)}
+                            helperText={(formik.touched.position && formik.errors.position) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -90,31 +92,27 @@ const rmastatusesEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Include in Item Status</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.inItem}
+                            onChange={(e) => formik.setFieldValue('inItem', e)}
+                            options={optionsInItem}
+                            error={!!(formik.touched.inItem && formik.errors.inItem)}
+                            helperText={(formik.touched.inItem && formik.errors.inItem) || ''}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Auto Message Text</span>
+                            <span className={classes.label}>Auto Message Text</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="messageText"
+                            value={formik.values.messageText}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.messageText && formik.errors.messageText)}
+                            helperText={(formik.touched.messageText && formik.errors.messageText) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -124,31 +122,27 @@ const rmastatusesEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Send Email to Customer</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.emailCustomer}
+                            onChange={(e) => formik.setFieldValue('emailCustomer', e)}
+                            options={optionsEmailCustomer}
+                            error={!!(formik.touched.emailCustomer && formik.errors.emailCustomer)}
+                            helperText={(formik.touched.emailCustomer && formik.errors.emailCustomer) || ''}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Custom Email Text to Customer</span>
+                            <span className={classes.label}>Custom Email Text to Customer</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="customerText"
+                            value={formik.values.customerText}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.customerText && formik.errors.customerText)}
+                            helperText={(formik.touched.customerText && formik.errors.customerText) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -158,31 +152,27 @@ const rmastatusesEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Send Email to Admin</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.emailAdmin}
+                            onChange={(e) => formik.setFieldValue('emailAdmin', e)}
+                            options={optionsEmailAdmin}
+                            error={!!(formik.touched.emailAdmin && formik.errors.emailAdmin)}
+                            helperText={(formik.touched.emailAdmin && formik.errors.emailAdmin) || ''}
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Custom Email Text to Admin</span>
+                            <span className={classes.label}>Custom Email Text to Admin</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="adminText"
+                            value={formik.values.adminText}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.adminText && formik.errors.adminText)}
+                            helperText={(formik.touched.adminText && formik.errors.adminText) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -203,4 +193,4 @@ const rmastatusesEditContent = (props) => {
     );
 };
 
-export default rmastatusesEditContent;
+export default RmaStatusesEditContent;
