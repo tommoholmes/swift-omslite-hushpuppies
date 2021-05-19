@@ -1,18 +1,23 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getStockTransferList = gql`
+    query getStockTransferList(
         $pageSize: Int!,
         $currentPage: Int!,
     ){
-        getCompanyList(
+        getStockTransferList(
             pageSize: $pageSize,
             currentPage: $currentPage
         ){
             items {
-                company_id
-                company_code
-                company_name
+                increment_id
+                source_loc_code
+                target_loc_code
+                status
+                created_by
+                created_at
+                confirmed_by
+                confirmed_at
             }
             total_count
             page_info {
@@ -62,7 +67,7 @@ export const downloadSampleCsv = gql`
 `;
 
 export default {
-    getCompanyList,
+    getStockTransferList,
     getCompanyById,
     uploadStockTransfer,
     downloadSampleCsv,

@@ -9,7 +9,7 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getStockTransferList = (variables) => useLazyQuery(Schema.getStockTransferList, {
     variables, ...context, ...fetchPolicy,
 });
 
@@ -26,7 +26,7 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
 });
 
 export default {
-    getCompanyList,
+    getStockTransferList,
     getCompanyById,
     uploadStockTransfer,
     downloadSampleCsv,
