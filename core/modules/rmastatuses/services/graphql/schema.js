@@ -1,18 +1,18 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getRmaStatusList = gql`
+    query getRmaStatusList(
         $pageSize: Int!,
         $currentPage: Int!,
     ){
-        getCompanyList(
+        getRmaStatusList(
             pageSize: $pageSize,
             currentPage: $currentPage
         ){
             items {
-                company_id
-                company_code
-                company_name
+                status_code
+                status_label
+                position
             }
             total_count
             page_info {
@@ -24,86 +24,66 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
-        $id: Int!,
+export const getRmaStatusByCode = gql`
+    query getRmaStatusByCode(
+        $status_code: String!,
     ){
-        getCompanyById(
-            id: $id
+        getRmaStatusByCode(
+            status_code: $status_code
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            status_code
+            status_label
+            position
+            in_item
+            message_text
+            is_email_customer
+            email_customer_text
+            is_email_admin
+            email_admin_text
         }
     }
 `;
 
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
+export const updateRmaStatus = gql`
+    mutation updateRmaStatus(
+        $status_code: String!,
+        $status_label: String,
+        $position: Int,
+        $in_item: Int,
+        $message_text: String,
+        $is_email_customer: Int,
+        $email_customer_text: String,
+        $is_email_admin: Int,
+        $email_admin_text: String,
     ){
-        createCompany(
+        updateRmaStatus(
+            status_code: $status_code,
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                status_label: $status_label,
+                position: $position,
+                in_item: $in_item,
+                message_text: $message_text,
+                is_email_customer: $is_email_customer,
+                email_customer_text: $email_customer_text,
+                is_email_admin: $is_email_admin,
+                email_admin_text: $email_admin_text,
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            status_code
+            status_label
+            position
+            in_item
+            message_text
+            is_email_customer
+            email_customer_text
+            is_email_admin
+            email_admin_text
         }
-    }
-`;
-
-export const updateCompany = gql`
-    mutation updateCompany(
-        $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
-    ){
-        updateCompany(
-            id: $id,
-            input: {
-                company_code: $company_code,
-                company_name: $company_name
-            }
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
-        }
-    }
-`;
-
-export const deleteCompany = gql`
-    mutation deleteCompany (
-        $id: Int!
-    ){
-        deleteCompany(
-            id: $id
-        )
-    }
-`;
-
-export const multideleteCompany = gql`
-    mutation multideleteCompany (
-        $id: [Int!]!
-    ){
-        multideleteCompany(
-            id: $id
-        )
     }
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getRmaStatusList,
+    getRmaStatusByCode,
+    updateRmaStatus,
 };

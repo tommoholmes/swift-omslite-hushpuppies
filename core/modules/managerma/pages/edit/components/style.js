@@ -72,6 +72,10 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         display: 'block',
     },
+    spanLabel: {
+        display: 'block',
+        fontWeight: 700,
+    },
     contentLeft: {
         display: 'inline-block',
         width: '50%',

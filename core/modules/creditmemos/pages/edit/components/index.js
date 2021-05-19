@@ -9,7 +9,7 @@ import useStyles from './style';
 
 const creditmemosEditContent = (props) => {
     const {
-        formik,
+        creditmemoDetail,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -31,7 +31,10 @@ const creditmemosEditContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>View Memo</h2>
+            <h2 className={classes.titleTop}>
+                View Memo
+                {creditmemoDetail.id}
+            </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <h5 className={classes.title}>Shipment & Order Information</h5>
@@ -40,21 +43,21 @@ const creditmemosEditContent = (props) => {
                             <tbody>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Order Date</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{creditmemoDetail.orderDate}</td>
                                     <td />
                                     <td className={classes.td}>Customer Name</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{creditmemoDetail.name}</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Order Status</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{creditmemoDetail.status}</td>
                                     <td />
                                     <td className={classes.td}>Email</td>
                                     <td className={classes.td}>Masih Kosong</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Channel Order</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{creditmemoDetail.channelOrder}</td>
                                     <td />
                                     <td className={classes.td}>Customer Group</td>
                                     <td className={classes.td}>Masih Kosong</td>
@@ -71,24 +74,94 @@ const creditmemosEditContent = (props) => {
                     <div className={classes.contentLeft}>
                         <h5 className={classes.title}>Billing Address</h5>
                         <span className={classes.orderLabel}>
-                            Masih Kosong
+                            {creditmemoDetail.billing.map((e) => (
+                                <>
+                                    {e.firstname}
+                                    {' '}
+                                    {' '}
+                                    {' '}
+                                    {e.lastname}
+                                </>
+                            ))}
                         </span>
-                        <span className={classes.orderLabel}>Masih Kosong</span>
                         <span className={classes.orderLabel}>
-                            Masih Kosong
+                            {creditmemoDetail.billing.map((e) => (
+                                <>{e.street}</>
+                            ))}
                         </span>
-                        <span className={classes.orderLabel}>Masih Kosong</span>
-                        <span className={classes.orderLabel}>Masih Kosong</span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.billing.map((e) => (
+                                <>
+                                    {e.city}
+                                    ,
+                                    {' '}
+                                    {' '}
+                                    {' '}
+                                    {e.region}
+                                    ,
+                                    {' '}
+                                    {' '}
+                                    {' '}
+                                    {e.postcode}
+                                </>
+                            ))}
+                        </span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.billing.map((e) => (
+                                <>{e.country_id}</>
+                            ))}
+                        </span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.billing.map((e) => (
+                                <>{e.telephone}</>
+                            ))}
+                        </span>
                     </div>
                     <div className={classes.contentLeft}>
                         <h5 className={classes.title}>Shipping Adress</h5>
-                        <span className={classes.orderLabel}>Masih Kosong</span>
-                        <span className={classes.orderLabel}>Masih Kosong</span>
                         <span className={classes.orderLabel}>
-                            Masih Kosong
+                            {creditmemoDetail.shipping.map((e) => (
+                                <>
+                                    {e.firstname}
+                                    {' '}
+                                    {''}
+                                    {' '}
+                                    {e.lastname}
+                                </>
+                            ))}
                         </span>
-                        <span className={classes.orderLabel}>Masih kosong</span>
-                        <span className={classes.orderLabel}>Masih Kosong</span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.shipping.map((e) => (
+                                <>{e.street}</>
+                            ))}
+                        </span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.shipping.map((e) => (
+                                <>
+                                    {e.city}
+                                    ,
+                                    {' '}
+                                    {' '}
+                                    {' '}
+                                    {e.region}
+                                    ,
+                                    {' '}
+                                    {' '}
+                                    {' '}
+                                    {e.postcode}
+                                </>
+                            ))}
+                        </span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.shipping.map((e) => (
+                                <>{e.country_id}</>
+                            ))}
+                        </span>
+                        <span className={classes.orderLabel}>
+                            {creditmemoDetail.shipping.map((e) => (
+                                <>{e.telephone}</>
+                            ))}
+                        </span>
                     </div>
                 </div>
                 <div className={classes.content}>
@@ -108,23 +181,32 @@ const creditmemosEditContent = (props) => {
                             <tr className={classes.tr}>
                                 <th className={classes.th}>Product</th>
                                 <th className={classes.th}>Price</th>
-                                <th className={classes.th}>Qty Price</th>
+                                <th className={classes.th}>Qty</th>
                                 <th className={classes.th}>Qty to Refund</th>
                                 <th className={classes.th}>Subtotal</th>
                                 <th className={classes.th}>Tax Amount</th>
                                 <th className={classes.th}>Discount Amount</th>
                                 <th className={classes.th}>Row Total</th>
                             </tr>
-                            <tr>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                                <td className={classes.td}>masih kosong</td>
-                            </tr>
+                            {creditmemoDetail.item.map((e) => (
+                                <tr>
+                                    <td className={classes.td}>
+                                        {e.name}
+                                        {' '}
+                                        <br />
+                                        SKU:
+                                        {' '}
+                                        {e.sku}
+                                    </td>
+                                    <td className={classes.td}>{e.price}</td>
+                                    <td className={classes.td}>{e.qty}</td>
+                                    <td className={classes.td}>masih kosong</td>
+                                    <td className={classes.td}>masih kosong</td>
+                                    <td className={classes.td}>{e.base_tax_amount || 0}</td>
+                                    <td className={classes.td}>{e.base_discount_amount || 0}</td>
+                                    <td className={classes.td}>masih kosong</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -157,7 +239,7 @@ const creditmemosEditContent = (props) => {
                             </tr>
                             <tr>
                                 <td className={clsx(classes.td, classes.th)}>Grand Total</td>
-                                <td className={clsx(classes.td, classes.th)}>masih kosong</td>
+                                <td className={clsx(classes.td, classes.th)}>{creditmemoDetail.grandTotal}</td>
                             </tr>
                         </tbody>
                     </table>

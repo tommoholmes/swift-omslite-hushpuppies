@@ -1,7 +1,5 @@
 import React from 'react';
 import Layout from '@layout';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
@@ -10,49 +8,23 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const rma = data.getRmaById;
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
-        window.backdropLoader(true);
-        updateCompany({
-            variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit company!',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/oms/company'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
+    const rmaDetail = {
+        id: rma.id,
+        status: rma.status_code,
+        name: rma.customer_name,
+        createdAt: rma.created_at,
+        email: rma.customer_email,
+        updatedAt: rma.updated_at,
+        channelOrder: rma.channel_order_increment_id,
+        return: rma.return_type,
+        item: rma.rma_item,
+        message: rma.message,
     };
 
-    const formik = useFormik({
-        initialValues: {
-            code: company.company_code,
-            name: company.company_name,
-        },
-        validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
-        }),
-        onSubmit: (values) => {
-            handleSubmit(values);
-        },
-    });
-
     const contentProps = {
-        formik,
+        rmaDetail,
     };
 
     return (
@@ -62,7 +34,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getRmaById({
         id: router && router.query && Number(router.query.id),
     });
 

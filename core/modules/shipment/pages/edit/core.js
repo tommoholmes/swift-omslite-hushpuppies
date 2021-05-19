@@ -1,7 +1,5 @@
 import React from 'react';
 import Layout from '@layout';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
@@ -10,49 +8,26 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const shipment = data.getShipmentById;
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
-        window.backdropLoader(true);
-        updateCompany({
-            variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit company!',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/oms/company'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
+    const shipmentDetail = {
+        id: shipment.increment_id,
+        locName: shipment.loc_code.loc_name,
+        orderDate: shipment.created_at,
+        lastUpdate: shipment.updated_at,
+        channelOrderNumber: shipment.channel_order_increment_id,
+        status: shipment.status,
+        email: shipment.email,
+        billing: shipment.billing_address,
+        shipping: shipment.shipping_address,
+        orderItem: shipment.order_item,
+        shipMethod: shipment.channel_shipping_label || '-',
+        tracking: shipment.all_track,
+        statusHistory: shipment.status_history,
     };
 
-    const formik = useFormik({
-        initialValues: {
-            code: company.company_code,
-            name: company.company_name,
-        },
-        validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
-        }),
-        onSubmit: (values) => {
-            handleSubmit(values);
-        },
-    });
-
     const contentProps = {
-        formik,
+        shipmentDetail,
     };
 
     return (
@@ -62,7 +37,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 

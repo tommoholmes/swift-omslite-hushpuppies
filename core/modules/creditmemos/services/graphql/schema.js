@@ -1,18 +1,27 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getCreditMemoList = gql`
+    query getCreditMemoList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: CreditMemoFilterInput,
+        $sort: CreditMemoSortInput,
     ){
-        getCompanyList(
+        getCreditMemoList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
+                increment_id
+                created_at
+                order_id
+                channel_order
+                order_date
+                bill_to_name
+                status
+                base_grand_total
             }
             total_count
             page_info {
@@ -24,86 +33,52 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getCreditMemoById = gql`
+    query getCreditMemoById(
         $id: Int!,
     ){
-        getCompanyById(
+        getCreditMemoById(
             id: $id
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
-        }
-    }
-`;
-
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
-    ){
-        createCompany(
-            input: {
-                company_code: $company_code,
-                company_name: $company_name
+            order_id
+            order_date
+            bill_to_name
+            status
+            channel_order
+            billing_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                telephone
+            }   
+            shipping_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                telephone
             }
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
-        }
-    }
-`;
-
-export const updateCompany = gql`
-    mutation updateCompany(
-        $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
-    ){
-        updateCompany(
-            id: $id,
-            input: {
-                company_code: $company_code,
-                company_name: $company_name
+            creditmemo_items {
+                name
+                sku
+                price
+                qty
+                base_tax_amount
+                base_discount_amount 
             }
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            base_grand_total
         }
-    }
-`;
-
-export const deleteCompany = gql`
-    mutation deleteCompany (
-        $id: Int!
-    ){
-        deleteCompany(
-            id: $id
-        )
-    }
-`;
-
-export const multideleteCompany = gql`
-    mutation multideleteCompany (
-        $id: [Int!]!
-    ){
-        multideleteCompany(
-            id: $id
-        )
     }
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getCreditMemoList,
+    getCreditMemoById,
 };
