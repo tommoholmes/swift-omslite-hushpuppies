@@ -43,6 +43,7 @@ const RmaStatusesEditContent = (props) => {
                         </div>
                         <TextField
                             className={classes.fieldRoot}
+                            disabled
                             variant="outlined"
                             name="code"
                             value={formik.values.code}
