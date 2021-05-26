@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const colorPurple = '#BE1F93';
+const colorBlue = '#321fdb';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
 const borderColor = '#DDE1EC';
@@ -49,16 +50,18 @@ const useStyles = makeStyles((theme) => ({
     },
     btn: {
         borderRadius: 20,
-        backgroundColor: '#ffffff',
-        color: colorPurple,
         boxShadow: 'none',
         border: '1px solid',
-        borderColor: colorPurple,
+        height: 36,
+        width: 150,
         letterSpacing: 0,
         textTransform: 'capitalize',
         padding: '0 10px',
-        '&:hover': {
-            background: 'transparent',
+        marginTop: 20,
+        float: 'right',
+        [theme.breakpoints.down('xs')]: {
+            width: 50,
+            marginRight: 18,
         },
     },
     content: {
@@ -115,6 +118,13 @@ const useStyles = makeStyles((theme) => ({
     grandTotal: {
         fontFamily: font,
         fontWeight: 'bold',
+    },
+    link: {
+        color: colorBlue,
+        fontWeight: 700,
+        '&:hover': {
+            textDecorationLine: 'underline',
+        },
     },
 }));
 
