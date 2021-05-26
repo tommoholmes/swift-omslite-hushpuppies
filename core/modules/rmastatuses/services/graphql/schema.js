@@ -4,10 +4,12 @@ export const getRmaStatusList = gql`
     query getRmaStatusList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $sort: RmaStatusSortInput,
     ){
         getRmaStatusList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            sort: $sort,
         ){
             items {
                 status_code
