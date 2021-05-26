@@ -11,9 +11,9 @@ const RmaStatusesListContent = (props) => {
     const rmaStatusesTotal = (data && data.getRmaStatusList && data.getRmaStatusList.total_count) || 0;
 
     const columns = [
-        { field: 'status_code', headerName: 'Code', hideable: true },
-        { field: 'status_label', headerName: 'Title', hideable: true },
-        { field: 'position', headerName: 'Position', hideable: true },
+        { field: 'status_code', headerName: 'Code', hideable: true, sortable: 'true' },
+        { field: 'status_label', headerName: 'Title', hideable: true, sortable: 'true' },
+        { field: 'position', headerName: 'Position', hideable: true, sortable: 'true' },
         { field: 'actions', headerName: 'Actions' },
     ];
 

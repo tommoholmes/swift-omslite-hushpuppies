@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import Button from '@common_button';
+import Link from 'next/link';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -31,6 +32,24 @@ const ManageRmaEditContent = (props) => {
                 }}
                 />
             </Button>
+            {(rmaDetail.status === 'processing') && (
+                <Button
+                    className={classes.btn}
+                    // onClick={formik.handleSubmit}
+                    variant="contained"
+                >
+                    Refund
+                </Button>
+            )}
+            {(rmaDetail.status === 'package_received') && (
+                <Button
+                    className={classes.btn}
+                    // onClick={formik.handleSubmit}
+                    variant="contained"
+                >
+                    Credit Memo
+                </Button>
+            )}
             <h2 className={classes.titleTop}>Detail Manage Request</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
@@ -57,7 +76,29 @@ const ManageRmaEditContent = (props) => {
                                     <td className={classes.td}>{rmaDetail.updatedAt}</td>
                                     <td />
                                     <td className={classes.td}>Shipping Address</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>
+                                        <span className={classes.orderLabel}>
+                                            {rmaDetail.firstname}
+                                            {' '}
+                                            {rmaDetail.lastname}
+                                        </span>
+                                        <span className={classes.orderLabel}>
+                                            {rmaDetail.street}
+                                        </span>
+                                        <span className={classes.orderLabel}>
+                                            {rmaDetail.city}
+                                            {', '}
+                                            {rmaDetail.region}
+                                            {', '}
+                                            {rmaDetail.postcode}
+                                        </span>
+                                        <span className={classes.orderLabel}>
+                                            {rmaDetail.country}
+                                        </span>
+                                        <span className={classes.orderLabel}>
+                                            {rmaDetail.telephone}
+                                        </span>
+                                    </td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Channel Order</td>
@@ -69,12 +110,22 @@ const ManageRmaEditContent = (props) => {
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Refund Type</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.refund}</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Package Received</td>
-                                    <td className={classes.td}>Masih Kosong</td>
+                                    <td className={classes.td}>{rmaDetail.package}</td>
                                 </tr>
+                                {(rmaDetail.status === 'processing' || rmaDetail.status === 'complete') && (
+                                    <tr className={classes.tr}>
+                                        <td className={classes.td}>Creditmemo</td>
+                                        <td className={classes.td}>
+                                            <Link href={`/sales/creditmemos/edit/${rmaDetail.creditmemo}`}>
+                                                <a className={classes.link}>{rmaDetail.creditmemo}</a>
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -129,7 +180,11 @@ const ManageRmaEditContent = (props) => {
                     <ul>
                         {rmaDetail.message.map((e) => (
                             <li style={{ marginBottom: 10 }}>
-                                <span className={classes.spanLabel}>{e.created_at}</span>
+                                <span className={classes.spanLabel}>
+                                    {e.customer_name}
+                                    {', '}
+                                    {e.created_at}
+                                </span>
                                 <span>{e.text}</span>
                             </li>
                         ))}

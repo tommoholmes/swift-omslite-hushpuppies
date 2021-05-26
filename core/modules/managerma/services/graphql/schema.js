@@ -4,13 +4,18 @@ export const getRmaList = gql`
     query getRmaList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: RmaFilterInput,
+        $sort: RmaSortInput,
     ){
         getRmaList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 id
+                increment_id
                 channel_order_increment_id
                 status_code
                 loc_name
@@ -43,8 +48,21 @@ export const getRmaById = gql`
             created_at
             customer_email
             updated_at
+            shipping_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                telephone
+            }
             channel_order_increment_id
             return_type
+            refund_type
+            package_received
+            creditmemo
             rma_item {
                 id
                 name
@@ -58,6 +76,7 @@ export const getRmaById = gql`
             }
             message {
                 id
+                customer_name
                 created_at
                 text
             }
