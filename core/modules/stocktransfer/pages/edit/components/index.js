@@ -10,7 +10,7 @@ import useStyles from './style';
 
 const StockTransferEditContent = (props) => {
     const {
-        formik,
+        stockTransferDetail,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -32,43 +32,34 @@ const StockTransferEditContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Item List</h2>
+            <h2 className={classes.titleTop}>
+                Item List
+                {stockTransferDetail.incrementID}
+            </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <div className={classes.formField}>
-                        <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Company Code</span>
-                        </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
-                        />
-                    </div>
-                    <div className={classes.formField}>
-                        <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Company Name</span>
-                        </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
-                        />
-                    </div>
+                    <table className={classes.table}>
+                        <tbody>
+                            <tr className={classes.tr}>
+                                <th className={classes.th}>SKU</th>
+                                <th className={classes.th}>Product Name</th>
+                                <th className={classes.th}>Source ID</th>
+                                <th className={classes.th}>Target ID</th>
+                                <th className={classes.th}>Source Quantity</th>
+                                <th className={classes.th}>Transfer Quantity</th>
+                            </tr>
+                            {stockTransferDetail.items.map((e) => (
+                                <tr>
+                                    <td className={classes.td}>{e.sku}</td>
+                                    <td className={classes.td}>{e.product_name}</td>
+                                    <td className={classes.td}>{e.source_id}</td>
+                                    <td className={classes.td}>{e.target_id}</td>
+                                    <td className={classes.td}>{e.source_qty}</td>
+                                    <td className={classes.td}>{e.transfer_qty}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </Paper>
         </>

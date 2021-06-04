@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
+const borderColor = '#DDE1EC';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -75,6 +76,23 @@ const useStyles = makeStyles((theme) => ({
         borderColor: colorText,
         borderRadius: 20,
         height: 36,
+    },
+    table: {
+        borderCollapse: 'collapse',
+        width: '100%',
+    },
+    tr: {
+        borderBottom: '1px solid',
+        borderBottomColor: borderColor,
+        verticalAlign: 'top',
+    },
+    th: {
+        textAlign: 'left',
+        padding: '5px 0',
+    },
+    td: {
+        padding: '5px 0',
+        fontFamily: font,
     },
 }));
 
