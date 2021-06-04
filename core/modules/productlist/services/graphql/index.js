@@ -9,15 +9,15 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getProductList = (variables) => useLazyQuery(Schema.getProductList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getProductById = (variables) => useQuery(Schema.getProductById, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
+export const updateProduct = (variables) => useMutation(Schema.updateProduct, {
     variables, ...context,
 });
 
@@ -30,9 +30,9 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    updateCompany,
+    getProductList,
+    getProductById,
+    updateProduct,
     uploadSource,
     downloadSampleCsv,
 };

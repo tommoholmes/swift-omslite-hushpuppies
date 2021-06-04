@@ -5,12 +5,15 @@ import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
+import Autocomplete from '@common_autocomplete';
+import { optionsStatus } from '@modules/productlist/helpers';
 import clsx from 'clsx';
 import useStyles from './style';
 
 const ProductListEditContent = (props) => {
     const {
         formik,
+        stockList,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -41,19 +44,15 @@ const ProductListEditContent = (props) => {
                     </h2>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>Status</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Status</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.status}
+                            onChange={(e) => formik.setFieldValue('status', e)}
+                            options={optionsStatus}
+                            error={!!(formik.touched.status && formik.errors.status)}
+                            helperText={(formik.touched.status && formik.errors.status) || ''}
                         />
                     </div>
                     <div className={classes.formField}>
@@ -61,13 +60,11 @@ const ProductListEditContent = (props) => {
                             <span className={classes.label}>Attribute Set</span>
                         </div>
                         <TextField
+                            disabled
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="code"
                             value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -78,13 +75,11 @@ const ProductListEditContent = (props) => {
                             <span className={classes.label}>Product Name</span>
                         </div>
                         <TextField
+                            disabled
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            name="name"
+                            value={formik.values.name}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -95,13 +90,11 @@ const ProductListEditContent = (props) => {
                             <span className={classes.label}>SKU</span>
                         </div>
                         <TextField
+                            disabled
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            name="sku"
+                            value={formik.values.sku}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -109,16 +102,16 @@ const ProductListEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>Price</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Price</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="price"
+                            value={formik.values.price}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.price && formik.errors.price)}
+                            helperText={(formik.touched.price && formik.errors.price) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -131,28 +124,74 @@ const ProductListEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="specialPrice"
+                            value={formik.values.specialPrice}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.specialPrice && formik.errors.specialPrice)}
+                            helperText={(formik.touched.specialPrice && formik.errors.specialPrice) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
                         />
                     </div>
                     <div className={classes.formField}>
+                        <div className={classes.divLabel} />
+                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                            <div className={classes.divLabel} style={{ width: '82px' }}>
+                                <span className={classes.label}>From Date: </span>
+                            </div>
+                            <TextField
+                                style={{ width: '170px' }}
+                                className={classes.fieldRoot}
+                                id="date"
+                                type="date"
+                                variant="outlined"
+                                name="dateFrom"
+                                value={formik.values.dateFrom}
+                                onChange={formik.handleChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                InputProps={{
+                                    className: classes.fieldInput,
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel} />
+                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                            <div className={classes.divLabel} style={{ width: '82px' }}>
+                                <span className={classes.label}>To: </span>
+                            </div>
+                            <TextField
+                                style={{ width: '170px' }}
+                                className={classes.fieldRoot}
+                                id="date"
+                                type="date"
+                                variant="outlined"
+                                name="dateTo"
+                                value={formik.values.dateTo}
+                                onChange={formik.handleChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                InputProps={{
+                                    className: classes.fieldInput,
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Weight</span>
                         </div>
                         <TextField
+                            disabled
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="code"
                             value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -163,13 +202,11 @@ const ProductListEditContent = (props) => {
                             <span className={classes.label}>Visibility</span>
                         </div>
                         <TextField
+                            disabled
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="code"
                             value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -178,7 +215,7 @@ const ProductListEditContent = (props) => {
                     <div className={classes.formFieldButton}>
                         <Button
                             className={classes.btn}
-                            // onClick={formik.handleSubmit}
+                            onClick={formik.handleSubmit}
                             variant="contained"
                         >
                             Submit
@@ -196,12 +233,14 @@ const ProductListEditContent = (props) => {
                                     <th className={classes.th}>Qty Reserved</th>
                                     <th className={classes.th}>Qty Saleable</th>
                                 </tr>
-                                <tr>
-                                    <td className={classes.td}>null</td>
-                                    <td className={classes.td}>null</td>
-                                    <td className={classes.td}>null</td>
-                                    <td className={classes.td}>null</td>
-                                </tr>
+                                {stockList.sourcing.map((e) => (
+                                    <tr>
+                                        <td className={classes.td}>{e.loc_name}</td>
+                                        <td className={classes.td}>{e.qty_total}</td>
+                                        <td className={classes.td}>{e.qty_reserved}</td>
+                                        <td className={classes.td}>{e.qty_saleable}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>

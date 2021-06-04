@@ -3,6 +3,7 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
+// import { optionsStatus } from '@modules/productlist/helpers';
 import gqlService from '../../services/graphql';
 
 const ContentWrapper = (props) => {
@@ -11,29 +12,55 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const product = data.getProductById;
+    const [updateProduct] = gqlService.updateProduct();
+
+    let dateFromSplit;
+    let dateFromSplitNew;
+    let dateToSplit;
+    let dateToSplitNew;
+
+    if (!product.special_from_date) {
+        dateFromSplitNew = product.special_from_date;
+    }
+    if (product.special_from_date) {
+        dateFromSplit = product.special_from_date;
+        [dateFromSplitNew] = dateFromSplit.split(' ');
+    }
+    if (!product.special_to_date) {
+        dateToSplitNew = product.special_to_date;
+    }
+    if (product.special_to_date) {
+        dateToSplit = product.special_to_date;
+        [dateToSplitNew] = dateToSplit.split(' ');
+    }
 
     const handleSubmit = ({
-        code,
-        name,
+        status,
+        price,
+        specialPrice,
+        dateFrom,
+        dateTo,
     }) => {
         const variables = {
-            id: company.company_id,
-            company_code: code,
-            company_name: name,
+            id: product.id,
+            status: status.id,
+            price: Number(price),
+            special_price: Number(specialPrice),
+            special_price_from: dateFrom,
+            special_price_to: dateTo,
         };
         window.backdropLoader(true);
-        updateCompany({
+        updateProduct({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success edit company!',
+                text: 'Success Update Product!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/oms/company'), 250);
+            setTimeout(() => router.push('/cataloginventory/productlist'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -46,20 +73,32 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
+            status: {
+                name: '---Please Select---',
+            },
+            name: product.name,
+            sku: product.sku,
+            price: product.price_range.maximum_price.regular_price.value,
+            specialPrice: product.special_price,
+            dateFrom: dateFromSplitNew,
+            dateTo: dateToSplitNew,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            price: Yup.number().required('Required'),
+            specialPrice: Yup.number().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
         },
     });
 
+    const stockList = {
+        sourcing: product.sourcing,
+    };
+
     const contentProps = {
         formik,
+        stockList,
     };
 
     return (
@@ -69,7 +108,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getProductById({
         id: router && router.query && Number(router.query.id),
     });
 

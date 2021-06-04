@@ -1,18 +1,27 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getProductList = gql`
+    query getProductList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: ProductFilterInput,
+        $sort: ProductSortInput,
     ){
-        getCompanyList(
+        getProductList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
+                entity_id
+                product_name
+                sku
+                product_price
+                product_special_price
+                product_status {
+                  label
+                }
             }
             total_count
             page_info {
@@ -24,39 +33,56 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getProductById = gql`
+    query getProductById(
         $id: Int!,
     ){
-        getCompanyById(
+        getProductById(
             id: $id
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            id
+            name
+            sku
+            price_range {
+            maximum_price {
+                regular_price {
+                        value
+                    }
+                }
+            }
+            special_price
+            special_from_date
+            special_to_date
+            sourcing{
+                loc_name
+                qty_total
+                qty_reserved
+                qty_saleable
+            }
         }
     }
 `;
 
-export const updateCompany = gql`
-    mutation updateCompany(
+export const updateProduct = gql`
+    mutation updateProduct(
         $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
+        $status: Int!,
+        $price: Int!,
+        $special_price: Int!,
+        $special_price_from: String!,
+        $special_price_to: String!,
+        
     ){
-        updateCompany(
+        updateProduct(
             id: $id,
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                status: $status,
+                price: $price,
+                special_price: $special_price,
+                special_price_from: $special_price_from,
+                special_price_to: $special_price_to,
             }
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
-        }
+        )
     }
 `;
 
@@ -83,9 +109,9 @@ export const downloadSampleCsv = gql`
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    updateCompany,
+    getProductList,
+    getProductById,
+    updateProduct,
     uploadSource,
     downloadSampleCsv,
 };

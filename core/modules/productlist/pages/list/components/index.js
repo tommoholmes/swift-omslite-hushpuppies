@@ -6,25 +6,33 @@ import Link from 'next/link';
 import Header from './Header';
 
 const ProductListContent = (props) => {
-    const { data, loading, getCompanyList } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const { data, loading, getProductList } = props;
+    const productList = (data && data.getProductList && data.getProductList.items) || [];
+    const productTotal = (data && data.getProductList && data.getProductList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_name', headerName: 'Product Name' },
-        { field: 'company_code', headerName: 'SKU' },
-        { field: 'company_name', headerName: 'Price' },
-        { field: 'company_name', headerName: 'Special Price' },
-        { field: 'company_name', headerName: 'Status' },
-        { field: 'actions', headerName: 'Action', hideable: true },
+        { field: 'entity_id', headerName: 'ID', hideable: true, sortable: true, initialSort: 'ASC' },
+        { field: 'product_name', headerName: 'Product Name', hideable: true, sortable: true },
+        { field: 'sku', headerName: 'SKU', hideable: true, sortable: true },
+        { field: 'product_price', headerName: 'Price', hideable: true },
+        { field: 'product_special_price', headerName: 'Special Price', hideable: true },
+        { field: 'productStatus', headerName: 'Status', hideable: true },
+        { field: 'actions', headerName: 'Action' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const filters = [
+        { field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID From', initialValue: '' },
+        { field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID To', initialValue: '' },
+        { field: 'product_name', name: 'product_name', type: 'like', label: 'Product Name', initialValue: '' },
+        { field: 'sku', name: 'sku', type: 'like', label: 'SKU', initialValue: '' },
+    ];
+
+    const rows = productList.map((product) => ({
+        ...product,
+        id: product.entity_id,
+        productStatus: product.product_status.label,
         actions: () => (
-            <Link href={`/cataloginventory/productlist/edit/${company.company_id}`}>
+            <Link href={`/cataloginventory/productlist/edit/${product.entity_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),
@@ -40,11 +48,12 @@ const ProductListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
-                getRows={getCompanyList}
+                getRows={getProductList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={productTotal}
             />
         </>
     );
