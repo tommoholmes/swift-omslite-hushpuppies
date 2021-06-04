@@ -10,18 +10,22 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const [createCompany] = gqlService.createCompany();
+    const [createVirtualLocation] = gqlService.createVirtualLocation();
 
     const handleSubmit = ({
-        code,
-        name,
+        parentLocation,
+        virtualLocation,
+        percentage,
+        priority,
     }) => {
         const variables = {
-            company_code: code,
-            company_name: name,
+            parent_location: parentLocation.loc_code,
+            virtual_location: virtualLocation.loc_code,
+            percentage: Number(percentage),
+            priority: Number(priority),
         };
         window.backdropLoader(true);
-        createCompany({
+        createVirtualLocation({
             variables,
         }).then(() => {
             window.backdropLoader(false);
@@ -30,7 +34,7 @@ const Core = (props) => {
                 text: 'Success create new Virtual Location!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/cataloginventory/vituallocationinventory'), 250);
+            setTimeout(() => router.push('/cataloginventory/virtuallocationinventory'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -43,12 +47,16 @@ const Core = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: '',
-            name: '',
+            parentLocation: null,
+            virtualLocation: null,
+            percentage: null,
+            priority: null,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            parentLocation: Yup.string().required('Required!'),
+            virtualLocation: Yup.string().required('Required!'),
+            percentage: Yup.number().required('Required!'),
+            priority: Yup.number().required('Required!'),
         }),
         onSubmit: (values) => {
             handleSubmit(values);

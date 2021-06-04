@@ -1,7 +1,5 @@
 import React from 'react';
 import Layout from '@layout';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
@@ -10,21 +8,15 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const company = data.getCompanyById;
+    const stockTransfer = data.getStockTransferById;
 
-    const formik = useFormik({
-        initialValues: {
-            code: company.company_code,
-            name: company.company_name,
-        },
-        validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
-        }),
-    });
+    const stockTransferDetail = {
+        incrementID: stockTransfer.increment_id,
+        items: stockTransfer.items,
+    };
 
     const contentProps = {
-        formik,
+        stockTransferDetail,
     };
 
     return (
@@ -34,7 +26,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getStockTransferById({
         id: router && router.query && Number(router.query.id),
     });
 

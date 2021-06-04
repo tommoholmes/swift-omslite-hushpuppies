@@ -77,6 +77,11 @@ const useStyles = makeStyles((theme) => ({
             width: 'calc(100% - 140px)',
         },
     },
+    fieldRootDesc: {
+        [theme.breakpoints.down('xs')]: {
+            verticalAlign: 'top',
+        },
+    },
     fieldInput: {
         border: '1px solid',
         borderColor: colorText,
@@ -99,6 +104,21 @@ const useStyles = makeStyles((theme) => ({
     td: {
         padding: '5px 0',
         fontFamily: font,
+    },
+    autocompleteRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            borderRadius: 20,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
     },
 }));
 

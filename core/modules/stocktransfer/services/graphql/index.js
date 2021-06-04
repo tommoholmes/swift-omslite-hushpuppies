@@ -13,7 +13,7 @@ export const getStockTransferList = (variables) => useLazyQuery(Schema.getStockT
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getStockTransferById = (variables) => useQuery(Schema.getStockTransferById, {
     variables, ...context, ...fetchPolicy,
 });
 
@@ -27,7 +27,7 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
 
 export default {
     getStockTransferList,
-    getCompanyById,
+    getStockTransferById,
     uploadStockTransfer,
     downloadSampleCsv,
 };

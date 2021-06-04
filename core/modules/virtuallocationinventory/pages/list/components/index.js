@@ -5,25 +5,35 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Header from './Header';
 
-const MarketplaceListContent = (props) => {
-    const { data, loading, getCompanyList } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+const VirtualLocationListContent = (props) => {
+    const { data, loading, getVirtualLocationList } = props;
+    const virtualLocationList = (data && data.getVirtualLocationList && data.getVirtualLocationList.items) || [];
+    const virtualLocationTotal = (data && data.getVirtualLocationList && data.getVirtualLocationList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_name', headerName: 'Parent Location' },
-        { field: 'company_code', headerName: 'Virtual Location' },
-        { field: 'company_name', headerName: 'Percentage' },
-        { field: 'company_code', headerName: 'Priority' },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'vl_id', headerName: 'ID', sortable: true, initialSort: 'ASC' },
+        { field: 'parentLocation', headerName: 'Parent Location', hideable: true },
+        { field: 'virtualLocation', headerName: 'Virtual Location', hideable: true },
+        { field: 'percentage', headerName: 'Percentage', hideable: true, sortable: true },
+        { field: 'priority', headerName: 'Priority', hideable: true, sortable: true },
+        { field: 'actions', headerName: 'Actions' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const filters = [
+        { field: 'vl_id', name: 'vl_id', type: 'like', label: 'ID', initialValue: '' },
+        { field: 'parent_location', name: 'parent_location', type: 'like', label: 'Parent Location', initialValue: '' },
+        { field: 'virtual_location', name: 'virtual_location', type: 'like', label: 'Virtual Location', initialValue: '' },
+        { field: 'percentage', name: 'percentage', type: 'like', label: 'Percentage', initialValue: '' },
+        { field: 'priority', name: 'priority', type: 'like', label: 'Priority', initialValue: '' },
+    ];
+
+    const rows = virtualLocationList.map((virtualLocation) => ({
+        ...virtualLocation,
+        id: virtualLocation.vl_id,
+        parentLocation: virtualLocation.parent_label.label,
+        virtualLocation: virtualLocation.virtual_label.label,
         actions: () => (
-            <Link href={`/cataloginventory/virtuallocationinventory/edit/${company.company_id}`}>
+            <Link href={`/cataloginventory/virtuallocationinventory/edit/${virtualLocation.vl_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),
@@ -39,14 +49,15 @@ const MarketplaceListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
-                getRows={getCompanyList}
+                getRows={getVirtualLocationList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={virtualLocationTotal}
             />
         </>
     );
 };
 
-export default MarketplaceListContent;
+export default VirtualLocationListContent;
