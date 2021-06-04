@@ -9,25 +9,25 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getVirtualLocationList = (variables) => useLazyQuery(Schema.getVirtualLocationList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getVirtualLocationById = (variables) => useQuery(Schema.getVirtualLocationById, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
+export const createVirtualLocation = (variables) => useMutation(Schema.createVirtualLocation, {
     variables, ...context,
 });
 
-export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
+export const updateVirtualLocation = (variables) => useMutation(Schema.updateVirtualLocation, {
     variables, ...context,
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
+    getVirtualLocationList,
+    getVirtualLocationById,
+    createVirtualLocation,
+    updateVirtualLocation,
 };

@@ -11,20 +11,24 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const locationInventory = data.getVirtualLocationById;
+    const [updateVirtualLocation] = gqlService.updateVirtualLocation();
 
     const handleSubmit = ({
-        code,
-        name,
+        parentLocation,
+        virtualLocation,
+        percentage,
+        priority,
     }) => {
         const variables = {
-            id: company.company_id,
-            company_code: code,
-            company_name: name,
+            id: locationInventory.vl_id,
+            parent_location: parentLocation.loc_code,
+            virtual_location: virtualLocation.loc_code,
+            percentage: Number(percentage),
+            priority: Number(priority),
         };
         window.backdropLoader(true);
-        updateCompany({
+        updateVirtualLocation({
             variables,
         }).then(() => {
             window.backdropLoader(false);
@@ -33,7 +37,7 @@ const ContentWrapper = (props) => {
                 text: 'Success edit Virtual Location!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/cataloginventory/vituallocationinventory'), 250);
+            setTimeout(() => router.push('/cataloginventory/virtuallocationinventory'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -46,12 +50,22 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
+            parentLocation: {
+                loc_code: locationInventory.parent_location,
+                loc_name: 'Kosong',
+            },
+            virtualLocation: {
+                loc_code: locationInventory.virtual_location,
+                loc_name: 'kosong',
+            },
+            percentage: locationInventory.percentage,
+            priority: locationInventory.priority,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            parentLocation: Yup.string().required('Required!'),
+            virtualLocation: Yup.string().required('Required!'),
+            percentage: Yup.number().required('Required!'),
+            priority: Yup.number().required('Required!'),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
@@ -69,7 +83,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getVirtualLocationById({
         id: router && router.query && Number(router.query.id),
     });
 

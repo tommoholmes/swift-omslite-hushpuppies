@@ -1,18 +1,28 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getVirtualLocationList = gql`
+    query getVirtualLocationList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: VirtualLocationFilterInput,
+        $sort: VirtualLocationSortInput,
     ){
-        getCompanyList(
+        getVirtualLocationList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
+                vl_id
+                parent_label {
+                    label
+                }
+                virtual_label {
+                    label
+                }
+                percentage
+                priority
             }
             total_count
             page_info {
@@ -24,64 +34,73 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getVirtualLocationById = gql`
+    query getVirtualLocationById(
         $id: Int!,
     ){
-        getCompanyById(
+        getVirtualLocationById(
             id: $id
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            vl_id
+            parent_location
+            virtual_location
+            percentage
+            priority
         }
     }
 `;
 
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
+export const createVirtualLocation = gql`
+    mutation createVirtualLocation(
+        $parent_location: String!,
+        $virtual_location: String!,
+        $percentage: Int!,
+        $priority:Int!
     ){
-        createCompany(
+        createVirtualLocation(
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                parent_location: $parent_location,
+                virtual_location: $virtual_location,
+                percentage: $percentage,
+                priority: $priority
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            parent_location
+            virtual_location
+            percentage
+            priority
         }
     }
 `;
 
-export const updateCompany = gql`
-    mutation updateCompany(
+export const updateVirtualLocation = gql`
+    mutation updateVirtualLocation(
         $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
+        $parent_location: String!,
+        $virtual_location: String!,
+        $percentage: Int!,
+        $priority:Int!
     ){
-        updateCompany(
+        updateVirtualLocation(
             id: $id,
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                parent_location: $parent_location,
+                virtual_location: $virtual_location,
+                percentage: $percentage,
+                priority: $priority
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            parent_location
+            virtual_location
+            percentage
+            priority
         }
     }
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
+    getVirtualLocationList,
+    getVirtualLocationById,
+    createVirtualLocation,
+    updateVirtualLocation,
 };
