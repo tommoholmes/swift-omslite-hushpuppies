@@ -115,6 +115,21 @@ const useStyles = makeStyles((theme) => ({
             paddingRight: 8,
         },
     },
+    autocompleteRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            borderRadius: 20,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
+    },
     table: {
         borderCollapse: 'collapse',
         width: '100%',
@@ -135,6 +150,9 @@ const useStyles = makeStyles((theme) => ({
     grandTotal: {
         fontFamily: font,
         fontWeight: 'bold',
+    },
+    space: {
+        marginBottom: 15,
     },
 }));
 
