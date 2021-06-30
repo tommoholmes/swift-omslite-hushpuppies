@@ -16,11 +16,14 @@ export const getCreditMemoList = gql`
             items {
                 increment_id
                 created_at
-                order_id
-                channel_order
-                order_date
-                bill_to_name
-                status
+                order_increment_id
+                channel_order_increment_id
+                order_created_at
+                billing_name
+                state {
+                    id
+                    label
+                }
                 base_grand_total
             }
             total_count
@@ -40,11 +43,15 @@ export const getCreditMemoById = gql`
         getCreditMemoById(
             id: $id
         ){
-            order_id
-            order_date
-            bill_to_name
-            status
-            channel_order
+            increment_id
+            order_increment_id
+            order_created_at
+            customer_name
+            order_status
+            email
+            channel_order_increment_id
+            customer_group
+            channel_name
             billing_address {
                 firstname
                 lastname
@@ -65,14 +72,29 @@ export const getCreditMemoById = gql`
                 country_id
                 telephone
             }
+            payment_method
+            shipping_method
+            shipping_amount
             creditmemo_items {
                 name
                 sku
                 price
+                qty_detail {
+                    qty_ordered
+                    qty_invoiced
+                    qty_shipped
+                    qty_refunded
+                    qty_canceled
+                }
                 qty
-                base_tax_amount
-                base_discount_amount 
+                tax_amount
+                discount_amount
+                row_total 
             }
+            base_subtotal
+            discount_amount
+            base_adjustment_positive
+            base_adjustment_negative
             base_grand_total
         }
     }
