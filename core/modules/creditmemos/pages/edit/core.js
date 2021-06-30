@@ -11,14 +11,24 @@ const ContentWrapper = (props) => {
     const creditmemo = data.getCreditMemoById;
 
     const creditmemoDetail = {
-        id: creditmemo.order_id,
-        orderDate: creditmemo.order_date,
-        name: creditmemo.bill_to_name,
-        status: creditmemo.status,
-        channelOrder: creditmemo.channel_order,
+        id: creditmemo.order_increment_id,
+        orderDate: creditmemo.order_created_at,
+        name: creditmemo.customer_name,
+        status: creditmemo.order_status,
+        email: creditmemo.email,
+        channelOrder: creditmemo.channel_order_increment_id,
+        group: creditmemo.customer_group,
+        channelName: creditmemo.channel_name,
         billing: creditmemo.billing_address,
         shipping: creditmemo.shipping_address,
+        paymentMethod: creditmemo.payment_method,
+        shippingMethod: creditmemo.shipping_method,
+        shippingAmount: creditmemo.shipping_amount,
         item: creditmemo.creditmemo_items,
+        subtotal: creditmemo.base_subtotal,
+        discount: creditmemo.discount_amount,
+        adjustRefund: creditmemo.base_adjustment_positive || 0,
+        adjustFee: creditmemo.base_adjustment_negative || 0,
         grandTotal: creditmemo.base_grand_total,
     };
 

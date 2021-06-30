@@ -5,30 +5,30 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Header from './Header';
 
-const CompanyListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+const OrderReallocationListContent = (props) => {
+    const { data, loading, getOrderReallocationList } = props;
+    const orderReallocationList = (data && data.getOrderReallocationList && data.getOrderReallocationList.items) || [];
+    const orderReallocationTotal = (data && data.getOrderReallocationList && data.getOrderReallocationList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'Shipment Number' },
-        { field: 'company_id', headerName: 'Order Number' },
-        { field: 'company_id', headerName: 'Channel Order Number', hideable: true },
-        { field: 'company_id', headerName: 'Order Date', hideable: true },
-        { field: 'company_id', headerName: 'Recipient Name', hideable: true },
-        { field: 'company_id', headerName: 'Billing Name', hideable: true },
-        { field: 'company_id', headerName: 'Email Address', hideable: true },
-        { field: 'company_id', headerName: 'Phone', hideable: true },
-        { field: 'company_id', headerName: 'Status', hideable: true },
-        { field: 'company_id', headerName: 'Location Name', hideable: true },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC' },
+        { field: 'order_increment_id', headerName: 'Order Number', hideable: true, sortable: true },
+        { field: 'channel_order_increment_id', headerName: 'Channel Order Number', hideable: true, sortable: true },
+        { field: 'created_at', headerName: 'Order Date', hideable: true, sortable: true },
+        { field: 'customer_name', headerName: 'Recipient Name', hideable: true, sortable: true },
+        { field: 'customer_name', headerName: 'Billing Name', hideable: true, sortable: true },
+        { field: 'email', headerName: 'Email Address', hideable: true, sortable: true },
+        { field: 'email', headerName: 'Phone', hideable: true, sortable: true },
+        { field: 'status', headerName: 'Status', hideable: true, sortable: true },
+        { field: 'loc_name', headerName: 'Location Name', hideable: true, sortable: true },
         { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = orderReallocationList.map((orderReallocation) => ({
+        ...orderReallocation,
+        id: orderReallocation.entity_id,
         actions: () => (
-            <Link href={`/sales/orderreallocation/edit/${company.company_id}`}>
+            <Link href={`/sales/orderreallocation/edit/${orderReallocation.entity_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),
@@ -45,15 +45,13 @@ const CompanyListContent = (props) => {
             <Header />
             <Table
                 rows={rows}
-                getRows={getCompanyList}
-                deleteRows={multideleteCompany}
+                getRows={getOrderReallocationList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
-                showCheckbox
+                count={orderReallocationTotal}
             />
         </>
     );
 };
 
-export default CompanyListContent;
+export default OrderReallocationListContent;

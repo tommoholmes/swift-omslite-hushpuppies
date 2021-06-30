@@ -9,35 +9,35 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getOrderReallocationList = (variables) => useLazyQuery(Schema.getOrderReallocationList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getOrderReallocationById = (variables) => useQuery(Schema.getOrderReallocationById, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
+export const updateReallocation = (variables) => useMutation(Schema.updateReallocation, {
     variables, ...context,
 });
 
-export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
-    variables, ...context,
+export const getCompanyReallocation = (variables) => useLazyQuery(Schema.getCompanyReallocation, {
+    variables, ...context, ...fetchPolicy,
 });
 
-export const deleteCompany = (variables) => useMutation(Schema.deleteCompany, {
-    variables, ...context,
+export const getLocationReallocation = (variables) => useLazyQuery(Schema.getLocationReallocation, {
+    variables, ...context, ...fetchPolicy,
 });
 
-export const multideleteCompany = (variables) => useMutation(Schema.multideleteCompany, {
-    variables, ...context,
+export const getAvailabilityPerSku = (variables) => useLazyQuery(Schema.getAvailabilityPerSku, {
+    variables, ...context, ...fetchPolicy,
 });
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getOrderReallocationList,
+    getOrderReallocationById,
+    updateReallocation,
+    getCompanyReallocation,
+    getLocationReallocation,
+    getAvailabilityPerSku,
 };

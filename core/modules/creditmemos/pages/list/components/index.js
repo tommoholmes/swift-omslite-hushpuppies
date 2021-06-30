@@ -16,13 +16,13 @@ const CreditmemoListContent = (props) => {
     const creditmemoTotal = (data && data.getCreditMemoList && data.getCreditMemoList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'Credit Memo', hideable: true, sortable: true, initalSort: 'ASC' },
+        { field: 'increment_id', headerName: 'Credit Memo', hideable: true, sortable: true, initialSort: 'ASC' },
         { field: 'created_at', headerName: 'Created', hideable: true, sortable: true },
-        { field: 'order_id', headerName: 'Order', hideable: true, sortable: true },
-        { field: 'channel_order', headerName: 'Channel Order', hideable: true, sortable: true },
-        { field: 'order_date', headerName: 'Order Date', hideable: true, sortable: true },
-        { field: 'bill_to_name', headerName: 'Bill-to Name', hideable: true, sortable: true },
-        { field: 'status', headerName: 'Status', hideable: true, sortable: true },
+        { field: 'order_increment_id', headerName: 'Order', hideable: true, sortable: true },
+        { field: 'channel_order_increment_id', headerName: 'Channel Order', hideable: true, sortable: true },
+        { field: 'order_created_at', headerName: 'Order Date', hideable: true, sortable: true },
+        { field: 'billing_name', headerName: 'Bill-to Name', hideable: true, sortable: true },
+        { field: 'state', headerName: 'Status', hideable: true, sortable: true },
         { field: 'base_grand_total', headerName: 'Refunded', hideable: true, sortable: true },
         { field: 'actions', headerName: 'Actions' },
     ];
@@ -72,9 +72,10 @@ const CreditmemoListContent = (props) => {
                 />
             ),
         },
+        { field: 'order_increment_id', name: 'order_increment_id', type: 'match', label: 'Order', initialValue: '' },
         {
-            field: 'order_date',
-            name: 'order_date_from',
+            field: 'order_created_at',
+            name: 'order_created_at_from',
             type: 'from',
             label: 'Order date From',
             initialValue: '',
@@ -95,8 +96,8 @@ const CreditmemoListContent = (props) => {
             ),
         },
         {
-            field: 'order_date',
-            name: 'order_date_to',
+            field: 'order_created_at',
+            name: 'order_created_at_to',
             type: 'to',
             label: 'Order date To',
             initialValue: '',
@@ -119,20 +120,19 @@ const CreditmemoListContent = (props) => {
         { field: 'base_grand_total', name: 'base_grand_total_from', type: 'from', label: 'Refunded From', initialValue: '' },
         { field: 'base_grand_total', name: 'base_grand_total_to', type: 'to', label: 'Refunded To', initialValue: '' },
         { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Credit Memo', initialValue: '' },
-        { field: 'order_id', name: 'order_id', type: 'match', label: 'Order', initialValue: '' },
-        { field: 'channel_order', name: 'channel_order', type: 'like', label: 'Channel Order', initialValue: '' },
-        { field: 'bill_to_name', name: 'bill_to_name', type: 'like', label: 'Bill-to-Name', initialValue: '' },
+        { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Channel Order', initialValue: '' },
+        { field: 'billing_name', name: 'billing_name', type: 'like', label: 'Bill-to-Name', initialValue: '' },
         {
-            field: 'status',
-            name: 'status',
-            type: 'in',
+            field: 'state',
+            name: 'state',
+            type: 'eq',
             label: 'Status',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.name === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.name)}
+                    value={optionsStatus.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => setFilterValue(newValue && newValue.id)}
                     options={optionsStatus}
                 />
             ),
@@ -142,6 +142,7 @@ const CreditmemoListContent = (props) => {
     const rows = creditmemoList.map((creditmemo) => ({
         ...creditmemo,
         id: creditmemo.increment_id,
+        state: creditmemo.state.label,
         actions: () => (
             <Link href={`/sales/creditmemos/edit/${creditmemo.increment_id}`}>
                 <a className="link-button">view</a>

@@ -6,12 +6,10 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
-    const [multideleteCompany] = gqlService.multideleteCompany();
+    const [getOrderReallocationList, { data, loading }] = gqlService.getOrderReallocationList();
 
     const contentProps = {
-        getCompanyList,
-        multideleteCompany,
+        getOrderReallocationList,
         data,
         loading,
     };

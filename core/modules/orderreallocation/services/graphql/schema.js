@@ -1,18 +1,28 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getOrderReallocationList = gql`
+    query getOrderReallocationList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: ShipmentFilterInput,
+        $sort: ShipmentSortInput
     ){
-        getCompanyList(
+        getOrderReallocationList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort
         ){
             items {
-                company_id
-                company_code
-                company_name
+                entity_id
+                increment_id
+                order_increment_id
+                channel_order_increment_id
+                created_at
+                customer_name
+                email
+                status
+                loc_name
             }
             total_count
             page_info {
@@ -24,86 +34,102 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getOrderReallocationById = gql`
+    query getOrderReallocationById(
         $id: Int!,
     ){
-        getCompanyById(
+        getOrderReallocationById(
             id: $id
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
-        }
-    }
-`;
-
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
-    ){
-        createCompany(
-            input: {
-                company_code: $company_code,
-                company_name: $company_name
+            entity_id
+            increment_id
+            status
+            created_at
+            order_increment_id
+            channel_order_increment_id
+            loc_code{
+                loc_code
+                loc_name
             }
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            order_item {
+                sku
+                name
+                qty_shipped
+            }
+            status_history {
+                created_at
+                status
+                comment
+            }
         }
     }
 `;
 
-export const updateCompany = gql`
-    mutation updateCompany(
+export const updateReallocation = gql`
+    mutation updateReallocation(
         $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
+        $company_id: Int,
+        $loc_code: String!,
     ){
-        updateCompany(
+        updateReallocation(
             id: $id,
-            input: {
-                company_code: $company_code,
-                company_name: $company_name
-            }
+            company_id: $company_id,
+                loc_code: $loc_code
+        )
+    }
+`;
+
+export const getCompanyReallocation = gql`
+    query getCompanyReallocation(
+        $id: Int!,
+    ){
+        getCompanyReallocation(
+            id: $id,
         ){
-            company_code
             company_id
+            company_code
             company_name
-            is_new_product
         }
     }
 `;
 
-export const deleteCompany = gql`
-    mutation deleteCompany (
-        $id: Int!
+export const getLocationReallocation = gql`
+    query getLocationReallocation(
+        $id: Int!,
+        $company_id: Int!,
     ){
-        deleteCompany(
-            id: $id
-        )
+        getLocationReallocation(
+            id: $id,
+            company_id: $company_id,
+        ){
+            loc_id
+            loc_code
+            loc_name
+        }
     }
 `;
 
-export const multideleteCompany = gql`
-    mutation multideleteCompany (
-        $id: [Int!]!
+export const getAvailabilityPerSku = gql`
+    query getAvailabilityPerSku(
+        $id: Int!,
+        $sku: String!,
     ){
-        multideleteCompany(
-            id: $id
-        )
+        getAvailabilityPerSku(
+            id: $id,
+            sku: $sku,
+        ){
+            loc_id
+            loc_code
+            loc_name
+        }
     }
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
-    deleteCompany,
-    multideleteCompany,
+    getOrderReallocationList,
+    getOrderReallocationById,
+    updateReallocation,
+    getCompanyReallocation,
+    getLocationReallocation,
+    getAvailabilityPerSku,
 };

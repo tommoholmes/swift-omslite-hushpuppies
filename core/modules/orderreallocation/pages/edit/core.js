@@ -1,6 +1,5 @@
 import React from 'react';
 import Layout from '@layout';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
@@ -11,22 +10,29 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const orderReallocation = data.getOrderReallocationById;
+    const [updateReallocation] = gqlService.updateReallocation();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
+    const handleSubmit = ({
+        company,
+        location,
+    }) => {
+        const variables = {
+            id: orderReallocation.entity_id,
+            company_id: company.company_id,
+            loc_code: location.loc_code,
+        };
         window.backdropLoader(true);
-        updateCompany({
+        updateReallocation({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success edit company!',
+                text: 'Success edit reallocation!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/oms/company'), 250);
+            setTimeout(() => router.push('/sales/orderreallocation'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -39,20 +45,31 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
+            company: {
+                company_code: 'ICUBE',
+                company_name: 'PT Informasi Inovasi Indonesia',
+            },
+            location: orderReallocation.loc_code,
         },
-        validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
-        }),
         onSubmit: (values) => {
             handleSubmit(values);
         },
     });
 
+    const reallocationDetail = {
+        id: orderReallocation.entity_id,
+        shipmentNumber: orderReallocation.increment_id,
+        status: orderReallocation.status,
+        orderDate: orderReallocation.created_at,
+        orderNumber: orderReallocation.order_increment_id,
+        channelOrderNumber: orderReallocation.channel_order_increment_id,
+        item: orderReallocation.order_item,
+        history: orderReallocation.status_history,
+    };
+
     const contentProps = {
         formik,
+        reallocationDetail,
     };
 
     return (
@@ -62,7 +79,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getOrderReallocationById({
         id: router && router.query && Number(router.query.id),
     });
 
