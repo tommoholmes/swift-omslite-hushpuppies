@@ -1,132 +1,167 @@
 /* eslint-disable arrow-body-style */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
-import Chart from 'core/modules/commons/Chart';
-import BorderLinearProgress from 'core/modules/commons/ProgressBar';
 import useStyles from './style';
 
 const DashboardContent = () => {
     const styles = useStyles();
 
-    const chartData = [
-        { month: 'January', value1: 2.525, value2: 6.127 },
-        { month: 'March', value1: 3.018, value2: 5.310 },
-        { month: 'May', value1: 3.682, value2: 4.440 },
-        { month: 'July', value1: 4.440, value2: 3.682 },
-        { month: 'September', value1: 5.310, value2: 3.018 },
-        { month: 'November', value1: 6.127, value2: 2.525 },
-    ];
-
-    const data = [
-        { argument: 1, value: 0 },
-        { argument: 14, value: 0 },
-        { argument: 15, value: 360000 },
-        { argument: 16, value: 0 },
-        { argument: 30, value: 0 },
-    ];
-
     return (
         <div>
+            <div className={clsx(styles.info, styles.welcomeUser)}>
+                <div className="title">
+                    <span>
+                        Hello Endra,
+                        <br />
+                        welcome to your dashboard!
+                    </span>
+                </div>
+                <div className={styles.user}>
+                    <div className={styles.containerUser}>
+                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/people.svg" />
+                        <div className="user-text">
+                            <span className={styles.textName}>Endra Dwi Prasetya</span>
+                            <br />
+                            <span>Store Manager</span>
+                            <br />
+                            <span>endra@icube.us</span>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.user}>
+                    <span className={styles.textBold}>Location Code</span>
+                    <br />
+                    <span>LOC1,LOC2,LOC3,LOC4,LOC5,LOC6,LOC7</span>
+                </div>
+                <div className={styles.user}>
+                    <span className={styles.textBold}>Channel Code</span>
+                    <br />
+                    <span>SWI,SWIPOS,Jubelio,TKPD,SHPE,LZDA</span>
+                </div>
+                <div className={styles.user}>
+                    <a href="#">Edit</a>
+                </div>
+            </div>
             <div className={styles.info}>
-                <div className={clsx(styles.boxInfo, styles.bgGradient)}>
-                    <div className={styles.imgIcon}>
-                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/incoming-order.svg" />
+                <div className={styles.boxInfo}>
+                    <h3 className={clsx('colorBlue', styles.noMargin)}>Order</h3>
+                    <div className={styles.infoDetail}>
+                        <span>
+                            You have
+                            <b>70 new order</b>
+                            {' '}
+                            to confirm
+                        </span>
+                        <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_order.svg" />
                     </div>
-                    <div className={clsx(styles.total, styles.colorInGradient)}>97</div>
-                    <div className={styles.titleInfo}>Incoming Order</div>
+                    <div className={styles.infoStatus}>
+                        <h2 className={clsx('colorBlue', styles.noMargin)}>12</h2>
+                        <span>Failed Order</span>
+                    </div>
+                    <a className="link" href="#">Manage Order</a>
                 </div>
                 <div className={styles.boxInfo}>
-                    <div className={styles.imgIcon}>
-                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/failed-order.svg" />
+                    <h3 className={clsx('colorGreen', styles.noMargin)}>Shipment</h3>
+                    <div className={styles.infoDetail}>
+                        <span>
+                            You have
+                            <b>610 orders to fullfill</b>
+                            {' '}
+                            and
+                            <br />
+                            <b>2 orders cannot fullfill</b>
+                        </span>
+                        <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_shipment.svg" />
                     </div>
-                    <div className={styles.total}>36</div>
-                    <div className={styles.titleInfo}>Failed Order</div>
+                    <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                        <h2 className={clsx('colorGreen', styles.noMargin)}>12</h2>
+                        <span>Store Pickup</span>
+                    </div>
+                    <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                        <h2 className={clsx('colorGreen', styles.noMargin)}>251</h2>
+                        <span>Home Delivery</span>
+                    </div>
+                    <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                        <h2 className={clsx('colorGreen', styles.noMargin)}>347</h2>
+                        <span>Marketplace</span>
+                    </div>
+                    <a className="link" href="#">Manage Shipment</a>
                 </div>
                 <div className={styles.boxInfo}>
-                    <div className={styles.imgIcon}>
-                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/completed-order.svg" />
+                    <h3 className={clsx('colorOrange', styles.noMargin)}>Return</h3>
+                    <div className={styles.infoDetail}>
+                        <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_return.svg" />
                     </div>
-                    <div className={styles.total}>297</div>
-                    <div className={styles.titleInfo}>Completed Order</div>
+                    <div className={styles.infoStatus}>
+                        <h2 className={clsx('colorOrange', styles.noMargin)}>12</h2>
+                        <span>Request to Proceed</span>
+                    </div>
+                    <a className="link" href="#">Manage Return</a>
                 </div>
-                <div className={styles.boxInfo}>
-                    <div className={styles.imgIcon}>
-                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/lifetime-sales.svg" />
-                    </div>
-                    <div className={styles.total}>1119427</div>
-                    <div className={styles.titleInfo}>Lifetime Sales</div>
-                </div>
-                <div className={styles.boxInfo}>
-                    <div className={styles.imgIcon}>
-                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/total-product.svg" />
-                    </div>
-                    <div className={styles.total}>947</div>
-                    <div className={styles.titleInfo}>Total Product</div>
-                </div>
-            </div>
-            <div className={styles.container}>
-                <div className={styles.titleComponent}>Sales Performance</div>
-                <span>October 2020</span>
-                <Chart
-                    data={data}
-                    chartType="line"
-                    argumentField="argument"
-                    seriesFields={[
-                        { valueField: 'value', name: 'Argument', color: '#5719A0' },
-                    ]}
-                />
-            </div>
-            <div className={styles.container}>
-                <div className={styles.titleComponent}>Number of Orders</div>
-                <span>October 2020</span>
-                <Chart
-                    data={data}
-                    chartType="line"
-                    argumentField="argument"
-                    seriesFields={[
-                        { valueField: 'value', name: 'Argument', color: '#5719A0' },
-                    ]}
-                />
-            </div>
-            <div className={styles.column}>
-                <div className={styles.columnLeft}>
-                    <div className={styles.container}>
-                        <div className={styles.titleComponent}>Geographical Area of Sales</div>
-                        <span>October 2020</span>
-                        <BorderLinearProgress variant="determinate" value={20} title="Bantul" total="254" />
-                        <BorderLinearProgress variant="determinate" value={60} title="Denpasar" total="454" />
-                        <BorderLinearProgress variant="determinate" value={45} title="Jakarta Barat" total="300" />
-                        <BorderLinearProgress variant="determinate" value={80} title="Jakarta Selatan" total="624" />
-                        <BorderLinearProgress variant="determinate" value={30} title="Surabaya" total="273" />
-                    </div>
-                    <div className={styles.container}>
-                        <div className={styles.titleComponent}>Best Performing Location</div>
-                        <span>Sales Amount &amp; Orders 2020</span>
-                        <BorderLinearProgress variant="determinate" value={20} title="Bantul" total="254" />
-                        <BorderLinearProgress variant="determinate" value={60} title="Denpasar" total="454" />
-                        <BorderLinearProgress variant="determinate" value={45} title="Jakarta Barat" total="300" />
-                        <BorderLinearProgress variant="determinate" value={80} title="Jakarta Selatan" total="624" />
-                        <BorderLinearProgress variant="determinate" value={30} title="Surabaya" total="273" />
-                    </div>
-                </div>
-                <div className={styles.columnRight}>
-                    <div className={styles.container}>
-                        <div className={styles.titleComponent}>Sales Channel Order</div>
-                        <span>October 2020</span>
-                        <BorderLinearProgress variant="determinate" value={43} title="TADA Swift" total="102" />
-                    </div>
-                    <div className={styles.container}>
-                        <div className={styles.titleComponent}>Order VS Shipment</div>
-                        <span>2020</span>
-                        <Chart
-                            data={chartData}
-                            chartType="bar"
-                            argumentField="month"
-                            seriesFields={[
-                                { valueField: 'value1', name: 'Total Order', color: '#efefef' },
-                                { valueField: 'value2', name: 'Total Shipment', color: '#c9dde6' },
-                            ]}
-                        />
-                    </div>
+                <div className={styles.container}>
+                    <h2>Sales Channel</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td />
+                                <td>CHANNEL</td>
+                                <td>STORE NAME</td>
+                                <td>CODE</td>
+                                <td>VIRTUAL STOCK</td>
+                                <td>LOCATION</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_official.png" /></td>
+                                <td>Official Website</td>
+                                <td>Official Website</td>
+                                <td>SWIFTPOS</td>
+                                <td>VSSWIFTPOS</td>
+                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                            </tr>
+                            <tr>
+                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_tokopedia.png" /></td>
+                                <td>Tokopedia</td>
+                                <td>Tokopedia</td>
+                                <td>SWIFTPOS</td>
+                                <td>VSSWIFTPOS</td>
+                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                            </tr>
+                            <tr>
+                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_shopee.png" /></td>
+                                <td>Shopee</td>
+                                <td>Shopee</td>
+                                <td>SWIFTPOS</td>
+                                <td>VSSWIFTPOS</td>
+                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                            </tr>
+                            <tr>
+                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_lazada.png" /></td>
+                                <td>Lazada</td>
+                                <td>Lazada</td>
+                                <td>SWIFTPOS</td>
+                                <td>VSSWIFTPOS</td>
+                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                            </tr>
+                            <tr>
+                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_blibli.png" /></td>
+                                <td>Blibli</td>
+                                <td>Blibli</td>
+                                <td>SWIFTPOS</td>
+                                <td>VSSWIFTPOS</td>
+                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                            </tr>
+                            <tr>
+                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_bukalapak.svg" /></td>
+                                <td>Bukalapak</td>
+                                <td>Bukalapak</td>
+                                <td>SWIFTPOS</td>
+                                <td>VSSWIFTPOS</td>
+                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

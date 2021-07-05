@@ -65,6 +65,13 @@ const useStyles = makeStyles((theme) => ({
         '&.close': { justifyContent: 'center' },
         '& img': { height: 45 },
     },
+    divMenu: {
+        color: '#B1BCDB',
+        '& .itemText span': {
+            fontWeight: 700,
+            fontSize: 15,
+        },
+    },
     menuList: {
         padding: 0,
         '&.open': { paddingRight: 16 },
@@ -74,16 +81,22 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: 20,
         '&.open': { borderRadius: '0 26px 26px 0' },
         '&:hover': {
-            background: '#BE1F93',
-            color: '#fff',
+            background: '#ECF0FB',
+            color: '#BE1F93',
         },
         '&.active': {
-            background: '#BE1F93',
-            color: '#fff',
+            background: '#ECF0FB',
+            color: '#BE1F93',
+            '& .itemIcon img': {
+                filter: 'invert(24%) sepia(64%) saturate(3067%) hue-rotate(296deg) brightness(68%) contrast(98%)',
+            },
+        },
+        '& .itemIcon': {
+            minWidth: 50,
         },
     },
     menuChildItem: {
-        paddingLeft: 76,
+        paddingLeft: 70,
         '&.active span': {
             color: '#BE1F93',
             fontWeight: 'bold',
@@ -91,6 +104,9 @@ const useStyles = makeStyles((theme) => ({
         '&:hover span': {
             color: '#BE1F93',
             fontWeight: 'bold',
+        },
+        '&:hover': {
+            background: 'transparent',
         },
     },
 }));
@@ -140,7 +156,7 @@ const Sidebar = ({
             </Hidden>
             <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
                 {menuList.map((menu) => (
-                    <div key={menu.key}>
+                    <div className={classes.divMenu} key={menu.key}>
                         <ListItem
                             button
                             className={clsx(
@@ -150,10 +166,10 @@ const Sidebar = ({
                             )}
                             onClick={() => handleClickParent(menu)}
                         >
-                            <ListItemIcon>
+                            <ListItemIcon className="itemIcon">
                                 <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
                             </ListItemIcon>
-                            <ListItemText primary={menu.label} />
+                            <ListItemText className="itemText" primary={menu.label} />
                         </ListItem>
                         {menu && menu.children && menu.children.length && (
                             <Collapse in={activeParentMenu && activeParentMenu.key === menu.key} timeout="auto" unmountOnExit>
@@ -168,7 +184,7 @@ const Sidebar = ({
                                             )}
                                             onClick={() => handleClickChild(menuChild)}
                                         >
-                                            <ListItemText primary={menuChild.label} />
+                                            <ListItemText className="itemText" primary={menuChild.label} />
                                         </ListItem>
                                     ))}
                                 </List>
