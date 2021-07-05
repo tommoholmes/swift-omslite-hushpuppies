@@ -1,2 +1,2 @@
 export const miniDrawerWidth = 73;
-export const drawerWidth = 240;
+export const drawerWidth = 295;

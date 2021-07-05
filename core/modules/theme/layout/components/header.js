@@ -24,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
         height: 64,
     },
     appBar: {
-        background: '#fff',
-        color: '#8C98A2',
+        backgroundImage: 'linear-gradient(184deg, #D49AEB 50%, #F9C8C1 100%)',
+        opacity: '0.8',
+        color: '#FFFFFF',
         boxShadow: 'none',
         marginLeft: miniDrawerWidth,
         width: `calc(100% - ${miniDrawerWidth + 1}px)`,

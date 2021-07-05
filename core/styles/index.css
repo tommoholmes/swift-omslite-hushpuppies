@@ -29,7 +29,6 @@ body.loading:after {
     background-position-y: center;
 }
 main {
-    font-family: Montserrat;
     display: block;
     left: 0;
     margin: 0 auto;

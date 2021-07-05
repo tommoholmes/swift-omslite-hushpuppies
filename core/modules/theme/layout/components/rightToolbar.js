@@ -63,18 +63,6 @@ const RightToolbar = () => {
     return (
         <ul>
             <li>
-                <IconButton style={{ padding: 0 }} aria-label="" color="inherit">
-                    <img alt="" src="/assets/img/layout/moon.svg" />
-                </IconButton>
-            </li>
-            <li>
-                <IconButton style={{ padding: 0 }} aria-label="show 17 new notifications" color="inherit">
-                    <StyledBadge badgeContent={17} color="secondary">
-                        <img alt="" src="/assets/img/layout/notification.svg" />
-                    </StyledBadge>
-                </IconButton>
-            </li>
-            <li>
                 <a href="#">
                     <Hidden xsDown implementation="css">
                         {username}
@@ -86,11 +74,18 @@ const RightToolbar = () => {
                 </a>
                 <ul>
                     <li>
-                        <a href="#" onClick={handleLogout}>
+                        <a className="linkOut" href="#" onClick={handleLogout}>
                             Sign Out
                         </a>
                     </li>
                 </ul>
+            </li>
+            <li>
+                <IconButton style={{ padding: 0 }} aria-label="show 17 new notifications" color="inherit">
+                    <StyledBadge badgeContent={17} color="secondary">
+                        <img style={{ filter: 'brightness(0%) invert(100%)' }} alt="" src="/assets/img/layout/notification.svg" />
+                    </StyledBadge>
+                </IconButton>
             </li>
 
             <style jsx>
@@ -134,7 +129,7 @@ const RightToolbar = () => {
                         left: 100%;
                     }
                     a {
-                        color: #536777;
+                        color: #FFFFFF;
                         text-decoration: none;
                         white-space: nowrap;
                         font-size: 14px;
@@ -142,7 +137,10 @@ const RightToolbar = () => {
                     }
                     a:hover {
                         border-bottom: 1px dashed #fff;
-                        color: #b9acac;
+                        color: #BE1F93;
+                    }
+                    .linkOut {
+                        color: #BE1F93;
                     }
                 `}
             </style>

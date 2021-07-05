@@ -1,5 +1,5 @@
 export const FONT_DEFAULT = {
-    fontFamily: 'Montserrat !important',
+    fontFamily: 'Montserrat',
 };
 
 export const FONT_6 = {
