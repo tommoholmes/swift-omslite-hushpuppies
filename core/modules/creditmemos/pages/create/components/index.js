@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import TextField from '@common_textfield';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
@@ -7,8 +8,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
 import useStyles from './style';
 
-const creditmemosEditContent = (props) => {
+const creditmemosCreateContent = (props) => {
     const {
+        formik,
         creditmemoDetail,
     } = props;
     const classes = useStyles();
@@ -18,7 +20,7 @@ const creditmemosEditContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/sales/creditmemos')}
+                onClick={() => router.push(`/sales/managerma/edit/${creditmemoDetail.id}`)}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -32,7 +34,7 @@ const creditmemosEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                View Memo
+                New Memo
                 {' '}
                 {creditmemoDetail.id}
             </h2>
@@ -216,27 +218,54 @@ const creditmemosEditContent = (props) => {
                                 </td>
                             </tr>
                             <tr>
-                                <td className={classes.td}>Shippping & Handling</td>
+                                <td className={classes.td}>Refund Shipping</td>
                                 <td className={classes.td}>
-                                    IDR
-                                    {''}
-                                    {creditmemoDetail.shippingAmount}
+                                    <TextField
+                                        className={classes.fieldRoot}
+                                        variant="outlined"
+                                        name="refundShip"
+                                        value={formik.values.refundShip}
+                                        onChange={formik.handleChange}
+                                        error={!!(formik.touched.refundShip && formik.errors.refundShip)}
+                                        helperText={(formik.touched.refundShip && formik.errors.refundShip) || ''}
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                    />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={classes.td}>Adjusment Refund</td>
                                 <td className={classes.td}>
-                                    IDR
-                                    {''}
-                                    {creditmemoDetail.adjustRefund}
+                                    <TextField
+                                        className={classes.fieldRoot}
+                                        variant="outlined"
+                                        name="adjustRefund"
+                                        value={formik.values.adjustRefund}
+                                        onChange={formik.handleChange}
+                                        error={!!(formik.touched.adjustRefund && formik.errors.adjustRefund)}
+                                        helperText={(formik.touched.adjustRefund && formik.errors.adjustRefund) || ''}
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                    />
                                 </td>
                             </tr>
                             <tr>
                                 <td className={classes.td}>Adjusment Fee</td>
                                 <td className={classes.td}>
-                                    IDR
-                                    {''}
-                                    {creditmemoDetail.adjustFee}
+                                    <TextField
+                                        className={classes.fieldRoot}
+                                        variant="outlined"
+                                        name="adjustFee"
+                                        value={formik.values.adjustFee}
+                                        onChange={formik.handleChange}
+                                        error={!!(formik.touched.adjustFee && formik.errors.adjustFee)}
+                                        helperText={(formik.touched.adjustFee && formik.errors.adjustFee) || ''}
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                    />
                                 </td>
                             </tr>
                             <tr>
@@ -250,9 +279,20 @@ const creditmemosEditContent = (props) => {
                         </tbody>
                     </table>
                 </div>
+                <div className={classes.content}>
+                    <div className={classes.formFieldButton}>
+                        <Button
+                            className={classes.btn}
+                            onClick={formik.handleSubmit}
+                            variant="contained"
+                        >
+                            Submit
+                        </Button>
+                    </div>
+                </div>
             </Paper>
         </>
     );
 };
 
-export default creditmemosEditContent;
+export default creditmemosCreateContent;
