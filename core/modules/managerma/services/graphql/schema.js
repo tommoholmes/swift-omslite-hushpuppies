@@ -84,7 +84,18 @@ export const getRmaById = gql`
     }
 `;
 
+export const refundRma = gql`
+    mutation refundRma(
+        $id: Int!,
+    ){
+        refundRma(
+            id: $id,
+        )
+    }
+`;
+
 export default {
     getRmaList,
     getRmaById,
+    refundRma,
 };
