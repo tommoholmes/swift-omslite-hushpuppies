@@ -19,7 +19,9 @@ export const getShipmentList = gql`
                 channel_order_increment_id
                 updated_at
                 channel_name
-                status
+                status{
+                    label
+                }
             }
             total_count
             page_info {
@@ -45,7 +47,9 @@ export const getShipmentById = gql`
             created_at
             updated_at
             channel_order_increment_id
-            status
+            status{
+                label
+            }
             email
             billing_address {
                 firstname

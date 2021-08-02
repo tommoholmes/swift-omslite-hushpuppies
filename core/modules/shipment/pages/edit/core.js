@@ -16,7 +16,7 @@ const ContentWrapper = (props) => {
         orderDate: shipment.created_at,
         lastUpdate: shipment.updated_at,
         channelOrderNumber: shipment.channel_order_increment_id,
-        status: shipment.status,
+        status: shipment.status.label,
         email: shipment.email,
         billing: shipment.billing_address,
         shipping: shipment.shipping_address,
