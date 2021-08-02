@@ -29,7 +29,7 @@ export const getLocationReallocation = (variables) => useLazyQuery(Schema.getLoc
     variables, ...context, ...fetchPolicy,
 });
 
-export const getAvailabilityPerSku = (variables) => useLazyQuery(Schema.getAvailabilityPerSku, {
+export const getAvailabilityPerSku = (variables) => useQuery(Schema.getAvailabilityPerSku, {
     variables, ...context, ...fetchPolicy,
 });
 

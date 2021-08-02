@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -17,7 +17,12 @@ export const getCreditMemoById = (variables) => useQuery(Schema.getCreditMemoByI
     variables, ...context, ...fetchPolicy,
 });
 
+export const createCreditmemo = (variables) => useMutation(Schema.createCreditmemo, {
+    variables, ...context,
+});
+
 export default {
     getCreditMemoList,
     getCreditMemoById,
+    createCreditmemo,
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from '@layout';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '../../services/graphql';
 
@@ -9,6 +10,31 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const rma = data.getRmaById;
+    const [refundRma] = gqlService.refundRma();
+
+    const handleSubmit = () => {
+        const variables = {
+            id: rma.id,
+        };
+        window.backdropLoader(true);
+        refundRma({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success Refund!',
+                variant: 'success',
+            });
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
 
     const rmaDetail = {
         id: rma.id,
@@ -34,8 +60,18 @@ const ContentWrapper = (props) => {
         message: rma.message,
     };
 
+    const formik = useFormik({
+        initialValues: {
+            id: rma.id,
+        },
+        onSubmit: (values) => {
+            handleSubmit(values);
+            console.log('hasilnya: ', values);
+        },
+    });
+
     const contentProps = {
-        rmaDetail,
+        formik, rmaDetail,
     };
 
     return (

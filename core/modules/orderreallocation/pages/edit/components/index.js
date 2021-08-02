@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable consistent-return */
+
 import React from 'react';
-import TextField from '@common_textfield';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
@@ -20,7 +21,20 @@ const orderreallocationEditContent = (props) => {
     const router = useRouter();
     const [getCompanyReallocation, getCompanyReallocationRes] = gqlService.getCompanyReallocation();
     const [getLocationReallocation, getLocationReallocationRes] = gqlService.getLocationReallocation();
-    const [getAvailabilityPerSku, getAvailabilityPerSkuRes] = gqlService.getAvailabilityPerSku();
+
+    const dataLoc = [];
+    const varian = (idValue, skuValue) => {
+        const { loading, data, error } = gqlService.getAvailabilityPerSku({
+            id: idValue,
+            sku: skuValue,
+        });
+        if (loading || error) {
+            return <p>loading</p>;
+        }
+        dataLoc.push({
+            data: data.getAvailabilityPerSku,
+        });
+    };
 
     return (
         <>
@@ -78,7 +92,10 @@ const orderreallocationEditContent = (props) => {
                             className={classes.autocompleteRoot}
                             mode="lazy"
                             value={formik.values.company}
-                            onChange={(e) => formik.setFieldValue('company', e)}
+                            onChange={(e) => {
+                                formik.setFieldValue('company', e);
+                                formik.setFieldValue('location', null);
+                            }}
                             loading={getCompanyReallocationRes.loading}
                             options={
                                 getCompanyReallocationRes
@@ -115,7 +132,7 @@ const orderreallocationEditContent = (props) => {
                                 {
                                     variables: {
                                         id: reallocationDetail.id,
-                                        company_id: 1,
+                                        company_id: formik.values.company.company_id,
                                     },
                                 }
                             }
@@ -124,7 +141,7 @@ const orderreallocationEditContent = (props) => {
                         />
                     </div>
                     <div className={classes.formFieldButton}>
-                        {(reallocationDetail.status === 'process_for_shipping') ? (
+                        {(reallocationDetail.status === 'Process for Shipping') ? (
                             <Button
                                 className={classes.btn}
                                 onClick={formik.handleSubmit}
@@ -158,32 +175,26 @@ const orderreallocationEditContent = (props) => {
                                 <tr>
                                     <td className={classes.td}>{e.sku}</td>
                                     <td className={classes.td}>{e.name}</td>
-                                    <td className={classes.td}>{e.qty_shipped}</td>
+                                    <td className={classes.td}>{e.qty}</td>
                                     <td className={classes.td}>
                                         <ScrollDialog
                                             title="Available Location"
                                             linkText="Check Availability"
                                             message={(
-                                                <Autocomplete
-                                                    mode="lazy"
-                                                    loading={getAvailabilityPerSkuRes.loading}
-                                                    options={
-                                                        getAvailabilityPerSkuRes
-                                                    && getAvailabilityPerSkuRes.data
-                                                    && getAvailabilityPerSkuRes.data.getAvailabilityPerSku
+                                                <>
+                                                    {varian(reallocationDetail.id, e.sku)}
+                                                    {
+                                                        dataLoc.map((loc) => (
+                                                            loc.data.map((arr) => (
+                                                                <>
+                                                                    {arr.loc_name}
+                                                                    <br />
+                                                                </>
+                                                            ))
+                                                        ))
                                                     }
-                                                    getOptions={getAvailabilityPerSku}
-                                                    getOptionsVariables={
-                                                        {
-                                                            variables: {
-                                                                id: reallocationDetail.id,
-                                                                sku: e.sku,
-                                                            },
-                                                        }
-                                                    }
-                                                    primaryKey="loc_code"
-                                                    labelKey="loc_name"
-                                                />
+
+                                                </>
                                             )}
                                         />
                                     </td>

@@ -19,9 +19,13 @@ export const getOrderReallocationList = gql`
                 order_increment_id
                 channel_order_increment_id
                 created_at
-                customer_name
-                email
-                status
+                shipping_name
+                billing_name
+                shipping_email
+                shipping_telephone
+                status{
+                    label
+                }
                 loc_name
             }
             total_count
@@ -43,7 +47,9 @@ export const getOrderReallocationById = gql`
         ){
             entity_id
             increment_id
-            status
+            status{
+                label
+            }
             created_at
             order_increment_id
             channel_order_increment_id
@@ -51,10 +57,15 @@ export const getOrderReallocationById = gql`
                 loc_code
                 loc_name
             }
+            company{
+                company_id
+                company_code
+                company_name
+            }
             order_item {
                 sku
                 name
-                qty_shipped
+                qty
             }
             status_history {
                 created_at

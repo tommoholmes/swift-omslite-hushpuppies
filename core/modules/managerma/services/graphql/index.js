@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from './schema';
 
 const context = {
@@ -16,8 +16,12 @@ export const getRmaList = (variables) => useLazyQuery(Schema.getRmaList, {
 export const getRmaById = (variables) => useQuery(Schema.getRmaById, {
     variables, ...context, ...fetchPolicy,
 });
+export const refundRma = (variables) => useMutation(Schema.refundRma, {
+    variables, ...context,
+});
 
 export default {
     getRmaList,
     getRmaById,
+    refundRma,
 };

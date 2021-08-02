@@ -45,10 +45,7 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            company: {
-                company_code: 'ICUBE',
-                company_name: 'PT Informasi Inovasi Indonesia',
-            },
+            company: orderReallocation.company,
             location: orderReallocation.loc_code,
         },
         onSubmit: (values) => {
@@ -59,7 +56,7 @@ const ContentWrapper = (props) => {
     const reallocationDetail = {
         id: orderReallocation.entity_id,
         shipmentNumber: orderReallocation.increment_id,
-        status: orderReallocation.status,
+        status: orderReallocation.status.label,
         orderDate: orderReallocation.created_at,
         orderNumber: orderReallocation.order_increment_id,
         channelOrderNumber: orderReallocation.channel_order_increment_id,

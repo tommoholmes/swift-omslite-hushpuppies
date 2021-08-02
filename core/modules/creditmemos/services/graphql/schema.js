@@ -87,6 +87,7 @@ export const getCreditMemoById = gql`
                     qty_canceled
                 }
                 qty
+                base_row_total
                 tax_amount
                 discount_amount
                 row_total 
@@ -100,7 +101,28 @@ export const getCreditMemoById = gql`
     }
 `;
 
+export const createCreditmemo = gql`
+    mutation createCreditmemo(
+        $request_id: Int!,
+        $shipping_amount: Int,
+        $shipping_amount: Int,
+        $adjustment_negative: Int,
+    ){
+        createCreditmemo(
+            input:{
+                request_id: $request_id,
+                creditmemo:{
+                    shipping_amount: $shipping_amount,
+                    adjustment_positive: $adjustment_positive,
+                    adjustment_negative: $adjustment_negative,
+                }
+            }
+        )
+    }
+`;
+
 export default {
     getCreditMemoList,
     getCreditMemoById,
+    createCreditmemo,
 };

@@ -10,7 +10,7 @@ import useStyles from './style';
 
 const ManageRmaEditContent = (props) => {
     const {
-        rmaDetail,
+        formik, rmaDetail,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -35,8 +35,7 @@ const ManageRmaEditContent = (props) => {
             {(rmaDetail.status === 'processing') && (
                 <Button
                     className={classes.btn}
-                    // onClick={formik.handleSubmit}
-                    variant="contained"
+                    onClick={formik.handleSubmit}
                 >
                     Refund
                 </Button>
@@ -44,8 +43,7 @@ const ManageRmaEditContent = (props) => {
             {(rmaDetail.status === 'package_received') && (
                 <Button
                     className={classes.btn}
-                    // onClick={formik.handleSubmit}
-                    variant="contained"
+                    onClick={() => router.push('/sales/creditmemos/create')}
                 >
                     Credit Memo
                 </Button>

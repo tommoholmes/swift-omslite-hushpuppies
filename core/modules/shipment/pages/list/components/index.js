@@ -112,8 +112,8 @@ const ShipmentListContent = (props) => {
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.name === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.name)}
+                    value={optionsStatus.find((e) => e.idValue === filterValue)}
+                    onChange={(newValue) => setFilterValue(newValue && newValue.idValue)}
                     options={optionsStatus}
                 />
             ),
@@ -123,6 +123,7 @@ const ShipmentListContent = (props) => {
     const rows = shipmentList.map((shipment) => ({
         ...shipment,
         id: shipment.entity_id,
+        status: shipment.status.label,
         actions: () => (
             <Link href={`/sales/shipment/edit/${shipment.entity_id}`}>
                 <a className="link-button">view</a>
