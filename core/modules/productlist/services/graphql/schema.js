@@ -1,5 +1,24 @@
 import { gql } from '@apollo/client';
 
+const productList = `
+    items {
+        entity_id
+        product_name
+        sku
+        product_price
+        product_special_price
+        product_status {
+        label
+        }
+    }
+    total_count
+    page_info {
+        page_size
+        current_page
+        total_pages
+    }
+`;
+
 export const getProductList = gql`
     query getProductList(
         $pageSize: Int!,
@@ -13,22 +32,7 @@ export const getProductList = gql`
             filter: $filter,
             sort: $sort,
         ){
-            items {
-                entity_id
-                product_name
-                sku
-                product_price
-                product_special_price
-                product_status {
-                  label
-                }
-            }
-            total_count
-            page_info {
-                page_size
-                current_page
-                total_pages
-            }
+            ${productList}
         }
     }
 `;
@@ -41,6 +45,11 @@ export const getProductById = gql`
             id: $id
         ){
             id
+            product_status {
+                value
+                label
+            }
+            attribute_set_name
             name
             sku
             price_range {
@@ -53,6 +62,11 @@ export const getProductById = gql`
             special_price
             special_from_date
             special_to_date
+            weight
+            visibility
+            description {
+                html
+            }
             sourcing{
                 loc_name
                 qty_total
@@ -66,11 +80,11 @@ export const getProductById = gql`
 export const updateProduct = gql`
     mutation updateProduct(
         $id: Int!,
-        $status: Int!,
-        $price: Int!,
-        $special_price: Int!,
-        $special_price_from: String!,
-        $special_price_to: String!,
+        $status: Int,
+        $price: Int,
+        $special_price: Int,
+        $special_price_from: String,
+        $special_price_to: String,
         
     ){
         updateProduct(
@@ -108,10 +122,31 @@ export const downloadSampleCsv = gql`
     }
 `;
 
+export const getProductListBySku = gql`
+    query getProductList(
+        $pageSize: Int!,
+        $currentPage:Int!,
+        $querySearch: String,
+    ){
+        getProductList(
+            pageSize: $pageSize,
+            currentPage: $currentPage,
+            filter:{
+                sku:{
+                    like: $querySearch
+                }
+            },
+        ){
+            ${productList}
+        }
+    }
+`;
+
 export default {
     getProductList,
     getProductById,
     updateProduct,
     uploadSource,
     downloadSampleCsv,
+    getProductListBySku,
 };

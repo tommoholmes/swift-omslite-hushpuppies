@@ -29,10 +29,15 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
     variables, ...context,
 });
 
+export const getProductListBySku = (variables) => useLazyQuery(Schema.getProductListBySku, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getProductList,
     getProductById,
     updateProduct,
     uploadSource,
     downloadSampleCsv,
+    getProductListBySku,
 };
