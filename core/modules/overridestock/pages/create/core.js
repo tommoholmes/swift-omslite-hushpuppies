@@ -10,18 +10,22 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const [createCompany] = gqlService.createCompany();
+    const [createVirtualStockQuantity] = gqlService.createVirtualStockQuantity();
 
     const handleSubmit = ({
-        code,
-        name,
+        virtualStock,
+        sku,
+        qty,
+        reason,
     }) => {
         const variables = {
-            company_code: code,
-            company_name: name,
+            vs_id: Number(virtualStock.vs_id),
+            sku: sku.sku,
+            qty: Number(qty),
+            reason,
         };
         window.backdropLoader(true);
-        createCompany({
+        createVirtualStockQuantity({
             variables,
         }).then(() => {
             window.backdropLoader(false);
@@ -43,12 +47,18 @@ const Core = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: '',
-            name: '',
+            virtualStock: {
+                vs_name: '--Select Virtual Stock---',
+            },
+            sku: '',
+            qty: '',
+            reason: '',
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            virtualStock: Yup.object().required('Required!'),
+            sku: Yup.object().required('Required!'),
+            qty: Yup.number().nullable(),
+            reason: Yup.string().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);

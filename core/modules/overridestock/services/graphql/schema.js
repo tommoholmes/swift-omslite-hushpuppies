@@ -1,18 +1,38 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+const overrideStock = `
+    entity_id
+    vs_id{
+        vs_id
+        vs_name
+    }
+    sku
+    qty
+    reason
+`;
+
+export const getVirtualStockQuantityList = gql`
+    query getVirtualStockQuantityList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: VirtualStockQuantityFilterInput,
+        $sort: VirtualStockQuantitySortInput,
     ){
-        getCompanyList(
+        getVirtualStockQuantityList(
             pageSize: $pageSize,
             currentPage: $currentPage
+            filter: $filter,
+            sort: $sort,
         ){
             items {
-                company_id
-                company_code
-                company_name
+                entity_id
+                vs_id {
+                    vs_id
+                    vs_name
+                }
+                sku
+                qty
+                reason
             }
             total_count
             page_info {
@@ -24,57 +44,56 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getVirtualStockQuantityById = gql`
+    query getVirtualStockQuantityById(
         $id: Int!,
     ){
-        getCompanyById(
+        getVirtualStockQuantityById(
             id: $id
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            ${overrideStock}
         }
     }
 `;
 
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
+export const createVirtualStockQuantity = gql`
+    mutation createVirtualStockQuantity(
+        $vs_id: Int,
+        $sku: String,
+        $qty: Int,
+        $reason: String,
     ){
-        createCompany(
+        createVirtualStockQuantity(
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                vs_id: $vs_id,
+                sku: $sku,
+                qty: $qty,
+                reason: $reason,
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            ${overrideStock}
         }
     }
 `;
 
-export const updateCompany = gql`
-    mutation updateCompany(
+export const updateVirtualStockQuantity = gql`
+    mutation updateVirtualStockQuantity(
         $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
+        $vs_id: Int,
+        $sku: String,
+        $qty: Int,
+        $reason: String,
     ){
-        updateCompany(
+        updateVirtualStockQuantity(
             id: $id,
             input: {
-                company_code: $company_code,
-                company_name: $company_name
+                vs_id: $vs_id,
+                sku: $sku,
+                qty: $qty,
+                reason: $reason,
             }
         ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+            ${overrideStock}
         }
     }
 `;
@@ -102,10 +121,10 @@ export const downloadSampleCsv = gql`
 `;
 
 export default {
-    getCompanyList,
-    getCompanyById,
-    createCompany,
-    updateCompany,
+    getVirtualStockQuantityList,
+    getVirtualStockQuantityById,
+    createVirtualStockQuantity,
+    updateVirtualStockQuantity,
     uploadSource,
     downloadSampleCsv,
 };
