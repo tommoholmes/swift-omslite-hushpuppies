@@ -63,8 +63,8 @@ const ProductListEditContent = (props) => {
                             disabled
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="attribute"
+                            value={formik.values.attribute}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -190,8 +190,8 @@ const ProductListEditContent = (props) => {
                             disabled
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="weight"
+                            value={formik.values.weight}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -205,8 +205,23 @@ const ProductListEditContent = (props) => {
                             disabled
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="visibility"
+                            value={formik.values.visibility}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Description</span>
+                        </div>
+                        <TextField
+                            disabled
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="description"
+                            value={formik.values.description}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}

@@ -3,7 +3,7 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-// import { optionsStatus } from '@modules/productlist/helpers';
+import { optionsStatus } from '@modules/productlist/helpers';
 import gqlService from '../../services/graphql';
 
 const ContentWrapper = (props) => {
@@ -73,18 +73,20 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            status: {
-                name: '---Please Select---',
-            },
+            status: optionsStatus.find((e) => e.name === product.product_status.label),
+            attribute: product.attribute_set_name,
             name: product.name,
             sku: product.sku,
             price: product.price_range.maximum_price.regular_price.value,
             specialPrice: product.special_price,
             dateFrom: dateFromSplitNew,
             dateTo: dateToSplitNew,
+            weight: product.weight || 0,
+            visibility: product.visibility,
+            description: product.description.html,
         },
         validationSchema: Yup.object().shape({
-            price: Yup.number().required('Required'),
+            price: Yup.number().nullable(),
             specialPrice: Yup.number().nullable(),
         }),
         onSubmit: (values) => {

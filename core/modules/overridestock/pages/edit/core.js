@@ -11,22 +11,33 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const overrideStock = data.getVirtualStockQuantityById;
+    const [updateVirtualStockQuantity] = gqlService.updateVirtualStockQuantity();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
+    const handleSubmit = ({
+        virtualStock,
+        sku,
+        qty,
+        reason,
+    }) => {
+        const variables = {
+            id: overrideStock.entity_id,
+            vs_id: Number(virtualStock.vs_id),
+            sku: sku.sku,
+            qty: Number(qty),
+            reason,
+        };
         window.backdropLoader(true);
-        updateCompany({
+        updateVirtualStockQuantity({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success edit company!',
+                text: 'Success edit Override Stock!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/oms/company'), 250);
+            setTimeout(() => router.push('/cataloginventory/overridestock'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -39,12 +50,18 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
+            virtualStock: overrideStock.vs_id,
+            sku: {
+                sku: overrideStock.sku,
+            },
+            qty: overrideStock.qty,
+            reason: overrideStock.reason,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            virtualStock: Yup.object().required('Required!'),
+            sku: Yup.object().required('Required!'),
+            qty: Yup.number().nullable(),
+            reason: Yup.string().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
@@ -62,7 +79,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getVirtualStockQuantityById({
         id: router && router.query && Number(router.query.id),
     });
 

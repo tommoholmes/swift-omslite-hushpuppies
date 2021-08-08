@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import Autocomplete from '@common_autocomplete';
 import virtualStockGqlService from '@modules/virtualstock/services/graphql';
+import productListGqlService from '@modules/productlist/services/graphql';
 import clsx from 'clsx';
 import useStyles from './style';
 
@@ -17,6 +18,7 @@ const OverrideStockEditContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const [getVirtualStockList, getVirtualStockListRes] = virtualStockGqlService.getVirtualStockList();
+    const [getProductListBySku, getProductListBySkuRes] = productListGqlService.getProductListBySku();
 
     return (
         <>
@@ -63,17 +65,21 @@ const OverrideStockEditContent = (props) => {
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>SKU</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        <Autocomplete
+                            className={clsx(classes.autocompleteRoot, classes.autocompleteMulti)}
+                            mode="server"
+                            value={formik.values.sku}
+                            onChange={(e) => formik.setFieldValue('sku', e)}
+                            loading={getProductListBySkuRes.loading}
+                            options={
+                                getProductListBySkuRes
+                                && getProductListBySkuRes.data
+                                && getProductListBySkuRes.data.getProductList
+                                && getProductListBySkuRes.data.getProductList.items
+                            }
+                            getOptions={getProductListBySku}
+                            primaryKey="sku"
+                            labelKey="sku"
                         />
                     </div>
                     <div className={classes.formField}>
@@ -83,11 +89,11 @@ const OverrideStockEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
+                            name="qty"
+                            value={formik.values.qty}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            error={!!(formik.touched.qty && formik.errors.qty)}
+                            helperText={(formik.touched.qty && formik.errors.qty) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -100,11 +106,11 @@ const OverrideStockEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
+                            name="reason"
+                            value={formik.values.reason}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            error={!!(formik.touched.reason && formik.errors.reason)}
+                            helperText={(formik.touched.reason && formik.errors.reason) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -114,7 +120,7 @@ const OverrideStockEditContent = (props) => {
                 <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
-                        // onClick={formik.handleSubmit}
+                        onClick={formik.handleSubmit}
                         variant="contained"
                     >
                         Submit
