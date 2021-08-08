@@ -42,8 +42,14 @@ export const getVirtualLocationById = gql`
             id: $id
         ){
             vl_id
-            parent_location
-            virtual_location
+            parent_label {
+                loc_code
+                label
+            }
+            virtual_label {
+                loc_code
+                label
+            }
             percentage
             priority
         }

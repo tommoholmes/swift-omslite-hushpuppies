@@ -51,12 +51,12 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: {
             parentLocation: {
-                loc_code: locationInventory.parent_location,
-                loc_name: 'Kosong',
+                loc_code: locationInventory.parent_label.loc_code,
+                loc_name: locationInventory.parent_label.label,
             },
             virtualLocation: {
-                loc_code: locationInventory.virtual_location,
-                loc_name: 'kosong',
+                loc_code: locationInventory.virtual_label.loc_code,
+                loc_name: locationInventory.virtual_label.label,
             },
             percentage: locationInventory.percentage,
             priority: locationInventory.priority,
