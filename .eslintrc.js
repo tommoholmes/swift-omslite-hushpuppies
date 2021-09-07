@@ -57,6 +57,7 @@ module.exports = {
         ],
         'import/no-extraneous-dependencies': 'off',
         "template-curly-spacing": ["off"],
+        'import/no-unresolved': 'off'
     },
     settings: {
         'import/parser': 'babel-eslint',
