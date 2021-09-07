@@ -7,8 +7,8 @@ import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
 import { optionsStatus } from '@modules/shipment/helpers';
-import useStyles from './style';
-import Header from './Header';
+import useStyles from '@modules/shipment/pages/list/components/style';
+import Header from '@modules/shipment/pages/list/components/Header';
 
 const ShipmentListContent = (props) => {
     const classes = useStyles();
