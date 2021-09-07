@@ -9,7 +9,7 @@ import Autocomplete from '@common_autocomplete';
 import locationGqlService from '@modules/location/services/graphql';
 import channelGqlService from '@modules/channel/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/warehouse/pages/edit/components/style';
 
 const WarehouseEditContent = (props) => {
     const {

@@ -1,5 +1,5 @@
 import Layout from '@layout';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/warehouse/services/graphql';
 
 const Core = (props) => {
     const {
