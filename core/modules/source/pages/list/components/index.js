@@ -3,8 +3,8 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/source/pages/list/components/Header';
+import useStyles from '@modules/source/pages/list/components/style';
 
 const SourceListContent = (props) => {
     const classes = useStyles();
