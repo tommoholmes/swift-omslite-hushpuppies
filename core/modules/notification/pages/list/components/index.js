@@ -5,8 +5,8 @@ import Table from '@common_table';
 import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/notification/helpers';
-import useStyles from './style';
-import Header from './Header';
+import useStyles from '@modules/notification/pages/list/components/style';
+import Header from '@modules/notification/pages/list/components/Header';
 
 const NotificationListContent = (props) => {
     const classes = useStyles();

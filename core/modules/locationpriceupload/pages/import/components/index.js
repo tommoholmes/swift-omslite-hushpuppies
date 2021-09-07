@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/locationpriceupload/pages/import/components/style';
 
 const LocationPriceUploadImport = (props) => {
     const {

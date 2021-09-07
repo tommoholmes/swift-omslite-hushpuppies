@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import { useRouter } from 'next/router';
-import useStyles from './style';
+import useStyles from '@modules/marketplace/pages/list/components/Header/style';
 
 const HeaderContent = (props) => {
     const classes = useStyles();

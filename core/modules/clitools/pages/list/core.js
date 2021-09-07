@@ -4,7 +4,7 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/clitools/services/graphql';
 
 const Core = (props) => {
     const {

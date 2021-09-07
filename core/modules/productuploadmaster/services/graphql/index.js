@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import * as Schema from './schema';
+import * as Schema from '@modules/productuploadmaster/services/graphql/schema';
 
 const context = {
     context: { request: 'internal' },

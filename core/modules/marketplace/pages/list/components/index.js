@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Header from './Header';
+import Header from '@modules/marketplace/pages/list/components/Header';
 
 const MarketplaceListContent = (props) => {
     const { data, loading, getMarketplaceList } = props;

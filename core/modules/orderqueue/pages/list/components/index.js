@@ -6,8 +6,8 @@ import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import orderQueueGqlService from '@modules/orderqueue/services/graphql';
 import channelGqlService from '@modules/channel/services/graphql';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/orderqueue/pages/list/components/Header';
+import useStyles from '@modules/orderqueue/pages/list/components/style';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();

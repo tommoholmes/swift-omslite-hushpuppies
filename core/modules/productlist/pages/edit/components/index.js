@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/productlist/helpers';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/productlist/pages/edit/components/style';
 
 const ProductListEditContent = (props) => {
     const {

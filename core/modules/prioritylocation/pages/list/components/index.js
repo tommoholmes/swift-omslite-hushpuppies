@@ -3,8 +3,8 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/prioritylocation/pages/list/components/Header';
+import useStyles from '@modules/prioritylocation/pages/list/components/Header/style';
 
 const PriorityLocationListContent = (props) => {
     const classes = useStyles();

@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@layout';
 import { useRouter } from 'next/router';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/creditmemos/services/graphql';
 
 const ContentWrapper = (props) => {
     const {

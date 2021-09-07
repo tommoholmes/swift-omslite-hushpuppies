@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import { useDropzone } from 'react-dropzone';
 import React from 'react';
-import useStyles from './style';
+import useStyles from '@common_dropfile/style';
 
 const DropFile = ({
     title = '',

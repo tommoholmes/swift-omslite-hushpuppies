@@ -6,8 +6,8 @@ import Link from 'next/link';
 import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import statusGqlService from '@modules/rmastatuses/services/graphql';
-import useStyles from './style';
-import Header from './Header';
+import useStyles from '@modules/managerma/pages/list/components/style';
+import Header from '@modules/managerma/pages/list/components/Header';
 
 const ManageRmaListContent = (props) => {
     const classes = useStyles();

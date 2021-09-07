@@ -6,7 +6,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/company/pages/edit/components/style';
 
 const CompanyEditContent = (props) => {
     const {

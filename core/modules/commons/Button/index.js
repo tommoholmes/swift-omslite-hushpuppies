@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import classNames from 'classnames';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@common_button/style';
 
 const CustomButton = ({
     variant = 'contained',

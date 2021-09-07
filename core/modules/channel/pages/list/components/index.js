@@ -5,8 +5,8 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/channel/pages/list/components/Header';
+import useStyles from '@modules/channel/pages/list/components/Header/style';
 
 const ChannelListContent = (props) => {
     const classes = useStyles();

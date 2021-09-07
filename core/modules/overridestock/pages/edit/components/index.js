@@ -9,7 +9,7 @@ import Autocomplete from '@common_autocomplete';
 import virtualStockGqlService from '@modules/virtualstock/services/graphql';
 import productListGqlService from '@modules/productlist/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/overridestock/pages/edit/components/style';
 
 const OverrideStockEditContent = (props) => {
     const {

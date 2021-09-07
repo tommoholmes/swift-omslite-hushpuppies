@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Header from './Header';
+import Header from '@modules/productcategory/pages/list/components/Header';
 
 const ProductCategoryListContent = (props) => {
     const { data, loading, getProductCategoryList } = props;

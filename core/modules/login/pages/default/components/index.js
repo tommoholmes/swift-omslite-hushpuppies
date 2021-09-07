@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import useStyles from './style';
+import useStyles from '@modules/login/pages/default/components/style';
 
 const Login = (props) => {
     const classes = useStyles();

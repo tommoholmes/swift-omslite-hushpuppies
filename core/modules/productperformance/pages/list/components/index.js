@@ -2,8 +2,8 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/productperformance/pages/list/components/Header';
+import useStyles from '@modules/productperformance/pages/list/components/style';
 
 const ProductPerformanceContent = (props) => {
     const { data, loading, getCompanyList } = props;

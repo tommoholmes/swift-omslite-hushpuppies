@@ -3,7 +3,7 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
+import Header from '@modules/rmastatuses/pages/list/components/Header';
 
 const RmaStatusesListContent = (props) => {
     const { data, loading, getRmaStatusList } = props;

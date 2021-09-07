@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/overridestock/pages/import/components/style';
 
 const SourceImport = (props) => {
     const {

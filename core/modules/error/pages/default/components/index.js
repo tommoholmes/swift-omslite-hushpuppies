@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import useStyles from './style';
+import useStyles from '@modules/error/pages/default/components/style';
 
 const ErrorContent = (props) => {
     const styles = useStyles();

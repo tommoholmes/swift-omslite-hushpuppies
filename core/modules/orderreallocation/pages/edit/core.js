@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@layout';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/orderreallocation/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
