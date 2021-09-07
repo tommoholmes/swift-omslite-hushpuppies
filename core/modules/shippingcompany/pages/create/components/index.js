@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import { optionsIsActive } from '@modules/shippingcompany/helpers';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/shippingcompany/pages/create/components/style';
 
 const ShippingCompanyCreateContent = (props) => {
     const {

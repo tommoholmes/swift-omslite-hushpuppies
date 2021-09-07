@@ -3,7 +3,7 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
+import Header from '@modules/shippingcompany/pages/list/components/Header';
 
 const ShippingCompanyListContent = (props) => {
     const { data, loading, getShippingCompanyList, multideleteShippingCompany } = props;

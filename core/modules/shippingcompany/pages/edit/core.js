@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { optionsIsActive } from '@modules/shippingcompany/helpers';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/shippingcompany/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
