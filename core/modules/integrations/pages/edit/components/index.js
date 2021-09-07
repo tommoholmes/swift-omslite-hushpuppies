@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import TextField from '@common_textfield';
 import locationGqlService from '@modules/location/services/graphql';
-import useStyles from './style';
+import useStyles from '@modules/integrations/pages/edit/components/style';
 
 const IntegrationsContent = (props) => {
     const {

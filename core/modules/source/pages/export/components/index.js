@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import locationGqlService from '@modules/location/services/graphql';
-import useStyles from './style';
+import useStyles from '@modules/source/pages/export/components/style';
 
 const SourceExport = (props) => {
     const {

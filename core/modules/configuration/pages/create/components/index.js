@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import channelGqlService from '@modules/channel/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/configuration/pages/create/components/style';
 
 const ConfigurationTadaCreateContent = (props) => {
     const {

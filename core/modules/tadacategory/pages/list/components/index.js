@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Header from './Header';
+import Header from '@modules/tadacategory/pages/list/components/Header';
 
 const CategoryTadaListContent = (props) => {
     const { data, loading, getCategoryTadaList } = props;

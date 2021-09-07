@@ -8,7 +8,7 @@ import Autocomplete from '@common_autocomplete';
 import { useRouter } from 'next/router';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/adminstore/pages/create/components/style';
 
 const AdminStoreCreateContent = (props) => {
     const {

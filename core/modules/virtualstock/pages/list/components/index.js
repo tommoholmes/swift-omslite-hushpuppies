@@ -3,8 +3,8 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/virtualstock/pages/list/components/Header';
+import useStyles from '@modules/virtualstock/pages/list/components/style';
 
 const VirtualStockListContent = (props) => {
     const classes = useStyles();

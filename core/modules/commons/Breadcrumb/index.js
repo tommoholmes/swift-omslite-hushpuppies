@@ -3,7 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Link from 'next/link';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@common_breadcrumb/style';
 
 const CustomBreadcrumb = ({ data = [] }) => {
     const styles = useStyles();

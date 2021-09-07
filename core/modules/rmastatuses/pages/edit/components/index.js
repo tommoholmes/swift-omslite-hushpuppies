@@ -8,7 +8,7 @@ import { optionsInItem, optionsEmailCustomer, optionsEmailAdmin } from '@modules
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/rmastatuses/pages/edit/components/style';
 
 const RmaStatusesEditContent = (props) => {
     const {

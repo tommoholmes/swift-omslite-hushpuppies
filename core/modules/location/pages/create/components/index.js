@@ -9,7 +9,7 @@ import Autocomplete from '@common_autocomplete';
 import companyGqlService from '@modules/company/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/location/pages/create/components/style';
 
 const LocationCreateContent = (props) => {
     const {

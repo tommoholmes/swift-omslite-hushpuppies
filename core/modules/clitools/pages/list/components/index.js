@@ -7,8 +7,8 @@ import Button from '@common_button';
 import Autocomplete from '@common_autocomplete';
 import Paper from '@material-ui/core/Paper';
 import clitoolsGqlService from '@modules/clitools/services/graphql';
-import Header from './Header';
-import useStyles from './style';
+import Header from '@modules/clitools/pages/list/components/Header';
+import useStyles from '@modules/clitools/pages/list/components/style';
 
 const clitoolsListContent = (props) => {
     const { data, loading, getQueueList, formik } = props;

@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/orderreport/services/graphql';
 
 const Core = (props) => {
     const {

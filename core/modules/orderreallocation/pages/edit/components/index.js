@@ -9,8 +9,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import ScrollDialog from 'core/modules/commons/ScrollDialog';
 import clsx from 'clsx';
-import gqlService from '../../../services/graphql';
-import useStyles from './style';
+import gqlService from '@modules/orderreallocation/services/graphql';
+import useStyles from '@modules/orderreallocation/pages/edit/components/style';
 
 const orderreallocationEditContent = (props) => {
     const {

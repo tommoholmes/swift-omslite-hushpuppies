@@ -23,9 +23,9 @@ import Button from '@common_button';
 import Collapse from '@material-ui/core/Collapse';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
-import TablePaginationActions from './components/TablePaginationActions';
-import TableFilters from './components/TableFilters';
-import useStyles from './style';
+import TablePaginationActions from '@common_table/components/TablePaginationActions';
+import TableFilters from '@common_table/components/TableFilters';
+import useStyles from '@common_table/style';
 
 // helpers
 const getComponentOrString = (param) => (

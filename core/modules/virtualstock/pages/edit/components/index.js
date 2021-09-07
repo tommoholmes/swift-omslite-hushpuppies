@@ -10,7 +10,7 @@ import virtualStockGqlService from '@modules/virtualstock/services/graphql';
 import channelGqlService from '@modules/channel/services/graphql';
 import { optionsPriorityEnable, optionsPriorityType, optionsFramework } from '@modules/virtualstock/helpers';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/virtualstock/pages/edit/components/style';
 
 const VirtualStockEditContent = (props) => {
     const {

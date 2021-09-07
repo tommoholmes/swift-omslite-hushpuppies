@@ -3,7 +3,7 @@
 import React from 'react';
 import Button from '@common_button';
 import { useRouter } from 'next/router';
-import useStyles from './style';
+import useStyles from '@modules/clitools/pages/list/components/Header/style';
 
 const HeaderContent = (props) => {
     const classes = useStyles();

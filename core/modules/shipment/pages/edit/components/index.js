@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/shipment/pages/edit/components/style';
 
 const shipmentEditContent = (props) => {
     const {
@@ -70,93 +70,37 @@ const shipmentEditContent = (props) => {
                     <div className={classes.contentLeft}>
                         <h5 className={classes.title}>Billing Address</h5>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.billing.map((e) => (
-                                <>
-                                    {e.firstname}
-                                    {' '}
-                                    {' '}
-                                    {' '}
-                                    {e.lastname}
-                                </>
-                            ))}
+                            {`${shipmentDetail.billing.firstname} ${shipmentDetail.billing.lastname}`}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.billing.map((e) => (
-                                <>{e.street}</>
-                            ))}
+                            {shipmentDetail.billing.street}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.billing.map((e) => (
-                                <>
-                                    {e.city}
-                                    ,
-                                    {' '}
-                                    {' '}
-                                    {' '}
-                                    {e.region}
-                                    ,
-                                    {' '}
-                                    {' '}
-                                    {' '}
-                                    {e.postcode}
-                                </>
-                            ))}
+                            {`${shipmentDetail.billing.city}, ${shipmentDetail.billing.region}, ${shipmentDetail.billing.postcode}`}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.billing.map((e) => (
-                                <>{e.country_id}</>
-                            ))}
+                            {shipmentDetail.billing.country_id}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.billing.map((e) => (
-                                <>{e.telephone}</>
-                            ))}
+                            {shipmentDetail.billing.telephone}
                         </span>
                     </div>
                     <div className={classes.contentLeft}>
                         <h5 className={classes.title}>Shipping Adress</h5>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.shipping.map((e) => (
-                                <>
-                                    {e.firstname}
-                                    {' '}
-                                    {''}
-                                    {' '}
-                                    {e.lastname}
-                                </>
-                            ))}
+                            {`${shipmentDetail.shipping.firstname} ${shipmentDetail.shipping.lastname}`}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.shipping.map((e) => (
-                                <>{e.street}</>
-                            ))}
+                            {shipmentDetail.shipping.street}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.shipping.map((e) => (
-                                <>
-                                    {e.city}
-                                    ,
-                                    {' '}
-                                    {' '}
-                                    {' '}
-                                    {e.region}
-                                    ,
-                                    {' '}
-                                    {' '}
-                                    {' '}
-                                    {e.postcode}
-                                </>
-                            ))}
+                            {`${shipmentDetail.shipping.city}, ${shipmentDetail.shipping.region}, ${shipmentDetail.shipping.postcode}`}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.shipping.map((e) => (
-                                <>{e.country_id}</>
-                            ))}
+                            {shipmentDetail.shipping.country_id}
                         </span>
                         <span className={classes.orderLabel}>
-                            {shipmentDetail.shipping.map((e) => (
-                                <>{e.telephone}</>
-                            ))}
+                            {shipmentDetail.shipping.telephone}
                         </span>
                     </div>
                 </div>

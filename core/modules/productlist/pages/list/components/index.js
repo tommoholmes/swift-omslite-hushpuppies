@@ -3,7 +3,7 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
+import Header from '@modules/productlist/pages/list/components/Header';
 
 const ProductListContent = (props) => {
     const { data, loading, getProductList } = props;

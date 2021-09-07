@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/orderqueue/pages/edit/components/style';
 
 const OrderQueueEditContent = (props) => {
     const {

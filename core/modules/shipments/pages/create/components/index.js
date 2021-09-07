@@ -12,7 +12,7 @@ import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
 import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/shipments/pages/create/components/style';
 
 const ChannelCreateContent = (props) => {
     const {

@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Header from './Header';
+import Header from '@modules/productapproval/pages/list/components/Header';
 
 const ProductApprovalListContent = (props) => {
     const { data, loading, getCompanyList } = props;

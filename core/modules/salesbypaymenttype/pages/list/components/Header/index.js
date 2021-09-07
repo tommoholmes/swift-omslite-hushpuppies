@@ -3,7 +3,7 @@
 import React from 'react';
 import Button from '@common_button';
 import { useRouter } from 'next/router';
-import useStyles from './style';
+import useStyles from '@modules/salesbypaymenttype/pages/list/components/style';
 
 const HeaderContent = (props) => {
     const classes = useStyles();

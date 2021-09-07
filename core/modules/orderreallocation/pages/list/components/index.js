@@ -6,8 +6,8 @@ import Link from 'next/link';
 import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/orderreallocation/helpers';
-import useStyles from './style';
-import Header from './Header';
+import useStyles from '@modules/orderreallocation/pages/list/components/style';
+import Header from '@modules/orderreallocation/pages/list/components/Header';
 
 const OrderReallocationListContent = (props) => {
     const classes = useStyles();

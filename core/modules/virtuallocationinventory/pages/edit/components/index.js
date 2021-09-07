@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Autocomplete from '@common_autocomplete';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/virtuallocationinventory/pages/edit/components/style';
 
 const VirtualLocationInventoryEditContent = (props) => {
     const {

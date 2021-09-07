@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import priorityLocationGqlService from '@modules/prioritylocation/services/graphql';
-import useStyles from './style';
+import useStyles from '@modules/prioritylocation/pages/edit/components/style';
 
 const PriorityLocationEditContent = (props) => {
     const {

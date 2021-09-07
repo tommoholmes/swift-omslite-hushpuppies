@@ -1,6 +1,6 @@
-import Core from './pages/default/core';
-import Default from './pages/default';
-import Content from './pages/default/components';
+import Core from '@modules/error/pages/default/core';
+import Default from '@modules/error/pages/default';
+import Content from '@modules/error/pages/default/components';
 
 export default {
     Core,

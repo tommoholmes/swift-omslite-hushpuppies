@@ -1,0 +1,100 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "dom",
+            "es2015",
+            "es2016",
+            "es6",
+            "es2017"
+        ],
+        "target": "es2017",
+        "module": "es6",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "@root/*": ["*"],
+            "@core/*": ["src/*", "core/*"],
+            // "@core/*": ["src/*", "core/*"],
+            "@modules/*": ["src/modules/*","core/modules/*"],
+            "@helpers/*": ["src/helpers/*","core/helpers/*"],
+            "@services/*": ["src/services/*","core/services/*"],
+            "@config": ["swift.config.js"],
+
+            "@next_headcustom": ["src/nextjs_custom/HeadCustom","core/nextjs_custom/HeadCustom"],
+            "@next_nextscriptcustom": ["src/nextjs_custom/NextScriptCustom","core/nextjs_custom/NextScriptCustom"],
+
+            "@middlewares/*": ["src/middlewares/*","core/middlewares/*"],
+            "@middleware_route": ["src/middlewares/route","core/middlewares/route"],
+
+            "@graphql_request": ["src/api/graphql/request","core/api/graphql/request"],
+
+            "@lib/*": ["src/lib/*","core/lib/*"],
+            "@lib_apollo": ["src/lib/apollo","core/lib/apollo"],
+            "@lib_gtag": ["src/lib/gtag","core/lib/gtag"],
+            "@lib_firebase/*": ["src/lib/firebase/*","core/lib/firebase/*"],
+            "@i18n": ["src/lib/i18n","core/lib/i18n"],
+
+            "@layout": ["src/modules/theme/layout","core/modules/theme/layout"],
+            "@layout/*" : ["src/modules/theme/layout/*", "core/modules/theme/layout/*"],
+
+            // theme
+            "@theme/*": ["src/theme/*","core/theme/*"],
+            "@theme_color": ["src/theme/colors","core/theme/colors"],
+            "@theme_mixins": ["src/theme/mixins","core/theme/mixins"],
+            "@theme_theme": ["src/theme/theme","core/theme/theme"],
+            "@theme_typography": ["src/theme/typography","core/theme/typography"],
+            "@theme_vars": ["src/theme/vars","core/theme/vars"],
+
+            // helpers
+            "@helper_auth": ["src/helpers/auth","core/helpers/auth"],
+            "@helper_checkcomponents": ["src/helpers/checkComponent","core/helpers/checkComponent"],
+            "@helper_config": ["src/helpers/config","core/helpers/config"],
+            "@helper_cookies": ["src/helpers/cookies","core/helpers/cookies"],
+            "@helper_currency": ["src/helpers/currency","core/helpers/currency"],
+            "@helper_date": ["src/helpers/date","core/helpers/date"],
+            "@helper_encryption": ["src/helpers/encryption","core/helpers/encryption"],
+            "@helper_fonts": ["src/helpers/fonts","core/helpers/fonts"],
+            "@helper_generatequery": ["src/helpers/generateQuery","core/helpers/generateQuery"],
+            "@helper_getpath": ["src/helpers/getPath","core/helpers/getPath"],
+            "@helper_localstorage": ["src/helpers/localstorage","core/helpers/localstorage"],
+            // "@helper_noreload": ["src/helpers/noReload","core/helpers/noReload"],
+            "@helper_passwordstrength": ["src/helpers/passwordStrength","core/helpers/passwordStrength"],
+            "@helper_regex": ["src/helpers/regex","core/helpers/regex"],
+            "@helper_text": ["src/helpers/text","core/helpers/text"],
+            "@helper_theme": ["src/helpers/theme","core/helpers/theme"],
+            "@helper_urlparser": ["src/helpers/urlParser","core/helpers/urlParser"],
+            "@helper_zxcvbn": ["src/helpers/zxcvbn","core/helpers/zxcvbn"],
+
+            // commons
+            "@common_autocomplete": ["src/modules/commons/Autocomplete","core/modules/commons/Autocomplete"],
+            "@common_textfield": ["src/modules/commons/TextField","core/modules/commons/TextField"],
+            "@common_button": ["src/modules/commons/Button","core/modules/commons/Button"],
+            "@common_table": ["src/modules/commons/Table","core/modules/commons/Table"],
+            "@common_breadcrumb": ["src/modules/commons/Breadcrumb","core/modules/commons/Breadcrumb"],
+            "@common_menupopover": ["src/modules/commons/MenuPopover","core/modules/commons/MenuPopover"],
+            "@common_loaders": ["src/modules/commons/Loaders","core/modules/commons/Loaders"],
+            "@common_toast": ["src/modules/commons/Toast","core/modules/commons/Toast"],
+            "@common_dropfile": ["src/modules/commons/DropFile","core/modules/commons/DropFile"],
+            "@common_chart": ["src/modules/commons/Chart","core/modules/commons/Chart"],
+            "@common_progressbar": ["src/modules/commons/ProgressBar","core/modules/commons/ProgressBar"],
+            "@common_scrolldialog": ["src/modules/commons/ScrollDialog","core/modules/commons/ScrollDialog"],
+
+            "@common_autocomplete/*": ["src/modules/commons/Autocomplete/*","core/modules/commons/Autocomplete/*"],
+            "@common_textfield/*": ["src/modules/commons/TextField/*","core/modules/commons/TextField/*"],
+            "@common_button/*": ["src/modules/commons/Button/*","core/modules/commons/Button/*"],
+            "@common_table/*": ["src/modules/commons/Table/*","core/modules/commons/Table/*"],
+            "@common_breadcrumb/*": ["src/modules/commons/Breadcrumb/*","core/modules/commons/Breadcrumb/*"],
+            "@common_menupopover/*": ["src/modules/commons/MenuPopover/*","core/modules/commons/MenuPopover/*"],
+            "@common_loaders/*": ["src/modules/commons/Loaders/*","core/modules/commons/Loaders/*"],
+            "@common_toast/*": ["src/modules/commons/Toast/*","core/modules/commons/Toast/*"],
+            "@common_dropfile/*": ["src/modules/commons/DropFile/*","core/modules/commons/DropFile/*"],
+            "@common_chart/*": ["src/modules/commons/Chart/*","core/modules/commons/Chart/*"],
+            "@common_progressbar/*": ["src/modules/commons/ProgressBar/*","core/modules/commons/ProgressBar/*"],
+            "@common_scrolldialog/*": ["src/modules/commons/ScrollDialog/*","core/modules/commons/ScrollDialog/*"],
+
+            // for example
+            "@common_buttonqty": ["swift-pwa-core/core/modules/commons/ButtonQty"],
+        }
+    },
+    "exclude": ["node_modules"]
+}

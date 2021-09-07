@@ -8,7 +8,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import virtualStockGqlService from '@modules/virtualstock/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/virtualstock/pages/create/components/style';
 
 const VirtualStockCreateContent = (props) => {
     const {

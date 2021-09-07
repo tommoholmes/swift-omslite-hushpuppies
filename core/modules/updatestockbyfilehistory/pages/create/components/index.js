@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import Autocomplete from '@common_autocomplete';
 import { optionsHistory } from '@modules/updatestockbyfilehistory/helpers';
-import useStyles from './style';
+import useStyles from '@modules/updatestockbyfilehistory/pages/create/components/style';
 
 const UpdateStockHistoryContent = (props) => {
     const {

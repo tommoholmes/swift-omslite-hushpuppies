@@ -1,7 +1,7 @@
 // import { withTranslation } from '@i18n';
 import { withApollo } from '@lib_apollo';
-import Content from './components';
-import Core from './core';
+import Content from '@modules/integrations/pages/edit/components';
+import Core from '@modules/integrations/pages/edit/core';
 
 const Page = (props) => (
     <Core

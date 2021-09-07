@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Header from './Header';
+import Header from '@modules/bestperformingskus/pages/list/components/Header';
 
 const BestPerformingSkuContent = (props) => {
     const { data, loading, getCompanyList } = props;

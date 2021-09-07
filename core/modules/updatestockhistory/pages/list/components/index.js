@@ -3,7 +3,7 @@
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
-import Header from './Header';
+import Header from '@modules/updatestockhistory/pages/list/components/Header';
 
 const UpdateStockListContent = (props) => {
     const { data, loading, getCompanyList } = props;

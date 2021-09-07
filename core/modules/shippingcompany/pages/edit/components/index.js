@@ -8,7 +8,7 @@ import Autocomplete from '@common_autocomplete';
 import { useRouter } from 'next/router';
 import { optionsIsActive } from '@modules/shippingcompany/helpers';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/shippingcompany/pages/edit/components/style';
 
 const ShippingCompanyEditContent = (props) => {
     const {

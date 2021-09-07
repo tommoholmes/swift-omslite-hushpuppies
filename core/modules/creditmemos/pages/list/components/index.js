@@ -6,8 +6,8 @@ import Link from 'next/link';
 import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/creditmemos/helpers';
-import useStyles from './style';
-import Header from './Header';
+import useStyles from '@modules/creditmemos/pages/list/components/style';
+import Header from '@modules/creditmemos/pages/list/components/Header';
 
 const CreditmemoListContent = (props) => {
     const classes = useStyles();

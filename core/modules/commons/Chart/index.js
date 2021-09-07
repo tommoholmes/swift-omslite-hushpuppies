@@ -11,7 +11,7 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import { scaleBand } from '@devexpress/dx-chart-core';
 import { ArgumentScale, Stack } from '@devexpress/dx-react-chart';
-import useStyles from './style';
+import useStyles from '@common_chart/style';
 
 const CustomCart = ({
     data = [],

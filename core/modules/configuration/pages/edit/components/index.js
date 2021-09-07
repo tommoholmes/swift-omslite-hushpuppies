@@ -8,7 +8,7 @@ import Autocomplete from '@common_autocomplete';
 import { useRouter } from 'next/router';
 import channelGqlService from '@modules/channel/services/graphql';
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/configuration/pages/edit/components/style';
 
 const ConfigurationTadaEditContent = (props) => {
     const {

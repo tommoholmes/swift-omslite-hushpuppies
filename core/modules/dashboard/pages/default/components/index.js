@@ -1,7 +1,7 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
-import useStyles from './style';
+import useStyles from '@modules/dashboard/pages/default/components/style';
 
 const DashboardContent = () => {
     const styles = useStyles();
