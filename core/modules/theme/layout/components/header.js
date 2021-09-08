@@ -8,8 +8,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Hidden from '@material-ui/core/Hidden';
 import Breadcrumb from '@common_breadcrumb';
 import { makeStyles } from '@material-ui/core/styles';
-import RightToolbar from './rightToolbar';
-import { miniDrawerWidth, drawerWidth } from '../helpers';
+import RightToolbar from '@modules/theme/layout/components/rightToolbar';
+import { miniDrawerWidth, drawerWidth } from '@modules/theme/layout/helpers';
 
 const useStyles = makeStyles((theme) => ({
     swiftOmsLogo: {

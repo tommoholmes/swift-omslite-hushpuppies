@@ -11,7 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Hidden from '@material-ui/core/Hidden';
 import { useRouter } from 'next/router';
 import { makeStyles } from '@material-ui/core/styles';
-import { drawerWidth } from '../helpers';
+import { drawerWidth } from '@modules/theme/layout/helpers';
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
