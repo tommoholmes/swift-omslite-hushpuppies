@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Breadcrumb from '@common_breadcrumb';
 import Hidden from '@material-ui/core/Hidden';
-import Sidebar from './components/sidebar';
-import useStyles from './style';
-import Header from './components/header';
+import Sidebar from '@modules/theme/layout/components/sidebar';
+import useStyles from '@modules/theme/layout/style';
+import Header from '@modules/theme/layout/components/header';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
