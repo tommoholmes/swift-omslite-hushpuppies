@@ -39,6 +39,13 @@ const Layout = (props) => {
             ],
         },
         {
+            key: 'shipment',
+            label: 'Shipment',
+            children: [
+                { key: 'curbpickup', label: 'Curb Pickup', url: '/shipment/curbpickup' },
+            ],
+        },
+        {
             key: 'sales',
             label: 'Sales',
             children: [
