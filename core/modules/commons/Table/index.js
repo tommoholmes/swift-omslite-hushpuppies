@@ -172,13 +172,38 @@ const CustomTable = (props) => {
                                 }}
                                 message={activeAction && activeAction.message}
                             />
+                            <button
+                                id="clickConfirm"
+                                className="hide"
+                                type="submit"
+                                onClick={async () => {
+                                    if (checkedRows && checkedRows.length) {
+                                        await activeAction.onClick(checkedRows);
+                                        fetchRows();
+                                        window.toastMessage({
+                                            open: true,
+                                            text: 'Success!',
+                                            variant: 'success',
+                                        });
+                                        // window.location.reload();
+                                    }
+                                }}
+                            >
+                                Auto Confirm
+                            </button>
                             <MenuPopover
                                 openButton={{ label: 'Actions' }}
                                 menuItems={toolbarActions.map((action) => ({
                                     label: action.label,
                                     onClick: () => {
-                                        setOpenConfirmDialog(true);
                                         setActiveAction(action);
+                                        if (action.label === 'Delete') {
+                                            setOpenConfirmDialog(true);
+                                        } else {
+                                            setTimeout(() => {
+                                                document.getElementById('clickConfirm').click();
+                                            }, 100);
+                                        }
                                     },
                                 }))}
                             />

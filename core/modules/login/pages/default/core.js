@@ -10,8 +10,8 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const [email, setEmail] = React.useState('endra@icube.us');
-    const [password, setPassword] = React.useState('Password123');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [getCustomerToken] = getToken();
     const handleSubmit = () => {
         const variables = { email, password };
