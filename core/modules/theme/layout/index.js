@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -7,6 +9,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Sidebar from '@modules/theme/layout/components/sidebar';
 import useStyles from '@modules/theme/layout/style';
 import Header from '@modules/theme/layout/components/header';
+import gqlService from '@modules/theme/services/graphql';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
@@ -25,119 +28,267 @@ const Layout = (props) => {
         text: '',
     });
 
+    const dataAcl = [];
+    const varianAcl = () => {
+        const { loading, data } = gqlService.customerAccessControlList();
+        if (loading) {
+            return (
+                <>Loading...</>
+            );
+        }
+
+        if (!data) {
+            return (
+                <>Data not found!</>
+            );
+        }
+        dataAcl.push(
+            data.customerAccessControlList,
+        );
+    };
+
     const menuList = [
         { key: 'dashboard', label: 'Dashboard', url: '/' },
         {
-            key: 'oms',
-            label: 'OMS',
+            aclCode: 'oms_lite_header_sales',
+            key: 'order',
+            label: 'Order',
             children: [
-                { key: 'channel', label: 'Channel', url: '/oms/channel' },
-                { key: 'company', label: 'Company', url: '/oms/company' },
-                { key: 'location', label: 'Location', url: '/oms/location' },
-                { key: 'prioritylocation', label: 'Priority Location', url: '/oms/prioritylocation' },
-                { key: 'notification', label: 'Notification', url: '/oms/notification' },
+                {
+                    aclCode: 'oms_lite_sales_order_queue', key: 'orderqueue', label: 'All Orders', url: '/sales/orderqueue',
+                },
+                // { aclCode: 'orderreallocation', label: 'Order Reallocation', url: '/sales/orderreallocation' },
             ],
         },
         {
+            aclCode: 'header_shipment',
             key: 'shipment',
             label: 'Shipment',
             children: [
-                { key: 'curbpickup', label: 'Curb Pickup', url: '/shipment/curbpickup' },
+                {
+                    aclCode: 'oms_lite_sales_shipment', key: 'allshipment', label: 'All Shipment', url: '/sales/shipment',
+                },
+                {
+                    aclCode: 'shipment_pickup_dashboard', key: 'storepickup', label: 'Store Pickup', url: '/sales/storepickup',
+                },
+                {
+                    aclCode: 'shipment_curbside_pickup', key: 'curbpickup', label: 'Curb Pickup', url: '/shipment/curbpickup',
+                },
+                {
+                    aclCode: 'shipment_delivery_dashboard', key: 'homedelivery', label: 'Home Delivery', url: '/sales/homedelivery',
+                },
+                {
+                    aclCode: 'shipment_marketplace_dashboard', key: 'shipmentmarketplace', label: 'Marketplace', url: '/marketplace/shipmentmarketplace',
+                },
             ],
         },
         {
-            key: 'sales',
-            label: 'Sales',
+            aclCode: 'oms_lite_header_sales',
+            key: 'salesreturn',
+            label: 'Return',
             children: [
-                { key: 'orderQueue', label: 'Order Queue', url: '/sales/orderqueue' },
-                { key: 'shipment', label: 'Shipment', url: '/sales/shipment' },
-                { key: 'orderreallocation', label: 'Order Reallocation', url: '/sales/orderreallocation' },
-                { key: 'creditmemos', label: 'Credit Memos', url: '/sales/creditmemos' },
-                { key: 'managerma', label: 'Manage RMA', url: '/sales/managerma' },
-                { key: 'rmastatuses', label: 'RMA Statuses', url: '/sales/rmastatuses' },
+                {
+                    aclCode: 'oms_lite_credit_memos', key: 'creditmemos', label: 'Credit Memos', url: '/sales/creditmemos',
+                },
+                {
+                    aclCode: 'oms_lite_rma_manage', key: 'managerma', label: 'Manage RMA', url: '/sales/managerma',
+                },
+                {
+                    aclCode: 'oms_lite_rma_statuses', key: 'rmastatuses', label: 'RMA Statuses', url: '/sales/rmastatuses',
+                },
             ],
         },
         {
-            key: 'catalogInventory',
-            label: 'Catalog Inventory',
+            aclCode: 'oms_lite_header_catalog_inventory',
+            key: 'inventory',
+            label: 'Inventory',
             children: [
-                { key: 'productList', label: 'Product List', url: '/cataloginventory/productlist' },
-                { key: 'source', label: 'Source', url: '/cataloginventory/source' },
-                { key: 'virtualLocationInventory', label: 'Virtual Location Inventory', url: '/cataloginventory/virtuallocationinventory' },
-                { key: 'virtualStock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock' },
-                { key: 'overrideStock', label: 'Override Stock', url: '/cataloginventory/overridestock' },
-                { key: 'stockTransfer', label: 'Stock Transfer', url: '/cataloginventory/stocktransfer' },
-                { key: 'locationPriceUpload', label: 'Location Price Upload', url: '/cataloginventory/locationpriceupload/import' },
-                { key: 'updateStockByFileHistory', label: 'Update Stock by File History', url: '/cataloginventory/updatestockbyfilehistory' },
+                {
+                    aclCode: 'oms_lite_product_list', key: 'productlist', label: 'Products', url: '/cataloginventory/productlist',
+                },
+                {
+                    aclCode: 'oms_lite_source', key: 'source', label: 'Manage Source', url: '/cataloginventory/source',
+                },
+                {
+                    aclCode: 'oms_lite_override_stock', key: 'overridestock', label: 'Override Stock', url: '/cataloginventory/overridestock',
+                },
+                {
+                    aclCode: 'oms_lite_stock_transfer', key: 'stocktransfer', label: 'Stock Transfer', url: '/cataloginventory/stocktransfer',
+                },
+                {
+                    aclCode: 'oms_lite_location_price_upload', key: 'locationpriceupload', label: 'Price by Location', url: '/cataloginventory/locationpriceupload/import',
+                },
+                {
+                    aclCode: 'oms_lite_tools_history', key: 'toolshistory', label: 'Update Stock History', url: '/tools/history',
+                },
+                {
+                    aclCode: 'oms_lite_stock_history', key: 'updatestockbyfilehistory', label: 'Update Stock by File History', url: '/cataloginventory/updatestockbyfilehistory',
+                },
             ],
         },
         {
-            key: 'userData',
-            label: 'User Data',
+            aclCode: 'oms_lite_header_oms',
+            key: 'oms',
+            label: 'OMS',
             children: [
-                { key: 'adminStore', label: 'Admin Store', url: '/userdata/adminstore' },
+                {
+                    aclCode: 'oms_lite_company', key: 'company', label: 'Company', url: '/oms/company',
+                },
+                {
+                    aclCode: 'oms_lite_channel', key: 'channel', label: 'Channel', url: '/oms/channel',
+                },
+                {
+                    aclCode: 'oms_lite_virtual_stock', key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock',
+                },
+                {
+                    aclCode: 'oms_lite_location', key: 'location', label: 'Location', url: '/oms/location',
+                },
+                {
+                    aclCode: 'oms_lite_location_pickup', key: 'locationpickup', label: 'Location Pickup', url: '/oms/locationpickup',
+                },
+                {
+                    aclCode: 'oms_lite_virtual_location', key: 'virtuallocationinventory', label: 'Virtual Location', url: '/cataloginventory/virtuallocationinventory',
+                },
+                {
+                    aclCode: 'oms_lite_priority_location_by_city', key: 'prioritylocation', label: 'Priority Location', url: '/oms/prioritylocation',
+                },
             ],
         },
         {
+            aclCode: 'oms_lite_header_marketplace',
             key: 'marketplace',
             label: 'Marketplace',
             children: [
-                { key: 'marketPlace', label: 'Marketplace', url: '/marketplace/marketplace' },
-                { key: 'store', label: 'Store', url: '/marketplace/store' },
-                { key: 'warehouse', label: 'Warehouse', url: '/marketplace/warehouse' },
-                { key: 'productCategory', label: 'Product Category', url: '/marketplace/productcategory' },
-                { key: 'attributeSetmapping', label: 'Attribute Set Mapping', url: '/marketplace/attributesetmapping' },
-                { key: 'productAttributeMapping', label: 'Product Attribute Mapping', url: '/marketplace/productattributemapping' },
-                { key: 'productStatus', label: 'Product Status', url: '/marketplace/productstatus' },
-                { key: 'updateStockHistory', label: 'Update Stock History', url: '/marketplace/updatestockhistory' },
+                {
+                    aclCode: 'oms_lite_marketplace', key: 'marketplaces', label: 'Marketplace', url: '/marketplace/marketplace',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_store', key: 'store', label: 'Store', url: '/marketplace/store',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_warehouse', key: 'warehouse', label: 'Warehouse', url: '/marketplace/warehouse',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_product_categories', key: 'productcategory', label: 'Product Category', url: '/marketplace/productcategory',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_attribute_set_mapping', key: 'attributesetmapping', label: 'Attribute Set Mapping', url: '/marketplace/attributesetmapping',
+                },
+                {
+                    aclCode: 'oms_lite_mapping_product_attribute', key: 'productattributemapping', label: 'Product Attribute Mapping', url: '/marketplace/productattributemapping',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_product_status', key: 'productstatus', label: 'Product Status', url: '/marketplace/productstatus',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_update_stock_history', key: 'updatestockhistory', label: 'Update Stock History', url: '/marketplace/updatestockhistory',
+                },
             ],
         },
         {
+            aclCode: 'oms_lite_header_vendor_portal',
+            key: 'vendor',
+            label: 'Vendor',
+            children: [
+                {
+                    aclCode: 'requestVendor', key: 'requestvendor', label: 'Request Vendor', url: '/vendorportal/requestvendor',
+                },
+                {
+                    aclCode: 'manageVendor', key: 'managevendor', label: 'Manage Vendor', url: '/vendorportal/managevendor',
+                },
+                {
+                    aclCode: 'categoryUpload', key: 'categoryupload', label: 'Category Upload', url: '/vendorportal/categoryupload',
+                },
+                {
+                    aclCode: 'productUploadMaster', key: 'productuploadmaster', label: 'Product Upload Master', url: '/vendorportal/productuploadmaster',
+                },
+                {
+                    aclCode: 'productApproval', key: 'productapproval', label: 'Product Approval', url: '/vendorportal/productapproval',
+                },
+                {
+                    aclCode: 'irisPayoutApproval', key: 'irispayoutapproval', label: 'Iris Payout Approval', url: '/vendorportal/irispayoutapproval',
+                },
+            ],
+        },
+        {
+            aclCode: 'oms_lite_header_tada',
             key: 'tada',
             label: 'TADA',
             children: [
-                { key: 'tadaCategory', label: 'Tada Category', url: '/tada/tadacategory' },
-                { key: 'configuration', label: 'Configuration', url: '/tada/configuration' },
-                { key: 'shippingCompany', label: 'Shipping Company', url: '/tada/shippingcompany' },
+                {
+                    aclCode: 'oms_lite_tada_category', key: 'tadacategory', label: 'Tada Category', url: '/tada/tadacategory',
+                },
+                {
+                    aclCode: 'oms_lite_tada_config', key: 'configuration', label: 'Configuration', url: '/tada/configuration',
+                },
+                {
+                    aclCode: 'oms_lite_tada_shipping_company', key: 'shippingcompany', label: 'Shipping Company', url: '/tada/shippingcompany',
+                },
             ],
         },
         {
-            key: 'vendorPortal',
-            label: 'Vendor Portal',
-            children: [
-                { key: 'requestVendor', label: 'Request Vendor', url: '/vendorportal/requestvendor' },
-                { key: 'managevendor', label: 'Manage Vendor', url: '/vendorportal/managevendor' },
-                { key: 'productUploadMaster', label: 'Product Upload Master', url: '/vendorportal/productuploadmaster' },
-                { key: 'productApproval', label: 'Product Approval', url: '/vendorportal/productapproval' },
-            ],
-        },
-        {
+            aclCode: 'oms_lite_header_reports',
             key: 'reports',
-            label: 'Reports',
+            label: 'Report',
             children: [
-                { key: 'orderReport', label: 'Order Report', url: '/reports/orderreport' },
-                { key: 'salesOrder', label: 'Sales Order', url: '/reports/salesorder' },
-                { key: 'salesOverview', label: 'Sales Overview', url: '/reports/salesoverview' },
-                { key: 'productPerformance', label: 'Product Performance', url: '/reports/productperformance' },
-                { key: 'salesByPaymentType', label: 'Sales By Payment Type', url: '/reports/salesbypaymenttype' },
-                { key: 'salesByShippingType', label: 'Sales by Shipping Type', url: '/reports/salesbyshippingtype' },
-                { key: 'top10BestPerformingSkus', label: 'Top 10 Best Performing SKUs', url: '/reports/bestperformingskus' },
+                {
+                    aclCode: 'oms_lite_reports_sales_order', key: 'salesorder', label: 'Sales Order', url: '/reports/salesorder',
+                },
+                {
+                    aclCode: 'oms_lite_reports_sales_overview', key: 'salesoverview', label: 'Sales Overview', url: '/reports/salesoverview',
+                },
+                {
+                    aclCode: 'oms_lite_reports_product_performance', key: 'productperformance', label: 'Product Performance', url: '/reports/productperformance',
+                },
+                {
+                    aclCode: 'oms_lite_reports_sales_by_payment', key: 'salesbypaymenttype', label: 'Sales By Payment Type', url: '/reports/salesbypaymenttype',
+                },
+                {
+                    aclCode: 'oms_lite_reports_sales_by_shipping', key: 'salesbyshippingtype', label: 'Sales by Shipping Type', url: '/reports/salesbyshippingtype',
+                },
+                {
+                    aclCode: 'oms_lite_reports_best_sku', key: 'bestperformingskus', label: 'Top 10 Best Performing SKUs', url: '/reports/bestperformingskus',
+                },
+                // { aclCode: 'orderReport', label: 'Order Report', url: '/reports/orderreport' },
             ],
         },
         {
+            aclCode: 'oms_lite_header_configurations',
             key: 'configurations',
             label: 'Configurations',
             children: [
-                { key: 'integrations', label: 'Integrations', url: '/configurations/integrations' },
-                { key: 'shipments', label: 'Shipments', url: '/configurations/shipments' },
+                {
+                    aclCode: 'oms_lite_config_integrations', key: 'integrations', label: 'Integrations', url: '/configurations/integrations',
+                },
+                {
+                    aclCode: 'oms_lite_config_shipments', key: 'shipments', label: 'Shipments', url: '/configurations/shipments',
+                },
+                {
+                    aclCode: 'oms_lite_logistix_provider', key: 'logistixprovider', label: 'Logistix Provider', url: '/configurations/logistixprovider',
+                },
             ],
         },
         {
+            aclCode: 'oms_lite_header_tools',
             key: 'tools',
             label: 'Tools',
             children: [
-                { key: 'clitools', label: 'CLI Tools', url: '/tools/clitools' },
-                { key: 'history', label: 'History', url: '/tools/history' },
+                {
+                    aclCode: 'oms_lite_tools_cli', key: 'clitools', label: 'CLI Tools', url: '/tools/clitools',
+                },
+                {
+                    aclCode: 'oms_lite_notification', key: 'notification', label: 'Notification', url: '/oms/notification',
+                },
+            ],
+        },
+        {
+            aclCode: 'oms_lite_header_user_data',
+            key: 'userData',
+            label: 'User',
+            children: [
+                {
+                    aclCode: 'oms_lite_admin_store', key: 'adminstore', label: 'All Users', url: '/userdata/adminstore',
+                },
             ],
         },
     ];
@@ -217,15 +368,20 @@ const Layout = (props) => {
                 />
             )}
             {showSidebar() && (
-                <Sidebar
-                    activeParentMenu={activeParentMenu}
-                    setActiveParentMenu={setActiveParentMenu}
-                    activeChildMenu={activeChildMenu}
-                    setActiveChildMenu={setActiveChildMenu}
-                    open={open}
-                    setOpen={setOpen}
-                    menuList={menuList}
-                />
+                <>
+                    <Sidebar
+                        activeParentMenu={activeParentMenu}
+                        setActiveParentMenu={setActiveParentMenu}
+                        activeChildMenu={activeChildMenu}
+                        setActiveChildMenu={setActiveChildMenu}
+                        open={open}
+                        setOpen={setOpen}
+                        menuList={menuList}
+                        aclDetail={dataAcl}
+                    >
+                        {varianAcl()}
+                    </Sidebar>
+                </>
             )}
             <main className={showHeader() ? classes.content : classes.contentNoHeader}>
                 <Loading open={backdropLoader} />
