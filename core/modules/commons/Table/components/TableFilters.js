@@ -5,6 +5,7 @@ import React from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import PropTypes from 'prop-types';
+import classnames from 'clsx';
 
 const defaultFilterComponent = ({ filterValue, setFilterValue }) => (
     <TextField
@@ -44,7 +45,7 @@ const TableFilters = (props) => {
                 <div style={{ padding: 12 }}>Filter fields is empty.</div>
             )}
             {filters.map((field, i) => (
-                <div className="col-filter" key={i} style={{ padding: 12, display: 'inline-block' }}>
+                <div className={classnames('col-filter', field.class)} key={i} style={{ padding: 12, display: 'inline-block' }}>
                     <div>
                         {field.label}
                     </div>
