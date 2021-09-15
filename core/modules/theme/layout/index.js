@@ -69,16 +69,16 @@ const Layout = (props) => {
                     aclCode: 'oms_lite_sales_shipment', key: 'allshipment', label: 'All Shipment', url: '/sales/shipment',
                 },
                 {
-                    aclCode: 'shipment_pickup_dashboard', key: 'storepickup', label: 'Store Pickup', url: '/sales/storepickup',
+                    aclCode: 'shipment_pickup_dashboard', key: 'storepickup', label: 'Store Pickup', url: '/shipment/storepickup',
                 },
                 {
                     aclCode: 'shipment_curbside_pickup', key: 'curbpickup', label: 'Curb Pickup', url: '/shipment/curbpickup',
                 },
                 {
-                    aclCode: 'shipment_delivery_dashboard', key: 'homedelivery', label: 'Home Delivery', url: '/sales/homedelivery',
+                    aclCode: 'shipment_delivery_dashboard', key: 'homedelivery', label: 'Home Delivery', url: '/shipment/homedelivery',
                 },
                 {
-                    aclCode: 'shipment_marketplace_dashboard', key: 'shipmentmarketplace', label: 'Marketplace', url: '/marketplace/shipmentmarketplace',
+                    aclCode: 'shipment_marketplace_dashboard', key: 'shipmentmarketplace', label: 'Marketplace', url: '/shipment/shipmentmarketplace',
                 },
             ],
         },
