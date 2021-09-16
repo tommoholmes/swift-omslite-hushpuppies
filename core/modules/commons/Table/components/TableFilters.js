@@ -7,11 +7,12 @@ import Button from '@common_button';
 import PropTypes from 'prop-types';
 import classnames from 'clsx';
 
-const defaultFilterComponent = ({ filterValue, setFilterValue }) => (
+const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => (
     <TextField
         variant="outlined"
         value={filterValue}
         onChange={(e) => setFilterValue(e.target.value)}
+        disabled={disabled}
     />
 );
 
@@ -52,6 +53,7 @@ const TableFilters = (props) => {
                     {(field.component || defaultFilterComponent)({
                         get filterValue() { return getFilterValueByField(field); },
                         setFilterValue: (value) => setFilterValueByField(field, value),
+                        disabled: field.disabled,
                     })}
                 </div>
             ))}
