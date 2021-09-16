@@ -67,6 +67,12 @@ const useStyles = makeStyles((theme) => ({
     formFieldButton: {
         margin: '20px 0 10px 0',
     },
+    formFieldButton2: {
+        margin: 0,
+        '& button': {
+            marginTop: 0,
+        },
+    },
     btn: {
         borderRadius: 20,
         boxShadow: 'none',
@@ -85,6 +91,25 @@ const useStyles = makeStyles((theme) => ({
             borderColor: 'rgba(0, 0, 0, 0.12)',
         },
     },
+    contentHeader: {
+        padding: '18px 15px',
+        borderRadius: 16,
+        '& .divHeader': {
+            display: 'inline-block',
+            marginRight: 20,
+            marginBottom: 10,
+            verticalAlign: 'top',
+        },
+        '& .titleHeader': {
+            color: colorGray,
+            fontSize: 12,
+            textTransform: 'uppercase',
+            margin: 0,
+        },
+        '& .spanHeader': {
+            color: colorBold,
+        },
+    },
     content: {
         borderBottom: '3px solid #F5F7FB',
         padding: '18px 15px',
@@ -97,6 +122,10 @@ const useStyles = makeStyles((theme) => ({
             border: 0,
             height: 1,
         },
+    },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
     },
     orderLabel: {
         fontFamily: font,
@@ -183,6 +212,34 @@ const useStyles = makeStyles((theme) => ({
     },
     printProgress: {
         textAlign: 'center',
+    },
+    fieldRoot: {
+        maxWidth: 200,
+        verticalAlign: 'middle',
+        marginBottom: 10,
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
+        '&.fieldCenter': {
+            marginLeft: 10,
+            marginRight: 10,
+        },
+        '& .MuiInputLabel-outlined': {
+            transform: 'translate(10px, 10px)',
+        },
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6px) scale(0.75)',
+        },
+    },
+    fieldInput: {
+        height: 36,
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: colorText,
+        },
+    },
+    spanText: {
+        display: 'block',
+        margin: '20px 0 10px 0',
     },
 }));
 
