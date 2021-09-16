@@ -83,6 +83,7 @@ const CustomTable = (props) => {
         count,
         actions,
         hideActions = false,
+        handleClickRow = null,
     } = props;
 
     // hooks
@@ -341,7 +342,13 @@ const CustomTable = (props) => {
         return (
             <TableBody>
                 {rows.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
+                    <TableRow
+                        key={rowIndex}
+                        onClick={() => handleClickRow ? handleClickRow(row) : null}
+                        style={{
+                            cursor: handleClickRow ? 'pointer' : 'default',
+                        }}
+                    >
                         {showCheckbox && (
                             <TableCell>
                                 <Checkbox

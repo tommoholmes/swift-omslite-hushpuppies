@@ -5,9 +5,11 @@ const CustomTextField = ({
     variant = 'standard',
     InputProps,
     inputProps,
+    disabled,
     ...other
 }) => (
     <TextField
+        disabled={disabled}
         variant={variant}
         InputProps={{
             ...InputProps,
