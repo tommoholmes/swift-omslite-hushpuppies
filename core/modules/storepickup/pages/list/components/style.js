@@ -81,6 +81,13 @@ const useStyles = makeStyles(() => ({
         height: 'auto',
         marginRight: 12,
     },
+    loading: {
+        display: 'flex',
+        color: iconFont,
+        fontWeight: 600,
+        justifyContent: 'center',
+        paddingTop: 20,
+    },
 }));
 
 export default useStyles;

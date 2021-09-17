@@ -5,10 +5,9 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Tabs from '@common_tabs';
-import { optionsAllocation, optionsStatus } from '@modules/storepickup/helpers';
+import { optionsAllocation, optionsStatus, dataTab } from '@modules/storepickup/helpers';
 import Header from '@modules/storepickup/pages/list/components/Header';
 import useStyles from '@modules/storepickup/pages/list/components/style';
-import CustomTable from '@root/core/modules/commons/Table/index';
 import Router from 'next/router';
 
 const StorePickupListContent = (props) => {
@@ -23,14 +22,14 @@ const StorePickupListContent = (props) => {
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'ASC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
-        // { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
+        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
         { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        // { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
-        // { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
+        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true },
-        // { field: 'actions', headerName: 'Actions', hideable: true, hidden: },
+        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
@@ -61,12 +60,15 @@ const StorePickupListContent = (props) => {
                 <Autocomplete
                     style={{ width: 228 }}
                     value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.id)}
+                    onChange={(newValue) => {
+                        setTab(dataTab.find((e) => e.value === newValue.id) ? newValue.id : 0);
+                        setFilterValue(newValue && newValue.id);
+                    }}
                     options={optionsStatus}
                 />
             ),
         },
-        // { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Order Date', initialValue: '' },
+        { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Order Date', initialValue: '' },
         { field: 'track_number', name: 'track_number', type: 'like', label: 'Airwaybill Number', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'framework', name: 'framework', type: 'neq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
@@ -160,14 +162,6 @@ const StorePickupListContent = (props) => {
         },
     ];
 
-    const dataTab = [
-        { label: 'All', value: 0 },
-        { label: 'Process for Pack', value: 'process_for_pack' },
-        { label: 'Ready for Pack', value: 'ready_for_pack' },
-        { label: 'Ready for Pickup', value: 'ready_for_pickup' },
-        { label: 'Customer Picked Up', value: 'customer_picked_up' },
-    ];
-
     const onChangeTab = (e, v) => {
         setLoad(true);
         setTab(v);
@@ -183,11 +177,12 @@ const StorePickupListContent = (props) => {
     //         <div>Loading . . .</div>
     //     );
     // }
+
     return (
         <>
             <Header />
             <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
-            {load ? <div>Loading . . .</div>
+            {load ? <div className={classes.loading}>Loading . . .</div>
                 : (
                     <Table
                         filters={filters}
@@ -199,6 +194,7 @@ const StorePickupListContent = (props) => {
                         count={storeShipmentTotal}
                         showCheckbox
                         handleClickRow={handleClickRow}
+                        handleReset={() => setTab(0)}
                     />
                 )}
         </>

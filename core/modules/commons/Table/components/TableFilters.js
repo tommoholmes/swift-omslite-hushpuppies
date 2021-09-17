@@ -17,7 +17,7 @@ const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => (
 );
 
 const TableFilters = (props) => {
-    const { initialFilters, setParentFilters } = props;
+    const { initialFilters, setParentFilters, handleReset = () => {} } = props;
 
     // state
     const [filters, setFilters] = React.useState(initialFilters);
@@ -46,16 +46,19 @@ const TableFilters = (props) => {
                 <div style={{ padding: 12 }}>Filter fields is empty.</div>
             )}
             {filters.map((field, i) => (
-                <div className={classnames('col-filter', field.class)} key={i} style={{ padding: 12, display: 'inline-block' }}>
-                    <div>
-                        {field.label}
-                    </div>
-                    {(field.component || defaultFilterComponent)({
-                        get filterValue() { return getFilterValueByField(field); },
-                        setFilterValue: (value) => setFilterValueByField(field, value),
-                        disabled: field.disabled,
-                    })}
-                </div>
+                field.hidden ? null
+                    : (
+                        <div className={classnames('col-filter', field.class)} key={i} style={{ padding: 12, display: 'inline-block' }}>
+                            <div>
+                                {field.label}
+                            </div>
+                            {(field.component || defaultFilterComponent)({
+                                get filterValue() { return getFilterValueByField(field); },
+                                setFilterValue: (value) => setFilterValueByField(field, value),
+                                disabled: field.disabled,
+                            })}
+                        </div>
+                    )
             ))}
             <div style={{ padding: 12 }}>
                 <Button
@@ -74,6 +77,7 @@ const TableFilters = (props) => {
                             const resetedFilters = filters.map((filter) => ({ ...filter, value: '' }));
                             setFilters(resetedFilters);
                             setParentFilters([]);
+                            handleReset();
                         }
                     }}
                 >

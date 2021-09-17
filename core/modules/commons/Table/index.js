@@ -84,6 +84,7 @@ const CustomTable = (props) => {
         actions,
         hideActions = false,
         handleClickRow = null,
+        handleReset,
     } = props;
 
     // hooks
@@ -258,7 +259,7 @@ const CustomTable = (props) => {
                         </div>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
-                        <TableFilters initialFilters={filters} setParentFilters={setFilters} />
+                        <TableFilters initialFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
                     </Collapse>
                 </div>
             </div>
