@@ -10,7 +10,7 @@ import useStyles from '@modules/homedelivery/pages/list/components/style';
 
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getStoreShipmentList } = props;
+    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
 
@@ -97,10 +97,10 @@ const HomeDeliveryListContent = (props) => {
 
     const rows = storeShipmentList.map((homedelivery) => ({
         ...homedelivery,
-        id: homedelivery.increment_id,
+        id: homedelivery.entity_id,
         email: `${homedelivery.shipping_email} ${homedelivery.shipping_telephone}`,
         actions: () => (
-            <Link href={`/shipment/homedelivery/edit/${homedelivery.increment_id}`}>
+            <Link href={`/shipment/homedelivery/edit/${homedelivery.entity_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),
@@ -117,7 +117,7 @@ const HomeDeliveryListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/shipment/homedelivery/print/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pick/${ idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -125,40 +125,40 @@ const HomeDeliveryListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/shipment/homedelivery/printpack/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pack/${ idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
             label: 'Mark Confirm Complete',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await confirmShipment({ variables });
+            },
         },
         {
             label: 'Mark Pick Complete',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await pickShipment({ variables });
+            },
         },
         {
             label: 'Mark Pack Complete',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await packShipment({ variables });
+            },
         },
         {
             label: 'Mark Booking Complete (Shipper ID Only)',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await bookCourier({ variables });
+            },
         },
     ];
 

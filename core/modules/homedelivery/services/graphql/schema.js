@@ -14,6 +14,7 @@ export const getStoreShipmentList = gql`
             sort: $sort,
         ){
             items {
+                entity_id
                 increment_id
                 channel_order_increment_id
                 allocation_status
@@ -38,52 +39,53 @@ export const getStoreShipmentList = gql`
     }
 `;
 
-export const getShipmentById = gql`
-    query getShipmentById(
+export const getStoreShipmentById = gql`
+    query getStoreShipmentById(
         $id: Int!
     ){
-        getShipmentById(
+        getStoreShipmentById(
             id: $id
         ){
+            entity_id
             increment_id
+            channel_order_increment_id
             status {
                 label
                 value
             }
             allocation_status
             channel_order_date
-            order_id
-            channel_order_increment_id
-            loc_code{
-                loc_name
-            }
             customer_name
             shipping_telephone
-            email
+            shipping_email
+            updated_at
+            all_track{
+                created_at
+                title
+                track_number
+            }
             billing_address {
                 firstname
                 lastname
                 street
                 city
-                country_name
                 region
                 postcode
                 country_id
                 telephone
             }
             pickup_info {
-                created_at
                 name
-                phone
                 loc_details
                 vehicle_number
+                vehicle_desc
                 notes
             }
             order_item {
                 sku
                 name
-                base_price
-                qty_shipped
+                price
+                qty
                 row_total
             }
             subtotal
@@ -96,7 +98,90 @@ export const getShipmentById = gql`
     }
 `;
 
+export const confirmShipment = gql`
+    mutation confirmShipment(
+        $id: [Int!],
+    ){
+        confirmShipment(
+            id: $id
+        )
+    }
+`;
+
+export const cantFulfillShipment = gql`
+    mutation cantFulfillShipment(
+        $id: [Int!],
+    ){
+        cantFulfillShipment(
+            id: $id
+        )
+    }
+`;
+
+export const pickShipment = gql`
+    mutation pickShipment(
+        $id: [Int!],
+    ){
+        pickShipment(
+            id: $id
+        )
+    }
+`;
+
+export const packShipment = gql`
+    mutation packShipment(
+        $id: [Int!],
+    ){
+        packShipment(
+            id: $id
+        )
+    }
+`;
+
+export const bookCourier = gql`
+    mutation bookCourier(
+        $id: Int!,
+    ){
+        bookCourier(
+            id: $id
+        )
+    }
+`;
+
+export const shipDelivery = gql`
+    mutation shipDelivery(
+        $id: Int!,
+        $carrier: String!,
+        $name: String!,
+        $reference: String!,
+    ){
+        shipDelivery(
+            id: $id,
+            carrier: $carrier,
+            name: $name,
+            reference: $reference,
+        )
+    }
+`;
+
+export const deliveredShipment = gql`
+    mutation deliveredShipment(
+        $id: [Int!],
+    ){
+        deliveredShipment(
+            id: $id
+        )
+    }
+`;
+
 export default {
     getStoreShipmentList,
-    getShipmentById,
+    getStoreShipmentById,
+    confirmShipment,
+    cantFulfillShipment,
+    pickShipment,
+    packShipment,
+    bookCourier,
+    shipDelivery,
+    deliveredShipment,
 };
