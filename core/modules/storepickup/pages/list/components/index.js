@@ -29,7 +29,7 @@ const StorePickupListContent = (props) => {
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        // { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
@@ -77,6 +77,9 @@ const StorePickupListContent = (props) => {
 
     const getIconByStatus = (status) => {
         if (status.value === 'process_for_pack' || status.value === 'process_for_shipping') {
+            if (status.label === 'Cannot Fulfill') {
+                return '/assets/img/order_status/cannotfulfill.svg';
+            }
             return '/assets/img/order_status/processforpack.svg';
         }
         if (status.value === 'cannot_fulfill') {
