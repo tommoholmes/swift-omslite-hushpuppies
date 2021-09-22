@@ -29,6 +29,10 @@ export const pickShipment = (variables) => useMutation(Schema.pickShipment, {
     variables, ...context,
 });
 
+export const cancelDelivery = (variables) => useMutation(Schema.cancelDelivery, {
+    variables, ...context,
+});
+
 export const packShipment = (variables) => useMutation(Schema.packShipment, {
     variables, ...context,
 });
@@ -45,14 +49,40 @@ export const deliveredShipment = (variables) => useMutation(Schema.deliveredShip
     variables, ...context,
 });
 
+export const exportStoreShipmentToCsv = (variables) => useLazyQuery(Schema.exportStoreShipmentToCsv, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const saveShipmentNotes = (variables) => useMutation(Schema.saveShipmentNotes, {
+    variables, ...context,
+});
+
+export const getCourierOption = (variables) => useLazyQuery(Schema.getCourierOption, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getShipmentCancelReason = (variables) => useLazyQuery(Schema.getShipmentCancelReason, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const bulkShipment = (variables) => useMutation(Schema.bulkShipment, {
+    variables, ...context,
+});
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
     confirmShipment,
     cantFulfillShipment,
     pickShipment,
+    cancelDelivery,
     packShipment,
     bookCourier,
     shipDelivery,
     deliveredShipment,
+    exportStoreShipmentToCsv,
+    saveShipmentNotes,
+    getCourierOption,
+    getShipmentCancelReason,
+    bulkShipment,
 };

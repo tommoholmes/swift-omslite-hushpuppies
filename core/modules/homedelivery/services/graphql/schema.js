@@ -24,7 +24,9 @@ export const getStoreShipmentList = gql`
                     label
                 }
                 track_number
-                channel_name
+                channel{
+                    channel_name
+                }
                 shipping_name
                 shipping_email
                 shipping_telephone
@@ -55,6 +57,9 @@ export const getStoreShipmentById = gql`
             }
             allocation_status
             channel_order_date
+            location{
+                loc_name
+            }
             customer_name
             shipping_telephone
             shipping_email
@@ -128,6 +133,18 @@ export const pickShipment = gql`
     }
 `;
 
+export const cancelDelivery = gql`
+    mutation cancelDelivery(
+        $id: Int!,
+        $cancel_reason_id: String,
+    ){
+        cancelDelivery(
+            id: $id
+            cancel_reason_id: $cancel_reason_id,
+        )
+    }
+`;
+
 export const packShipment = gql`
     mutation packShipment(
         $id: [Int!],
@@ -174,14 +191,79 @@ export const deliveredShipment = gql`
     }
 `;
 
+export const exportStoreShipmentToCsv = gql`
+    query exportStoreShipmentToCsv(
+        $type: String!,
+        $filter: ShipmentFilterInput,
+        $sort: ShipmentSortInput,
+    ){
+        exportStoreShipmentToCsv(
+            type: $type,
+            filter: $filter,
+            sort: $sort,
+        )
+    }
+`;
+
+export const saveShipmentNotes = gql`
+    mutation saveShipmentNotes(
+        $id: Int!,
+        $notes: String!,
+    ){
+        saveShipmentNotes(
+            id: $id,
+            notes: $notes,
+        )
+    }
+`;
+
+export const getCourierOption = gql`
+    query{
+        getCourierOption{
+            label
+            value
+        }
+    }
+`;
+
+export const getShipmentCancelReason = gql`
+    query{
+        getShipmentCancelReason{
+            label
+            value
+        }
+    }
+`;
+
+export const bulkShipment = gql`
+    mutation bulkShipment(
+        $binary: String!,
+    ){
+        bulkShipment(
+            input: {
+                binary: $binary,
+            }
+        ){
+            data
+            error
+        }
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
     confirmShipment,
     cantFulfillShipment,
     pickShipment,
+    cancelDelivery,
     packShipment,
     bookCourier,
     shipDelivery,
     deliveredShipment,
+    exportStoreShipmentToCsv,
+    saveShipmentNotes,
+    getCourierOption,
+    getShipmentCancelReason,
+    bulkShipment,
 };

@@ -15,10 +15,12 @@ const ContentWrapper = (props) => {
     const [confirmShipment] = gqlService.confirmShipment();
     const [cantFulfillShipment] = gqlService.cantFulfillShipment();
     const [pickShipment] = gqlService.pickShipment();
+    const [cancelDelivery] = gqlService.cancelDelivery();
     const [packShipment] = gqlService.packShipment();
     const [bookCourier] = gqlService.bookCourier();
     const [shipDelivery] = gqlService.shipDelivery();
     const [deliveredShipment] = gqlService.deliveredShipment();
+    const [saveShipmentNotes] = gqlService.saveShipmentNotes();
 
     const handleConfirm = () => {
         const variables = {
@@ -95,6 +97,34 @@ const ContentWrapper = (props) => {
         });
     };
 
+    const handleCanceled = ({
+        reason,
+    }) => {
+        const variables = {
+            id: homeDelivery.id,
+            cancel_reason_id: reason.value,
+        };
+        window.backdropLoader(true);
+        cancelDelivery({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order was canceled',
+                variant: 'success',
+            });
+            setTimeout(() => window.location.reload(true), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
     const handlePacked = () => {
         const variables = {
             id: homeDelivery.id,
@@ -152,7 +182,7 @@ const ContentWrapper = (props) => {
     }) => {
         const variables = {
             id: homeDelivery.id,
-            carrier,
+            carrier: carrier.value,
             name,
             reference,
         };
@@ -202,6 +232,34 @@ const ContentWrapper = (props) => {
         });
     };
 
+    const handleNotes = ({
+        notes,
+    }) => {
+        const variables = {
+            id: homeDelivery.id,
+            notes,
+        };
+        window.backdropLoader(true);
+        saveShipmentNotes({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'notes has been saved',
+                variant: 'success',
+            });
+            setTimeout(() => window.location.reload(true), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
     const homeDelivery = {
         id: homedelivery.entity_id,
         shipmentNumber: homedelivery.increment_id,
@@ -210,6 +268,7 @@ const ContentWrapper = (props) => {
         statusValue: homedelivery.status.value,
         allocation: homedelivery.allocation_status,
         date: homedelivery.channel_order_date,
+        location: homedelivery.location.loc_name,
         updated: homedelivery.updated_at,
         awb: homedelivery.all_track[0],
         email: homedelivery.shipping_email,
@@ -254,6 +313,19 @@ const ContentWrapper = (props) => {
         },
     });
 
+    const formikCanceled = useFormik({
+        initialValues: {
+            id: homedelivery.entity_id,
+            reason: '',
+        },
+        validationSchema: Yup.object().shape({
+            reason: Yup.string().required('Required!'),
+        }),
+        onSubmit: (values) => {
+            handleCanceled(values);
+        },
+    });
+
     const formikPacked = useFormik({
         initialValues: {
             id: homedelivery.entity_id,
@@ -286,7 +358,6 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             handleShipped(values);
-            console.log(values);
         },
     });
 
@@ -299,16 +370,30 @@ const ContentWrapper = (props) => {
         },
     });
 
+    const formikNotes = useFormik({
+        initialValues: {
+            id: homedelivery.entity_id,
+            notes: '',
+        },
+        validationSchema: Yup.object().shape({
+            notes: Yup.string().required('Required!'),
+        }),
+        onSubmit: (values) => {
+            handleNotes(values);
+        },
+    });
+
     const contentProps = {
         homeDelivery,
         formikConfirm,
         formikCantFullfill,
         formikPicked,
+        formikCanceled,
         formikPacked,
         formikCourier,
         formikShipped,
         formikDelivered,
-
+        formikNotes,
     };
 
     return (

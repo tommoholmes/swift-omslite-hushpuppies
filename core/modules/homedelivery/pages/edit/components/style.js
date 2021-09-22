@@ -66,6 +66,16 @@ const useStyles = makeStyles((theme) => ({
     },
     formFieldButton: {
         margin: '20px 0 10px 0',
+        '& .btnFormDialog': {
+            borderRadius: 20,
+            boxShadow: 'none',
+            border: '1px solid',
+            borderColor: colorPurple,
+            letterSpacing: 0,
+            textTransform: 'capitalize',
+            padding: '5px 25px',
+            marginTop: 15,
+        },
     },
     formFieldButton2: {
         margin: 0,
@@ -126,6 +136,9 @@ const useStyles = makeStyles((theme) => ({
     grid: {
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
+        [theme.breakpoints.down('xs')]: {
+            display: 'block',
+        },
     },
     orderLabel: {
         fontFamily: font,
@@ -230,6 +243,18 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiInputLabel-shrink': {
             transform: 'translate(14px, -6px) scale(0.75)',
         },
+        '&.fieldNotes': {
+            maxWidth: 'unset',
+            width: '50%',
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
+        },
+        '&.newLine': {
+            maxWidth: 'unset',
+            width: '100%',
+            display: 'block',
+        },
     },
     fieldInput: {
         height: 36,
@@ -240,6 +265,47 @@ const useStyles = makeStyles((theme) => ({
     spanText: {
         display: 'block',
         margin: '20px 0 10px 0',
+    },
+    spanLabel: {
+        display: 'inline-block',
+        margin: '0 0 10px 0',
+        position: 'relative',
+    },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: -9,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
+    },
+    wrapperDialog: {
+        '& .MuiDialog-paperWidthSm': {
+            minWidth: 500,
+        },
+    },
+    autocompleteRoot: {
+        maxWidth: 200,
+        width: '100%',
+        verticalAlign: 'middle',
+        marginBottom: 10,
+        display: 'inline-flex',
+        '&.popup': {
+            display: 'block',
+            maxWidth: 'unset',
+        },
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
     },
 }));
 

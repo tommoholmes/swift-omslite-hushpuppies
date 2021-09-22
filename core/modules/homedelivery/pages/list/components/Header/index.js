@@ -13,7 +13,7 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Home Delivery Dashboard</h2>
             <Button
                 className={classes.buttonAdd}
-                // onClick={() => router.push('/shipment/homedelivery/bulk')}
+                onClick={() => router.push('/shipment/homedelivery/import')}
             >
                 Bulk Shipment
             </Button>
