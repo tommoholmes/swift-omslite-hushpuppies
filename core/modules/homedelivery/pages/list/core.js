@@ -7,11 +7,15 @@ const Core = (props) => {
     } = props;
 
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
+    const [exportStoreShipmentToCsv, { datax, loadingx }] = gqlService.exportStoreShipmentToCsv();
 
     const contentProps = {
         getStoreShipmentList,
         data,
         loading,
+        exportStoreShipmentToCsv,
+        datax,
+        loadingx,
     };
 
     return (

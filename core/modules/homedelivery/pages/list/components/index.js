@@ -4,15 +4,20 @@ import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
-import { optionsAllocation, optionsStatus } from '@modules/homedelivery/helpers';
+import Tabs from '@common_tabs';
+import { optionsAllocation, optionsStatus, dataTab } from '@modules/homedelivery/helpers';
 import Header from '@modules/homedelivery/pages/list/components/Header';
 import useStyles from '@modules/homedelivery/pages/list/components/style';
 
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier } = props;
+    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier,
+        exportStoreShipmentToCsv, datax, loadingx } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
+    const exportStoreShipmentToCsvList = (datax && datax.exportStoreShipmentToCsv) || [];
+    const [tab, setTab] = React.useState(0);
+    const [load, setLoad] = React.useState(false);
 
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'ASC', hideable: true },
@@ -50,7 +55,7 @@ const HomeDeliveryListContent = (props) => {
             name: 'status',
             type: 'like',
             label: 'Status',
-            initialValue: '',
+            initialValue: tab !== 0 ? tab : '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
@@ -98,6 +103,7 @@ const HomeDeliveryListContent = (props) => {
     const rows = storeShipmentList.map((homedelivery) => ({
         ...homedelivery,
         id: homedelivery.entity_id,
+        channel_name: homedelivery.channel.channel_name,
         email: `${homedelivery.shipping_email} ${homedelivery.shipping_telephone}`,
         actions: () => (
             <Link href={`/shipment/homedelivery/edit/${homedelivery.entity_id}`}>
@@ -162,6 +168,12 @@ const HomeDeliveryListContent = (props) => {
         },
     ];
 
+    const onChangeTab = (e, v) => {
+        setLoad(true);
+        setTab(v);
+        setTimeout(() => { setLoad(false); }, 500);
+    };
+
     // if (!data || loading) {
     //     return (
     //         <div>Loading . . .</div>
@@ -171,16 +183,21 @@ const HomeDeliveryListContent = (props) => {
     return (
         <>
             <Header />
-            <Table
-                filters={filters}
-                actions={actions}
-                rows={rows}
-                getRows={getStoreShipmentList}
-                loading={loading}
-                columns={columns}
-                count={storeShipmentTotal}
-                showCheckbox
-            />
+            <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
+            {load ? <div className={classes.loading}>Loading . . .</div>
+                : (
+                    <Table
+                        filters={filters}
+                        actions={actions}
+                        rows={rows}
+                        getRows={getStoreShipmentList}
+                        loading={loading}
+                        columns={columns}
+                        count={storeShipmentTotal}
+                        showCheckbox
+                        handleReset={() => setTab(0)}
+                    />
+                )}
         </>
     );
 };
