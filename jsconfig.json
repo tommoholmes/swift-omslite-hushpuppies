@@ -78,6 +78,7 @@
             "@common_chart": ["src/modules/commons/Chart","core/modules/commons/Chart"],
             "@common_progressbar": ["src/modules/commons/ProgressBar","core/modules/commons/ProgressBar"],
             "@common_scrolldialog": ["src/modules/commons/ScrollDialog","core/modules/commons/ScrollDialog"],
+            "@common_tabs": ["src/modules/commons/Tabs","core/modules/commons/Tabs"],
 
             "@common_autocomplete/*": ["src/modules/commons/Autocomplete/*","core/modules/commons/Autocomplete/*"],
             "@common_textfield/*": ["src/modules/commons/TextField/*","core/modules/commons/TextField/*"],

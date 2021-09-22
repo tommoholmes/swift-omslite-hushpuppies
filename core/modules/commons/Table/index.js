@@ -83,6 +83,8 @@ const CustomTable = (props) => {
         count,
         actions,
         hideActions = false,
+        handleClickRow = null,
+        handleReset,
     } = props;
 
     // hooks
@@ -257,7 +259,7 @@ const CustomTable = (props) => {
                         </div>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
-                        <TableFilters initialFilters={filters} setParentFilters={setFilters} />
+                        <TableFilters initialFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
                     </Collapse>
                 </div>
             </div>
@@ -341,7 +343,13 @@ const CustomTable = (props) => {
         return (
             <TableBody>
                 {rows.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
+                    <TableRow
+                        key={rowIndex}
+                        onClick={() => handleClickRow ? handleClickRow(row) : null}
+                        style={{
+                            cursor: handleClickRow ? 'pointer' : 'default',
+                        }}
+                    >
                         {showCheckbox && (
                             <TableCell>
                                 <Checkbox

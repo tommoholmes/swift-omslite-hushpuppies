@@ -12,3 +12,5 @@ export const RED = '#ff0000';
 export const ORANGE = '#FE5D26';
 export const GREEN = '#46954D';
 export const BLACK = '#000000';
+
+export const PURPLE = '#BE1F93';
