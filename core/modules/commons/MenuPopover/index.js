@@ -1,14 +1,28 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@common_button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+
+const useStyles = makeStyles(() => ({
+    btn: {
+        background: '#B1BCDB',
+        boxShadow: 'none',
+        '&:hover': {
+            background: '#B1BCDB',
+            boxShadow: 'none',
+        },
+    },
+}));
 
 const MenuPopover = (props) => {
     const {
         openButton,
         menuItems,
+        icon,
     } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const styles = useStyles();
 
     const handleClickOpenButton = (event) => {
         setAnchorEl(event.currentTarget);
@@ -26,8 +40,9 @@ const MenuPopover = (props) => {
 
     return (
         <div>
-            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickOpenButton}>
+            <Button variant="contained" buttonType="primary-rounded" className={styles.btn} onClick={handleClickOpenButton}>
                 {openButton.label}
+                {icon}
             </Button>
             <Menu
                 id="simple-menu"

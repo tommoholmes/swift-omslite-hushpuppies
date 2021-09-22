@@ -26,6 +26,8 @@ import ImportExportIcon from '@material-ui/icons/ImportExport';
 import TablePaginationActions from '@common_table/components/TablePaginationActions';
 import TableFilters from '@common_table/components/TableFilters';
 import useStyles from '@common_table/style';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // helpers
 const getComponentOrString = (param) => (
@@ -195,6 +197,7 @@ const CustomTable = (props) => {
                             </button>
                             <MenuPopover
                                 openButton={{ label: 'Actions' }}
+                                icon={<ExpandMoreIcon />}
                                 menuItems={toolbarActions.map((action) => ({
                                     label: action.label,
                                     onClick: () => {
@@ -221,9 +224,12 @@ const CustomTable = (props) => {
                     </div>
                     <div className="top-item">
                         <Button
-                            className={classes.btn}
+                            className={clsx(classes.btn, 'filter')}
                             onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
+                            variant="contained"
+                            buttonType="primary-rounded"
                         >
+                            <FilterListIcon style={{ marginRight: 10 }} />
                             filters
                         </Button>
                     </div>
