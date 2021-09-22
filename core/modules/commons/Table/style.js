@@ -2,6 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const colorText = '#536777';
 const colorBorder = '#435179';
+const colorPurple = '#BE1F93';
 
 const useStyles = makeStyles((theme) => ({
     tableToolbar: {
@@ -66,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: 'unset',
             boxShadow: 'none',
+        },
+        '&.filter': {
+            borderColor: colorPurple,
+            color: 'white',
+            background: colorPurple,
         },
     },
     arrowDown: {
