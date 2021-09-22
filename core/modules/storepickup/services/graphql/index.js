@@ -33,15 +33,11 @@ export const packShipment = (variables) => useMutation(Schema.packShipmentPickup
     variables, ...context,
 });
 
-export const bookCourier = (variables) => useMutation(Schema.bookCourierPickup, {
+export const pickedupShipment = (variables) => useMutation(Schema.pickedupShipment, {
     variables, ...context,
 });
 
-export const shipDelivery = (variables) => useMutation(Schema.shipDeliveryPickup, {
-    variables, ...context,
-});
-
-export const deliveredShipment = (variables) => useMutation(Schema.deliveredShipmentPickup, {
+export const saveShipmentNotes = (variables) => useMutation(Schema.saveShipmentNotes, {
     variables, ...context,
 });
 
@@ -52,7 +48,6 @@ export default {
     cantFulfillShipment,
     pickShipment,
     packShipment,
-    bookCourier,
-    shipDelivery,
-    deliveredShipment,
+    pickedupShipment,
+    saveShipmentNotes,
 };

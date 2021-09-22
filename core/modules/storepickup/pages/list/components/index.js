@@ -73,6 +73,7 @@ const StorePickupListContent = (props) => {
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'framework', name: 'framework', type: 'neq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
         { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '1', disabled: true },
+        { field: 'pickup_id', name: 'pickup_id', type: 'null', label: 'Pickup Id', class: 'fixed', initialValue: 'true', disabled: true },
     ];
 
     const getIconByStatus = (status) => {
@@ -101,6 +102,7 @@ const StorePickupListContent = (props) => {
         ...storepickup,
         id: storepickup.increment_id,
         email: `${storepickup.shipping_email} ${storepickup.shipping_telephone}`,
+        channel_name: `${storepickup.channel.channel_name}`,
         actions: () => (
             <Link href={`/shipment/storepickup/edit/${storepickup.increment_id}`}>
                 <a className="link-button">view</a>
@@ -112,6 +114,18 @@ const StorePickupListContent = (props) => {
                 {storepickup.status.label}
             </div>
         ),
+        allocation_status: () => (
+            <div
+                className={classes.statusRow}
+                style={{
+                    textTransform: 'capitalize',
+
+                }}
+            >
+                {storepickup.allocation_status?.split('_').join(' ') || '-'}
+            </div>
+        ),
+        track_number: storepickup.track_number || '-',
     }));
 
     const actions = [

@@ -149,38 +149,28 @@ export const packShipmentPickup = gql`
     }
 `;
 
-export const bookCourierPickup = gql`
-    mutation bookCourierPickup(
+export const saveShipmentNotes = gql`
+    mutation saveShipmentNotesPickup(
         $id: Int!,
+        $notes: String!,
     ){
-        bookCourier(
+        saveShipmentNotes(
             id: $id
+            notes: $notes
         )
     }
 `;
 
-export const shipDeliveryPickup = gql`
-    mutation shipDeliveryPickup(
-        $id: Int!,
-        $carrier: String!,
+export const pickedupShipment = gql`
+    mutation pickedupShipmentPickup(
+        $id: [Int!],
         $name: String!,
         $reference: String!,
     ){
-        shipDelivery(
-            id: $id,
-            carrier: $carrier,
-            name: $name,
-            reference: $reference,
-        )
-    }
-`;
-
-export const deliveredShipmentPickup = gql`
-    mutation deliveredShipmentPickup(
-        $id: [Int!],
-    ){
-        deliveredShipment(
+        pickedupShipment(
             id: $id
+            name: $name
+            reference: $reference
         )
     }
 `;
@@ -192,7 +182,6 @@ export default {
     cantFulfillShipmentPickup,
     pickShipmentPickup,
     packShipmentPickup,
-    bookCourierPickup,
-    shipDeliveryPickup,
-    deliveredShipmentPickup,
+    pickedupShipment,
+    saveShipmentNotes,
 };
