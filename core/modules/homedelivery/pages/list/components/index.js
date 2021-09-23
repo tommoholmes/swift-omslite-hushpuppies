@@ -12,10 +12,9 @@ import useStyles from '@modules/homedelivery/pages/list/components/style';
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier,
-        exportStoreShipmentToCsv, datax, loadingx } = props;
+        handleExport } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
-    const exportStoreShipmentToCsvList = (datax && datax.exportStoreShipmentToCsv) || [];
     const [tab, setTab] = React.useState(0);
     const [load, setLoad] = React.useState(false);
 
@@ -69,7 +68,7 @@ const HomeDeliveryListContent = (props) => {
         { field: 'track_number', name: 'track_number', type: 'like', label: 'Airwaybill Number', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'framework', name: 'framework', type: 'neq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
-        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '0' },
+        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '0', disabled: true },
     ];
 
     const getClassByStatus = (status) => {
@@ -174,12 +173,6 @@ const HomeDeliveryListContent = (props) => {
         setTimeout(() => { setLoad(false); }, 500);
     };
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
@@ -196,6 +189,7 @@ const HomeDeliveryListContent = (props) => {
                         count={storeShipmentTotal}
                         showCheckbox
                         handleReset={() => setTab(0)}
+                        handleExport={handleExport}
                     />
                 )}
         </>
