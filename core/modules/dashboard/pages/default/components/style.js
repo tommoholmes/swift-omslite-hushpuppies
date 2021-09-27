@@ -13,15 +13,20 @@ const blibli = '#2689CA';
 const bukalapak = '#E2004D';
 
 const useStyles = makeStyles((theme) => ({
-    container: {
-        margin: '30px 0px 0px',
+    salesChannelTableWrapper: {
+        margin: '15px 16px',
         '& h2': {
             color: black,
             marginBottom: 0,
         },
+    },
+    container: {
         '& table': {
             width: '100%',
             borderSpacing: '0 15px',
+            [theme.breakpoints.down('xs')]: {
+                width: '230%',
+            },
         },
         '& thead td': {
             color: gray,
@@ -37,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         },
         '& .channelIcon': {
             textAlign: 'center',
-            borderRadius: '10px 0 0 10px',
+            borderRadius: '30% 0 0 10px',
             position: 'relative',
         },
         '& tbody tr .channelIcon::before': {
@@ -62,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
         },
         '& tbody tr:nth-child(6) .channelIcon::before': {
             borderColor: bukalapak,
+        },
+        [theme.breakpoints.down('xs')]: {
+            height: '100%',
+            width: '100%',
+            overflowX: 'scroll',
         },
     },
     titleComponent: {
@@ -89,9 +99,10 @@ const useStyles = makeStyles((theme) => ({
         margin: '0 8px',
         background: '#FFF',
         color: '#8C98A2',
+        height: '260px',
         verticalAlign: 'top',
         [theme.breakpoints.down('xs')]: {
-            margin: '15px 8px',
+            margin: '15px 16px',
         },
         [theme.breakpoints.up('sm')]: {
             width: 'calc(33.333% - 16px)',
@@ -128,6 +139,7 @@ const useStyles = makeStyles((theme) => ({
         '& .link': {
             color: purple,
             textDecoration: 'underline',
+            textAlign: 'center',
         },
     },
     bgGradient: {
@@ -169,10 +181,25 @@ const useStyles = makeStyles((theme) => ({
             lineHeight: '33px',
             marginBottom: 24,
         },
+        [theme.breakpoints.down('xs')]: {
+            margin: '15px 8px',
+        },
+    },
+    userWrapper: {
+        display: 'grid',
+        gridTemplateColumns: '30% 30% 30% 10%',
+        gridColumnGap: '10px',
+        [theme.breakpoints.down('xs')]: {
+            margin: '15px 8px',
+            display: 'inline-grid',
+            gridTemplateColumns: '70vw',
+            gridRowGap: '20px',
+        },
     },
     user: {
-        display: 'inline-block',
-        width: '30%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
         verticalAlign: 'top',
         '&:nth-last-child(1)': {
             width: '10%',
@@ -199,12 +226,17 @@ const useStyles = makeStyles((theme) => ({
             maxWidth: '82%',
         },
     },
+    infoStatusWrapper: {
+        display: 'grid',
+        gridTemplateColumns: '33% 33% 33%',
+        gridColumnGap: '4px',
+        marginTop: '10px',
+    },
     infoStatus: {
         marginBottom: 18,
         '&.statusCenter': {
-            display: 'inline-block',
-            width: '33.333%',
             verticalAlign: 'top',
+            textAlign: 'center',
         },
     },
     noMargin: {
