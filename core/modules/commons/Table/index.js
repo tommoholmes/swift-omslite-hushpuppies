@@ -28,6 +28,7 @@ import TableFilters from '@common_table/components/TableFilters';
 import useStyles from '@common_table/style';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import PublishIcon from '@material-ui/icons/Publish';
 
 // helpers
 const getComponentOrString = (param) => (
@@ -87,6 +88,7 @@ const CustomTable = (props) => {
         hideActions = false,
         handleClickRow = null,
         handleReset,
+        handleExport,
     } = props;
 
     // hooks
@@ -140,6 +142,30 @@ const CustomTable = (props) => {
             }, {}),
         };
         getRows({ variables });
+    };
+
+    const onClickExport = () => {
+        if (handleExport) {
+            const isEmpty = (value) => {
+                if ([undefined, null, '', false].includes(value)) return true;
+                if (value && value.length <= 0) return true;
+                return false;
+            };
+            const variables = {
+                filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
+                    accumulator[currentValue.field] = {
+                        ...accumulator[currentValue.field],
+                        [currentValue.type]: currentValue.value,
+                    };
+                    return accumulator;
+                }, {}),
+                sort: sorts.reduce((accumulator, currentValue) => {
+                    accumulator[currentValue.field] = currentValue.value || undefined;
+                    return accumulator;
+                }, {}),
+            };
+            handleExport(variables);
+        }
     };
 
     // effects
@@ -233,6 +259,20 @@ const CustomTable = (props) => {
                             filters
                         </Button>
                     </div>
+                    {handleExport
+                        && (
+                            <div className="top-item">
+                                <Button
+                                    className={clsx(classes.btn, 'filter')}
+                                    onClick={onClickExport}
+                                    variant="contained"
+                                    buttonType="primary-rounded"
+                                >
+                                    <PublishIcon style={{ marginRight: 10 }} />
+                                    export
+                                </Button>
+                            </div>
+                        )}
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>

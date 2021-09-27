@@ -49,8 +49,8 @@ export const deliveredShipment = (variables) => useMutation(Schema.deliveredShip
     variables, ...context,
 });
 
-export const exportStoreShipmentToCsv = (variables) => useLazyQuery(Schema.exportStoreShipmentToCsv, {
-    variables, ...context, ...fetchPolicy,
+export const exportStoreShipmentToCsv = (options) => useLazyQuery(Schema.exportStoreShipmentToCsv, {
+    ...options, ...context, ...fetchPolicy,
 });
 
 export const saveShipmentNotes = (variables) => useMutation(Schema.saveShipmentNotes, {
