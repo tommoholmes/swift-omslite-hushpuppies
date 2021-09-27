@@ -244,8 +244,27 @@ export const bulkShipment = gql`
                 binary: $binary,
             }
         ){
-            data
-            error
+            is_success
+            attachment_url
+        }
+    }
+`;
+
+export const getActivity = gql`
+    query{
+        getActivity(code: "import_bulkshipment", by_session: true){
+        activity_id
+        activity_code
+        run_status
+        data_total
+        data_processed
+        started_at
+        snapshot_at
+        finished_at
+        run_by
+        run_type
+        attachment
+        error_message
         }
     }
 `;
@@ -266,4 +285,5 @@ export default {
     getCourierOption,
     getShipmentCancelReason,
     bulkShipment,
+    getActivity,
 };
