@@ -63,7 +63,102 @@ export const getPackList = gql`
     }
 `;
 
+export const getAddress = gql`
+    query getAddress(
+        $id: [Int!]!,
+    ){
+        getAddress(
+            id: $id
+        ){
+            print_date
+            data {
+                entity_id
+                channel{
+                    channel_name
+                }
+                ref_barcode
+                marketplace_order_number
+                order_created_at
+                store_name
+                store_telephone
+                track_barcode
+                track_number
+                channel_shipping_label
+                shipping_amount
+                so_barcode
+                order_increment_id
+                shipping_address{
+                    firstname
+                    lastname
+                    street
+                    city
+                    region
+                    postcode
+                    country_id
+                    telephone
+                }
+                store_category
+                items{
+                    sku
+                    name
+                    qty
+                }
+                notes
+            }
+        }
+    }
+`;
+
+export const getInvoice = gql`
+    query getInvoice(
+        $id: [Int!]!,
+    ){
+        getInvoice(
+            id: $id
+        ){
+            print_date
+            data {
+                entity_id
+                            channel{
+                    channel_name
+                }
+                ref_barcode
+                marketplace_order_number
+                so_barcode
+                order_increment_id
+                shipping_address{
+                    firstname
+                    lastname
+                    street
+                    city
+                    region
+                    postcode
+                    country_id
+                    telephone
+                }
+                order_created_at
+                store_name
+                channel_payment_method
+                channel_shipping_label
+                items{
+                    sku
+                    name
+                    price
+                    qty
+                    amount
+                }
+                subtotal
+                discount_amount
+                shipping_amount
+                grand_total
+            }
+        }
+    }
+`;
+
 export default {
     getPickList,
     getPackList,
+    getAddress,
+    getInvoice,
 };
