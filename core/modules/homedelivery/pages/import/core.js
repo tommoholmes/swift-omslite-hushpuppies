@@ -11,17 +11,30 @@ const Core = (props) => {
     const {
         Content,
     } = props;
-    const router = useRouter();
     const [activityState, setActivityState] = React.useState();
+    const [firstLoad, setFirstLoad] = React.useState(true);
     const [bulkShipment] = gqlService.bulkShipment();
-    const [getActivity, responseActivity] = gqlService.getActivity({
+    const [getActivity] = gqlService.getActivity({
         onCompleted: (res) => {
             setActivityState(res.getActivity);
+            if (firstLoad) {
+                setFirstLoad(false);
+            }
+            if (res.getActivity.run_status === 'running') {
+                setTimeout(() => {
+                    getActivity();
+                }, 5000);
+            }
+        },
+        onError: () => {
+            getActivity();
         },
     });
+
     React.useEffect(() => {
         getActivity();
     }, []);
+
     const handleSubmit = ({
         binary,
     }) => {
@@ -37,12 +50,6 @@ const Core = (props) => {
             window.backdropLoader(false);
         }, 2000);
     };
-
-    if (activityState?.run_status === 'running') {
-        setTimeout(() => {
-            getActivity();
-        }, 5000);
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -68,6 +75,7 @@ const Core = (props) => {
         formik,
         handleDropFile,
         activityState,
+        firstLoad,
     };
 
     return (
