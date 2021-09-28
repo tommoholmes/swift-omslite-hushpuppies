@@ -16,31 +16,34 @@ const DashboardContent = () => {
                         welcome to your dashboard!
                     </span>
                 </div>
-                <div className={styles.user}>
-                    <div className={styles.containerUser}>
-                        <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/people.svg" />
-                        <div className="user-text">
-                            <span className={styles.textName}>Endra Dwi Prasetya</span>
-                            <br />
-                            <span>Store Manager</span>
-                            <br />
-                            <span>endra@icube.us</span>
+                <div className={styles.userWrapper}>
+                    <div className={styles.user}>
+                        <div className={styles.containerUser}>
+                            <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/people.svg" />
+                            <div className="user-text">
+                                <span className={styles.textName}>Endra Dwi Prasetya</span>
+                                <br />
+                                <span>Store Manager</span>
+                                <br />
+                                <span>endra@icube.us</span>
+                            </div>
                         </div>
                     </div>
+                    <div className={styles.user}>
+                        <span className={styles.textBold}>Location Code</span>
+                        <br />
+                        <span>LOC1,LOC2,LOC3,LOC4,LOC5,LOC6,LOC7</span>
+                    </div>
+                    <div className={styles.user}>
+                        <span className={styles.textBold}>Channel Code</span>
+                        <br />
+                        <span>SWI,SWIPOS,Jubelio,TKPD,SHPE,LZDA</span>
+                    </div>
+                    <div className={styles.user}>
+                        <a href="#">Edit</a>
+                    </div>
                 </div>
-                <div className={styles.user}>
-                    <span className={styles.textBold}>Location Code</span>
-                    <br />
-                    <span>LOC1,LOC2,LOC3,LOC4,LOC5,LOC6,LOC7</span>
-                </div>
-                <div className={styles.user}>
-                    <span className={styles.textBold}>Channel Code</span>
-                    <br />
-                    <span>SWI,SWIPOS,Jubelio,TKPD,SHPE,LZDA</span>
-                </div>
-                <div className={styles.user}>
-                    <a href="#">Edit</a>
-                </div>
+                
             </div>
             <div className={styles.info}>
                 <div className={styles.boxInfo}>
@@ -48,6 +51,7 @@ const DashboardContent = () => {
                     <div className={styles.infoDetail}>
                         <span>
                             You have
+							<br />
                             <b>70 new order</b>
                             {' '}
                             to confirm
@@ -65,25 +69,28 @@ const DashboardContent = () => {
                     <div className={styles.infoDetail}>
                         <span>
                             You have
-                            <b>610 orders to fullfill</b>
+                            <br />
+                            <b> 610 orders to full fill</b>
                             {' '}
                             and
                             <br />
-                            <b>2 orders cannot fullfill</b>
+                            <b> 2 orders cannot fullfill</b>
                         </span>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_shipment.svg" />
                     </div>
-                    <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                        <h2 className={clsx('colorGreen', styles.noMargin)}>12</h2>
-                        <span>Store Pickup</span>
-                    </div>
-                    <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                        <h2 className={clsx('colorGreen', styles.noMargin)}>251</h2>
-                        <span>Home Delivery</span>
-                    </div>
-                    <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                        <h2 className={clsx('colorGreen', styles.noMargin)}>347</h2>
-                        <span>Marketplace</span>
+                    <div className={styles.infoStatusWrapper}>
+                        <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                            <h2 className={clsx('colorGreen', styles.noMargin)}>12</h2>
+                            <span>Store Pickup</span>
+                        </div>
+                        <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                            <h2 className={clsx('colorGreen', styles.noMargin)}>251</h2>
+                            <span>Home Delivery</span>
+                        </div>
+                        <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                            <h2 className={clsx('colorGreen', styles.noMargin)}>347</h2>
+                            <span>Marketplace</span>
+                        </div>
                     </div>
                     <a className="link" href="#">Manage Shipment</a>
                 </div>
@@ -98,70 +105,73 @@ const DashboardContent = () => {
                     </div>
                     <a className="link" href="#">Manage Return</a>
                 </div>
-                <div className={styles.container}>
+                
+                <div className={styles.salesChannelTableWrapper}>
                     <h2>Sales Channel</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td />
-                                <td>CHANNEL</td>
-                                <td>STORE NAME</td>
-                                <td>CODE</td>
-                                <td>VIRTUAL STOCK</td>
-                                <td>LOCATION</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_official.png" /></td>
-                                <td>Official Website</td>
-                                <td>Official Website</td>
-                                <td>SWIFTPOS</td>
-                                <td>VSSWIFTPOS</td>
-                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                            </tr>
-                            <tr>
-                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_tokopedia.png" /></td>
-                                <td>Tokopedia</td>
-                                <td>Tokopedia</td>
-                                <td>SWIFTPOS</td>
-                                <td>VSSWIFTPOS</td>
-                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                            </tr>
-                            <tr>
-                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_shopee.png" /></td>
-                                <td>Shopee</td>
-                                <td>Shopee</td>
-                                <td>SWIFTPOS</td>
-                                <td>VSSWIFTPOS</td>
-                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                            </tr>
-                            <tr>
-                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_lazada.png" /></td>
-                                <td>Lazada</td>
-                                <td>Lazada</td>
-                                <td>SWIFTPOS</td>
-                                <td>VSSWIFTPOS</td>
-                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                            </tr>
-                            <tr>
-                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_blibli.png" /></td>
-                                <td>Blibli</td>
-                                <td>Blibli</td>
-                                <td>SWIFTPOS</td>
-                                <td>VSSWIFTPOS</td>
-                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                            </tr>
-                            <tr>
-                                <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_bukalapak.svg" /></td>
-                                <td>Bukalapak</td>
-                                <td>Bukalapak</td>
-                                <td>SWIFTPOS</td>
-                                <td>VSSWIFTPOS</td>
-                                <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div className={styles.container}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td />
+                                    <td>CHANNEL</td>
+                                    <td>STORE NAME</td>
+                                    <td>CODE</td>
+                                    <td>VIRTUAL STOCK</td>
+                                    <td>LOCATION</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_official.png" /></td>
+                                    <td>Official Website</td>
+                                    <td>Official Website</td>
+                                    <td>SWIFTPOS</td>
+                                    <td>VSSWIFTPOS</td>
+                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                                </tr>
+                                <tr>
+                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_tokopedia.png" /></td>
+                                    <td>Tokopedia</td>
+                                    <td>Tokopedia</td>
+                                    <td>SWIFTPOS</td>
+                                    <td>VSSWIFTPOS</td>
+                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                                </tr>
+                                <tr>
+                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_shopee.png" /></td>
+                                    <td>Shopee</td>
+                                    <td>Shopee</td>
+                                    <td>SWIFTPOS</td>
+                                    <td>VSSWIFTPOS</td>
+                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                                </tr>
+                                <tr>
+                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_lazada.png" /></td>
+                                    <td>Lazada</td>
+                                    <td>Lazada</td>
+                                    <td>SWIFTPOS</td>
+                                    <td>VSSWIFTPOS</td>
+                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                                </tr>
+                                <tr>
+                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_blibli.png" /></td>
+                                    <td>Blibli</td>
+                                    <td>Blibli</td>
+                                    <td>SWIFTPOS</td>
+                                    <td>VSSWIFTPOS</td>
+                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                                </tr>
+                                <tr>
+                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_bukalapak.svg" /></td>
+                                    <td>Bukalapak</td>
+                                    <td>Bukalapak</td>
+                                    <td>SWIFTPOS</td>
+                                    <td>VSSWIFTPOS</td>
+                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
