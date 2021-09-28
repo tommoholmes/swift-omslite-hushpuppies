@@ -8,11 +8,11 @@ import Tabs from '@common_tabs';
 import { optionsAllocation, optionsStatus, dataTab } from '@modules/storepickup/helpers';
 import Header from '@modules/storepickup/pages/list/components/Header';
 import useStyles from '@modules/storepickup/pages/list/components/style';
-import Router from 'next/router';
+// import Router from 'next/router';
 
 const StorePickupListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getStoreShipmentList } = props;
+    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment } = props;
     const [tab, setTab] = React.useState(0);
     const [load, setLoad] = React.useState(false);
 
@@ -29,7 +29,7 @@ const StorePickupListContent = (props) => {
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true },
-        // { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
@@ -100,11 +100,11 @@ const StorePickupListContent = (props) => {
 
     const rows = storeShipmentList.map((storepickup) => ({
         ...storepickup,
-        id: storepickup.increment_id,
+        id: storepickup.entity_id,
         email: `${storepickup.shipping_email} ${storepickup.shipping_telephone}`,
         channel_name: `${storepickup.channel.channel_name}`,
         actions: () => (
-            <Link href={`/shipment/storepickup/edit/${storepickup.increment_id}`}>
+            <Link href={`/shipment/storepickup/edit/${storepickup.entity_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),
@@ -148,34 +148,26 @@ const StorePickupListContent = (props) => {
         {
             label: 'Mark Confirm Complete',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await confirmShipment({ variables });
+            },
         },
         {
             label: 'Mark Pick Complete',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await pickShipment({ variables });
+            },
         },
         {
             label: 'Mark Pack Complete',
             message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
-        },
-        {
-            label: 'Mark Booking Complete (Shipper ID Only)',
-            message: 'Are you sure to confirm ?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await confirmPickShipment({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await packShipment({ variables });
+            },
         },
     ];
 
@@ -185,9 +177,9 @@ const StorePickupListContent = (props) => {
         setTimeout(() => { setLoad(false); }, 500);
     };
 
-    const handleClickRow = (row) => {
-        Router.push(`/shipment/storepickup/edit/${row.increment_id}`);
-    };
+    // const handleClickRow = (row) => {
+    //     Router.push(`/shipment/storepickup/edit/${row.increment_id}`);
+    // };
 
     // if (!data || loading) {
     //     return (
@@ -210,7 +202,7 @@ const StorePickupListContent = (props) => {
                         columns={columns}
                         count={storeShipmentTotal}
                         showCheckbox
-                        handleClickRow={handleClickRow}
+                        // handleClickRow={handleClickRow}
                         handleReset={() => setTab(0)}
                     />
                 )}

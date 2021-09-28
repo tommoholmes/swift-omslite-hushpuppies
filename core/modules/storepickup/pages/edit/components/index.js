@@ -42,7 +42,7 @@ const StorePickupEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                {`Shipment # ${storePickup.shipmentNumber}`}
+                {`Store Pickup # ${storePickup.shipmentNumber}`}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>

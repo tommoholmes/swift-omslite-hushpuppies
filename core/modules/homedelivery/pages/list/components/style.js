@@ -7,6 +7,7 @@ const colorAqua = '#29c3c9';
 const colorBlue = '#2689ca';
 const colorRed = '#d6676a';
 const varPadding = '5px 10px';
+const iconFont = '#435179';
 
 const useStyles = makeStyles(() => ({
     statusYellow: {
@@ -68,6 +69,24 @@ const useStyles = makeStyles(() => ({
         textAlign: 'center',
         width: '100%',
         padding: varPadding,
+    },
+    statusRow: {
+        display: 'flex',
+        color: iconFont,
+        fontWeight: 600,
+        alignItems: 'center',
+    },
+    statusIcon: {
+        width: 36,
+        height: 'auto',
+        marginRight: 12,
+    },
+    loading: {
+        display: 'flex',
+        color: iconFont,
+        fontWeight: 600,
+        justifyContent: 'center',
+        paddingTop: 20,
     },
 }));
 

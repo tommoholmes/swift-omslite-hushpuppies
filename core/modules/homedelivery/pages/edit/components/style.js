@@ -135,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
     },
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(2, 1fr)',
         [theme.breakpoints.down('xs')]: {
             display: 'block',
         },

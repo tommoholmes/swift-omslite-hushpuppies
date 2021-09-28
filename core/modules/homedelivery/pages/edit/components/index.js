@@ -49,7 +49,7 @@ const HomeDeliveryEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                {`Shipment # ${homeDelivery.shipmentNumber}`}
+                {`Home Delivery # ${homeDelivery.shipmentNumber}`}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>
@@ -81,24 +81,26 @@ const HomeDeliveryEditContent = (props) => {
                             <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
                         </div>
                         <div className="step line">
-                            {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'closed') ? (
+                            {(homeDelivery.statusValue === 'process_for_shipping') ? (
                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
                             ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />}
                         </div>
                         <div className="step line">
-                            {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') || (homeDelivery.statusValue === 'closed') ? (
+                            {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') ? (
                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
                             ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />}
                         </div>
                         <div className="step line">
-                            {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />}
+                            {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered')
+                                || (homeDelivery.statusValue === 'closed') || (homeDelivery.statusValue === 'canceled') ? (
+                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
+                                ) : <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />}
                         </div>
                         <div className="step">
-                            {!(homeDelivery.statusValue === 'order_delivered') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />}
+                            {!((homeDelivery.statusValue === 'order_delivered') || (homeDelivery.statusValue === 'closed')
+                                || (homeDelivery.statusValue === 'canceled')) ? (
+                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                ) : <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />}
                         </div>
                     </div>
                     <hr />
@@ -351,18 +353,6 @@ const HomeDeliveryEditContent = (props) => {
                             <span className={classes.orderLabel}>
                                 {`${homeDelivery.region}, ${homeDelivery.postcode}, ${homeDelivery.countryId}`}
                             </span>
-                        </div>
-                        <div className="grid-child">
-                            <h5 className={classes.titleSmall}>Pickup Info</h5>
-                            {(homeDelivery.pickup) ? (
-                                <>
-                                    <span className={classes.orderLabel}>{homeDelivery.pickup.name || '-'}</span>
-                                    <span className={classes.orderLabel}>{homeDelivery.pickup.loc_details || '-'}</span>
-                                    <span className={classes.orderLabel}>{homeDelivery.pickup.vehice_number || '-'}</span>
-                                    <span className={classes.orderLabel}>{homeDelivery.pickup.vehicle_desc || '-'}</span>
-                                    <span className={classes.orderLabel}>{homeDelivery.pickup.notes || '-'}</span>
-                                </>
-                            ) : <span className={classes.orderLabel}>-</span>}
                         </div>
                     </div>
                     <div>
