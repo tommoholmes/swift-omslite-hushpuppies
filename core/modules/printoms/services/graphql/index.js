@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import * as Schema from '@modules/curbpickup/services/graphql/schema';
+import * as Schema from '@modules/printoms/services/graphql/schema';
 
 const context = {
     context: { request: 'internal' },
@@ -17,7 +17,17 @@ export const getPackList = (variables) => useQuery(Schema.getPackList, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const getAddress = (variables) => useQuery(Schema.getAddress, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getInvoice = (variables) => useQuery(Schema.getInvoice, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getPickList,
     getPackList,
+    getAddress,
+    getInvoice,
 };
