@@ -29,7 +29,7 @@ const StorePickupListContent = (props) => {
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true },
-        // { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
@@ -185,16 +185,6 @@ const StorePickupListContent = (props) => {
         setTimeout(() => { setLoad(false); }, 500);
     };
 
-    const handleClickRow = (row) => {
-        Router.push(`/shipment/storepickup/edit/${row.increment_id}`);
-    };
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
@@ -210,7 +200,6 @@ const StorePickupListContent = (props) => {
                         columns={columns}
                         count={storeShipmentTotal}
                         showCheckbox
-                        handleClickRow={handleClickRow}
                         handleReset={() => setTab(0)}
                     />
                 )}
