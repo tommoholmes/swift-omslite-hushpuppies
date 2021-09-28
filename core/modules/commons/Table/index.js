@@ -89,6 +89,7 @@ const CustomTable = (props) => {
         handleClickRow = null,
         handleReset,
         handleExport,
+        setVarExport,
     } = props;
 
     // hooks
@@ -141,31 +142,23 @@ const CustomTable = (props) => {
                 return accumulator;
             }, {}),
         };
-        getRows({ variables });
-    };
-
-    const onClickExport = () => {
-        if (handleExport) {
-            const isEmpty = (value) => {
-                if ([undefined, null, '', false].includes(value)) return true;
-                if (value && value.length <= 0) return true;
-                return false;
-            };
-            const variables = {
-                filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
-                    accumulator[currentValue.field] = {
-                        ...accumulator[currentValue.field],
-                        [currentValue.type]: currentValue.value,
-                    };
-                    return accumulator;
-                }, {}),
-                sort: sorts.reduce((accumulator, currentValue) => {
-                    accumulator[currentValue.field] = currentValue.value || undefined;
-                    return accumulator;
-                }, {}),
-            };
-            handleExport(variables);
+        const variablesExport = {
+            filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
+                accumulator[currentValue.field] = {
+                    ...accumulator[currentValue.field],
+                    [currentValue.type]: currentValue.value,
+                };
+                return accumulator;
+            }, {}),
+            sort: sorts.reduce((accumulator, currentValue) => {
+                accumulator[currentValue.field] = currentValue.value || undefined;
+                return accumulator;
+            }, {}),
+        };
+        if (setVarExport) {
+            setVarExport(variablesExport);
         }
+        getRows({ variables });
     };
 
     // effects
@@ -264,7 +257,7 @@ const CustomTable = (props) => {
                             <div className="top-item">
                                 <Button
                                     className={clsx(classes.btn, 'filter')}
-                                    onClick={onClickExport}
+                                    onClick={handleExport}
                                     variant="contained"
                                     buttonType="primary-rounded"
                                 >

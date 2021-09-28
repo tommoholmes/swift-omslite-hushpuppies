@@ -7,9 +7,10 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
-
+    const [varExport, setVarExport] = React.useState({});
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
+    const [getExportStatusHistory] = gqlService.getExportStatusHistory();
     const [pickShipment] = gqlService.pickShipment();
     const [packShipment] = gqlService.packShipment();
     const [exportStoreShipmentToCsv] = gqlService.exportStoreShipmentToCsv({
@@ -32,12 +33,12 @@ const Core = (props) => {
         },
     });
 
-    const handleExport = (variables) => {
+    const handleExport = () => {
         window.backdropLoader(true);
         exportStoreShipmentToCsv({
             variables: {
                 type: 'marketplace',
-                ...variables,
+                ...varExport,
             },
         });
     };
@@ -45,12 +46,15 @@ const Core = (props) => {
     const contentProps = {
         getStoreShipmentList,
         confirmMarketplaceShipment,
+        getExportStatusHistory,
         pickShipment,
         packShipment,
         data,
         loading,
         exportStoreShipmentToCsv,
         handleExport,
+        setVarExport,
+        varExport,
     };
 
     return (

@@ -12,7 +12,7 @@ import useStyles from '@modules/shipmentmarketplace/pages/list/components/style'
 const ShipmentMarketplaceListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmMarketplaceShipment, pickShipment, packShipment,
-        handleExport } = props;
+        setVarExport, varExport, handleExport, exportStoreShipmentToCsv, getExportStatusHistory } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState(0);
@@ -121,7 +121,7 @@ const ShipmentMarketplaceListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/pick/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -129,7 +129,7 @@ const ShipmentMarketplaceListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/pack/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -137,7 +137,7 @@ const ShipmentMarketplaceListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/address/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/address/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -145,16 +145,16 @@ const ShipmentMarketplaceListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/invoice/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/invoice/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
             label: 'Export Status History',
             message: 'ready for print?',
-            // onClick: (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await exportStoreShipmentToCsv({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await getExportStatusHistory({ variables });
+            },
         },
         {
             label: 'Mark Confirm Complete',
@@ -167,10 +167,23 @@ const ShipmentMarketplaceListContent = (props) => {
         {
             label: 'Export With Items',
             message: 'ready for print?',
-            // onClick: (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await exportStoreShipmentToCsv({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
+                window.backdropLoader(true);
+                await exportStoreShipmentToCsv({
+                    variables: {
+                        type: 'marketplace',
+                        with_items: true,
+                        ...varExport,
+                        filter: {
+                            increment_id: {
+                                in: incrementIds,
+                            },
+                            ...varExport.filter,
+                        },
+                    },
+                });
+            },
         },
         {
             label: 'Mark Pick Complete',
@@ -219,6 +232,7 @@ const ShipmentMarketplaceListContent = (props) => {
                         showCheckbox
                         handleReset={() => setTab(0)}
                         handleExport={handleExport}
+                        setVarExport={setVarExport}
                     />
                 )}
         </>

@@ -65,6 +65,10 @@ export const bulkShipment = (variables) => useMutation(Schema.bulkShipment, {
     variables, ...context,
 });
 
+export const getExportStatusHistory = (variables) => useLazyQuery(Schema.getExportStatusHistory, {
+    variables, ...context,
+});
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -80,4 +84,5 @@ export default {
     getCourierOption,
     getShipmentCancelReason,
     bulkShipment,
+    getExportStatusHistory,
 };

@@ -189,11 +189,13 @@ export const deliveredShipment = gql`
 export const exportStoreShipmentToCsv = gql`
     query exportStoreShipmentToCsv(
         $type: String!,
+        $with_items: Boolean,
         $filter: ShipmentFilterInput,
         $sort: ShipmentSortInput,
     ){
         exportStoreShipmentToCsv(
             type: $type,
+            with_items: $with_items,
             filter: $filter,
             sort: $sort,
         )
@@ -245,6 +247,23 @@ export const bulkShipment = gql`
     }
 `;
 
+export const getExportStatusHistory = gql`
+query getExportStatusHistory($id: [Int!]!) {
+    getExportStatusHistory(id: $id) {
+      cancel_at
+      cancel_by
+      channel_order_increment_id
+      confirm_at
+      confirm_by
+      delivered_at
+      delivered_by
+      order_created_at
+      shipped_at
+      shipped_by
+    }
+  }
+`;
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -260,4 +279,5 @@ export default {
     getCourierOption,
     getShipmentCancelReason,
     bulkShipment,
+    getExportStatusHistory,
 };

@@ -12,7 +12,7 @@ import useStyles from '@modules/homedelivery/pages/list/components/style';
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier,
-        handleExport } = props;
+        handleExport, setVarExport } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState(0);
@@ -190,6 +190,7 @@ const HomeDeliveryListContent = (props) => {
                         showCheckbox
                         handleReset={() => setTab(0)}
                         handleExport={handleExport}
+                        setVarExport={setVarExport}
                     />
                 )}
         </>
