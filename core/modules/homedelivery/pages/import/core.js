@@ -28,25 +28,14 @@ const Core = (props) => {
         const variables = {
             binary,
         };
-        // window.backdropLoader(true);
+        window.backdropLoader(true);
         bulkShipment({
             variables,
-        }).then(() => {
-            // window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Bulk Shipment',
-                variant: 'success',
-            });
-            // setTimeout(() => router.push('/shipment/homedelivery'), 250);
-        }).catch((e) => {
-            // window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
         });
+        setTimeout(() => {
+            getActivity();
+            window.backdropLoader(false);
+        }, 2000);
     };
 
     if (activityState?.run_status === 'running') {
