@@ -7,9 +7,15 @@ const Core = (props) => {
     } = props;
 
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
+    const [confirmShipment] = gqlService.confirmShipment();
+    const [pickShipment] = gqlService.pickShipment();
+    const [packShipment] = gqlService.packShipment();
 
     const contentProps = {
         getStoreShipmentList,
+        confirmShipment,
+        pickShipment,
+        packShipment,
         data,
         loading,
     };
