@@ -11,8 +11,29 @@ const Core = (props) => {
     const {
         Content,
     } = props;
-    const router = useRouter();
+    const [activityState, setActivityState] = React.useState();
+    const [firstLoad, setFirstLoad] = React.useState(true);
     const [bulkShipment] = gqlService.bulkShipment();
+    const [getActivity] = gqlService.getActivity({
+        onCompleted: (res) => {
+            setActivityState(res.getActivity);
+            if (firstLoad) {
+                setFirstLoad(false);
+            }
+            if (res.getActivity.run_status === 'running') {
+                setTimeout(() => {
+                    getActivity();
+                }, 5000);
+            }
+        },
+        onError: () => {
+            getActivity();
+        },
+    });
+
+    React.useEffect(() => {
+        getActivity();
+    }, []);
 
     const handleSubmit = ({
         binary,
@@ -23,22 +44,11 @@ const Core = (props) => {
         window.backdropLoader(true);
         bulkShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Bulk Shipment',
-                variant: 'success',
-            });
-            // setTimeout(() => router.push('/shipment/homedelivery'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
         });
+        setTimeout(() => {
+            getActivity();
+            window.backdropLoader(false);
+        }, 2000);
     };
 
     const formik = useFormik({
@@ -56,13 +66,16 @@ const Core = (props) => {
     const handleDropFile = (files) => {
         const fileName = files[0].file.name;
         const { baseCode } = files[0];
+        const idx = baseCode.indexOf('base64,');
         formik.setFieldValue('filename', fileName);
-        formik.setFieldValue('binary', baseCode);
+        formik.setFieldValue('binary', baseCode.slice(idx + 7));
     };
 
     const contentProps = {
         formik,
         handleDropFile,
+        activityState,
+        firstLoad,
     };
 
     return (
