@@ -4,10 +4,14 @@ export const getCompanyList = gql`
     query getCompanyList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: CompanyFilterInput,
+        $sort: CompanySortInput,
     ){
         getCompanyList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort
         ){
             items {
                 company_id
