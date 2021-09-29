@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
-import useStyles from '@modules/shipmentmarketplace/pages/import/components/style';
+import useStyles from '@modules/shipmentmarketplace/pages/confirmed/components/style';
 import Progressbar from '@common_progressbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -45,7 +45,7 @@ const HomeDeliveryImport = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Bulk Shipment</h2>
+            <h2 className={classes.titleTop}>Bulk Confirmed</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>

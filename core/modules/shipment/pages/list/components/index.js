@@ -9,21 +9,25 @@ import channelGqlService from '@modules/channel/services/graphql';
 import { optionsStatus } from '@modules/shipment/helpers';
 import useStyles from '@modules/shipment/pages/list/components/style';
 import Header from '@modules/shipment/pages/list/components/Header';
+import clsx from 'clsx';
 
 const ShipmentListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getShipmentList } = props;
-    const shipmentList = (data && data.getShipmentList && data.getShipmentList.items) || [];
-    const shipmentTotal = (data && data.getShipmentList && data.getShipmentList.total_count) || 0;
+    const shipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
+    const shipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
 
     const columns = [
-        { field: 'entity_id', headerName: 'Id', sortable: true, initialSort: 'ASC' },
-        { field: 'increment_id', headerName: 'Shipment Number', sortable: true },
-        { field: 'channel_order_increment_id', headerName: 'Order Number', hideable: true, sortable: true },
-        { field: 'updated_at', headerName: 'Last Update', hideable: true, sortable: true },
-        { field: 'channel_name', headerName: 'Channel Name', hideable: true, sortable: true },
-        { field: 'status', headerName: 'Shipment Status', hideable: true, sortable: true },
-        { field: 'actions', headerName: 'Actions' },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
+        { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
+        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
+        { field: 'status', headerName: 'Status', sortable: true, hideable: true },
+        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
+        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
+        { field: 'email', headerName: 'Email/Mobile', hideable: true },
+        { field: 'action', headerName: 'Action', hideable: true },
     ];
 
     const filters = [
@@ -120,22 +124,64 @@ const ShipmentListContent = (props) => {
         },
     ];
 
+    const getIconByStatus = (status) => {
+        if (status.value === 'process_for_pack' || status.value === 'process_for_shipping') {
+            if (status.label === 'Cannot Fulfill') {
+                return '/assets/img/order_status/cannotfulfill.svg';
+            }
+            return '/assets/img/order_status/processforpack.svg';
+        }
+        if (status.value === 'cannot_fulfill') {
+            return '/assets/img/order_status/cannotfulfill.svg';
+        }
+        if (status.value === 'ready_for_pack') {
+            return '/assets/img/order_status/readyforpack.svg';
+        }
+        if (status.value === 'ready_for_pickup'
+            || status.value === 'ready_for_ship'
+            || status.value === 'shipment_booked'
+            || status.value === 'gosend_rejected'
+            || status.value === 'grabexpress_rejected') {
+            return '/assets/img/order_status/readyforpickup.svg';
+        }
+        if (status.value === 'customer_picked_up'
+            || status.value === 'customer_waiting'
+            || status.value === 'order_delivered'
+            || status.value === 'canceled'
+            || status.value === 'closed') {
+            return '/assets/img/order_status/customerpicked.svg';
+        }
+        return '/assets/img/order_status/ordershipped.svg';
+    };
+
     const rows = shipmentList.map((shipment) => ({
         ...shipment,
         id: shipment.entity_id,
-        status: shipment.status.label,
-        actions: () => (
+        email: `${shipment.shipping_email} ${shipment.shipping_telephone}`,
+        status: () => (
+            <div className={classes.statusRow}>
+                <img src={getIconByStatus(shipment.status)} alt="" className={classes.statusIcon} />
+                {shipment.status.label}
+            </div>
+        ),
+        action: () => (
             <Link href={`/sales/shipment/edit/${shipment.entity_id}`}>
-                <a className="link-button">view</a>
+                <a className="link-button">Edit</a>
             </Link>
         ),
+        allocation_status: () => (
+            <div
+                className={clsx(classes.statusRow, 'unbold')}
+                style={{
+                    textTransform: 'capitalize',
+                }}
+            >
+                {shipment.allocation_status?.split('_').join(' ') || 'Unconfirmed'}
+            </div>
+        ),
+        channel_name: shipment.channel.channel_name,
+        track_number: shipment.track_number || '-',
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>
@@ -144,6 +190,7 @@ const ShipmentListContent = (props) => {
                 filters={filters}
                 rows={rows}
                 getRows={getShipmentList}
+                showCheckbox
                 loading={loading}
                 columns={columns}
                 count={shipmentTotal}

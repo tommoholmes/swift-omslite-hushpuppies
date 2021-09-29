@@ -7,7 +7,7 @@ export const getShipmentList = gql`
         $filter: ShipmentFilterInput,
         $sort: ShipmentSortInput,
     ){
-        getShipmentList(
+        getStoreShipmentList(
             pageSize: $pageSize,
             currentPage: $currentPage,
             filter: $filter,
@@ -17,11 +17,19 @@ export const getShipmentList = gql`
                 entity_id
                 increment_id
                 channel_order_increment_id
-                updated_at
-                channel_name
+                allocation_status
+                channel_order_date
                 status{
+                    value
                     label
                 }
+                track_number
+                channel{
+                    channel_name
+                }
+                shipping_name
+                shipping_email
+                shipping_telephone
             }
             total_count
             page_info {
@@ -34,23 +42,39 @@ export const getShipmentList = gql`
 `;
 
 export const getShipmentById = gql`
-    query getShipmentById(
+    query getStoreShipmentById(
         $id: Int!,
     ){
-        getShipmentById(
+        getStoreShipmentById(
             id: $id
         ){
+            entity_id
             increment_id
-            loc_code{
+            channel_order_increment_id
+            channel{
+                channel_name
+            }
+            marketplace_order_number
+            status {
+                label
+                value
+            }
+            allocation_status
+            channel_order_date
+            location{
                 loc_name
             }
-            created_at
-            updated_at
-            channel_order_increment_id
-            status{
-                label
-            }
+            awb_source
+            customer_name
+            shipping_telephone
+            shipping_email
             email
+            updated_at
+            all_track{
+                created_at
+                title
+                track_number
+            }
             billing_address {
                 firstname
                 lastname
@@ -71,19 +95,22 @@ export const getShipmentById = gql`
                 country_id
                 telephone
             }
+            pickup_info {
+                name
+                loc_details
+                vehicle_number
+                vehicle_desc
+                notes
+            }
             order_item {
                 sku
                 name
-                base_price
-                qty_shipped   
+                price
+                qty
+                row_total
             }
             channel_shipping_label
-            all_track {
-                created_at
-                description
-                title
-                track_number
-            }
+            subtotal
             status_history {
                 created_at
                 status

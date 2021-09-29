@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const colorText = '#536777';
+const iconFont = '#435179';
 
 const useStyles = makeStyles(() => ({
     fieldInput: {
@@ -11,6 +12,20 @@ const useStyles = makeStyles(() => ({
         '& .MuiInputBase-input': {
             padding: '18.5px 14px',
         },
+    },
+    statusRow: {
+        display: 'flex',
+        color: iconFont,
+        fontWeight: 600,
+        alignItems: 'center',
+        '&.unbold': {
+            fontWeight: 'unset',
+        },
+    },
+    statusIcon: {
+        width: 36,
+        height: 'auto',
+        marginRight: 12,
     },
 }));
 

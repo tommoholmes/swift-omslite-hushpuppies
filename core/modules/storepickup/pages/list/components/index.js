@@ -8,7 +8,7 @@ import Tabs from '@common_tabs';
 import { optionsAllocation, optionsStatus, dataTab } from '@modules/storepickup/helpers';
 import Header from '@modules/storepickup/pages/list/components/Header';
 import useStyles from '@modules/storepickup/pages/list/components/style';
-// import Router from 'next/router';
+import clsx from 'clsx';
 
 const StorePickupListContent = (props) => {
     const classes = useStyles();
@@ -20,7 +20,7 @@ const StorePickupListContent = (props) => {
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'ASC', hideable: true },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
         { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
         { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
@@ -29,7 +29,7 @@ const StorePickupListContent = (props) => {
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'action', headerName: 'Action', hideable: true },
     ];
 
     const filters = [
@@ -103,9 +103,9 @@ const StorePickupListContent = (props) => {
         id: storepickup.entity_id,
         email: `${storepickup.shipping_email} ${storepickup.shipping_telephone}`,
         channel_name: `${storepickup.channel.channel_name}`,
-        actions: () => (
+        action: () => (
             <Link href={`/shipment/storepickup/edit/${storepickup.entity_id}`}>
-                <a className="link-button">view</a>
+                <a className="link-button">Edit</a>
             </Link>
         ),
         status: () => (
@@ -116,13 +116,12 @@ const StorePickupListContent = (props) => {
         ),
         allocation_status: () => (
             <div
-                className={classes.statusRow}
+                className={clsx(classes.statusRow, 'unbold')}
                 style={{
                     textTransform: 'capitalize',
-
                 }}
             >
-                {storepickup.allocation_status?.split('_').join(' ') || '-'}
+                {storepickup.allocation_status?.split('_').join(' ') || 'Unconfirmed'}
             </div>
         ),
         track_number: storepickup.track_number || '-',
@@ -177,16 +176,6 @@ const StorePickupListContent = (props) => {
         setTimeout(() => { setLoad(false); }, 500);
     };
 
-    // const handleClickRow = (row) => {
-    //     Router.push(`/shipment/storepickup/edit/${row.increment_id}`);
-    // };
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
@@ -202,7 +191,6 @@ const StorePickupListContent = (props) => {
                         columns={columns}
                         count={storeShipmentTotal}
                         showCheckbox
-                        // handleClickRow={handleClickRow}
                         handleReset={() => setTab(0)}
                     />
                 )}

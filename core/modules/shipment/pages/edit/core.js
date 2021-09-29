@@ -8,16 +8,16 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const shipment = data.getShipmentById;
+    const shipment = data.getStoreShipmentById;
 
     const shipmentDetail = {
         id: shipment.increment_id,
-        locName: shipment.loc_code.loc_name,
-        orderDate: shipment.created_at,
+        locName: shipment.location.loc_name,
+        orderDate: shipment.channel_order_date,
         lastUpdate: shipment.updated_at,
         channelOrderNumber: shipment.channel_order_increment_id,
         status: shipment.status.label,
-        email: shipment.email,
+        email: shipment.email || shipment.shipping_email,
         billing: shipment.billing_address,
         shipping: shipment.shipping_address,
         orderItem: shipment.order_item,

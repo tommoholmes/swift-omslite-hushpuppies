@@ -7,6 +7,7 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+    const [varExport, setVarExport] = React.useState({});
 
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmShipment] = gqlService.confirmShipment();
@@ -33,12 +34,12 @@ const Core = (props) => {
         },
     });
 
-    const handleExport = (variables) => {
+    const handleExport = () => {
         window.backdropLoader(true);
         exportStoreShipmentToCsv({
             variables: {
                 type: 'delivery',
-                ...variables,
+                ...varExport,
             },
         });
     };
@@ -53,6 +54,8 @@ const Core = (props) => {
         loading,
         exportStoreShipmentToCsv,
         handleExport,
+        varExport,
+        setVarExport,
     };
 
     return (

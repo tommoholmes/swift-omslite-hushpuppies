@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
 import gqlService from '@modules/homedelivery/services/graphql';
 
 const Core = (props) => {

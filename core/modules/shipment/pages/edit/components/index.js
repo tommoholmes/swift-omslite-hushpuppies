@@ -114,20 +114,28 @@ const shipmentEditContent = (props) => {
                                 <th className={classes.th}>Unit Price</th>
                                 <th className={classes.th}>QTY</th>
                             </tr>
-                            {shipmentDetail.orderItem.map((e) => (
+                            {shipmentDetail.orderItem.length ? shipmentDetail.orderItem.map((e) => (
                                 <tr>
                                     <td className={classes.td}>{e.sku}</td>
                                     <td className={classes.td}>{e.name}</td>
-                                    <td className={classes.td}>{e.base_price}</td>
-                                    <td className={classes.td}>{e.qty_shipped}</td>
+                                    <td className={classes.td}>{e.price}</td>
+                                    <td className={classes.td}>{e.qty}</td>
                                 </tr>
-                            ))}
+                            ))
+                                : (
+                                    <tr>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                 </div>
                 <div className={classes.content}>
                     <h5 className={classes.title}>Shipping & Tracking Information</h5>
-                    <span className={classes.orderLabel} style={{ fontSize: 24 }}>
+                    <span className={classes.orderLabel} style={{ fontSize: 24, marginTop: 20 }}>
                         Shipping Method:
                         {shipmentDetail.shipMethod}
                     </span>
@@ -139,14 +147,22 @@ const shipmentEditContent = (props) => {
                                 <th className={classes.th}>Name</th>
                                 <th className={classes.th}>Tracking Number</th>
                             </tr>
-                            {shipmentDetail.tracking.map((e) => (
+                            {shipmentDetail.tracking.length ? shipmentDetail.tracking.map((e) => (
                                 <tr>
                                     <td className={classes.td}>{e.created_at}</td>
                                     <td className={classes.td}>{e.description || '-'}</td>
                                     <td className={classes.td}>{e.title}</td>
                                     <td className={classes.td}>{e.track_number}</td>
                                 </tr>
-                            ))}
+                            ))
+                                : (
+                                    <tr>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                 </div>
@@ -159,13 +175,21 @@ const shipmentEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Note</th>
                             </tr>
-                            {shipmentDetail.statusHistory.map((e) => (
+                            {shipmentDetail.statusHistory.length ? shipmentDetail.statusHistory.map((e) => (
                                 <tr>
                                     <td className={classes.td}>{e.created_at}</td>
                                     <td className={classes.td}>{e.status}</td>
                                     <td className={classes.td}>{e.comment}</td>
                                 </tr>
-                            ))}
+                            ))
+                                : (
+                                    <tr>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                 </div>
