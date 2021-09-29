@@ -11,10 +11,17 @@ const CompanyListContent = (props) => {
     const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'Id' },
-        { field: 'company_code', headerName: 'Code' },
-        { field: 'company_name', headerName: 'Name', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'company_id', headerName: 'Id', sortable: true, initialSort: 'ASC' },
+        { field: 'company_code', headerName: 'Company Code', sortable: true },
+        { field: 'company_name', headerName: 'Company Name', sortable: true },
+        { field: 'actions', headerName: 'Actions' },
+    ];
+
+    const filters = [
+        { field: 'company_id', name: 'id_from', type: 'from', label: 'ID From', initialValue: '' },
+        { field: 'company_id', name: 'id_to', type: 'to', label: 'ID To', initialValue: '' },
+        { field: 'company_code', name: 'company_code', type: 'like', label: 'Company Code', initialValue: '' },
+        { field: 'company_name', name: 'company_name', type: 'like', label: 'Company Name', initialValue: '' },
     ];
 
     const rows = companyList.map((company) => ({
@@ -37,6 +44,7 @@ const CompanyListContent = (props) => {
         <>
             <Header />
             <Table
+                filters={filters}
                 rows={rows}
                 getRows={getCompanyList}
                 deleteRows={multideleteCompany}
