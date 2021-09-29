@@ -7,7 +7,7 @@ export const getShipmentList = gql`
         $filter: ShipmentFilterInput,
         $sort: ShipmentSortInput,
     ){
-        getShipmentList(
+        getStoreShipmentList(
             pageSize: $pageSize,
             currentPage: $currentPage,
             filter: $filter,
@@ -17,11 +17,19 @@ export const getShipmentList = gql`
                 entity_id
                 increment_id
                 channel_order_increment_id
-                updated_at
-                channel_name
+                allocation_status
+                channel_order_date
                 status{
+                    value
                     label
                 }
+                track_number
+                channel{
+                    channel_name
+                }
+                shipping_name
+                shipping_email
+                shipping_telephone
             }
             total_count
             page_info {
