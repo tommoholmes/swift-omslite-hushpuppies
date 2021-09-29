@@ -10,6 +10,7 @@ import classnames from 'clsx';
 const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => (
     <TextField
         variant="outlined"
+        size="small"
         value={filterValue}
         onChange={(e) => setFilterValue(e.target.value)}
         disabled={disabled}

@@ -85,6 +85,11 @@ const useStyles = makeStyles((theme) => ({
     mainTable: {
         overflowX: 'scroll',
     },
+
+    tableContainer: {
+        maxWidth: '91vw',
+    },
+
 }));
 
 export default useStyles;

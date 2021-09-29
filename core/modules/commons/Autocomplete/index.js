@@ -155,6 +155,7 @@ CustomAutocomplete.propTypes = {
     primaryKey: PropTypes.string,
     value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     variant: PropTypes.string,
+    size: PropTypes.string,
 };
 
 CustomAutocomplete.defaultProps = {
@@ -167,6 +168,7 @@ CustomAutocomplete.defaultProps = {
     primaryKey: 'id',
     value: null,
     variant: 'outlined',
+    size: 'small',
 };
 
 export default CustomAutocomplete;
