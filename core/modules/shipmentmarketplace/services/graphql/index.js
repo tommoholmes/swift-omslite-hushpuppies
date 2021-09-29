@@ -61,12 +61,22 @@ export const getShipmentCancelReason = (variables) => useLazyQuery(Schema.getShi
     variables, ...context, ...fetchPolicy,
 });
 
-export const bulkShipment = (variables) => useMutation(Schema.bulkShipment, {
+export const bulkShippedMarketplaceShipment = (variables) => useMutation(Schema.bulkShippedMarketplaceShipment, {
     variables, ...context,
 });
 
-export const getExportStatusHistory = (variables) => useLazyQuery(Schema.getExportStatusHistory, {
+export const bulkConfirmedMarketplaceShipment = (variables) => useMutation(Schema.bulkConfirmedMarketplaceShipment, {
     variables, ...context,
+});
+
+export const getExportStatusHistory = (options) => useLazyQuery(Schema.getExportStatusHistory, {
+    ...options, ...context,
+});
+
+export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
+    ...context,
+    ...options,
+    fetchPolicy: 'no-cache',
 });
 
 export default {
@@ -83,6 +93,8 @@ export default {
     saveShipmentNotes,
     getCourierOption,
     getShipmentCancelReason,
-    bulkShipment,
+    bulkShippedMarketplaceShipment,
+    bulkConfirmedMarketplaceShipment,
     getExportStatusHistory,
+    getActivity,
 };

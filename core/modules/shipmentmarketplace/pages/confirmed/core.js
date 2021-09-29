@@ -12,10 +12,10 @@ const Core = (props) => {
     } = props;
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
-    const [bulkShipment] = gqlService.bulkShippedMarketplaceShipment();
+    const [bulkShipment] = gqlService.bulkConfirmedMarketplaceShipment();
     const [getActivity] = gqlService.getActivity({
         variables: {
-            code: 'import_rts',
+            code: 'import_confirmed',
         },
         onCompleted: (res) => {
             setActivityState(res.getActivity);

@@ -232,36 +232,59 @@ export const getShipmentCancelReason = gql`
     }
 `;
 
-export const bulkShipment = gql`
-    mutation bulkShipment(
+export const bulkShippedMarketplaceShipment = gql`
+    mutation bulkShippedMarketplaceShipment(
         $binary: String!,
     ){
-        bulkShipment(
+        bulkShippedMarketplaceShipment(
             input: {
                 binary: $binary,
             }
         ){
-            data
-            error
+            is_success
+            attachment_url
+        }
+    }
+`;
+
+export const bulkConfirmedMarketplaceShipment = gql`
+    mutation bulkConfirmedMarketplaceShipment(
+        $binary: String!,
+    ){
+        bulkConfirmedMarketplaceShipment(
+            input: {
+                binary: $binary,
+            }
+        ){
+            is_success
+            attachment_url
         }
     }
 `;
 
 export const getExportStatusHistory = gql`
 query getExportStatusHistory($id: [Int!]!) {
-    getExportStatusHistory(id: $id) {
-      cancel_at
-      cancel_by
-      channel_order_increment_id
-      confirm_at
-      confirm_by
-      delivered_at
-      delivered_by
-      order_created_at
-      shipped_at
-      shipped_by
-    }
+    getExportStatusHistory(id: $id)
   }
+`;
+
+export const getActivity = gql`
+    query getActivity($code: String!){
+        getActivity(code: $code, by_session: true){
+        activity_id
+        activity_code
+        run_status
+        data_total
+        data_processed
+        started_at
+        snapshot_at
+        finished_at
+        run_by
+        run_type
+        attachment
+        error_message
+        }
+    }
 `;
 
 export default {
@@ -278,6 +301,8 @@ export default {
     saveShipmentNotes,
     getCourierOption,
     getShipmentCancelReason,
-    bulkShipment,
+    bulkShippedMarketplaceShipment,
+    bulkConfirmedMarketplaceShipment,
     getExportStatusHistory,
+    getActivity,
 };
