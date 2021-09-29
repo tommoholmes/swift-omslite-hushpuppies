@@ -203,17 +203,21 @@ const Sidebar = ({
                                             {menu.children.map((menuChild) => (
                                                 <>
                                                     { ((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode)) || (menu.key === 'vendor')) && (
-                                                        <ListItem
-                                                            button
-                                                            key={menuChild.key}
-                                                            className={clsx(
-                                                                classes.menuChildItem,
-                                                                menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
-                                                            )}
-                                                            onClick={() => handleClickChild(menuChild)}
-                                                        >
-                                                            <ListItemText className="itemText" primary={menuChild.label} />
-                                                        </ListItem>
+                                                        <div>
+                                                            <a href={`${menuChild.url}`}>
+                                                                <ListItem
+                                                                    button
+                                                                    key={menuChild.key}
+                                                                    className={clsx(
+                                                                        classes.menuChildItem,
+                                                                        menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
+                                                                    )}
+                                                                    onClick={() => handleClickChild(menuChild)}
+                                                                >
+                                                                    <ListItemText className="itemText" primary={menuChild.label} />
+                                                                </ListItem>
+                                                            </a>
+                                                        </div>
                                                     )}
                                                 </>
                                             ))}
