@@ -4,6 +4,7 @@ import React from 'react';
 import Button from '@common_button';
 import { useRouter } from 'next/router';
 import useStyles from '@modules/shipmentmarketplace/pages/list/components/Header/style';
+import clsx from 'clsx';
 
 const HeaderContent = (props) => {
     const classes = useStyles();
@@ -16,6 +17,12 @@ const HeaderContent = (props) => {
                 onClick={() => router.push('/shipment/shipmentmarketplace/import')}
             >
                 Bulk Shipment
+            </Button>
+            <Button
+                className={clsx(classes.buttonAdd, 'left')}
+                onClick={() => router.push('/shipment/shipmentmarketplace/confirmed')}
+            >
+                Bulk Confirmed
             </Button>
         </div>
     );

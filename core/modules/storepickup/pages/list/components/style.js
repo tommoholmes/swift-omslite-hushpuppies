@@ -75,6 +75,9 @@ const useStyles = makeStyles(() => ({
         color: iconFont,
         fontWeight: 600,
         alignItems: 'center',
+        '&.unbold': {
+            fontWeight: 'unset',
+        },
     },
     statusIcon: {
         width: 36,

@@ -10,7 +10,11 @@ const Core = (props) => {
     const [varExport, setVarExport] = React.useState({});
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
-    const [getExportStatusHistory] = gqlService.getExportStatusHistory();
+    const [getExportStatusHistory] = gqlService.getExportStatusHistory({
+        onCompleted: (res) => {
+            router.push(`${res.getExportStatusHistory }.csv`);
+        },
+    });
     const [pickShipment] = gqlService.pickShipment();
     const [packShipment] = gqlService.packShipment();
     const [exportStoreShipmentToCsv] = gqlService.exportStoreShipmentToCsv({

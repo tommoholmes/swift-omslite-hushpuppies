@@ -8,6 +8,7 @@ import Tabs from '@common_tabs';
 import { optionsAllocation, optionsStatus, dataTab } from '@modules/homedelivery/helpers';
 import Header from '@modules/homedelivery/pages/list/components/Header';
 import useStyles from '@modules/homedelivery/pages/list/components/style';
+import clsx from 'clsx';
 
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
@@ -19,7 +20,7 @@ const HomeDeliveryListContent = (props) => {
     const [load, setLoad] = React.useState(false);
 
     const columns = [
-        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'ASC', hideable: true },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
         { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
         { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
@@ -28,7 +29,7 @@ const HomeDeliveryListContent = (props) => {
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'action', headerName: 'Action', hideable: true },
     ];
 
     const filters = [
@@ -106,9 +107,9 @@ const HomeDeliveryListContent = (props) => {
         id: homedelivery.entity_id,
         channel_name: homedelivery.channel.channel_name,
         email: `${homedelivery.shipping_email} ${homedelivery.shipping_telephone}`,
-        actions: () => (
+        action: () => (
             <Link href={`/shipment/homedelivery/edit/${homedelivery.entity_id}`}>
-                <a className="link-button">view</a>
+                <a className="link-button">Edit</a>
             </Link>
         ),
         status: () => (
@@ -117,6 +118,17 @@ const HomeDeliveryListContent = (props) => {
                 {homedelivery.status.label}
             </div>
         ),
+        allocation_status: () => (
+            <div
+                className={clsx(classes.statusRow, 'unbold')}
+                style={{
+                    textTransform: 'capitalize',
+                }}
+            >
+                {homedelivery.allocation_status?.split('_').join(' ') || 'Unconfirmed'}
+            </div>
+        ),
+        track_number: homedelivery.track_number || '-',
     }));
 
     const actions = [

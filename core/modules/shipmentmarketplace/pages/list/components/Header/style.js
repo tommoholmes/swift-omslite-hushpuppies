@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
             float: 'left',
             marginTop: 7,
         },
+        '&.left': {
+            marginRight: 10,
+        },
     },
 }));
 

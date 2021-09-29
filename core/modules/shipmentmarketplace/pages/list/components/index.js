@@ -8,6 +8,7 @@ import Tabs from '@common_tabs';
 import { optionsAllocation, optionsStatus, dataTab } from '@modules/shipmentmarketplace/helpers';
 import Header from '@modules/shipmentmarketplace/pages/list/components/Header';
 import useStyles from '@modules/shipmentmarketplace/pages/list/components/style';
+import clsx from 'clsx';
 
 const ShipmentMarketplaceListContent = (props) => {
     const classes = useStyles();
@@ -19,7 +20,7 @@ const ShipmentMarketplaceListContent = (props) => {
     const [load, setLoad] = React.useState(false);
 
     const columns = [
-        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'ASC', hideable: true },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
         { field: 'marketplace_order_number', headerName: 'Marketplace Order Number', hideable: true },
         { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
@@ -29,7 +30,7 @@ const ShipmentMarketplaceListContent = (props) => {
         { field: 'loc_code', headerName: 'Loc Code', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'connexi_order_status', headerName: 'Connexi Order Status', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
+        { field: 'action', headerName: 'Action', hideable: true },
     ];
 
     const filters = [
@@ -71,48 +72,62 @@ const ShipmentMarketplaceListContent = (props) => {
         { field: 'framework', name: 'framework', type: 'eq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
     ];
 
-    const getClassByStatus = (status) => {
-        if (status.value === 'process_for_shipping') {
-            return classes.statusYellow;
+    const getIconByStatus = (status) => {
+        if (status.value === 'process_for_pack' || status.value === 'process_for_shipping') {
+            if (status.label === 'Cannot Fulfill') {
+                return '/assets/img/order_status/cannotfulfill.svg';
+            }
+            return '/assets/img/order_status/processforpack.svg';
+        }
+        if (status.value === 'cannot_fulfill') {
+            return '/assets/img/order_status/cannotfulfill.svg';
         }
         if (status.value === 'ready_for_pack') {
-            return classes.statusOrange;
+            return '/assets/img/order_status/readyforpack.svg';
         }
         if (status.value === 'ready_for_pickup'
             || status.value === 'ready_for_ship'
             || status.value === 'shipment_booked'
             || status.value === 'gosend_rejected'
             || status.value === 'grabexpress_rejected') {
-            return classes.statusGreen;
+            return '/assets/img/order_status/readyforpickup.svg';
         }
         if (status.value === 'customer_picked_up'
             || status.value === 'customer_waiting'
-            || status.value === 'order_shipped'
             || status.value === 'order_delivered'
             || status.value === 'canceled'
             || status.value === 'closed') {
-            return classes.statusBlue;
+            return '/assets/img/order_status/customerpicked.svg';
         }
-        if (status.value === 'cannot_fulfill') {
-            return classes.statusRed;
-        }
-        return classes.statusAqua;
+        return '/assets/img/order_status/ordershipped.svg';
     };
 
     const rows = storeShipmentList.map((shipmentmarketplace) => ({
         ...shipmentmarketplace,
         id: shipmentmarketplace.entity_id,
         channel_name: shipmentmarketplace.channel.channel_name,
-        actions: () => (
+        action: () => (
             <Link href={`/shipment/shipmentmarketplace/edit/${shipmentmarketplace.entity_id}`}>
-                <a className="link-button">view</a>
+                <a className="link-button">Edit</a>
             </Link>
         ),
         status: () => (
-            <div className={getClassByStatus(shipmentmarketplace.status)}>
+            <div className={classes.statusRow}>
+                <img src={getIconByStatus(shipmentmarketplace.status)} alt="" className={classes.statusIcon} />
                 {shipmentmarketplace.status.label}
             </div>
         ),
+        allocation_status: () => (
+            <div
+                className={clsx(classes.statusRow, 'unbold')}
+                style={{
+                    textTransform: 'capitalize',
+                }}
+            >
+                {shipmentmarketplace.allocation_status?.split('_').join(' ') || 'Unconfirmed'}
+            </div>
+        ),
+        track_number: shipmentmarketplace.track_number || '-',
     }));
 
     const actions = [
@@ -208,12 +223,6 @@ const ShipmentMarketplaceListContent = (props) => {
         setTab(v);
         setTimeout(() => { setLoad(false); }, 500);
     };
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>
