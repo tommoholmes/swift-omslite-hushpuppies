@@ -11,12 +11,6 @@ const HeaderContent = (props) => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Store Pickup Dashboard</h2>
-            <Button
-                className={classes.buttonAdd}
-                // onClick={() => router.push('/shipment/storepickup/bulk')}
-            >
-                Bulk Shipment
-            </Button>
         </div>
     );
 };

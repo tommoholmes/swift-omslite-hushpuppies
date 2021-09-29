@@ -10,6 +10,10 @@ const Core = (props) => {
     const [varExport, setVarExport] = React.useState({});
 
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
+    const [confirmShipment] = gqlService.confirmShipment();
+    const [pickShipment] = gqlService.pickShipment();
+    const [packShipment] = gqlService.packShipment();
+    const [bookCourier] = gqlService.bookCourier();
     const [exportStoreShipmentToCsv] = gqlService.exportStoreShipmentToCsv({
         onCompleted: (res) => {
             window.backdropLoader(false);
@@ -42,6 +46,10 @@ const Core = (props) => {
 
     const contentProps = {
         getStoreShipmentList,
+        confirmShipment,
+        pickShipment,
+        packShipment,
+        bookCourier,
         data,
         loading,
         exportStoreShipmentToCsv,
