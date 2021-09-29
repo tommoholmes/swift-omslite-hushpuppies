@@ -47,7 +47,8 @@ const PrintAdressContent = (props) => {
                                     <h5 className={classes.titleSmall}>
                                         {`Order Number ${eParent.channel.channel_name}`}
                                         <br />
-                                        <img alt="barcode order" src={eParent.ref_barcode} />
+                                        {eParent.ref_barcode
+                                        && <img alt="barcode order" src={eParent.ref_barcode} />}
                                         <br />
                                         {eParent.marketplace_order_number}
                                     </h5>
@@ -65,7 +66,8 @@ const PrintAdressContent = (props) => {
                                     <h5 className={classes.titleSmall}>
                                         SO Number
                                         <br />
-                                        <img alt="barcode so" src={eParent.so_barcode} />
+                                        {eParent.so_barcode
+                                        && <img alt="barcode so" src={eParent.so_barcode} />}
                                         <br />
                                         {eParent.order_increment_id}
                                     </h5>
@@ -88,7 +90,8 @@ const PrintAdressContent = (props) => {
                                     <h5 className={classes.titleSmall}>
                                         Airwaybill Number
                                         <br />
-                                        <img alt="barcode awb" src={eParent.track_barcode} />
+                                        {eParent.track_barcode
+                                        && <img alt="barcode awb" src={eParent.track_barcode} />}
                                         <br />
                                         {eParent.track_number}
                                     </h5>
