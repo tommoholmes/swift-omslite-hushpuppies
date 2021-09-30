@@ -437,7 +437,7 @@ const CustomTable = (props) => {
     };
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className={classes.tableContainer}>
             {renderTableToolbar()}
             <div className={classes.mainTable}>
                 <Table size="small">
