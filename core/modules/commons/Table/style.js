@@ -87,7 +87,16 @@ const useStyles = makeStyles((theme) => ({
     },
 
     tableContainer: {
-        maxWidth: '91vw',
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '100vw',
+            display: 'block',
+            marginLeft: '0px',
+            marginRight: '0px',
+        },
     },
 
 }));
