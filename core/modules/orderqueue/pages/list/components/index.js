@@ -17,7 +17,7 @@ const OrderQueueListContent = (props) => {
     const [getOrderQueueListx, getOrderQueueListRes] = orderQueueGqlService.getOrderQueueList();
 
     const columns = [
-        { field: 'id', headerName: 'ID', sortable: true, initialSort: 'ASC', hideable: true },
+        { field: 'id', headerName: 'ID', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
         { field: 'created_at', headerName: 'Channel Order Date', sortable: true, hideable: true },
         { field: 'channel_order_status', headerName: 'Channel Status', sortable: true, hideable: true },
