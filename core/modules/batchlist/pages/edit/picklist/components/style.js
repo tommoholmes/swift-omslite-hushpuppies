@@ -4,7 +4,6 @@ const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#435179';
 const colorGray = '#B1BCDB';
-const colorBold = '#435179';
 const borderColor = '#DDE1EC';
 const borderGray = '#E5E9F1';
 const colorGreen = '#5EC929';
@@ -33,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 16,
         backgroundColor: 'unset',
         boxShadow: 'none',
+        position: 'relative',
         '& .title-information': {
             [theme.breakpoints.down('xs')]: {
                 height: 75,
@@ -61,6 +61,15 @@ const useStyles = makeStyles((theme) => ({
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
+    },
+    titleTopSmall: {
+        fontSize: 12,
+        color: colorText,
+        position: 'absolute',
+        right: 18,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        margin: 0,
     },
     titleSmall: {
         color: colorText,
@@ -93,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 15px 18px 15px',
     },
     content: {
-        padding: '12px 15px',
+        padding: '8px 15px',
         background: '#ffffff',
         borderRadius: 16,
         marginBottom: 8,
@@ -137,18 +146,18 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
     },
     tr: {
-        borderBottom: '1px solid',
-        borderBottomColor: borderColor,
         verticalAlign: 'top',
     },
     th: {
         textAlign: 'left',
-        padding: '5px 8px',
-        color: colorBold,
+        padding: '0 8px',
+        color: colorGray,
+        fontSize: 10,
     },
     td: {
-        padding: '5px 8px',
-        fontFamily: font,
+        padding: '0 8px',
+        color: colorText,
+        fontSize: 13,
     },
     grid: {
         display: 'grid',
@@ -228,6 +237,33 @@ const useStyles = makeStyles((theme) => ({
             borderWidth: '0 3px 0 0',
             transform: 'translateX(-50%)',
         },
+    },
+    footer: {
+        background: '#ffffff',
+        position: 'sticky',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        [theme.breakpoints.down('xs')]: {
+            position: 'fixed',
+        },
+        '& h2': {
+            margin: 0,
+            display: 'inline-block',
+            color: colorPurple,
+            verticalAlign: 'middle',
+        },
+        '& span': {
+            marginLeft: 5,
+        },
+    },
+    btnFooter: {
+        width: '40%',
+        backgroundColor: borderColor,
+        color: colorGray,
+        cursor: 'pointer',
+        padding: 20,
+        border: 0,
     },
 }));
 

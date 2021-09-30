@@ -70,21 +70,24 @@ const BatchListEditContent = (props) => {
                         <div className="grid-child">
                             <h5 className={classes.titleSmall}>{`Total Order : ${batchList.totalShipments}`}</h5>
                         </div>
-                        <div className="grid-child" />
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>{`Pick List : ${batchList.picklist.length}`}</h5>
+                        </div>
                         <div className="grid-child">
                             <h5 className={classes.titleSmall}>{`Total SKU : ${batchList.totalItems}`}</h5>
                         </div>
                     </div>
                 </div>
-                {batchList.pickList.map((e) => (
+                {batchList.picklist.map((e) => (
                     <div className={classes.content}>
                         <a href={`/pickpack/batchlist/edit/picklist/${e.entity_id}`}>
                             <div className={classes.gridList}>
                                 <h5 className={classes.titleList} style={{ textAlign: 'left' }}>{`PICK LIST ${e.entity_id}`}</h5>
                                 <h5 className={classes.titleList}>{`${e.total_items} SKU`}</h5>
                                 <h5 className={classes.titleList}>
-                                    Picked by
-                                    {e.picked_by || '-'}
+                                    {(e.picked_by) ? (
+                                        <>{`Picked by ${e.picked_by}`}</>
+                                    ) : null}
                                 </h5>
                                 <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
                                     {!(e.status.value === 'new') ? (

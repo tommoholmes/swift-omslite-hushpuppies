@@ -10,20 +10,21 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const batchlist = data.getPickByBatchById.pick_by_batch;
+    const picklist = data.getPickByBatchPicklist.pick_by_batch_picklist;
 
-    const batchList = {
-        id: batchlist.entity_id,
-        statusLabel: batchlist.status.label,
-        statusValue: batchlist.status.value,
-        date: batchlist.created_at,
-        totalItems: batchlist.total_items,
-        totalShipments: batchlist.total_shipments,
-        picklist: batchlist.picklist,
+    const pickList = {
+        id: picklist.entity_id,
+        parentId: picklist.parent_id,
+        statusLabel: picklist.status.label,
+        statusValue: picklist.status.value,
+        date: picklist.started_at,
+        totalItems: picklist.total_items,
+        picker: picklist.picked_by,
+        items: picklist.items,
     };
 
     const contentProps = {
-        batchList,
+        pickList,
     };
 
     return (
@@ -33,7 +34,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPickByBatchById({
+    const { loading, data } = gqlService.getPickByBatchPicklist({
         id: router && router.query && Number(router.query.id),
     });
 
