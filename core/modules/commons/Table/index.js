@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-param-reassign */
@@ -79,7 +80,7 @@ const CustomTable = (props) => {
         rows,
         getRows,
         deleteRows,
-        // loading,
+        loading,
         filters: initialFilters = [],
         initialPage = 0,
         initialRowsPerPage = 10,
@@ -180,7 +181,7 @@ const CustomTable = (props) => {
         return (
             <div className={classes.tableToolbar}>
                 <div className="top-buttons-wrapper">
-                    <div className="top-item records-found">{`${count} records found.`}</div>
+                    {!loading && <div className="top-item records-found">{`${count} records found.`}</div>}
                     {!hideActions && (
                         <div className="top-item">
                             <ConfirmDialog
@@ -440,10 +441,14 @@ const CustomTable = (props) => {
         <TableContainer component={Paper} className={classes.tableContainer}>
             {renderTableToolbar()}
             <div className={classes.mainTable}>
-                <Table size="small">
-                    {renderTableHeader()}
-                    {renderTableBody()}
-                </Table>
+                {loading ? <div className={classes.loading}>Loading . . .</div>
+                    : rows.length ? (
+                        <Table size="small">
+                            {renderTableHeader()}
+                            {renderTableBody()}
+                        </Table>
+                    )
+                        : <div className={classes.loading}>No records to display</div>}
             </div>
             {renderTableFooter()}
         </TableContainer>
