@@ -20,13 +20,10 @@ const PickByBatchListContent = (props) => {
         { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
-    // const filters = [
-    //     { field: 'channel_id', name: 'channel_id_from', type: 'from', label: 'No From', initialValue: '' },
-    //     { field: 'channel_id', name: 'channel_id_to', type: 'to', label: 'No To', initialValue: '' },
-    //     { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel Code', initialValue: '' },
-    //     { field: 'channel_url', name: 'channel_url', type: 'like', label: 'Channel Url', initialValue: '' },
+    const filters = [
+        { field: 'status', name: 'status', type: 'neq', label: 'Status', initialValue: 'complete', disabled: true },
 
-    // ];
+    ];
 
     const getClassByStatus = (status) => {
         if (status.value === 'new') {
@@ -67,7 +64,7 @@ const PickByBatchListContent = (props) => {
         <>
             <Header />
             <Table
-                // filters={filters}
+                filters={filters}
                 rows={rows}
                 getRows={getPickByBatchList}
                 loading={loading}

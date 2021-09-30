@@ -19,7 +19,7 @@ const ContentWrapper = (props) => {
         date: batchlist.created_at,
         totalItems: batchlist.total_items,
         totalShipments: batchlist.total_shipments,
-        pickList: batchlist.picklist,
+        picklist: batchlist.picklist,
     };
 
     const contentProps = {

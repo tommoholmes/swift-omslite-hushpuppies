@@ -93,11 +93,10 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 15px 18px 15px',
     },
     content: {
-        borderBottom: '3px solid #F5F7FB',
         padding: '12px 15px',
         background: '#ffffff',
         borderRadius: 16,
-        marginBottom: 5,
+        marginBottom: 8,
         '& hr': {
             margin: '12px -15px',
             background: borderGray,
@@ -153,7 +152,7 @@ const useStyles = makeStyles((theme) => ({
     },
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: '60% 40%',
     },
     gridList: {
         display: 'grid',

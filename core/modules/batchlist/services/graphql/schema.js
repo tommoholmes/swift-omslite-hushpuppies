@@ -46,27 +46,50 @@ export const getPickByBatchById = gql`
                     value
                 }
                 created_at
-                created_by
-                total_items
                 total_shipments
+                total_items
                 picklist {
                     parent_id
                     entity_id
+                    total_items
+                    picked_by
                     status{
                         value
                     }
-                    picked_by
-                    total_items
-                    items {
-                        barcode
-                        bin_code
-                        entity_id
-                        parent_id
-                        qty_picked
-                        qty_to_pick
-                        sku
-                        sort_no
-                    }
+                }
+            }
+        }
+    }
+`;
+
+export const getPickByBatchPicklist = gql`
+    query getPickByBatchPicklist(
+        $id: Int!,
+    ){
+        getPickByBatchPicklist(
+            id: $id
+        ){
+            pick_by_batch_picklist {
+                parent_id
+                entity_id
+                status {
+                    label
+                    value
+                }
+                started_at
+                total_items
+                picked_by
+                items {
+                    parent_id
+                    entity_id
+                    sku
+                    qty_picked
+                    qty_to_pick
+                    bin_code
+                    barcode        
+                    is_confirmed
+                    name
+                    sort_no
                 }
             }
         }
@@ -76,4 +99,5 @@ export const getPickByBatchById = gql`
 export default {
     getPickByBatchList,
     getPickByBatchById,
+    getPickByBatchPicklist,
 };

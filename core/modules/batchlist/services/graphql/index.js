@@ -17,7 +17,12 @@ export const getPickByBatchById = (variables) => useQuery(Schema.getPickByBatchB
     variables, ...context, ...fetchPolicy,
 });
 
+export const getPickByBatchPicklist = (variables) => useQuery(Schema.getPickByBatchPicklist, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getPickByBatchList,
     getPickByBatchById,
+    getPickByBatchPicklist,
 };
