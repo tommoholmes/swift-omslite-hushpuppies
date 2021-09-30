@@ -167,6 +167,15 @@ const CustomTable = (props) => {
         fetchRows();
     }, [page, rowsPerPage, filters, sorts]);
 
+    const cancelDeleteRowNotif = () => {
+        setOpenConfirmDialog(false);
+        window.toastMessage({
+            open: true,
+            text: 'Delete canceled!',
+            variant: 'error',
+        });
+    };
+
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
             {
@@ -175,6 +184,11 @@ const CustomTable = (props) => {
                 onClick: async (_checkedRows) => {
                     const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
                     await deleteRows({ variables });
+                    window.toastMessage({
+                        open: true,
+                        text: 'Delete success!',
+                        variant: 'success',
+                    });
                 },
             },
         ];
@@ -186,7 +200,7 @@ const CustomTable = (props) => {
                         <div className="top-item">
                             <ConfirmDialog
                                 open={openConfirmDialog}
-                                onCancel={() => setOpenConfirmDialog(false)}
+                                onCancel={() => cancelDeleteRowNotif()}
                                 onConfirm={async () => {
                                     if (checkedRows && checkedRows.length) {
                                         await activeAction.onClick(checkedRows);
