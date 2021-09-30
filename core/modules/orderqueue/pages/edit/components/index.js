@@ -100,7 +100,6 @@ const OrderQueueEditContent = (props) => {
                                     <td className={classes.td}>{orderQueue.channelOrderId}</td>
                                     <td />
                                     <td className={classes.td} />
-                                    <td className={classes.td}>(The order confirmation email is not sent)</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Channel Name</td>
