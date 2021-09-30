@@ -11,7 +11,7 @@ const CompanyListContent = (props) => {
     const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'Id', sortable: true, initialSort: 'ASC' },
+        { field: 'company_id', headerName: 'ID', sortable: true, initialSort: 'ASC' },
         { field: 'company_code', headerName: 'Company Code', sortable: true },
         { field: 'company_name', headerName: 'Company Name', sortable: true },
         { field: 'actions', headerName: 'Actions' },
