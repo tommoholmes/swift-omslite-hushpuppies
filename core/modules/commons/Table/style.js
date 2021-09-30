@@ -3,6 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 const colorText = '#536777';
 const colorBorder = '#435179';
 const colorPurple = '#BE1F93';
+const iconFont = '#435179';
 
 const useStyles = makeStyles((theme) => ({
     tableToolbar: {
@@ -98,7 +99,13 @@ const useStyles = makeStyles((theme) => ({
             marginRight: '0px',
         },
     },
-
+    loading: {
+        display: 'flex',
+        color: iconFont,
+        fontWeight: 600,
+        justifyContent: 'center',
+        padding: '20px 0',
+    },
 }));
 
 export default useStyles;

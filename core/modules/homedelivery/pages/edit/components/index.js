@@ -76,36 +76,47 @@ const HomeDeliveryEditContent = (props) => {
                     <h5 className={classes.title}>
                         {homeDelivery.statusLabel}
                     </h5>
-                    <div className={classes.progressBar}>
-                        <div className="step line">
-                            <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
+                    {homeDelivery.allocation === 'cannot_fulfill' ? (
+                        <div className={clsx(classes.progressBar, 'cannot')}>
+                            <div className="step">
+                                <img className="imgIcon" alt="" src="/assets/img/order_status/cannotfulfill.svg" />
+                            </div>
                         </div>
-                        <div className="step line">
-                            {(homeDelivery.statusValue === 'process_for_shipping') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />}
-                        </div>
-                        <div className="step line">
-                            {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />}
-                        </div>
-                        <div className="step line">
-                            {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered')
-                                || (homeDelivery.statusValue === 'closed') || (homeDelivery.statusValue === 'canceled') ? (
-                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
-                                ) : <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />}
-                        </div>
-                        <div className="step">
-                            {!((homeDelivery.statusValue === 'order_delivered') || (homeDelivery.statusValue === 'closed')
-                                || (homeDelivery.statusValue === 'canceled')) ? (
-                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                                ) : <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />}
-                        </div>
-                    </div>
+                    )
+
+                        : (
+                            <div className={classes.progressBar}>
+                                <div className="step line">
+                                    <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
+                                </div>
+                                <div className="step line">
+                                    {(homeDelivery.statusValue === 'process_for_shipping') ? (
+                                        <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                    ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />}
+                                </div>
+                                <div className="step line">
+                                    {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') ? (
+                                        <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                    ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />}
+                                </div>
+                                <div className="step line">
+                                    {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered')
+                                        || (homeDelivery.statusValue === 'closed') || (homeDelivery.statusValue === 'canceled') ? (
+                                            <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
+                                        ) : <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />}
+                                </div>
+                                <div className="step">
+                                    {!((homeDelivery.statusValue === 'order_delivered') || (homeDelivery.statusValue === 'closed')
+                                        || (homeDelivery.statusValue === 'canceled')) ? (
+                                            <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                        ) : <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />}
+                                </div>
+                            </div>
+                        )}
                     <hr />
                     <div className={classes.printProgress}>
-                        {(homeDelivery.statusValue === 'process_for_shipping') && (
+                        {(homeDelivery.statusValue === 'process_for_shipping')
+                            && (homeDelivery.allocation !== 'cannot_fulfill') && (
                             <>
                                 Print your packlist, Pick your items
                                 <br />
@@ -155,8 +166,8 @@ const HomeDeliveryEditContent = (props) => {
                                                             loading={getShipmentCancelReasonRes.loading}
                                                             options={
                                                                 getShipmentCancelReasonRes
-                                                                && getShipmentCancelReasonRes.data
-                                                                && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
                                                             }
                                                             getOptions={getShipmentCancelReason}
                                                             error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
@@ -186,6 +197,25 @@ const HomeDeliveryEditContent = (props) => {
                                             </Button>
                                         </>
                                     )}
+                                </div>
+                            </>
+                        )}
+                        {(homeDelivery.statusValue === 'process_for_shipping')
+                            && (homeDelivery.allocation === 'cannot_fulfill') && (
+                            <>
+                                <div className={classes.progressTitle}>
+                                    Order for home delivery from
+                                    {' '}
+                                    {homeDelivery.location}
+                                </div>
+                                <div className={classes.formFieldButton}>
+                                    <Button
+                                        className={classes.btn}
+                                        onClick={() => router.push('/shipment/homedelivery')}
+                                        variant="contained"
+                                    >
+                                        Reallocating Order
+                                    </Button>
                                 </div>
                             </>
                         )}
@@ -299,7 +329,7 @@ const HomeDeliveryEditContent = (props) => {
                                     <span className={classes.orderLabel} style={{ marginBottom: 10 }}>
                                         AWB Number : -
                                     </span>
-                                ) }
+                                )}
                                 <div className={classes.formFieldButton2}>
                                     <Button
                                         className={classes.btn}

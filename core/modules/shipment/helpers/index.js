@@ -8,3 +8,9 @@ export const optionsStatus = [
     { idValue: 'closed', name: 'Closed' },
     { idValue: 'canceled', name: 'Canceled' },
 ];
+
+export const dataTab = [
+    { label: 'All', value: 0 },
+    { label: 'Unconfirmed', value: 'true' },
+    { label: 'Cannot Fulfill', value: 'cannot_fulfill' },
+];

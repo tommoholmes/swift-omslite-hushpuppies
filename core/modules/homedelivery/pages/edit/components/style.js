@@ -222,6 +222,12 @@ const useStyles = makeStyles((theme) => ({
             display: 'block',
             margin: '0 auto',
         },
+        '&.cannot': {
+            gridTemplateColumns: 'repeat(1, auto)',
+            '& .imgIcon': {
+                width: '15% !important',
+            },
+        },
     },
     printProgress: {
         textAlign: 'center',
@@ -305,6 +311,14 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 140px)',
+        },
+    },
+    progressTitle: {
+        color: colorBold,
+        fontSize: 16,
+        paddingTop: 10,
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 14,
         },
     },
 }));

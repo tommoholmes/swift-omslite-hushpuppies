@@ -182,32 +182,31 @@ const HomeDeliveryListContent = (props) => {
         },
     ];
 
-    const onChangeTab = (e, v) => {
+    const onChangeTab = async (e, v) => {
         setLoad(true);
-        setTab(v);
-        setTimeout(() => { setLoad(false); }, 500);
+        await setTab(v);
+        setLoad(false);
     };
 
     return (
         <>
             <Header />
             <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
-            {load ? <div className={classes.loading}>Loading . . .</div>
-                : (
-                    <Table
-                        filters={filters}
-                        actions={actions}
-                        rows={rows}
-                        getRows={getStoreShipmentList}
-                        loading={loading}
-                        columns={columns}
-                        count={storeShipmentTotal}
-                        showCheckbox
-                        handleReset={() => setTab(0)}
-                        handleExport={handleExport}
-                        setVarExport={setVarExport}
-                    />
-                )}
+            {!load && (
+                <Table
+                    filters={filters}
+                    actions={actions}
+                    rows={rows}
+                    getRows={getStoreShipmentList}
+                    loading={loading}
+                    columns={columns}
+                    count={storeShipmentTotal}
+                    showCheckbox
+                    handleReset={() => setTab(0)}
+                    handleExport={handleExport}
+                    setVarExport={setVarExport}
+                />
+            )}
         </>
     );
 };

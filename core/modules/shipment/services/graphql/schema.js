@@ -120,7 +120,18 @@ export const getShipmentById = gql`
     }
 `;
 
+export const confirmShipment = gql`
+    mutation confirmShipmentAll(
+        $id: [Int!],
+    ){
+        confirmShipment(
+            id: $id
+        )
+    }
+`;
+
 export default {
     getShipmentList,
     getShipmentById,
+    confirmShipment,
 };
