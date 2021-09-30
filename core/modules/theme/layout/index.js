@@ -61,6 +61,31 @@ const Layout = (props) => {
             ],
         },
         {
+            aclCode: 'header_pick_pack',
+            key: 'pickpack',
+            label: 'Pick and Pack',
+            children: [
+                {
+                    aclCode: 'pick_by_wave_list', key: 'wavelist', label: 'Pick List', url: '/pickpack/wavelist',
+                },
+                {
+                    aclCode: 'pick_by_wave_create', key: 'wavecreate', label: 'Create Pick by Wave', url: '/pickpack/wavecreate',
+                },
+                {
+                    aclCode: 'pick_by_wave_packlist', key: 'wavepack', label: 'Pack List', url: '/pickpack/wavepack',
+                },
+                {
+                    aclCode: 'pick_by_batch_list', key: 'batchlist', label: 'Batch List', url: '/pickpack/batchlist',
+                },
+                {
+                    aclCode: 'pick_by_batch_create', key: 'batchcreate', label: 'Create Pick By Batch', url: '/pickpack/batchcreate',
+                },
+                {
+                    aclCode: 'pick_by_batch_packlist', key: 'batchpack', label: 'Pack List', url: '/pickpack/batchpack',
+                },
+            ],
+        },
+        {
             aclCode: 'header_shipment',
             key: 'shipment',
             label: 'Shipment',
