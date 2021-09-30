@@ -157,7 +157,7 @@ export const packShipment = gql`
 
 export const bookCourier = gql`
     mutation bookCourier(
-        $id: Int!,
+        $id: [Int!],
     ){
         bookCourier(
             id: $id
