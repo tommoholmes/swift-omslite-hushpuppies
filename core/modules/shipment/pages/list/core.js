@@ -7,9 +7,11 @@ const Core = (props) => {
     } = props;
 
     const [getShipmentList, { data, loading }] = gqlService.getShipmentList();
+    const [confirmShipment] = gqlService.confirmShipment();
 
     const contentProps = {
         getShipmentList,
+        confirmShipment,
         data,
         loading,
     };

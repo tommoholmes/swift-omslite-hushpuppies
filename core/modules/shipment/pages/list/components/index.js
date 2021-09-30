@@ -6,16 +6,19 @@ import Link from 'next/link';
 import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
-import { optionsStatus } from '@modules/shipment/helpers';
+import Tabs from '@common_tabs';
+import { optionsStatus, dataTab } from '@modules/shipment/helpers';
 import useStyles from '@modules/shipment/pages/list/components/style';
 import Header from '@modules/shipment/pages/list/components/Header';
 import clsx from 'clsx';
 
 const ShipmentListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getShipmentList } = props;
+    const { data, loading, getShipmentList, confirmShipment } = props;
     const shipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const shipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
+    const [tab, setTab] = React.useState(0);
+    const [load, setLoad] = React.useState(false);
 
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
@@ -111,7 +114,7 @@ const ShipmentListContent = (props) => {
             field: 'status',
             name: 'status',
             type: 'eq',
-            label: 'Shipment',
+            label: 'Status',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
@@ -121,6 +124,14 @@ const ShipmentListContent = (props) => {
                     options={optionsStatus}
                 />
             ),
+        },
+        {
+            field: 'allocation_status',
+            name: 'allocation_status',
+            type: tab === 'true' ? 'null' : 'eq',
+            label: 'Allocation Status',
+            initialValue: tab !== 0 ? tab : '',
+            hidden: true,
         },
     ];
 
@@ -183,18 +194,40 @@ const ShipmentListContent = (props) => {
         track_number: shipment.track_number || '-',
     }));
 
+    const actions = [
+        {
+            label: 'Mark Confirm Complete',
+            message: 'Are you sure to confirm ?',
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await confirmShipment({ variables });
+            },
+        },
+    ];
+
+    const onChangeTab = async (e, v) => {
+        setLoad(true);
+        await setTab(v);
+        setLoad(false);
+    };
+
     return (
         <>
             <Header />
-            <Table
-                filters={filters}
-                rows={rows}
-                getRows={getShipmentList}
-                showCheckbox
-                loading={loading}
-                columns={columns}
-                count={shipmentTotal}
-            />
+            <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
+            {!load && (
+                <Table
+                    filters={filters}
+                    actions={actions}
+                    rows={rows}
+                    getRows={getShipmentList}
+                    showCheckbox
+                    loading={loading}
+                    columns={columns}
+                    count={shipmentTotal}
+                    handleReset={() => setTab(0)}
+                />
+            )}
         </>
     );
 };
