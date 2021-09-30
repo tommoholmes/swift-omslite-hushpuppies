@@ -107,6 +107,28 @@ const useStyles = makeStyles((theme) => ({
     td: {
         padding: '5px 0',
         fontFamily: font,
+        '&.price': {
+            textAlign: 'right',
+        },
+        '& span': {
+            paddingRight: '62%',
+            [theme.breakpoints.down('xs')]: {
+                paddingRight: '5px',
+            },
+            [theme.breakpoints.up('sm')]: {
+                paddingRight: '25%',
+            },
+            [theme.breakpoints.up('md')]: {
+                paddingRight: '42%',
+            },
+            [theme.breakpoints.up('lg')]: {
+                paddingRight: '60%',
+            },
+            [theme.breakpoints.up('xl')]: {
+                paddingRight: '70%',
+            },
+        },
+
     },
     grandTotal: {
         fontFamily: font,

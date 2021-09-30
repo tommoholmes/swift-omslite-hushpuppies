@@ -16,6 +16,17 @@ const OrderQueueEditContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
 
+    const convertToRupiah = (number) => {
+        const currencyFractionDigits = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+        }).resolvedOptions().maximumFractionDigits;
+
+        const value = (number).toLocaleString('id-ID', { maximumFractionDigits: currencyFractionDigits });
+
+        return value;
+    };
+
     return (
         <>
             <Button
@@ -89,7 +100,6 @@ const OrderQueueEditContent = (props) => {
                                     <td className={classes.td}>{orderQueue.channelOrderId}</td>
                                     <td />
                                     <td className={classes.td} />
-                                    <td className={classes.td}>(The order confirmation email is not sent)</td>
                                 </tr>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Channel Name</td>
@@ -165,8 +175,8 @@ const OrderQueueEditContent = (props) => {
                             {orderQueue.orderItem.map((e) => (
                                 <tr>
                                     <td className={classes.td}>{e.sku}</td>
-                                    <td className={classes.td}>{e.base_price}</td>
-                                    <td className={classes.td}>{e.sell_price}</td>
+                                    <td className={clsx(classes.td, 'price')}><span>{convertToRupiah(e.base_price)}</span></td>
+                                    <td className={clsx(classes.td, 'price')}><span>{convertToRupiah(e.sell_price)}</span></td>
                                     <td className={classes.td}>{e.qty}</td>
                                     <td className={classes.td}>{e.discount_amount}</td>
                                     <td className={classes.td}>{e.loc_code}</td>
@@ -186,7 +196,7 @@ const OrderQueueEditContent = (props) => {
                         <span className={classes.orderLabel}>Grand Total</span>
                         <span className={classes.grandTotal}>
                             {' '}
-                            {orderQueue.grandTotal}
+                            {convertToRupiah(orderQueue.grandTotal)}
                         </span>
                     </div>
                 </div>
