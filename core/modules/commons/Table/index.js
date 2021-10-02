@@ -206,6 +206,7 @@ const CustomTable = (props) => {
                                         await activeAction.onClick(checkedRows);
                                         fetchRows();
                                     }
+                                    setCheckedRows([]);
                                     setOpenConfirmDialog(false);
                                 }}
                                 message={activeAction && activeAction.message}

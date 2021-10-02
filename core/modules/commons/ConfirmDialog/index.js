@@ -8,7 +8,7 @@ import propTypes from 'prop-types';
 
 const ConfirmationDialog = (props) => {
     const {
-        open = false, 
+        open = false,
         onConfirm,
         onCancel,
         title,
@@ -31,7 +31,7 @@ const ConfirmationDialog = (props) => {
                 <Button onClick={onConfirm} color="primary">
                     OK
                 </Button>
-                <Button onClick={onCancel} color="primary" autoFocus>
+                <Button onClick={onCancel} buttonType="outlined" color="primary" autoFocus>
                     Cancel
                 </Button>
             </DialogActions>
