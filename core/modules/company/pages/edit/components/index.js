@@ -76,7 +76,7 @@ const CompanyEditContent = (props) => {
                         onClick={formik.handleSubmit}
                         variant="contained"
                     >
-                        Save
+                        Submit
                     </Button>
                 </div>
             </Paper>
