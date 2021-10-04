@@ -111,6 +111,7 @@ const PriorityLocationCreateContent = (props) => {
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="priority"
+                            type="text"
                             value={formik.values.priority}
                             onChange={formik.handleChange}
                             error={!!(formik.touched.priority && formik.errors.priority)}
