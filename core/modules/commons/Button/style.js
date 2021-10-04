@@ -14,7 +14,8 @@ const useStyles = makeStyles(() => ({
     outlined: {
         borderRadius: 7,
         background: 'transparent',
-        border: `2px solid ${colorPurple}`,
+        border: `1px solid ${colorPurple}`,
+        padding: '5px 16px',
         color: colorPurple,
         fontWeight: 400,
         textTransform: 'unset',
