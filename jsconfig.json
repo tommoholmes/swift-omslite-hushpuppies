@@ -80,6 +80,7 @@
             "@common_scrolldialog": ["src/modules/commons/ScrollDialog","core/modules/commons/ScrollDialog"],
             "@common_tabs": ["src/modules/commons/Tabs","core/modules/commons/Tabs"],
             "@common_formdialog": ["src/modules/commons/FormDialog","core/modules/commons/FormDialog"],
+            "@common_customlist": ["src/modules/commons/CustomList","core/modules/commons/CustomList"],
 
             "@common_autocomplete/*": ["src/modules/commons/Autocomplete/*","core/modules/commons/Autocomplete/*"],
             "@common_textfield/*": ["src/modules/commons/TextField/*","core/modules/commons/TextField/*"],
@@ -94,6 +95,7 @@
             "@common_progressbar/*": ["src/modules/commons/ProgressBar/*","core/modules/commons/ProgressBar/*"],
             "@common_scrolldialog/*": ["src/modules/commons/ScrollDialog/*","core/modules/commons/ScrollDialog/*"],
             "@common_formdialog/*": ["src/modules/commons/FormDialog/*","core/modules/commons/FormDialog/*"],
+            "@common_customlist/*": ["src/modules/commons/CustomList/*","core/modules/commons/CustomList/*"],
 
             // for example
             "@common_buttonqty": ["swift-pwa-core/core/modules/commons/ButtonQty"],

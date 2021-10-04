@@ -2,6 +2,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
+import CustomList from '@common_customlist';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Header from '@modules/batchlist/pages/list/components/Header';
@@ -14,7 +15,7 @@ const PickByBatchListContent = (props) => {
     const PickByBatchTotal = (data && data.getPickByBatchList && data.getPickByBatchList.total_count) || 0;
 
     const columns = [
-        { field: 'entity_id', headerName: 'Wave Number', sortable: true, initialSort: 'DESC', hideable: true },
+        { field: 'entity_id', headerName: 'Batch Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'created_at', headerName: 'Date', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
         { field: 'actions', headerName: 'Actions', hideable: true },
@@ -49,7 +50,7 @@ const PickByBatchListContent = (props) => {
         // status: batchlist.status.label,
         actions: () => (
             <Link href={`/pickpack/batchlist/edit/${batchlist.entity_id}`}>
-                <a className="link-button">view</a>
+                <a className="link-button">View</a>
             </Link>
         ),
     }));
@@ -63,7 +64,7 @@ const PickByBatchListContent = (props) => {
     return (
         <>
             <Header />
-            <Table
+            <CustomList
                 filters={filters}
                 rows={rows}
                 getRows={getPickByBatchList}
@@ -71,6 +72,14 @@ const PickByBatchListContent = (props) => {
                 columns={columns}
                 count={PickByBatchTotal}
             />
+            {/* <Table
+                filters={filters}
+                rows={rows}
+                getRows={getPickByBatchList}
+                loading={loading}
+                columns={columns}
+                count={PickByBatchTotal}
+            /> */}
         </>
     );
 };
