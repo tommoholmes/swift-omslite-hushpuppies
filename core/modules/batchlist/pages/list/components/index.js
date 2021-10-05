@@ -5,6 +5,7 @@ import Table from '@common_table';
 import CustomList from '@common_customlist';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
+import { optionsStatus } from '@modules/batchlist/helpers';
 import Header from '@modules/batchlist/pages/list/components/Header';
 import useStyles from '@modules/batchlist/pages/list/components/style';
 
@@ -22,7 +23,21 @@ const PickByBatchListContent = (props) => {
     ];
 
     const filters = [
-        { field: 'status', name: 'status', type: 'neq', label: 'Status', initialValue: 'complete', disabled: true },
+        {
+            field: 'status',
+            name: 'status',
+            type: 'like',
+            label: 'Status',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsStatus.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => setFilterValue(newValue && newValue.id)}
+                    options={optionsStatus}
+                />
+            ),
+        },
 
     ];
 

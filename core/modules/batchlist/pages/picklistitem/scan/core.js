@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
-import React from 'react';
+/* eslint-disable prefer-const */
+import React, { useState } from 'react';
 import Layout from '@layout';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -11,24 +12,44 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const picklist = data.getPickByBatchPicklist.pick_by_batch_picklist;
-    const [donePickByBatchPicklist] = gqlService.donePickByBatchPicklist();
+    const picklist = data.getPickByBatchItemById.pick_by_batch_item;
+    const [updatePickByBatchItem] = gqlService.updatePickByBatchItem();
 
-    const handleDone = () => {
+    let [count, setCount] = useState(0);
+
+    function incrementCount() {
+        if (count < pickList.qty) {
+            count += 1;
+        }
+        setCount(count);
+    }
+
+    function decrementCount() {
+        if (count > 0) {
+            count -= 1;
+        }
+        setCount(count);
+    }
+
+    const handleSubmit = ({
+        itemId,
+        qtyPicked,
+    }) => {
         const variables = {
-            id: pickList.id,
+            item_id: itemId,
+            qty_picked: Number(qtyPicked),
         };
         window.backdropLoader(true);
-        donePickByBatchPicklist({
+        updatePickByBatchItem({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Picklist was done',
+                text: 'Success update qty!',
                 variant: 'success',
             });
-            router.push(`/pickpack/batchlist/edit/${pickList.parentId}`);
+            setTimeout(() => router.push(`/pickpack/batchlist/edit/picklist/${pickList.parentId}`), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -40,29 +61,36 @@ const ContentWrapper = (props) => {
     };
 
     const pickList = {
-        id: picklist.entity_id,
         parentId: picklist.parent_id,
-        statusLabel: picklist.status.label,
-        statusValue: picklist.status.value,
-        date: picklist.started_at,
-        totalItems: picklist.total_items,
-        picker: picklist.picked_by,
-        items: picklist.items,
-        itemsLeft: picklist.total_items_left_to_pick,
+        id: picklist.entity_id,
+        name: picklist.name,
+        sku: picklist.sku,
+        location: picklist.bin_code,
+        qty: picklist.qty_to_pick,
+        qtyPicked: picklist.qty_picked,
     };
 
-    const formikDone = useFormik({
+    const formik = useFormik({
         initialValues: {
-            id: picklist.parent_id,
+            itemId: picklist.entity_id,
+            qtyPicked: picklist.qty_picked,
         },
+        // validationSchema: Yup.object().shape({
+        //     id: Yup.Number().required('Required!'),
+        //     qtyPicked: Yup.Number().required('Required!'),
+        // }),
         onSubmit: (values) => {
-            handleDone(values);
+            handleSubmit(values);
+            // console.log(values);
         },
     });
 
     const contentProps = {
         pickList,
-        formikDone,
+        count,
+        incrementCount,
+        decrementCount,
+        formik,
     };
 
     return (
@@ -72,7 +100,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPickByBatchPicklist({
+    const { loading, data } = gqlService.getPickByBatchItemById({
         id: router && router.query && Number(router.query.id),
     });
 

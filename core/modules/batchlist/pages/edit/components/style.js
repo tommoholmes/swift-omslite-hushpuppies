@@ -6,10 +6,10 @@ const colorText = '#435179';
 const colorGray = '#B1BCDB';
 const colorBold = '#435179';
 const borderColor = '#DDE1EC';
-const borderGray = '#E5E9F1';
 const colorGreen = '#5EC929';
 const colorRed = '#DA1414';
 const colorOrange = '#FF962C';
+const colorPink = '#FFDFDF';
 
 const useStyles = makeStyles((theme) => ({
     green: {
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 16,
         backgroundColor: 'unset',
         boxShadow: 'none',
+        position: 'relative',
         '& .title-information': {
             [theme.breakpoints.down('xs')]: {
                 height: 75,
@@ -97,11 +98,10 @@ const useStyles = makeStyles((theme) => ({
         background: '#ffffff',
         borderRadius: 16,
         marginBottom: 8,
-        '& hr': {
-            margin: '12px -15px',
-            background: borderGray,
-            border: 0,
-            height: 1,
+        '&.pick_uncomplete': {
+            border: '1px solid',
+            borderColor: colorRed,
+            backgroundColor: colorPink,
         },
     },
     orderLabel: {
@@ -157,6 +157,7 @@ const useStyles = makeStyles((theme) => ({
     gridList: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
+        cursor: 'pointer',
     },
     titleList: {
         color: colorText,
@@ -228,6 +229,30 @@ const useStyles = makeStyles((theme) => ({
             borderWidth: '0 3px 0 0',
             transform: 'translateX(-50%)',
         },
+    },
+    footer: {
+        background: '#ffffff',
+        position: 'sticky',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        '& h2': {
+            margin: 0,
+            display: 'inline-block',
+            color: colorPurple,
+            verticalAlign: 'middle',
+        },
+        '& span': {
+            marginLeft: 5,
+        },
+    },
+    btnFooter: {
+        width: '100%',
+        backgroundColor: colorPurple,
+        color: '#ffffff',
+        cursor: 'pointer',
+        padding: 20,
+        border: 0,
     },
 }));
 
