@@ -4,10 +4,10 @@ import React from 'react';
 import CustomList from '@common_customlist';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
-import Header from '@modules/batchlist/pages/list/components/Header';
-import useStyles from '@modules/batchlist/pages/list/components/style';
+import Header from '@modules/wavelist/pages/list/components/Header';
+import useStyles from '@modules/wavelist/pages/list/components/style';
 
-const PickByBatchListContent = (props) => {
+const PickByWaveListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getPickByWaveList } = props;
     const PickByWaveList = (data && data.getPickByWaveList && data.getPickByWaveList.items) || [];
@@ -21,9 +21,30 @@ const PickByBatchListContent = (props) => {
         { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
-    const filters = [
-        { field: 'status', name: 'status', type: 'neq', label: 'Status', initialValue: 'complete', disabled: true },
+    const optionsStatus = [
+        { name: 'Pick in Progress', id: 'pick_in_progress' },
+        { name: 'Pick Uncomplete', id: 'pick_uncomplete' },
+        { name: 'Pick Complete', id: 'pick_complete' },
+    ];
 
+    const filters = [
+        {
+            field: 'status',
+            name: 'status',
+            type: 'eq',
+            label: 'Status',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsStatus.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue && newValue.id);
+                    }}
+                    options={optionsStatus}
+                />
+            ),
+        },
     ];
 
     const getClassByStatus = (status) => {
@@ -52,7 +73,7 @@ const PickByBatchListContent = (props) => {
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const yyyy = today.getFullYear();
-            const todayString = `${mm }/${ dd }/${ yyyy}`;
+            const todayString = `${mm}/${dd}/${yyyy}`;
             return (
                 <span>
                     {todayString}
@@ -60,7 +81,7 @@ const PickByBatchListContent = (props) => {
             );
         },
         actions: () => (
-            <Link href={`/pickpack/wavelist/edit/${wavelist.entity_id}`}>
+            <Link href={`/pickpack/wavelist/picklist/${wavelist.entity_id}`}>
                 <a className="link-button">View</a>
             </Link>
         ),
@@ -80,4 +101,4 @@ const PickByBatchListContent = (props) => {
     );
 };
 
-export default PickByBatchListContent;
+export default PickByWaveListContent;

@@ -33,33 +33,30 @@ export const getPickByWaveList = gql`
 `;
 
 export const getPickByWaveById = gql`
-    query getPickByWaveById(
-        $id: Int!,
-    ){
-        getPickByWaveById(
-            id: $id
-        ){
-            pick_by_batch{
-                entity_id
-                status {
-                    label
-                    value
-                }
-                created_at
-                total_shipments
-                total_items
-                picklist {
-                    parent_id
-                    entity_id
-                    total_items
-                    picked_by
-                    status{
-                        value
-                    }
-                }
-            }
+query getPickByWaveById($id: Int!) {
+    getPickByWaveById(id: $id) {
+      pick_by_wave {
+        entity_id
+        finished_at
+        items {
+          entity_id
+          sku
+          is_confirmed
+          bin_code
+          qty_picked
+          qty_to_pick
         }
+        picked_by
+        started_at
+        status {
+          label
+          value
+        }
+        total_items
+        total_shipments
+      }
     }
+  }
 `;
 
 export default {

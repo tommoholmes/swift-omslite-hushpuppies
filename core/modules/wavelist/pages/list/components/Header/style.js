@@ -5,9 +5,7 @@ const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 
 const useStyles = makeStyles((theme) => ({
     headerContainer: {
-        paddingBottom: '32px',
         [theme.breakpoints.down('xs')]: {
-            marginBottom: 25,
             paddingLeft: 17,
             paddingRight: 17,
         },

@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
         '& .top-buttons-wrapper': {
             padding: '16px',
             textAlign: 'right',
-            [theme.breakpoints.down('xs')]: {
-                textAlign: 'unset',
-            },
         },
         '& .records-found': {
             padding: '12px 0',

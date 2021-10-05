@@ -69,7 +69,7 @@ const ListFilters = (props) => {
                         if (!emptyFiltersField) setParentFilters(filters);
                     }}
                 >
-                    Apply Filters
+                    Apply
                 </Button>
                 <Button
                     buttonType="link"
@@ -82,7 +82,7 @@ const ListFilters = (props) => {
                         }
                     }}
                 >
-                    Clear Filters
+                    Clear
                 </Button>
             </div>
         </div>
