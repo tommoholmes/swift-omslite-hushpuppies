@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
 import Layout from '@layout';
-// import { useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/batchlist/services/graphql';
 
@@ -10,7 +10,65 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const batchlist = data.getPickByBatchById.pick_by_batch;
+    const [startPickByBatchPicklist] = gqlService.startPickByBatchPicklist();
+    const [startSortingPickByBatch] = gqlService.startSortingPickByBatch();
+
+    const handleClick = (id, status) => {
+        const variables = {
+            id,
+            status,
+        };
+        if (status === 'new') {
+            window.backdropLoader(true);
+            startPickByBatchPicklist({
+                variables,
+            }).then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'PickList in Progress',
+                    variant: 'success',
+                });
+                router.push(`/pickpack/batchlist/edit/picklist/${id}`);
+            }).catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            });
+        } else {
+            router.push(`/pickpack/batchlist/edit/picklist/${id}`);
+        }
+    };
+
+    const handleStartSorting = () => {
+        const variables = {
+            batch_id: batchList.id,
+        };
+        window.backdropLoader(true);
+        startSortingPickByBatch({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Start Sorting',
+                variant: 'success',
+            });
+            // setTimeout(() => window.location.reload(true), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
 
     const batchList = {
         id: batchlist.entity_id,
@@ -22,8 +80,19 @@ const ContentWrapper = (props) => {
         picklist: batchlist.picklist,
     };
 
+    const formikStartSorting = useFormik({
+        initialValues: {
+            batch_id: batchlist.entity_id,
+        },
+        onSubmit: (values) => {
+            handleStartSorting(values);
+        },
+    });
+
     const contentProps = {
         batchList,
+        handleClick,
+        formikStartSorting,
     };
 
     return (

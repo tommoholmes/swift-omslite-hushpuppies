@@ -147,6 +147,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tr: {
         verticalAlign: 'top',
+        position: 'relative',
     },
     th: {
         textAlign: 'left',
@@ -182,7 +183,8 @@ const useStyles = makeStyles((theme) => ({
     },
     loading: {
         position: 'absolute',
-        right: 0,
+        right: 2,
+        top: 8,
         height: 20,
         width: 20,
         borderRadius: 50,
@@ -191,7 +193,8 @@ const useStyles = makeStyles((theme) => ({
     },
     checkmark: {
         position: 'absolute',
-        right: 0,
+        right: 2,
+        top: 8,
         backgroundColor: colorGreen,
         height: 20,
         width: 20,
@@ -210,7 +213,8 @@ const useStyles = makeStyles((theme) => ({
     },
     exclamation: {
         position: 'absolute',
-        right: 0,
+        right: 2,
+        top: 8,
         backgroundColor: colorRed,
         height: 20,
         width: 20,
@@ -238,15 +242,18 @@ const useStyles = makeStyles((theme) => ({
             transform: 'translateX(-50%)',
         },
     },
+    iconBarcode: {
+        marginTop: 6,
+    },
     footer: {
         background: '#ffffff',
         position: 'sticky',
         bottom: 0,
         left: 0,
         width: '100%',
-        [theme.breakpoints.down('xs')]: {
-            position: 'fixed',
-        },
+        // [theme.breakpoints.down('xs')]: {
+        //     position: 'fixed',
+        // },
         '& h2': {
             margin: 0,
             display: 'inline-block',
@@ -259,9 +266,17 @@ const useStyles = makeStyles((theme) => ({
     },
     btnFooter: {
         width: '40%',
+        backgroundColor: colorPurple,
+        color: '#FFFFFF',
+        cursor: 'pointer',
+        padding: 20,
+        border: 0,
+    },
+    btnFooterDisabled: {
+        width: '40%',
         backgroundColor: borderColor,
         color: colorGray,
-        cursor: 'pointer',
+        cursor: 'not-allowed',
         padding: 20,
         border: 0,
     },
