@@ -33,33 +33,54 @@ export const getPickByWaveList = gql`
 `;
 
 export const getPickByWaveById = gql`
-query getPickByWaveById($id: Int!) {
-    getPickByWaveById(id: $id) {
-      pick_by_wave {
-        entity_id
-        finished_at
-        items {
+  query getPickByWaveById($id: Int!) {
+      getPickByWaveById(id: $id) {
+        pick_by_wave {
           entity_id
-          sku
-          is_confirmed
-          bin_code
-          qty_picked
-          qty_to_pick
+          finished_at
+          items {
+            entity_id
+            sku
+            is_confirmed
+            bin_code
+            qty_picked
+            qty_to_pick
+          }
+          picked_by
+          started_at
+          status {
+            label
+            value
+          }
+          total_items
+          total_shipments
         }
-        picked_by
-        started_at
-        status {
-          label
-          value
-        }
-        total_items
-        total_shipments
       }
     }
-  }
+`;
+
+export const getPickByWaveItemById = gql`
+  query getPickByWaveItemById($item_id: Int!) {
+      getPickByWaveItemById(item_id: $item_id) {
+        pick_by_wave_item{
+          entity_id
+          parent_id
+          slot_no
+          image_url
+          shipment_id
+          sku
+          bin_code
+          qty_to_pick
+          qty_picked
+          is_confirmed
+          name
+        }
+      }
+    }
 `;
 
 export default {
     getPickByWaveList,
     getPickByWaveById,
+    getPickByWaveItemById,
 };

@@ -17,7 +17,12 @@ export const getPickByWaveById = (variables) => useQuery(Schema.getPickByWaveByI
     variables, ...context, ...fetchPolicy,
 });
 
+export const getPickByWaveItemById = (variables) => useQuery(Schema.getPickByWaveItemById, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getPickByWaveList,
     getPickByWaveById,
+    getPickByWaveItemById,
 };

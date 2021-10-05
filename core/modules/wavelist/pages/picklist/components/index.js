@@ -74,7 +74,7 @@ const BatchListPickListContent = (props) => {
                 </div>
                 {waveList.items.map((e) => (
                     <div className={classes.content} key={e.entity_id}>
-                        <a href={`/pickpack/wavelist/picklist/scan/${e.entity_id}`}>
+                        <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
                             <div className={classes.gridList}>
                                 <div>
                                     <h5
@@ -106,7 +106,7 @@ const BatchListPickListContent = (props) => {
                                 <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
                                     {e.is_confirmed ? (
                                         <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
-                                    ) : <span className={classes.spanStart}>Barcode</span>}
+                                    ) : <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_barcode.svg" />}
                                 </h5>
                             </div>
                         </a>
