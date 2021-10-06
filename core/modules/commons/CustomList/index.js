@@ -17,6 +17,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import clsx from 'clsx';
+
 // helpers
 const getComponentOrString = (param) => (
     typeof param === 'function' ? param() : param
@@ -245,42 +246,43 @@ const CustomList = (props) => {
     return (
         <div>
             {renderTableToolbar()}
-            {loading && <div className={classes.loading}>Loading . . .</div>}
-            {rows.map((row, i) => (
-                <div
-                    key={i}
-                    className={clsx(classes.gridList, classes.content)}
-                    style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr)` }}
-                >
-                    {showCheckbox && (
-                        <Checkbox
-                            checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
-                            onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
-                        />
-                    )}
-                    {columns.map((column, columnIndex) => {
-                        return (
-                            !column.hidden && (
-                                <div
-                                    key={columnIndex}
-                                    style={{ paddingLeft: 10 }}
-                                >
-                                    <h5
-                                        className={classes.titleList}
+            {loading ? <div className={classes.loading}>Loading . . .</div>
+                : rows.length ? rows.map((row, i) => (
+                    <div
+                        key={i}
+                        className={clsx(classes.gridList, classes.content)}
+                        style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr)` }}
+                    >
+                        {showCheckbox && (
+                            <Checkbox
+                                checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
+                                onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
+                            />
+                        )}
+                        {columns.map((column, columnIndex) => {
+                            return (
+                                !column.hidden && (
+                                    <div
+                                        key={columnIndex}
+                                        style={{ paddingLeft: 10 }}
                                     >
-                                        {column.headerName}
-                                    </h5>
-                                    <h5
-                                        className={classes.bodyList}
-                                    >
-                                        {getComponentOrString(row[column.field])}
-                                    </h5>
-                                </div>
-                            )
-                        );
-                    })}
-                </div>
-            ))}
+                                        <h5
+                                            className={classes.titleList}
+                                        >
+                                            {column.headerName}
+                                        </h5>
+                                        <h5
+                                            className={classes.bodyList}
+                                        >
+                                            {getComponentOrString(row[column.field])}
+                                        </h5>
+                                    </div>
+                                )
+                            );
+                        })}
+                    </div>
+                ))
+                    : <div className={classes.loading}>No records to display</div>}
             {count > rowsPerPage
                 ? <Pagination count={count / rowsPerPage} page={page} onChange={() => { setPage(page + 1); }} />
                 : null}

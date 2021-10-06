@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
         '& .top-buttons-wrapper': {
             padding: '16px',
             textAlign: 'right',
-            [theme.breakpoints.down('xs')]: {
-                textAlign: 'unset',
-            },
         },
         '& .records-found': {
             padding: '12px 0',
@@ -70,21 +67,21 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     btn: {
-        borderRadius: 20,
-        background: 'unset',
-        boxShadow: 'none',
-        textTransform: 'capitalize',
-        color: colorText,
-        border: '1px solid',
-        borderColor: colorText,
+        borderRadius: '20px !important',
+        background: 'unset !important',
+        boxShadow: 'none !important',
+        textTransform: 'capitalize !important',
+        color: `${colorText} !important`,
+        border: '1px solid !important',
+        borderColor: `${colorText} !important`,
         '&:hover': {
-            background: 'unset',
-            boxShadow: 'none',
+            background: 'unset !important',
+            boxShadow: 'none !important',
         },
         '&.filter': {
-            borderColor: colorPurple,
-            color: 'white',
-            background: colorPurple,
+            borderColor: `${colorPurple} !important`,
+            color: 'white !important',
+            background: `${colorPurple} !important`,
         },
     },
     gridList: {
