@@ -11,7 +11,7 @@ import useStyles from '@modules/orderqueue/pages/list/components/style';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getOrderQueueList } = props;
+    const { data, loading, getOrderQueueList, setReallocation } = props;
     const orderQueueList = (data && data.getOrderQueueList && data.getOrderQueueList.items) || [];
     const orderQueueTotal = (data && data.getOrderQueueList && data.getOrderQueueList.total_count) || 0;
     const [getOrderQueueListx, getOrderQueueListRes] = orderQueueGqlService.getOrderQueueList();
@@ -151,6 +151,35 @@ const OrderQueueListContent = (props) => {
         ),
     }));
 
+    const actions = [
+        {
+            label: 'Set as New',
+            message: 'Are you sure to confirm ?',
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await variables.id.map((id) => setReallocation({
+                    variables: {
+                        id,
+                        type: 'new',
+                    },
+                }));
+            },
+        },
+        {
+            label: 'Set as Reallocation',
+            message: 'Are you sure to confirm ?',
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await variables.id.map((id) => setReallocation({
+                    variables: {
+                        id,
+                        type: 'allocation',
+                    },
+                }));
+            },
+        },
+    ];
+
     // if (!data || loading) {
     //     return (
     //         <div>Loading . . .</div>
@@ -162,6 +191,7 @@ const OrderQueueListContent = (props) => {
             <Header />
             <Table
                 filters={filters}
+                actions={actions}
                 rows={rows}
                 getRows={getOrderQueueList}
                 loading={loading}

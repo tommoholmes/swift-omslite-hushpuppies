@@ -8,10 +8,12 @@ const Core = (props) => {
 
     const [getOrderQueueList, { data, loading }] = gqlService.getOrderQueueList();
     // const [multideleteChannel] = gqlService.multideleteChannel();
+    const [setReallocation] = gqlService.setReallocation();
 
     const contentProps = {
         getOrderQueueList,
         // multideleteChannel,
+        setReallocation,
         data,
         loading,
     };
