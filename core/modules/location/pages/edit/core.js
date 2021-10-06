@@ -22,11 +22,11 @@ const ContentWrapper = (props) => {
         { id: 1, name: 'Active' },
     ];
     const optionsZone = [
-        { id: 0, name: 'Jawa' },
-        { id: 1, name: 'Sumatera' },
-        { id: 2, name: 'Sulawesi' },
-        { id: 3, name: 'Kalimantan' },
-        { id: 4, name: 'Papua' },
+        { id: 0, name: 'jawa' },
+        { id: 1, name: 'sumatera' },
+        { id: 2, name: 'sulawesi' },
+        { id: 3, name: 'kalimantan' },
+        { id: 4, name: 'papua' },
     ];
 
     const handleSubmit = ({
