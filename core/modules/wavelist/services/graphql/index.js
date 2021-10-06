@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from '@modules/wavelist/services/graphql/schema';
 
 const context = {
@@ -21,8 +21,13 @@ export const getPickByWaveItemById = (variables) => useQuery(Schema.getPickByWav
     variables, ...context, ...fetchPolicy,
 });
 
+export const donePickByWave = (variables) => useMutation(Schema.donePickByWave, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getPickByWaveList,
     getPickByWaveById,
     getPickByWaveItemById,
+    donePickByWave,
 };

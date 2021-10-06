@@ -242,6 +242,38 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         padding: '20px 0',
     },
+    footer: {
+        background: '#ffffff',
+        position: 'sticky',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        '& h2': {
+            margin: 0,
+            display: 'inline-block',
+            color: colorPurple,
+            verticalAlign: 'middle',
+        },
+        '& span': {
+            marginLeft: 5,
+        },
+    },
+    btnFooter: {
+        width: '40%',
+        backgroundColor: colorPurple,
+        color: '#FFFFFF',
+        cursor: 'pointer',
+        padding: 20,
+        border: 0,
+    },
+    btnFooterDisabled: {
+        width: '40%',
+        backgroundColor: borderColor,
+        color: colorGray,
+        cursor: 'not-allowed',
+        padding: 20,
+        border: 0,
+    },
 }));
 
 export default useStyles;

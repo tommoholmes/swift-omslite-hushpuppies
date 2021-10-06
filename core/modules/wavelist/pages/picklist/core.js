@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
 import Layout from '@layout';
-// import { useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/wavelist/services/graphql';
 import useStyles from '@modules/wavelist/pages/picklist/components/style';
@@ -22,10 +22,47 @@ const ContentWrapper = (props) => {
         totalShipments: wavelist.total_shipments,
         picker: wavelist.picked_by,
         items: wavelist.items,
+        itemsLeft: wavelist.total_items_left_to_pick,
     };
+
+    const [donePickByWave] = gqlService.donePickByWave();
+
+    const handleDone = () => {
+        const variables = {
+            id: waveList.id,
+        };
+        window.backdropLoader(true);
+        donePickByWave({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Picklist was done',
+                variant: 'success',
+            });
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    const formikDone = useFormik({
+        initialValues: {
+            id: waveList.id,
+        },
+        onSubmit: (values) => {
+            handleDone(values);
+        },
+    });
 
     const contentProps = {
         waveList,
+        formikDone,
     };
 
     return (

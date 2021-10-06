@@ -29,7 +29,7 @@ const BatchListPickListContent = (props) => {
                 <div className={classes.imgContainer}>
                     {itemProps.image
                         ? <img src={itemProps.image} className={classes.img} alt="item-preview" />
-                        : <div className={classes.emptyImg} />}
+                        : <img src="/assets/img/placeholder_image.jpg" className={classes.emptyImg} alt="item-preview" />}
                 </div>
                 <div className={classes.divider} />
                 <div className={classes.section}>

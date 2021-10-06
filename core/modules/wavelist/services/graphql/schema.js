@@ -54,6 +54,7 @@ export const getPickByWaveById = gql`
           }
           total_items
           total_shipments
+          total_items_left_to_pick
         }
       }
     }
@@ -79,8 +80,19 @@ export const getPickByWaveItemById = gql`
     }
 `;
 
+export const donePickByWave = gql`
+  mutation donePickByWave ($id: Int!){
+    donePickByWave(id: $id){
+      pick_by_wave{
+        entity_id
+      }   
+    }
+  }
+`;
+
 export default {
     getPickByWaveList,
     getPickByWaveById,
     getPickByWaveItemById,
+    donePickByWave,
 };

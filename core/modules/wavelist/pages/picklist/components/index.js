@@ -7,7 +7,7 @@ import useStyles from '@modules/wavelist/pages/picklist/components/style';
 
 const BatchListPickListContent = (props) => {
     const {
-        waveList,
+        waveList, formikDone,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -29,7 +29,7 @@ const BatchListPickListContent = (props) => {
         if (qty_to_pick === qty_picked) {
             return classes.checkmark;
         }
-        return classes.loading;
+        return classes.exclamation;
     };
 
     return (
@@ -65,7 +65,7 @@ const BatchListPickListContent = (props) => {
                             <h5 className={classes.titleSmall}>{`Picker : ${waveList.picker}`}</h5>
                         </div>
                         <div className="grid-child">
-                            <h5 className={classes.titleSmall}>{`Total Order : ${waveList.totalShipments}`}</h5>
+                            <h5 className={classes.titleSmall}>{`Total Shipment : ${waveList.totalShipments}`}</h5>
                         </div>
                         <div className="grid-child">
                             <h5 className={classes.titleSmall}>{`Total SKU : ${waveList.totalItems}`}</h5>
@@ -106,12 +106,35 @@ const BatchListPickListContent = (props) => {
                                 <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
                                     {e.is_confirmed ? (
                                         <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
-                                    ) : <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_barcode.svg" />}
+                                    ) : <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />}
                                 </h5>
                             </div>
                         </a>
                     </div>
                 ))}
+                <div className={classes.footer}>
+                    <div style={{ width: '60%', display: 'inline-block', padding: 20 }}>
+                        <h2>{waveList.itemsLeft}</h2>
+                        <span>items left to pick</span>
+                    </div>
+                    {(waveList.itemsLeft === 0) ? (
+                        <button
+                            className={classes.btnFooter}
+                            type="submit"
+                            onClick={formikDone.handleSubmit}
+                        >
+                            Done Picking
+                        </button>
+                    ) : (
+                        <button
+                            className={classes.btnFooterDisabled}
+                            type="submit"
+                            disabled
+                        >
+                            Done Picking
+                        </button>
+                    )}
+                </div>
             </Paper>
         </>
     );
