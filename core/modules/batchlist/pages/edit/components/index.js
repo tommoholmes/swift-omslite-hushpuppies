@@ -3,6 +3,8 @@
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
+import Link from 'next/link';
+import LinkUi from '@material-ui/core/Link';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
@@ -10,7 +12,7 @@ import useStyles from '@modules/batchlist/pages/edit/components/style';
 
 const BatchListEditContent = (props) => {
     const {
-        batchList,
+        batchList, handleClick, formikStartSorting,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -33,9 +35,9 @@ const BatchListEditContent = (props) => {
             return classes.loading;
         }
         if (status === 'pick_uncomplete') {
-            return classes.checkmark;
+            return classes.exclamation;
         }
-        return classes.exclamation;
+        return classes.checkmark;
     };
 
     return (
@@ -68,7 +70,7 @@ const BatchListEditContent = (props) => {
                             <h5 className={classes.titleSmall}>{`Date : ${batchList.date}`}</h5>
                         </div>
                         <div className="grid-child">
-                            <h5 className={classes.titleSmall}>{`Total Order : ${batchList.totalShipments}`}</h5>
+                            <h5 className={classes.titleSmall}>{`Total Shipments : ${batchList.totalShipments}`}</h5>
                         </div>
                         <div className="grid-child">
                             <h5 className={classes.titleSmall}>{`Pick List : ${batchList.picklist.length}`}</h5>
@@ -79,8 +81,8 @@ const BatchListEditContent = (props) => {
                     </div>
                 </div>
                 {batchList.picklist.map((e) => (
-                    <div className={classes.content}>
-                        <a href={`/pickpack/batchlist/edit/picklist/${e.entity_id}`}>
+                    <div className={clsx(classes.content, e.status.value)}>
+                        <LinkUi onClick={() => handleClick(e.entity_id, e.status.value)}>
                             <div className={classes.gridList}>
                                 <h5 className={classes.titleList} style={{ textAlign: 'left' }}>{`PICK LIST ${e.entity_id}`}</h5>
                                 <h5 className={classes.titleList}>{`${e.total_items} SKU`}</h5>
@@ -95,9 +97,20 @@ const BatchListEditContent = (props) => {
                                     ) : <span className={classes.spanStart}>Start Picking</span>}
                                 </h5>
                             </div>
-                        </a>
+                        </LinkUi>
                     </div>
                 ))}
+                {(batchList.statusValue === 'pick_complete') && (
+                    <div className={classes.footer}>
+                        <button
+                            className={classes.btnFooter}
+                            type="submit"
+                            onClick={formikStartSorting.handleSubmit}
+                        >
+                            Start Sorting
+                        </button>
+                    </div>
+                )}
             </Paper>
         </>
     );

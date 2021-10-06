@@ -1,5 +1,45 @@
 import { gql } from '@apollo/client';
 
+const queryPickList = `
+    parent_id
+    entity_id
+    status {
+        label
+        value
+    }
+    started_at
+    total_items
+    picked_by
+    items {
+        parent_id
+        entity_id
+        sku
+        qty_picked
+        qty_to_pick
+        bin_code
+        barcode        
+        is_confirmed
+        name
+        sort_no
+    }
+    finished_at
+    total_items_left_to_pick
+`;
+
+const queryItemDetail = `
+    parent_id
+    entity_id
+    name
+    sku
+    bin_code
+    image_url
+    qty_to_pick
+    barcode
+    is_confirmed
+    qty_picked
+    sort_no
+`;
+
 export const getPickByBatchList = gql`
     query getPickByBatchList(
         $pageSize: Int!,
@@ -62,6 +102,34 @@ export const getPickByBatchById = gql`
     }
 `;
 
+export const startPickByBatchPicklist = gql`
+    mutation startPickByBatchPicklist(
+        $id: Int!,
+    ){
+        startPickByBatchPicklist(
+            id: $id
+        ){
+            pick_by_batch_picklist {
+                ${queryPickList}
+            }
+        }
+    }
+`;
+
+export const donePickByBatchPicklist = gql`
+    mutation donePickByBatchPicklist(
+        $id: Int!,
+    ){
+        donePickByBatchPicklist(
+            id: $id
+        ){
+            pick_by_batch_picklist {
+                ${queryPickList}
+            }
+        }
+    }
+`;
+
 export const getPickByBatchPicklist = gql`
     query getPickByBatchPicklist(
         $id: Int!,
@@ -70,34 +138,59 @@ export const getPickByBatchPicklist = gql`
             id: $id
         ){
             pick_by_batch_picklist {
-                parent_id
-                entity_id
-                status {
-                    label
-                    value
-                }
-                started_at
-                total_items
-                picked_by
-                items {
-                    parent_id
-                    entity_id
-                    sku
-                    qty_picked
-                    qty_to_pick
-                    bin_code
-                    barcode        
-                    is_confirmed
-                    name
-                    sort_no
-                }
+                ${queryPickList}
             }
         }
+    }
+`;
+
+export const getPickByBatchItemById = gql`
+    query getPickByBatchItemById(
+        $id: Int!,
+    ){
+        getPickByBatchItemById(
+            id: $id
+        ){
+            pick_by_batch_item {
+                ${queryItemDetail}
+            }
+        }
+    }
+`;
+
+export const updatePickByBatchItem = gql`
+    mutation updatePickByBatchItem(
+        $item_id: Int!,
+        $qty_picked: Int!,
+    ){
+        updatePickByBatchItem(
+            item_id: $item_id,
+            qty_picked: $qty_picked
+        ){
+            pick_by_batch_item {
+                ${queryItemDetail}
+            }
+        }
+    }
+`;
+
+export const startSortingPickByBatch = gql`
+    mutation startSortingPickByBatch(
+        $batch_id: Int!,
+    ){
+        startSortingPickByBatch(
+            batch_id: $batch_id
+        )
     }
 `;
 
 export default {
     getPickByBatchList,
     getPickByBatchById,
+    startPickByBatchPicklist,
+    donePickByBatchPicklist,
     getPickByBatchPicklist,
+    getPickByBatchItemById,
+    updatePickByBatchItem,
+    startSortingPickByBatch,
 };

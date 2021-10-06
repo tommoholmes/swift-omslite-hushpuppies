@@ -358,13 +358,37 @@ const Layout = (props) => {
         }
     }, []);
 
+    const removeLastPathOnUrl = (url) => {
+        const output = url.split('/').slice(0, 3).join('/');
+        return output;
+    };
+
     useEffect(() => {
-        const activeMenu = mappedMenuList.find((e) => e.url === (router && router.pathname));
-        if (activeMenu && activeMenu.parentKey) {
-            setActiveChildMenu(activeMenu);
-            setActiveParentMenu(mappedMenuList.find((e) => e.key === activeMenu.parentKey));
+        const activeMenuFirstChild = mappedMenuList.find((e) => e.url === (router && router.pathname));
+
+        if (activeMenuFirstChild && activeMenuFirstChild.parentKey) {
+            if (activeMenuFirstChild && activeMenuFirstChild.parentKey) {
+                setActiveChildMenu(activeMenuFirstChild);
+                setActiveParentMenu(mappedMenuList.find((e) => e.key === activeMenuFirstChild.parentKey));
+            } else {
+                setActiveParentMenu(activeMenuFirstChild);
+            }
         } else {
-            setActiveParentMenu(activeMenu);
+            let activeMenuSecondChild = null;
+
+            for (let i = 0; i < mappedMenuList.length; i += 1) {
+                if (mappedMenuList[i].url.includes(removeLastPathOnUrl((router && router.pathname)))) {
+                    activeMenuSecondChild = mappedMenuList[i];
+                    break;
+                }
+            }
+
+            if (activeMenuSecondChild && activeMenuSecondChild.parentKey) {
+                setActiveChildMenu(activeMenuSecondChild);
+                setActiveParentMenu(mappedMenuList.find((e) => e.key === activeMenuSecondChild.parentKey));
+            } else {
+                setActiveParentMenu(activeMenuSecondChild);
+            }
         }
     }, [router]);
 
