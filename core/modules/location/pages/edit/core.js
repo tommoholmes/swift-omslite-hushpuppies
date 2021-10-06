@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/location/services/graphql';
+import { optionsYesNo, optionsActive, optionsZone } from '@modules/location/helpers';
 
 const ContentWrapper = (props) => {
     const {
@@ -13,21 +14,6 @@ const ContentWrapper = (props) => {
     const router = useRouter();
     const location = data.getLocationById;
     const [updateLocation] = gqlService.updateLocation();
-    const optionsYesNo = [
-        { id: 0, name: 'No' },
-        { id: 1, name: 'Yes' },
-    ];
-    const optionsActive = [
-        { id: 0, name: 'Inactive' },
-        { id: 1, name: 'Active' },
-    ];
-    const optionsZone = [
-        { id: 0, name: 'Jawa' },
-        { id: 1, name: 'Sumatera' },
-        { id: 2, name: 'Sulawesi' },
-        { id: 3, name: 'Kalimantan' },
-        { id: 4, name: 'Papua' },
-    ];
 
     const handleSubmit = ({
         company,

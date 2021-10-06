@@ -10,6 +10,7 @@ import companyGqlService from '@modules/company/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/location/pages/edit/components/style';
+import { optionsYesNo, optionsActive, optionsZone } from '@modules/location/helpers';
 
 const LocationEditContent = (props) => {
     const {
@@ -21,21 +22,6 @@ const LocationEditContent = (props) => {
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
     const [getCityList, getCityListRes] = locationGqlService.getCityList();
-    const optionsYesNo = [
-        { id: 0, name: 'No' },
-        { id: 1, name: 'Yes' },
-    ];
-    const optionsActive = [
-        { id: 0, name: 'Inactive' },
-        { id: 1, name: 'Active' },
-    ];
-    const optionsZone = [
-        { id: 0, name: 'Jawa' },
-        { id: 1, name: 'Sumatera' },
-        { id: 2, name: 'Sulawesi' },
-        { id: 3, name: 'Kalimantan' },
-        { id: 4, name: 'Papua' },
-    ];
     const isIndonesia = () => formik && formik.values && formik.values.countries && formik.values.countries.id === 'ID';
 
     return (
