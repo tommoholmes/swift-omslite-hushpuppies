@@ -1,5 +1,18 @@
 import { gql } from '@apollo/client';
 
+const queryItemDetail = `
+    entity_id
+    parent_id
+    slot_no
+    shipment_id
+    sku
+    bin_code
+    qty_to_pick
+    qty_picked
+    is_confirmed
+    name
+`;
+
 export const getPickByWaveList = gql`
     query getPickByWaveList(
         $pageSize: Int!,
@@ -80,6 +93,22 @@ export const getPickByWaveItemById = gql`
     }
 `;
 
+export const updatePickByWaveItem = gql`
+    mutation updatePickByWaveItem(
+        $item_id: Int!,
+        $qty_picked: Int!,
+    ){
+        updatePickByWaveItem(
+            item_id: $item_id,
+            qty_picked: $qty_picked
+        ){
+            pick_by_wave_item {
+                ${queryItemDetail}
+            }
+        }
+    }
+`;
+
 export const donePickByWave = gql`
   mutation donePickByWave ($id: Int!){
     donePickByWave(id: $id){
@@ -95,4 +124,5 @@ export default {
     getPickByWaveById,
     getPickByWaveItemById,
     donePickByWave,
+    updatePickByWaveItem,
 };

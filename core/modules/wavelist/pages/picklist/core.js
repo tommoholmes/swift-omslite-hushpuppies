@@ -12,6 +12,7 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const wavelist = data.getPickByWaveById.pick_by_wave;
+    const router = useRouter();
 
     const waveList = {
         id: wavelist.entity_id,
@@ -41,6 +42,7 @@ const ContentWrapper = (props) => {
                 text: 'Picklist was done',
                 variant: 'success',
             });
+            router.push('/pickpack/wavelist');
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({

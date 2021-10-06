@@ -21,13 +21,18 @@ export const getPickByWaveItemById = (variables) => useQuery(Schema.getPickByWav
     variables, ...context, ...fetchPolicy,
 });
 
+export const updatePickByWaveItem = (variables) => useMutation(Schema.updatePickByWaveItem, {
+    variables, ...context,
+});
+
 export const donePickByWave = (variables) => useMutation(Schema.donePickByWave, {
-    variables, ...context, ...fetchPolicy,
+    variables, ...context,
 });
 
 export default {
     getPickByWaveList,
     getPickByWaveById,
     getPickByWaveItemById,
+    updatePickByWaveItem,
     donePickByWave,
 };
