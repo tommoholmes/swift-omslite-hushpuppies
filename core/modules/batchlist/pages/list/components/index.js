@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 import React from 'react';
-import Table from '@common_table';
 import CustomList from '@common_customlist';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
@@ -26,7 +25,7 @@ const PickByBatchListContent = (props) => {
         {
             field: 'status',
             name: 'status',
-            type: 'like',
+            type: 'eq',
             label: 'Status',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
@@ -37,6 +36,14 @@ const PickByBatchListContent = (props) => {
                     options={optionsStatus}
                 />
             ),
+        },
+        {
+            field: 'status',
+            name: 'status',
+            type: 'neq',
+            label: 'Status',
+            initialValue: 'pick_complete',
+            hidden: true,
         },
 
     ];
@@ -62,19 +69,12 @@ const PickByBatchListContent = (props) => {
                 {batchlist.status.label}
             </span>
         ),
-        // status: batchlist.status.label,
         actions: () => (
             <Link href={`/pickpack/batchlist/edit/${batchlist.entity_id}`}>
                 <a className="link-button">View</a>
             </Link>
         ),
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>
@@ -87,14 +87,6 @@ const PickByBatchListContent = (props) => {
                 columns={columns}
                 count={PickByBatchTotal}
             />
-            {/* <Table
-                filters={filters}
-                rows={rows}
-                getRows={getPickByBatchList}
-                loading={loading}
-                columns={columns}
-                count={PickByBatchTotal}
-            /> */}
         </>
     );
 };
