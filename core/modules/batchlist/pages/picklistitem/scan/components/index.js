@@ -12,10 +12,9 @@ import useStyles from '@modules/batchlist/pages/picklistitem/scan/components/sty
 
 const ScanItemContent = (props) => {
     const {
-        pickList, count, incrementCount, decrementCount, formik,
+        pickList, incrementCount, decrementCount, formik,
     } = props;
     const classes = useStyles();
-    const router = useRouter();
 
     return (
         <>
@@ -30,10 +29,8 @@ const ScanItemContent = (props) => {
                     </span>
                     <br />
                     <span className={classes.text}>{`You have picked ${pickList.qtyPicked} item`}</span>
-                    <div style={{ marginTop: 19 }}>
+                    <div style={{ marginTop: 19, display: 'flex', justifyContent: 'center' }}>
                         <button className={classes.button} style={{ marginTop: -10 }} onClick={decrementCount}> - </button>
-                        <h2 className={clsx(classes.h2, 'quantity')}>{count}</h2>
-                        <button className={classes.button} style={{ marginTop: -6 }} onClick={incrementCount}> + </button>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
@@ -42,10 +39,11 @@ const ScanItemContent = (props) => {
                             onChange={formik.handleChange}
                             error={!!(formik.touched.qtyPicked && formik.errors.qtyPicked)}
                             helperText={(formik.touched.qtyPicked && formik.errors.qtyPicked) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
+                            inputProps={{
+                                className: classes.InputProps,
                             }}
                         />
+                        <button className={classes.button} style={{ marginTop: -6 }} onClick={incrementCount}> + </button>
                     </div>
                     <Button
                         className={classes.btn}
