@@ -133,7 +133,7 @@ const StorePickupListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/shipment/storepickup/print/${idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -141,7 +141,7 @@ const StorePickupListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/shipment/storepickup/printpack/${idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
