@@ -2,9 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
     scan: {
-        '@media (max-width: 767px )': {
-            height: window.innerHeight / 2,
-        },
         display: 'flex',
         justifyContent: 'center',
         '& #scanner-container': {
