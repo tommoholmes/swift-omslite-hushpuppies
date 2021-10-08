@@ -4,7 +4,6 @@ const useStyles = makeStyles(() => ({
     scan: {
         '@media (max-width: 767px )': {
             height: window.innerHeight / 2,
-            width: window.innerWidth,
         },
         display: 'flex',
         justifyContent: 'center',
