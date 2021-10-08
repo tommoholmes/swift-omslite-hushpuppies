@@ -54,6 +54,7 @@ const ScanItemContent = (props) => {
                         <button className={classes.button} style={{ marginTop: -6 }} onClick={incrementCount}> + </button>
                     </div>
                     <Button
+                        disabled={!count}
                         className={classes.btn}
                         onClick={handleSubmit}
                         variant="contained"
