@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable prefer-const */
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '@layout';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -14,22 +14,6 @@ const ContentWrapper = (props) => {
     const router = useRouter();
     const picklist = data.getPickByBatchItemById.pick_by_batch_item;
     const [updatePickByBatchItem] = gqlService.updatePickByBatchItem();
-
-    let [count, setCount] = useState(0);
-
-    function incrementCount() {
-        if (count < pickList.qty) {
-            count += 1;
-        }
-        setCount(count);
-    }
-
-    function decrementCount() {
-        if (count > 0) {
-            count -= 1;
-        }
-        setCount(count);
-    }
 
     const handleSubmit = ({
         itemId,
@@ -60,6 +44,18 @@ const ContentWrapper = (props) => {
         });
     };
 
+    function incrementCount() {
+        if (formik.values.qtyPicked < pickList.qty) {
+            formik.setFieldValue('qtyPicked', formik.values.qtyPicked + 1);
+        }
+    }
+
+    function decrementCount() {
+        if (formik.values.qtyPicked > 0) {
+            formik.setFieldValue('qtyPicked', formik.values.qtyPicked - 1);
+        }
+    }
+
     const pickList = {
         parentId: picklist.parent_id,
         id: picklist.entity_id,
@@ -75,19 +71,13 @@ const ContentWrapper = (props) => {
             itemId: picklist.entity_id,
             qtyPicked: picklist.qty_picked,
         },
-        // validationSchema: Yup.object().shape({
-        //     id: Yup.Number().required('Required!'),
-        //     qtyPicked: Yup.Number().required('Required!'),
-        // }),
         onSubmit: (values) => {
             handleSubmit(values);
-            // console.log(values);
         },
     });
 
     const contentProps = {
         pickList,
-        count,
         incrementCount,
         decrementCount,
         formik,

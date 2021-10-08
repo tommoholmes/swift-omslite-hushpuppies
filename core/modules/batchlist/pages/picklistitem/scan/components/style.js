@@ -70,6 +70,17 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 143,
         marginBottom: 10,
     },
+    fieldRoot: {
+        margin: '0 10px',
+    },
+    InputProps: {
+        color: colorText,
+        fontSize: 40,
+        textAlign: 'center',
+        fontWeight: 600,
+        padding: 0,
+        maxWidth: 100,
+    },
 }));
 
 export default useStyles;
