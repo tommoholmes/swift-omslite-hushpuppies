@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
         border: '1px solid',
         borderColor: colorPurple,
         letterSpacing: 0,
-        padding: '14px 53px',
-        marginTop: 27,
+        padding: '5px 25px',
+        marginTop: 15,
         textTransform: 'uppercase',
     },
     button: {
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     },
     InputProps: {
         color: colorText,
-        fontSize: 40,
+        fontSize: 30,
         textAlign: 'center',
         fontWeight: 600,
         padding: 0,

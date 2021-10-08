@@ -2,6 +2,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
     scan: {
+        '@media (max-width: 767px )': {
+            height: window.innerHeight / 2,
+            width: window.innerWidth,
+        },
         display: 'flex',
         justifyContent: 'center',
         '& #scanner-container': {
@@ -11,6 +15,11 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             left: 0,
             top: 0,
+        },
+        '& video': {
+            '@media (max-width: 767px )': {
+                height: window.innerHeight / 2,
+            },
         },
     },
     closeButton: {
@@ -33,10 +42,10 @@ const useStyles = makeStyles(() => ({
     },
     icon: {
         backgroundColor: 'white',
-        border: '10px solid white',
+        border: '5px solid white',
         borderRadius: 99,
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
         '&.cancel': {
             color: '#DA1414',
         },

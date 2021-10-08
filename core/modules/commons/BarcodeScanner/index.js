@@ -16,7 +16,7 @@ const App = ({
     readers, barcode, handleDetect = () => { }, handleClose = () => { },
 }) => {
     const classes = useStyles();
-    const [isMatch, setIsMatch] = useState(null);
+    const [isMatch, setIsMatch] = useState(true);
 
     const _onDetected = (res) => {
         if (barcode === res.codeResult.code) {
@@ -119,15 +119,24 @@ const App = ({
         });
     };
 
+    const stopScanner = () => {
+        Quagga.offProcessed();
+        Quagga.offDetected();
+        Quagga.stop();
+    };
+
     useEffect(() => {
         startScanner();
+        return () => {
+            stopScanner();
+        };
     }, []);
 
     return (
-        <div style={{ marginBottom: 50 }}>
+        <div style={{ marginBottom: 35 }}>
             <div className={classes.scan}>
                 <div id="scanner-container">
-                    <IconButton className={classes.closeButton} onClick={handleClose}>
+                    <IconButton className={clsx(classes.closeButton, 'hidden-mobile')} onClick={handleClose}>
                         <CloseIcon className={classes.closeIcon} />
                     </IconButton>
                 </div>
