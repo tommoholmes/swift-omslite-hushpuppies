@@ -6,20 +6,25 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import clsx from 'clsx';
+import Router from 'next/router';
 import useStyles from '@modules/wavelist/pages/scan/components/style';
+import Scan from '@common_barcodescanner';
 
 const ScanItemContent = (props) => {
     const {
-        pickList, incrementCount, decrementCount, formik,
+        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit,
     } = props;
     const classes = useStyles();
-
+    const num = /^\d+$/;
     return (
         <>
             <Paper className={classes.container}>
                 <div className={classes.content}>
+                    <Scan
+                        barcode={pickList.barcode}
+                        handleDetect={handleDetect}
+                        handleClose={() => Router.push(`/pickpack/wavelist/picklist/item/${pickList.id}`)}
+                    />
                     <h2 className={classes.h2}>{pickList.name}</h2>
                     <span className={classes.text}>
                         {`SKU ${pickList.sku} / `}
@@ -35,10 +40,13 @@ const ScanItemContent = (props) => {
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="qtyPicked"
-                            value={formik.values.qtyPicked}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.qtyPicked && formik.errors.qtyPicked)}
-                            helperText={(formik.touched.qtyPicked && formik.errors.qtyPicked) || ''}
+                            value={count}
+                            onChange={(e) => {
+                                if (num.test(e.target.value)) {
+                                    setCount(Number(e.target.value));
+                                }
+                            }}
+                            error={!num.test(count)}
                             inputProps={{
                                 className: classes.InputProps,
                             }}
@@ -47,15 +55,16 @@ const ScanItemContent = (props) => {
                     </div>
                     <Button
                         className={classes.btn}
-                        onClick={formik.handleSubmit}
+                        onClick={handleSubmit}
                         variant="contained"
                     >
                         Confirm
                     </Button>
-
-                    <Link href={`/pickpack/wavelist/picklist/item/${pickList.id}`}>
-                        <a className={classes.linkBack}>Back to Pick List Item</a>
-                    </Link>
+                    <div className="hidden-mobile">
+                        <Link href={`/pickpack/wavelist/picklist/item/${pickList.id}`}>
+                            <a className={classes.linkBack}>Back to Pick List Item</a>
+                        </Link>
+                    </div>
                 </div>
             </Paper>
         </>

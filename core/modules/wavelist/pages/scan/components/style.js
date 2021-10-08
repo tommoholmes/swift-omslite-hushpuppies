@@ -67,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
         textDecoration: 'underline',
         color: colorPurple,
-        marginTop: 143,
-        marginBottom: 10,
+        marginTop: 100,
+        marginBottom: 50,
     },
     fieldRoot: {
         margin: '0 10px',
