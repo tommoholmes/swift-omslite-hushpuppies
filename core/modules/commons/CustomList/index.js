@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable object-curly-newline */
@@ -68,9 +70,12 @@ const CustomList = (props) => {
         filters: initialFilters = [],
         actions,
         hideActions = true,
+        hideColumn = true,
         handleReset,
         initialPage = 0,
         initialRowsPerPage = 15,
+        header = null,
+        handleClickRow,
         count,
     } = props;
     // hooks
@@ -130,76 +135,82 @@ const CustomList = (props) => {
 
     const renderTableToolbar = () => (
         <div className={classes.tableToolbar}>
-            <div className="top-buttons-wrapper">
-                {!hideActions && actions.length && (
-                    <div className="top-item">
-                        <ConfirmDialog
-                            open={openConfirmDialog}
-                            onConfirm={async () => {
-                                if (checkedRows && checkedRows.length) {
-                                    await activeAction.onClick(checkedRows);
-                                    fetchRows();
-                                }
-                                setOpenConfirmDialog(false);
-                            }}
-                            message={activeAction && activeAction.message}
-                        />
-                        <button
-                            id="clickConfirm"
-                            className="hide"
-                            type="submit"
-                            onClick={async () => {
-                                if (checkedRows && checkedRows.length) {
-                                    await activeAction.onClick(checkedRows);
-                                    fetchRows();
-                                    window.toastMessage({
-                                        open: true,
-                                        text: 'Success!',
-                                        variant: 'success',
-                                    });
-                                    // window.location.reload();
-                                }
-                            }}
-                        >
-                            Auto Confirm
-                        </button>
-                        <MenuPopover
-                            openButton={{ label: 'Actions' }}
-                            icon={<ExpandMoreIcon />}
-                            menuItems={actions.map((action) => ({
-                                label: action.label,
-                                onClick: () => {
-                                    setActiveAction(action);
-                                    if (action.label === 'Delete') {
-                                        setOpenConfirmDialog(true);
-                                    } else {
-                                        setTimeout(() => {
-                                            document.getElementById('clickConfirm').click();
-                                        }, 100);
+            <div className={header ? 'top-header' : 'top'}>
+                {header && header()}
+                <div className="top-buttons-wrapper">
+                    {!hideActions && actions.length && (
+                        <div className="top-item">
+                            <ConfirmDialog
+                                open={openConfirmDialog}
+                                onConfirm={async () => {
+                                    if (checkedRows && checkedRows.length) {
+                                        await activeAction.onClick(checkedRows);
+                                        fetchRows();
                                     }
-                                },
-                            }))}
-                        />
+                                    setOpenConfirmDialog(false);
+                                }}
+                                message={activeAction && activeAction.message}
+                            />
+                            <button
+                                id="clickConfirm"
+                                className="hide"
+                                type="submit"
+                                onClick={async () => {
+                                    if (checkedRows && checkedRows.length) {
+                                        await activeAction.onClick(checkedRows);
+                                        fetchRows();
+                                        window.toastMessage({
+                                            open: true,
+                                            text: 'Success!',
+                                            variant: 'success',
+                                        });
+                                    // window.location.reload();
+                                    }
+                                }}
+                            >
+                                Auto Confirm
+                            </button>
+                            <MenuPopover
+                                openButton={{ label: 'Actions' }}
+                                icon={<ExpandMoreIcon />}
+                                menuItems={actions.map((action) => ({
+                                    label: action.label,
+                                    onClick: () => {
+                                        setActiveAction(action);
+                                        if (action.label === 'Delete') {
+                                            setOpenConfirmDialog(true);
+                                        } else {
+                                            setTimeout(() => {
+                                                document.getElementById('clickConfirm').click();
+                                            }, 100);
+                                        }
+                                    },
+                                }))}
+                            />
+                        </div>
+                    )}
+                    {!hideColumn
+                && (
+                    <div className="top-item">
+                        <Button
+                            className={classes.btn}
+                            onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
+                        >
+                            columns
+                        </Button>
                     </div>
                 )}
-                <div className="top-item">
-                    <Button
-                        className={classes.btn}
-                        onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
-                    >
-                        columns
-                    </Button>
-                </div>
-                <div className="top-item">
-                    <Button
-                        className={clsx(classes.btn, 'filter')}
-                        onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
-                        variant="contained"
-                        buttonType="primary-rounded"
-                    >
-                        <FilterListIcon style={{ marginRight: 10 }} />
-                        filters
-                    </Button>
+                    <div className="top-item">
+                        <Button
+                            className={clsx(classes.btn, 'filter')}
+                            onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
+                            variant="contained"
+                            buttonType="primary-rounded"
+                        >
+                            <FilterListIcon style={{ marginRight: 10 }} />
+                            filters
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div style={{ background: '#EBEFF6' }}>
@@ -264,7 +275,8 @@ const CustomList = (props) => {
                                 !column.hidden && (
                                     <div
                                         key={columnIndex}
-                                        style={{ paddingLeft: 10 }}
+                                        style={{ paddingLeft: 10, cursor: handleClickRow ? 'pointer' : 'unset' }}
+                                        onClick={() => handleClickRow ? handleClickRow(row.id) : null}
                                     >
                                         <h5
                                             className={classes.titleList}

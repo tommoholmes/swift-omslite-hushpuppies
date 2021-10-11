@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
             paddingLeft: 17,
             paddingRight: 17,
         },
+        display: 'flex',
     },
     title: {
         display: 'inline',

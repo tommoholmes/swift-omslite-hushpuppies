@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Header from '@modules/wavelist/pages/list/components/Header';
 import useStyles from '@modules/wavelist/pages/list/components/style';
+import Router from 'next/router';
 
 const PickByWaveListContent = (props) => {
     const classes = useStyles();
@@ -19,7 +20,6 @@ const PickByWaveListContent = (props) => {
         { field: 'started_at', headerName: 'Date', hideable: true },
         { field: 'picked_by', headerName: 'Picker', sortable: true, hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const optionsStatus = [
@@ -78,27 +78,15 @@ const PickByWaveListContent = (props) => {
                 {wavelist.status.label}
             </span>
         ),
-        started_at: () => {
-            const today = new Date(wavelist.started_at);
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const yyyy = today.getFullYear();
-            const todayString = `${mm}/${dd}/${yyyy}`;
-            return (
-                <span>
-                    {todayString}
-                </span>
-            );
-        },
-        actions: () => (
-            <Link href={`/pickpack/wavelist/picklist/${wavelist.entity_id}`}>
-                <a className="link-button">View</a>
-            </Link>
+        started_at: () => (
+            <span>
+                {wavelist.started_at}
+            </span>
         ),
     }));
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <CustomList
                 filters={filters}
                 rows={rows}
@@ -107,6 +95,10 @@ const PickByWaveListContent = (props) => {
                 columns={columns}
                 count={PickByWaveTotal}
                 handleReset={() => setStatusFilter('')}
+                header={() => (
+                    <Header />
+                )}
+                handleClickRow={(id) => Router.push(`/pickpack/wavelist/picklist/${id}`)}
             />
         </>
     );

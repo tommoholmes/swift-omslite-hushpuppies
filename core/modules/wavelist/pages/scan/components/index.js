@@ -42,8 +42,8 @@ const ScanItemContent = (props) => {
                             name="qtyPicked"
                             value={count}
                             onChange={(e) => {
-                                if (num.test(e.target.value)) {
-                                    setCount(Number(e.target.value));
+                                if (num.test(e.target.value) || e.target.value === '') {
+                                    setCount(e.target.value ? Number(e.target.value) : e.target.value);
                                 }
                             }}
                             error={!num.test(count)}
@@ -54,7 +54,7 @@ const ScanItemContent = (props) => {
                         <button className={classes.button} style={{ marginTop: -6 }} onClick={incrementCount}> + </button>
                     </div>
                     <Button
-                        disabled={!count}
+                        disabled={!count || count > pickList.qty}
                         className={classes.btn}
                         onClick={handleSubmit}
                         variant="contained"
