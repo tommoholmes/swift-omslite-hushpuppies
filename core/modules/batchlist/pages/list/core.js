@@ -15,7 +15,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

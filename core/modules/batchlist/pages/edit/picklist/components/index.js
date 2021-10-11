@@ -64,7 +64,7 @@ const PickListEditContent = (props) => {
             </div>
             <Paper className={classes.container}>
                 <div className={classes.headerContent}>
-                    <div>
+                    <div style={{ marginBottom: 10 }}>
                         <span className={getValueStatus(pickList.statusValue)}>{pickList.statusLabel}</span>
                     </div>
                     <div className={classes.grid}>

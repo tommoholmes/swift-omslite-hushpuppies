@@ -41,6 +41,10 @@ export const startSortingPickByBatch = (variables) => useMutation(Schema.startSo
     variables, ...context,
 });
 
+export const itemSortingPickByBatch = (variables) => useMutation(Schema.itemSortingPickByBatch, {
+    variables, ...context,
+});
+
 export default {
     getPickByBatchList,
     getPickByBatchById,
@@ -50,4 +54,5 @@ export default {
     getPickByBatchItemById,
     updatePickByBatchItem,
     startSortingPickByBatch,
+    itemSortingPickByBatch,
 };
