@@ -1,17 +1,60 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint max-len: ["error", { "code": 180 }] */
 import clsx from 'clsx';
 import useStyles from '@modules/dashboard/pages/default/components/style';
+import loginGqlService from '@modules/login/services/graphql';
+import Cookies from 'js-cookie';
+import { custDataNameCookie } from '@config';
 
 const DashboardContent = () => {
     const styles = useStyles();
+    const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
+    const getCustomerFromGql = () => getCustomerRes
+        && getCustomerRes.data
+        && getCustomerRes.data.customer;
+    const [username, setUsername] = React.useState('');
+    const [firstname, setFirstname] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [customer_loc_code, setCustomerLocCode] = React.useState('');
+    const handleSetUserInfo = (customer) => {
+        const firstnameTemp = customer && customer.firstname;
+        const lastnameTemp = customer && customer.lastname;
+        const emailTemp = customer && customer.email;
+        const customerLocCodeTemp = customer && customer.customer_loc_code;
+        setUsername(`${firstnameTemp} ${lastnameTemp}`);
+        setFirstname(`${firstnameTemp}`);
+        setEmail(`${emailTemp}`);
+        setCustomerLocCode(`${customerLocCodeTemp}`);
+    };
+    const limitString = (string, limit) => {
+        return string.substring(0, limit);
+    };
+
+    React.useEffect(() => {
+        if (Cookies.getJSON(custDataNameCookie)) {
+            handleSetUserInfo(Cookies.getJSON(custDataNameCookie));
+        } else {
+            getCustomer();
+        }
+    }, []);
+
+    React.useEffect(() => {
+        if (getCustomerFromGql()) {
+            Cookies.set(custDataNameCookie, getCustomerFromGql());
+            handleSetUserInfo(getCustomerFromGql());
+        }
+    }, [getCustomerFromGql()]);
 
     return (
         <div>
             <div className={clsx(styles.info, styles.welcomeUser)}>
                 <div className="title">
                     <span>
-                        Hello Endra,
+                        Hello
+                        {' '}
+                        {firstname}
+                        ,
                         <br />
                         welcome to your dashboard!
                     </span>
@@ -21,18 +64,21 @@ const DashboardContent = () => {
                         <div className={styles.containerUser}>
                             <img className={styles.imgIcon} alt="" src="/assets/img/dashboard/people.svg" />
                             <div className="user-text">
-                                <span className={styles.textName}>Endra Dwi Prasetya</span>
+                                <span className={styles.textName}>{username}</span>
                                 <br />
                                 <span>Store Manager</span>
                                 <br />
-                                <span>endra@icube.us</span>
+                                <span>{email}</span>
                             </div>
                         </div>
                     </div>
                     <div className={styles.user}>
                         <span className={styles.textBold}>Location Code</span>
                         <br />
-                        <span>LOC1,LOC2,LOC3,LOC4,LOC5,LOC6,LOC7</span>
+                        <span>
+                            {limitString(customer_loc_code, 64)}
+                            ...
+                        </span>
                     </div>
                     <div className={styles.user}>
                         <span className={styles.textBold}>Channel Code</span>
@@ -43,7 +89,7 @@ const DashboardContent = () => {
                         <a href="#">Edit</a>
                     </div>
                 </div>
-                
+
             </div>
             <div className={styles.info}>
                 <div className={styles.boxInfo}>
@@ -51,7 +97,7 @@ const DashboardContent = () => {
                     <div className={styles.infoDetail}>
                         <span>
                             You have
-							<br />
+                            <br />
                             <b>70 new order</b>
                             {' '}
                             to confirm
@@ -105,7 +151,7 @@ const DashboardContent = () => {
                     </div>
                     <a className="link" href="#">Manage Return</a>
                 </div>
-                
+
                 <div className={styles.salesChannelTableWrapper}>
                     <h2>Sales Channel</h2>
                     <div className={styles.container}>

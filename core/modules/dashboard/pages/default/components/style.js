@@ -198,7 +198,8 @@ const useStyles = makeStyles((theme) => ({
     },
     user: {
         [theme.breakpoints.down('xs')]: {
-            width: '100%',
+            maxWidth: '100%',
+
         },
         verticalAlign: 'top',
         '&:nth-last-child(1)': {
