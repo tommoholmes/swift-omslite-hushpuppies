@@ -14,19 +14,19 @@ const colorPink = '#FFDFDF';
 const useStyles = makeStyles((theme) => ({
     green: {
         color: colorGreen,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     orange: {
         color: colorOrange,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     red: {
         color: colorRed,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     gray: {
         color: colorGray,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     container: {
         padding: '0 16px',
@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 12,
         margin: 0,
         marginBottom: 5,
+        fontWeight: 400,
     },
     formFieldButton: {
         margin: '20px 0 10px 0',
@@ -102,6 +103,9 @@ const useStyles = makeStyles((theme) => ({
             border: '1px solid',
             borderColor: colorRed,
             backgroundColor: colorPink,
+        },
+        '& a:hover': {
+            textDecoration: 'none',
         },
     },
     orderLabel: {
@@ -165,6 +169,8 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
         textAlign: 'center',
         position: 'relative',
+        fontWeight: 500,
+        fontFamily: font,
     },
     spanStart: {
         color: colorPurple,

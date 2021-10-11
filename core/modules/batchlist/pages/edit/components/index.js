@@ -62,7 +62,7 @@ const BatchListEditContent = (props) => {
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.headerContent}>
-                    <div>
+                    <div style={{ marginBottom: 10 }}>
                         <span className={getValueStatus(batchList.statusValue)}>{batchList.statusLabel}</span>
                     </div>
                     <div className={classes.grid}>
@@ -100,7 +100,8 @@ const BatchListEditContent = (props) => {
                         </LinkUi>
                     </div>
                 ))}
-                {(batchList.statusValue === 'pick_complete') && (
+                {((batchList.statusValue === 'pick_complete') || (batchList.statusValue === 'sort_in_progress')
+                    || (batchList.statusValue === 'pick_uncomplete')) && (
                     <div className={classes.footer}>
                         <button
                             className={classes.btnFooter}

@@ -59,7 +59,7 @@ const ContentWrapper = (props) => {
                 text: 'Start Sorting',
                 variant: 'success',
             });
-            // setTimeout(() => window.location.reload(true), 250);
+            router.push(`/pickpack/batchlist/edit/sorting/${batchList.id}`);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({

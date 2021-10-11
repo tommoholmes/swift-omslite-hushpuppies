@@ -3,6 +3,7 @@
 import React from 'react';
 import CustomList from '@common_customlist';
 import Link from 'next/link';
+import Router from 'next/router';
 import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/batchlist/helpers';
 import Header from '@modules/batchlist/pages/list/components/Header';
@@ -18,7 +19,6 @@ const PickByBatchListContent = (props) => {
         { field: 'entity_id', headerName: 'Batch Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'created_at', headerName: 'Date', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
@@ -69,16 +69,11 @@ const PickByBatchListContent = (props) => {
                 {batchlist.status.label}
             </span>
         ),
-        actions: () => (
-            <Link href={`/pickpack/batchlist/edit/${batchlist.entity_id}`}>
-                <a className="link-button">View</a>
-            </Link>
-        ),
     }));
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <CustomList
                 filters={filters}
                 rows={rows}
@@ -86,6 +81,10 @@ const PickByBatchListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={PickByBatchTotal}
+                header={() => (
+                    <Header />
+                )}
+                handleClickRow={(id) => Router.push(`/pickpack/batchlist/edit/${id}`)}
             />
         </>
     );
