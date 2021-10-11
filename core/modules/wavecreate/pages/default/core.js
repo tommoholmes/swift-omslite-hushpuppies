@@ -17,16 +17,14 @@ const Core = (props) => {
                 is_auto: true,
             },
         })
-            .then(async (res) => {
+            .then((res) => {
                 window.backdropLoader(false);
-                if (res.data.createPickByWave.pick_by_wave?.entitiy_id) {
-                    window.toastMessage({
-                        open: true,
-                        text: 'Success auto generate!',
-                        variant: 'success',
-                    });
-                    setTimeout(() => Router.push(`/pickpack/wavelist/picklist/${res.data.createPickByWave.pick_by_wave.entitiy_id}`), 250);
-                }
+                window.toastMessage({
+                    open: true,
+                    text: 'Success auto generate!',
+                    variant: 'success',
+                });
+                setTimeout(() => Router.push(`/pickpack/wavelist/picklist/${res.data.createPickByWave.pick_by_wave.entity_id}`), 250);
             }).catch((e) => {
                 window.backdropLoader(false);
                 window.toastMessage({

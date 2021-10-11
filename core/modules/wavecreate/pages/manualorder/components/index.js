@@ -38,6 +38,7 @@ const PickByWaveListContent = (props) => {
 
     const rows = PickByWaveList.map((wavelist) => ({
         ...wavelist,
+        id: wavelist.entity_id,
         order_number: wavelist.channel_order_increment_id,
         shipping_label: wavelist.channel_shipping_label,
         channel: wavelist.channel.channel_name,
