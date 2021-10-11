@@ -2,7 +2,6 @@
 /* eslint-disable prefer-const */
 import React from 'react';
 import Layout from '@layout';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/wavelist/services/graphql';
 import useStyles from '@modules/wavelist/pages/pickitem/components/style';
@@ -16,13 +15,12 @@ const ContentWrapper = (props) => {
     const picklist = data.getPickByWaveItemById.pick_by_wave_item;
     const [updatePickByWaveItem] = gqlService.updatePickByWaveItem();
 
-    const handleSubmit = ({
-        itemId,
-        qtyPicked,
-    }) => {
+    let [count, setCount] = React.useState(picklist.qty_picked);
+
+    const handleSubmit = () => {
         const variables = {
-            item_id: itemId,
-            qty_picked: Number(qtyPicked),
+            item_id: picklist.entity_id,
+            qty_picked: count,
         };
         window.backdropLoader(true);
         updatePickByWaveItem({
@@ -45,17 +43,25 @@ const ContentWrapper = (props) => {
         });
     };
 
-    function incrementCount() {
-        if (formik.values.qtyPicked < pickList.qty) {
-            formik.setFieldValue('qtyPicked', formik.values.qtyPicked + 1);
+    const incrementCount = () => {
+        if (count < pickList.qty) {
+            count += 1;
         }
-    }
+        setCount(count);
+    };
 
-    function decrementCount() {
-        if (formik.values.qtyPicked > 0) {
-            formik.setFieldValue('qtyPicked', formik.values.qtyPicked - 1);
+    const decrementCount = () => {
+        if (count > 0) {
+            count -= 1;
         }
-    }
+        setCount(count);
+    };
+
+    const handleDetect = (code) => {
+        if (code === picklist.barcode) {
+            incrementCount();
+        }
+    };
 
     const pickList = {
         id: picklist.entity_id,
@@ -67,23 +73,17 @@ const ContentWrapper = (props) => {
         qty: picklist.qty_to_pick,
         qtyPicked: picklist.qty_picked,
         slot: picklist.slot_no,
+        barcode: picklist.barcode,
     };
-
-    const formik = useFormik({
-        initialValues: {
-            itemId: picklist.entity_id,
-            qtyPicked: picklist.qty_picked,
-        },
-        onSubmit: (values) => {
-            handleSubmit(values);
-        },
-    });
 
     const contentProps = {
         pickList,
         incrementCount,
         decrementCount,
-        formik,
+        handleDetect,
+        count,
+        setCount,
+        handleSubmit,
     };
 
     return (
@@ -119,7 +119,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

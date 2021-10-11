@@ -72,6 +72,7 @@
     "next-with-apollo": "^5.0.0",
     "npm": "^6.14.8",
     "prop-types": "^15.7.2",
+    "quagga": "^0.12.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.2.4",

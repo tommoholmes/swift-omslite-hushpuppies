@@ -88,6 +88,7 @@ export const getPickByWaveItemById = gql`
           qty_picked
           is_confirmed
           name
+          barcode
         }
       }
     }

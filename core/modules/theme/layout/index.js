@@ -4,7 +4,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Breadcrumb from '@common_breadcrumb';
+// import Breadcrumb from '@common_breadcrumb';
 import Hidden from '@material-ui/core/Hidden';
 import Sidebar from '@modules/theme/layout/components/sidebar';
 import useStyles from '@modules/theme/layout/style';
@@ -15,7 +15,7 @@ const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false }
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
 
 const Layout = (props) => {
-    const { children, pageConfig } = props;
+    const { children, pageConfig, useBreadcrumbs = true } = props;
     const classes = useStyles();
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
@@ -442,9 +442,10 @@ const Layout = (props) => {
                 />
                 {/* necessary for content to be below app bar */}
                 <div className={showHeader() ? classes.toolbar : ''} />
-                {showHeader() && (
+                {showHeader() && useBreadcrumbs && (
                     <Hidden smUp implementation="css">
-                        <Breadcrumb data={getBreadcrumbData()} />
+                        {/* <Breadcrumb data={getBreadcrumbData()} /> */}
+                        <div style={{ height: 30 }} />
                     </Hidden>
                 )}
                 {children}
