@@ -76,6 +76,7 @@ const CustomList = (props) => {
         initialRowsPerPage = 15,
         header = null,
         handleClickRow,
+        handleChecked = () => {},
         count,
     } = props;
     // hooks
@@ -127,9 +128,11 @@ const CustomList = (props) => {
         const i = checkedRows.findIndex((checkedRow) => checkedRow[primaryKey] === row[primaryKey]);
         if (checked && i < 0) {
             setCheckedRows([...checkedRows, row]);
+            handleChecked([...checkedRows, row]);
         } else if (!checked && i >= 0) {
             // eslint-disable-next-line eqeqeq
             setCheckedRows(checkedRows.filter((checkedRow) => checkedRow[primaryKey] != row[primaryKey]));
+            handleChecked(checkedRows.filter((checkedRow) => checkedRow[primaryKey] != row[primaryKey]));
         }
     };
 
@@ -262,7 +265,7 @@ const CustomList = (props) => {
                     <div
                         key={i}
                         className={clsx(classes.gridList, classes.content)}
-                        style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr)` }}
+                        style={{ gridTemplateColumns: `repeat(${showCheckbox ? 1 + columns.length : columns.length}, 1fr)` }}
                     >
                         {showCheckbox && (
                             <Checkbox
