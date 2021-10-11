@@ -13,6 +13,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { useRouter } from 'next/router';
 import { makeStyles } from '@material-ui/core/styles';
 import { drawerWidth } from '@modules/theme/layout/helpers';
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -113,14 +114,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Sidebar = ({
-    activeParentMenu,
-    setActiveParentMenu,
-    activeChildMenu,
-    setActiveChildMenu,
-    open,
-    setOpen,
-    menuList,
-    aclDetail,
+    activeParentMenu, setActiveParentMenu, activeChildMenu, setActiveChildMenu, open, setOpen, menuList, aclDetail,
 }) => {
     const router = useRouter();
     const classes = useStyles();
@@ -140,10 +134,7 @@ const Sidebar = ({
     const SidebarContent = () => (
         <>
             <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
-                <img
-                    alt=""
-                    src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'}
-                />
+                <img alt="" src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'} />
             </div>
             <Hidden smUp>
                 <IconButton
@@ -157,77 +148,82 @@ const Sidebar = ({
                 </IconButton>
             </Hidden>
             <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
-                {menuList && menuList.map((menu) => (
-                    <>
-                        { (menu.key === 'dashboard') && (
-                            <div className={classes.divMenu} key={menu.key}>
-                                <ListItem
-                                    button
-                                    className={clsx(
-                                        classes.menuItem,
-                                        open ? 'open' : 'close',
-                                        menu.key === (activeParentMenu && activeParentMenu.key) && 'active',
+                {menuList
+                    && menuList.map((menu) => (
+                        <>
+                            {menu.key === 'dashboard' && (
+                                <div className={classes.divMenu} key={menu.key}>
+                                    <ListItem
+                                        button
+                                        className={clsx(
+                                            classes.menuItem,
+                                            open ? 'open' : 'close',
+                                            menu.key === (activeParentMenu && activeParentMenu.key) && 'active',
+                                        )}
+                                        onClick={() => handleClickParent(menu)}
+                                    >
+                                        <ListItemIcon className="itemIcon">
+                                            <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
+                                        </ListItemIcon>
+                                        <ListItemText className="itemText" primary={menu.label} />
+                                    </ListItem>
+                                </div>
+                            )}
+                        </>
+                    ))}
+                {menuList
+                    && menuList.map((menu) => (
+                        <>
+                            {aclDetail[0] && aclDetail[0].acl_code.includes(menu.aclCode) && (
+                                <div className={classes.divMenu} key={menu.key}>
+                                    <ListItem
+                                        button
+                                        className={clsx(
+                                            classes.menuItem,
+                                            open ? 'open' : 'close',
+                                            menu.key === (activeParentMenu && activeParentMenu.key) && 'active',
+                                        )}
+                                        onClick={() => handleClickParent(menu)}
+                                    >
+                                        <ListItemIcon className="itemIcon">
+                                            <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
+                                        </ListItemIcon>
+                                        <ListItemText className="itemText" primary={menu.label} />
+                                    </ListItem>
+                                    {menu && menu.children && menu.children.length && (
+                                        <Collapse in={activeParentMenu && activeParentMenu.key === menu.key} timeout="auto" unmountOnExit>
+                                            <List component="div" disablePadding>
+                                                {menu.children.map((menuChild) => (
+                                                    <>
+                                                        {((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode))
+                                                            || menu.key === 'vendor') && (
+                                                            <>
+                                                                <Link href={`${menuChild.url}`} key={menuChild.key}>
+                                                                    <a>
+                                                                        <ListItem
+                                                                            button
+                                                                            key={menuChild.key}
+                                                                            className={clsx(
+                                                                                classes.menuChildItem,
+                                                                                menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
+                                                                            )}
+                                                                            onClick={() => handleClickChild(menuChild)}
+                                                                        >
+                                                                            <ListItemText className="itemText" primary={menuChild.label} />
+                                                                        </ListItem>
+                                                                    </a>
+                                                                </Link>
+                                                            </>
+                                                        )}
+                                                    </>
+                                                ))}
+                                            </List>
+                                        </Collapse>
                                     )}
-                                    onClick={() => handleClickParent(menu)}
-                                >
-                                    <ListItemIcon className="itemIcon">
-                                        <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
-                                    </ListItemIcon>
-                                    <ListItemText className="itemText" primary={menu.label} />
-                                </ListItem>
-                            </div>
-                        )}
-                    </>
-                ))}
-                {menuList && menuList.map((menu) => (
-                    <>
-                        { (aclDetail[0] && aclDetail[0].acl_code.includes(menu.aclCode)) && (
-                            <div className={classes.divMenu} key={menu.key}>
-                                <ListItem
-                                    button
-                                    className={clsx(
-                                        classes.menuItem,
-                                        open ? 'open' : 'close',
-                                        menu.key === (activeParentMenu && activeParentMenu.key) && 'active',
-                                    )}
-                                    onClick={() => handleClickParent(menu)}
-                                >
-                                    <ListItemIcon className="itemIcon">
-                                        <img alt="" src={`/assets/img/layout/${menu.key}.svg`} />
-                                    </ListItemIcon>
-                                    <ListItemText className="itemText" primary={menu.label} />
-                                </ListItem>
-                                {menu && menu.children && menu.children.length && (
-                                    <Collapse in={activeParentMenu && activeParentMenu.key === menu.key} timeout="auto" unmountOnExit>
-                                        <List component="div" disablePadding>
-                                            {menu.children.map((menuChild) => (
-                                                <>
-                                                    { ((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode)) || (menu.key === 'vendor')) && (
-                                                        <div>
-                                                            <a href={`${menuChild.url}`}>
-                                                                <ListItem
-                                                                    button
-                                                                    key={menuChild.key}
-                                                                    className={clsx(
-                                                                        classes.menuChildItem,
-                                                                        menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
-                                                                    )}
-                                                                    onClick={() => handleClickChild(menuChild)}
-                                                                >
-                                                                    <ListItemText className="itemText" primary={menuChild.label} />
-                                                                </ListItem>
-                                                            </a>
-                                                        </div>
-                                                    )}
-                                                </>
-                                            ))}
-                                        </List>
-                                    </Collapse>
-                                )}
-                            </div>
-                        )}
-                    </>
-                ))}
+                                </div>
+                            )}
+                        </>
+                    ))}
             </List>
         </>
     );
@@ -262,12 +258,8 @@ const Sidebar = ({
 
     return (
         <>
-            <Hidden smUp>
-                {SidebarMobile()}
-            </Hidden>
-            <Hidden xsDown>
-                {SidebarDesktop()}
-            </Hidden>
+            <Hidden smUp>{SidebarMobile()}</Hidden>
+            <Hidden xsDown>{SidebarDesktop()}</Hidden>
         </>
     );
 };
