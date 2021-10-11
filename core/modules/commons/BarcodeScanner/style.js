@@ -8,9 +8,7 @@ const useStyles = makeStyles(() => ({
             position: 'relative',
         },
         '& .drawingBuffer': {
-            position: 'absolute',
-            left: 0,
-            top: 0,
+            display: 'none',
         },
         '& video': {
             '@media (max-width: 767px )': {
@@ -21,7 +19,7 @@ const useStyles = makeStyles(() => ({
     closeButton: {
         position: 'absolute',
         top: 5,
-        right: 0,
+        right: 50,
     },
     closeIcon: {
         color: 'white',
