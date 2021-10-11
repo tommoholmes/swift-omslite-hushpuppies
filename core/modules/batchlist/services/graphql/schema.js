@@ -184,6 +184,34 @@ export const startSortingPickByBatch = gql`
     }
 `;
 
+export const itemSortingPickByBatch = gql`
+    mutation itemSortingPickByBatch(
+        $batch_id: Int!,
+        $barcode: String!,
+    ){
+        itemSortingPickByBatch(
+            batch_id: $batch_id,
+            barcode: $barcode
+        ){
+            pick_by_batch_sort {
+                barcode
+                bin_code
+                entity_id
+                name
+                parent_id
+                qty_packed
+                qty_picked
+                qty_to_pick
+                shipment_id
+                sku
+                slot_no
+                sort_no
+                sorted_by
+            }
+        }
+    }
+`;
+
 export default {
     getPickByBatchList,
     getPickByBatchById,
@@ -193,4 +221,5 @@ export default {
     getPickByBatchItemById,
     updatePickByBatchItem,
     startSortingPickByBatch,
+    itemSortingPickByBatch,
 };
