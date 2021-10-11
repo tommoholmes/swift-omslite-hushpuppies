@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     tableToolbar: {
+        '& .top-header': {
+            display: 'flex',
+            justifyContent: 'space-between',
+        },
         '& .top-buttons-wrapper': {
             padding: '16px',
             textAlign: 'right',
@@ -96,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
         color: colorText,
         fontSize: 12,
         margin: 0,
+        fontWeight: 400,
     },
     loading: {
         display: 'flex',

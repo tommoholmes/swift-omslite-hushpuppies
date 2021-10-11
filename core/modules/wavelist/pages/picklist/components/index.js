@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -72,7 +73,7 @@ const BatchListPickListContent = (props) => {
                         </div>
                     </div>
                 </div>
-                {waveList.items.map((e) => (
+                {waveList.items.slice().sort((a, b) => a.is_confirmed - b.is_confirmed).map((e) => (
                     <div className={classes.content} key={e.entity_id}>
                         <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
                             <div className={classes.gridList}>
@@ -112,29 +113,33 @@ const BatchListPickListContent = (props) => {
                         </a>
                     </div>
                 ))}
-                <div className={classes.footer}>
-                    <div style={{ width: '60%', display: 'inline-block', padding: 20 }}>
-                        <h2>{waveList.itemsLeft}</h2>
-                        <span>items left to pick</span>
-                    </div>
-                    {(waveList.itemsLeft === 0) ? (
-                        <button
-                            className={classes.btnFooter}
-                            type="submit"
-                            onClick={formikDone.handleSubmit}
-                        >
-                            Done Picking
-                        </button>
-                    ) : (
-                        <button
-                            className={classes.btnFooterDisabled}
-                            type="submit"
-                            disabled
-                        >
-                            Done Picking
-                        </button>
-                    )}
-                </div>
+                {waveList.statusValue === 'pick_in_progress'
+                    ? (
+                        <div className={classes.footer}>
+                            <div style={{ width: '60%', display: 'inline-block', padding: 20 }}>
+                                <h2>{waveList.itemsLeft}</h2>
+                                <span>items left to pick</span>
+                            </div>
+                            {/* {(waveList.itemsLeft === 0) ? ( */}
+                            <button
+                                className={classes.btnFooter}
+                                type="submit"
+                                onClick={formikDone.handleSubmit}
+                            >
+                                Done Picking
+                            </button>
+                            {/* ) : (
+                                <button
+                                    className={classes.btnFooterDisabled}
+                                    type="submit"
+                                    disabled
+                                >
+                                    Done Picking
+                                </button>
+                            )} */}
+                        </div>
+                    )
+                    : null}
             </Paper>
         </>
     );

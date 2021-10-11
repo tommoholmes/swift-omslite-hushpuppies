@@ -8,15 +8,19 @@ const colorGray = '#B1BCDB';
 const useStyles = makeStyles(() => ({
     green: {
         color: colorGreen,
+        fontWeight: 500,
     },
     orange: {
         color: colorOrange,
+        fontWeight: 500,
     },
     red: {
         color: colorRed,
+        fontWeight: 500,
     },
     gray: {
         color: colorGray,
+        fontWeight: 500,
     },
 }));
 

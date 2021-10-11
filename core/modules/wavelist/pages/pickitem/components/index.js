@@ -29,7 +29,7 @@ const BatchListPickListContent = (props) => {
                 <div className={classes.imgContainer}>
                     {itemProps.image
                         ? <img src={itemProps.image} className={classes.img} alt="item-preview" />
-                        : <img src="/assets/img/placeholder_image.jpg" className={classes.emptyImg} alt="item-preview" />}
+                        : <img src="/assets/img/placeholder_image.jpg" className={classes.img} alt="item-preview" />}
                 </div>
                 <div className={classes.divider} />
                 <div className={classes.section}>
@@ -53,7 +53,7 @@ const BatchListPickListContent = (props) => {
                         onClick={() => router.push(`/pickpack/wavelist/picklist/item/scan/${itemProps.id}`)}
                         buttonType="primary-rounded"
                     >
-                        Scan
+                        SCAN
                     </Button>
                 </div>
                 <div className={classes.divider} />

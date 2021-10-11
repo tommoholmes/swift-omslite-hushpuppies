@@ -25,13 +25,13 @@ const useStyles = makeStyles(() => ({
     text: {
         fontSize: 13,
         margin: 0,
-        fontWeight: 500,
+        fontWeight: 400,
     },
     imgContainer: {
         display: 'flex',
         justifyContent: 'center',
     },
-    emptyImg: {
+    img: {
         width: 214,
         height: 214,
         border: `1px solid ${borderColor}`,

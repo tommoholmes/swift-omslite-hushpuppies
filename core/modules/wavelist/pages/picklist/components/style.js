@@ -14,19 +14,19 @@ const colorOrange = '#FF962C';
 const useStyles = makeStyles((theme) => ({
     green: {
         color: colorGreen,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     orange: {
         color: colorOrange,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     red: {
         color: colorRed,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     gray: {
         color: colorGray,
-        fontWeight: 700,
+        fontWeight: 500,
     },
     container: {
         padding: '0 16px',
@@ -67,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 12,
         margin: 0,
         marginBottom: 5,
+        fontWeight: 400,
     },
     formFieldButton: {
         margin: '20px 0 10px 0',
@@ -162,12 +163,14 @@ const useStyles = makeStyles((theme) => ({
         color: colorGray,
         fontSize: 10,
         margin: 0,
+        fontWeight: 400,
     },
     bodyList: {
         color: colorText,
         fontSize: 13,
         margin: 0,
         position: 'relative',
+        fontWeight: 400,
     },
     spanStart: {
         color: colorPurple,
