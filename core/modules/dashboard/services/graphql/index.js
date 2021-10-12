@@ -9,6 +9,10 @@ export const getCustomer = (variables) => useQuery(Schema.getCustomer, {
     variables, ...context, fetchPolicy: 'no-cache',
 });
 
+export const getDashboardData = () => useQuery(Schema.getDashboardData, {
+    ...context, fetchPolicy: 'cache-and-network',
+});
+
 export const changePassword = (variables) => useMutation(Schema.changePassword, {
     variables, ...context,
 });
@@ -23,6 +27,7 @@ export const changeName = (variables) => useMutation(Schema.changeName, {
 
 export default {
     getCustomer,
+    getDashboardData,
     changePassword,
     changeEmail,
     changeName,

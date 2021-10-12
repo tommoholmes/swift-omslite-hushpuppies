@@ -8,7 +8,10 @@ import Cookies from 'js-cookie';
 import { custDataNameCookie } from '@config';
 import { useRouter } from 'next/router';
 
-const DashboardContent = () => {
+const DashboardContent = (props) => {
+    const {
+        summaryData,
+    } = props;
     const styles = useStyles();
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
     const getCustomerFromGql = () => getCustomerRes
@@ -101,17 +104,27 @@ const DashboardContent = () => {
                             <span>
                                 You have
                                 <br />
-                                <b>70 new order</b>
+                                <b>
+                                    {summaryData.order_new}
+                                    {' '}
+                                    new order
+                                </b>
                                 {' '}
                                 to confirm
                             </span>
                             <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_order.svg" />
                         </div>
-                        <div className={styles.infoStatus}>
-                            <h2 className={clsx('colorBlue', styles.noMargin)}>12</h2>
-                            <span>Failed Order</span>
+                        <div className={styles.infoStatusWrapper}>
+                            <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                                <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_no_allocation}</h2>
+                                <span>No Allocation Order</span>
+                            </div>
+                            <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                                <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_failed}</h2>
+                                <span>Failed Order</span>
+                            </div>
                         </div>
-                        <a className="link" href="#">Manage Order</a>
+                        <a className="link" href="#" onClick={() => router.push('/pickpack/batchlist')}>Manage Order</a>
                     </div>
                     <div className={styles.boxInfo}>
                         <h3 className={clsx('colorGreen', styles.noMargin)}>Shipment</h3>
@@ -119,40 +132,52 @@ const DashboardContent = () => {
                             <span>
                                 You have
                                 <br />
-                                <b> 610 orders to full fill</b>
+                                <b>
+                                    {' '}
+                                    {summaryData.shipment_unconfirmed_total}
+                                    {' '}
+                                    orders to fullfill
+                                </b>
                                 {' '}
                                 and
                                 <br />
-                                <b> 2 orders cannot fullfill</b>
+                                <b>
+                                    {' '}
+                                    {summaryData.shipment_cannot_fulfill}
+                                    {' '}
+                                    orders cannot fullfill
+                                </b>
                             </span>
                             <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_shipment.svg" />
                         </div>
                         <div className={styles.infoStatusWrapper}>
                             <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                                <h2 className={clsx('colorGreen', styles.noMargin)}>12</h2>
+                                <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_store_pickup}</h2>
                                 <span>Store Pickup</span>
                             </div>
                             <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                                <h2 className={clsx('colorGreen', styles.noMargin)}>251</h2>
+                                <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_home_delivery}</h2>
                                 <span>Home Delivery</span>
                             </div>
                             <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                                <h2 className={clsx('colorGreen', styles.noMargin)}>347</h2>
+                                <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_marketplace}</h2>
                                 <span>Marketplace</span>
                             </div>
                         </div>
-                        <a className="link" href="#">Manage Shipment</a>
+                        <a className="link" href="#" onClick={() => router.push('/sales/shipment')}>Manage Shipment</a>
                     </div>
                     <div className={styles.boxInfo}>
                         <h3 className={clsx('colorOrange', styles.noMargin)}>Return</h3>
                         <div className={styles.infoDetail}>
                             <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_return.svg" />
                         </div>
-                        <div className={styles.infoStatus}>
-                            <h2 className={clsx('colorOrange', styles.noMargin)}>12</h2>
-                            <span>Request to Proceed</span>
+                        <div className={styles.infoStatusWrapper}>
+                            <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                                <h2 className={clsx('colorOrange', styles.noMargin)}>{summaryData.return_new}</h2>
+                                <span>Request to Proceed</span>
+                            </div>
                         </div>
-                        <a className="link" href="#">Manage Return</a>
+                        <a className="link" href="#" onClick={() => router.push(' /sales/managerma')}>Manage Return</a>
                     </div>
 
                     <div className={styles.salesChannelTableWrapper}>
