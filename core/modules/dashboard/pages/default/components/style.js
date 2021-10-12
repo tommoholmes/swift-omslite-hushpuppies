@@ -192,7 +192,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             margin: '15px 8px',
             display: 'inline-grid',
-            gridTemplateColumns: '70vw',
+            gridTemplateColumns: 'minmax(0, 1fr)',
             gridRowGap: '20px',
         },
     },
@@ -242,6 +242,10 @@ const useStyles = makeStyles((theme) => ({
     },
     noMargin: {
         marginBottom: 0,
+    },
+    contentGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 1fr)',
     },
 }));
 
