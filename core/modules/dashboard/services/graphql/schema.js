@@ -11,6 +11,22 @@ export const getCustomer = gql`
     }
 `;
 
+export const getDashboardData = gql`
+    query{
+        getDashboardData{
+            order_new
+            order_no_allocation
+            order_failed
+            shipment_unconfirmed_total
+            shipment_unconfirmed_store_pickup
+            shipment_unconfirmed_home_delivery
+            shipment_unconfirmed_marketplace
+            shipment_cannot_fulfill
+            return_new
+        }
+    }
+`;
+
 export const changePassword = gql`
     mutation changeCustomerPassword(
         $currentPassword: String!,
@@ -70,6 +86,7 @@ export const changeName = gql`
 
 export default {
     getCustomer,
+    getDashboardData,
     changePassword,
     changeEmail,
     changeName,
