@@ -27,6 +27,21 @@ export const getDashboardData = gql`
     }
 `;
 
+export const getChannelList = gql`
+    query{
+        getChannelList{
+            items{
+                channel_id
+                channel_code
+                channel_name
+                framework
+                virtual_stock_list
+                location_list
+           }
+        }
+    }
+`;
+
 export const changePassword = gql`
     mutation changeCustomerPassword(
         $currentPassword: String!,
@@ -87,6 +102,7 @@ export const changeName = gql`
 export default {
     getCustomer,
     getDashboardData,
+    getChannelList,
     changePassword,
     changeEmail,
     changeName,

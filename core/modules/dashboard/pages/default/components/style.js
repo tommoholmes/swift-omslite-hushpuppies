@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         },
         '& tbody td': {
             background: '#FFFFFF',
-            padding: '11px 0',
+            padding: '11px 5px',
             color: black,
         },
         '& .channelIcon': {
@@ -246,6 +246,9 @@ const useStyles = makeStyles((theme) => ({
     contentGrid: {
         display: 'grid',
         gridTemplateColumns: 'minmax(0, 1fr)',
+    },
+    imageIcon: {
+        marginLeft: '10px',
     },
 }));
 

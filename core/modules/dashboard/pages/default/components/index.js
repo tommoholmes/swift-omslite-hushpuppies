@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint max-len: ["error", { "code": 180 }] */
+/* eslint max-len: ["error", { "code": 200 }] */
 import clsx from 'clsx';
 import useStyles from '@modules/dashboard/pages/default/components/style';
 import loginGqlService from '@modules/login/services/graphql';
@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 const DashboardContent = (props) => {
     const {
         summaryData,
+        channelListData,
     } = props;
     const styles = useStyles();
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
@@ -50,6 +51,29 @@ const DashboardContent = (props) => {
             handleSetUserInfo(getCustomerFromGql());
         }
     }, [getCustomerFromGql()]);
+
+    const iconFilter = (framework, channel_code) => {
+        if (framework === 'M1' || framework === 'M2') {
+            return '/assets/img/dashboard/channel_official.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
+            return '/assets/img/dashboard/channel_bukalapak.svg';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
+            return '/assets/img/dashboard/channel_blibli.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
+            return '/assets/img/dashboard/channel_jd.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
+            return '/assets/img/dashboard/channel_lazada.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
+            return '/assets/img/dashboard/channel_shopee.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
+            return '/assets/img/dashboard/channel_sirclo.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
+            return '/assets/img/dashboard/channel_tokopedia.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
+            return '/assets/img/dashboard/channel_zalora.png';
+        }
+        return null;
+    };
 
     return (
         <div className={clsx(styles.contentGrid)}>
@@ -194,55 +218,65 @@ const DashboardContent = (props) => {
                                         <td>LOCATION</td>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    <tr>
-                                        <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_official.png" /></td>
-                                        <td>Official Website</td>
-                                        <td>Official Website</td>
-                                        <td>SWIFTPOS</td>
-                                        <td>VSSWIFTPOS</td>
-                                        <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_tokopedia.png" /></td>
-                                        <td>Tokopedia</td>
-                                        <td>Tokopedia</td>
-                                        <td>SWIFTPOS</td>
-                                        <td>VSSWIFTPOS</td>
-                                        <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_shopee.png" /></td>
-                                        <td>Shopee</td>
-                                        <td>Shopee</td>
-                                        <td>SWIFTPOS</td>
-                                        <td>VSSWIFTPOS</td>
-                                        <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_lazada.png" /></td>
-                                        <td>Lazada</td>
-                                        <td>Lazada</td>
-                                        <td>SWIFTPOS</td>
-                                        <td>VSSWIFTPOS</td>
-                                        <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_blibli.png" /></td>
-                                        <td>Blibli</td>
-                                        <td>Blibli</td>
-                                        <td>SWIFTPOS</td>
-                                        <td>VSSWIFTPOS</td>
-                                        <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_bukalapak.svg" /></td>
-                                        <td>Bukalapak</td>
-                                        <td>Bukalapak</td>
-                                        <td>SWIFTPOS</td>
-                                        <td>VSSWIFTPOS</td>
-                                        <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                    </tr>
+                                    {channelListData.map((e) => (
+                                        <>
+                                            <tr>
+                                                <td className="channelIcon"><img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} /></td>
+                                                <td>{e.channel_name}</td>
+                                                <td>{e.channel_name}</td>
+                                                <td>{e.channel_code}</td>
+                                                {e.virtual_stock_list.length > 3
+                                                    && (
+                                                        <td>
+                                                            {e.virtual_stock_list[0]}
+                                                            {' '}
+                                                            {e.virtual_stock_list[1]}
+                                                            {' '}
+                                                            {e.virtual_stock_list[2]}
+                                                            ,
+                                                            {' '}
+                                                            <a className="link" href="#" onClick={() => router.push('/cataloginventory/virtualstock')}><u>see more...</u></a>
+                                                        </td>
+                                                    )}
+                                                {e.virtual_stock_list.length <= 3
+                                                    && (
+                                                        <td>
+                                                            {e.virtual_stock_list[0]}
+                                                            {' '}
+                                                            {e.virtual_stock_list[1]}
+                                                            {' '}
+                                                            {e.virtual_stock_list[2]}
+                                                        </td>
+                                                    )}
+
+                                                {e.location_list.length > 3
+                                                    && (
+                                                        <td>
+                                                            {e.location_list[0]}
+                                                            {' '}
+                                                            {e.location_list[1]}
+                                                            {' '}
+                                                            {e.location_list[2]}
+                                                            ,
+                                                            {' '}
+                                                            <a className="link" href="#" onClick={() => router.push('/oms/location')}><u>see more...</u></a>
+                                                        </td>
+                                                    )}
+                                                {e.location_list.length <= 3
+                                                    && (
+                                                        <td>
+                                                            {e.location_list[0]}
+                                                            {' '}
+                                                            {e.location_list[1]}
+                                                            {' '}
+                                                            {e.location_list[2]}
+                                                        </td>
+                                                    )}
+                                            </tr>
+                                        </>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
