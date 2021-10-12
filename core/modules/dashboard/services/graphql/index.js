@@ -13,6 +13,10 @@ export const getDashboardData = () => useQuery(Schema.getDashboardData, {
     ...context, fetchPolicy: 'cache-and-network',
 });
 
+export const getChannelList = () => useQuery(Schema.getChannelList, {
+    ...context, fetchPolicy: 'cache-and-network',
+});
+
 export const changePassword = (variables) => useMutation(Schema.changePassword, {
     variables, ...context,
 });
@@ -28,6 +32,7 @@ export const changeName = (variables) => useMutation(Schema.changeName, {
 export default {
     getCustomer,
     getDashboardData,
+    getChannelList,
     changePassword,
     changeEmail,
     changeName,

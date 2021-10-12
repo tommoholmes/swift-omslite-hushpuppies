@@ -6,22 +6,24 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const summaryDataRaw = data.getDashboardData;
 
     const summaryData = {
-        order_new: summaryDataRaw.order_new,
-        order_no_allocation: summaryDataRaw.order_no_allocation,
-        order_failed: summaryDataRaw.order_failed,
-        shipment_unconfirmed_total: summaryDataRaw.shipment_unconfirmed_total,
-        shipment_unconfirmed_store_pickup: summaryDataRaw.shipment_unconfirmed_store_pickup,
-        shipment_unconfirmed_home_delivery: summaryDataRaw.shipment_unconfirmed_home_delivery,
-        shipment_unconfirmed_marketplace: summaryDataRaw.shipment_unconfirmed_marketplace,
-        shipment_cannot_fulfill: summaryDataRaw.shipment_cannot_fulfill,
-        return_new: summaryDataRaw.return_new,
+        order_new: data.summaryData.order_new,
+        order_no_allocation: data.summaryData.order_no_allocation,
+        order_failed: data.summaryData.order_failed,
+        shipment_unconfirmed_total: data.summaryData.shipment_unconfirmed_total,
+        shipment_unconfirmed_store_pickup: data.summaryData.shipment_unconfirmed_store_pickup,
+        shipment_unconfirmed_home_delivery: data.summaryData.shipment_unconfirmed_home_delivery,
+        shipment_unconfirmed_marketplace: data.summaryData.shipment_unconfirmed_marketplace,
+        shipment_cannot_fulfill: data.summaryData.shipment_cannot_fulfill,
+        return_new: data.summaryData.return_new,
     };
+
+    const channelListData = data.channelListData.items;
 
     const contentProps = {
         summaryData,
+        channelListData,
     };
 
     return (
@@ -30,19 +32,25 @@ const ContentWrapper = (props) => {
 };
 
 const Core = (props) => {
-    const { loading, data } = gqlService.getDashboardData();
+    const { loading: loadingSummaryData, data: summaryData } = gqlService.getDashboardData();
+    const { loading: loadingChannelListData, data: channelListData } = gqlService.getChannelList();
 
-    if (loading) {
+    if (loadingSummaryData || loadingChannelListData) {
         return (
             <Layout>Loading...</Layout>
         );
     }
 
-    if (!data) {
+    if (!summaryData && !channelListData) {
         return (
             <Layout>Data not found!</Layout>
         );
     }
+
+    const data = {
+        summaryData: summaryData.getDashboardData,
+        channelListData: channelListData.getChannelList,
+    };
 
     return (
         <Layout>
