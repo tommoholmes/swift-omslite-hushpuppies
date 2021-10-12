@@ -6,16 +6,31 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import PropTypes from 'prop-types';
 import classnames from 'clsx';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
-const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => (
-    <TextField
-        variant="outlined"
-        size="small"
-        value={filterValue}
-        onChange={(e) => setFilterValue(e.target.value)}
-        disabled={disabled}
-    />
-);
+const useStyles = makeStyles(() => ({
+    input: {
+        paddingTop: '8.5px',
+        paddingBottom: '8.5px',
+    },
+}));
+
+const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => {
+    const classes = useStyles();
+
+    return (
+        <TextField
+            inputProps={{
+                className: classes.input,
+            }}
+            variant="outlined"
+            size="small"
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+            disabled={disabled}
+        />
+    );
+};
 
 const TableFilters = (props) => {
     const { initialFilters, setParentFilters, handleReset = () => {} } = props;
@@ -32,10 +47,12 @@ const TableFilters = (props) => {
     const setFilterValueByField = (field, value) => {
         const index = filters.findIndex((filter) => filter.name === field.name);
         if (index >= 0) {
-            setFilters(filters.map((filter) => ({
-                ...filter,
-                ...(filter.name === field.name && { ...field, value }),
-            })));
+            setFilters(
+                filters.map((filter) => ({
+                    ...filter,
+                    ...(filter.name === field.name && { ...field, value }),
+                })),
+            );
         } else {
             setFilters([...filters, { ...field, value }]);
         }
@@ -43,24 +60,19 @@ const TableFilters = (props) => {
 
     return (
         <div style={{ padding: 12 }}>
-            {emptyFiltersField && (
-                <div style={{ padding: 12 }}>Filter fields is empty.</div>
-            )}
-            {filters.map((field, i) => (
-                field.hidden ? null
-                    : (
-                        <div className={classnames('col-filter', field.class)} key={i} style={{ padding: 12, display: 'inline-block' }}>
-                            <div>
-                                {field.label}
-                            </div>
-                            {(field.component || defaultFilterComponent)({
-                                get filterValue() { return getFilterValueByField(field); },
-                                setFilterValue: (value) => setFilterValueByField(field, value),
-                                disabled: field.disabled,
-                            })}
-                        </div>
-                    )
-            ))}
+            {emptyFiltersField && <div style={{ padding: 12 }}>Filter fields is empty.</div>}
+            {filters.map((field, i) => (field.hidden ? null : (
+                <div className={classnames('col-filter', field.class)} key={i} style={{ padding: 12, display: 'inline-block' }}>
+                    <div>{field.label}</div>
+                    {(field.component || defaultFilterComponent)({
+                        get filterValue() {
+                            return getFilterValueByField(field);
+                        },
+                        setFilterValue: (value) => setFilterValueByField(field, value),
+                        disabled: field.disabled,
+                    })}
+                </div>
+            )))}
             <div style={{ padding: 12 }}>
                 <Button
                     buttonType="primary-rounded"
