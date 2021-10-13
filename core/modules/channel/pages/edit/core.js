@@ -52,7 +52,7 @@ const ContentWrapper = (props) => {
             auto_confirm_shipment: auto_confirm_shipment?.id ?? 0,
             prio_one_store: prio_one_store?.id ?? 0,
             split_prio_one_store: split_prio_one_store?.id ?? 0,
-            release_stock: release_stock.map((val) => val.value).toString(),
+            release_stock: (release_stock && release_stock.map((val) => val.value).toString()) || null,
             webhook_vendor_salesrule,
         };
         window.backdropLoader(true);
