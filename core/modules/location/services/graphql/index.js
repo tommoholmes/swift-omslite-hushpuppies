@@ -10,39 +10,59 @@ const fetchPolicy = {
 };
 
 export const getLocationList = (variables) => useLazyQuery(Schema.getLocationList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getLocationById = (variables) => useQuery(Schema.getLocationById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const createLocation = (variables) => useMutation(Schema.createLocation, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const updateLocation = (variables) => useMutation(Schema.updateLocation, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const getCountries = () => useLazyQuery(Schema.getCountries, {
-    ...context, ...fetchPolicy,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getCountry = (variables) => useLazyQuery(Schema.getCountry, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getCityListByRegionCode = (variables) => useLazyQuery(Schema.getCityListByRegionCode, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getCityList = (variables) => useLazyQuery(Schema.getCityList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const multideleteLocation = (variables) => useMutation(Schema.multideleteLocation, {
-    variables, ...context,
+    variables,
+    ...context,
+});
+
+export const getCityKecByRegionCode = (variables) => useLazyQuery(Schema.getCityKecByRegionCode, {
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export default {
@@ -55,4 +75,5 @@ export default {
     getCityListByRegionCode,
     getCityList,
     multideleteLocation,
+    getCityKecByRegionCode,
 };

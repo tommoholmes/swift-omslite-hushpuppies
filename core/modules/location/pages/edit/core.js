@@ -7,10 +7,7 @@ import gqlService from '@modules/location/services/graphql';
 import { optionsYesNo, optionsActive, optionsZone } from '@modules/location/helpers';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const location = data.getLocationById;
     const [updateLocation] = gqlService.updateLocation();
@@ -34,7 +31,6 @@ const ContentWrapper = (props) => {
         virtualLocation,
         priority,
         status,
-
     }) => {
         const variables = {
             id: location.loc_id,
@@ -60,22 +56,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateLocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Location',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Location',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/oms/location'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/oms/location'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -96,8 +94,8 @@ const ContentWrapper = (props) => {
                 name: location.loc_region.label,
             },
             city: {
-                id: location.loc_city.id,
-                city: location.loc_city.label,
+                value: location.loc_city.id,
+                label: location.loc_city.label,
             },
             telephone: location.loc_telephone || '',
             postcode: location.loc_postcode || '',
@@ -140,9 +138,7 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -152,15 +148,11 @@ const Core = (props) => {
     });
 
     if (loading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        return <Layout>Data not found!</Layout>;
     }
 
     return (

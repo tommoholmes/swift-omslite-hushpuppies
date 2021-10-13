@@ -1,18 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const getCompanyList = gql`
-    query getCompanyList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-        $filter: CompanyFilterInput,
-        $sort: CompanySortInput,
-    ){
-        getCompanyList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
-            filter: $filter,
-            sort: $sort
-        ){
+    query getCompanyList($pageSize: Int!, $currentPage: Int!, $filter: CompanyFilterInput, $sort: CompanySortInput) {
+        getCompanyList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 company_id
                 company_code
@@ -29,77 +19,68 @@ export const getCompanyList = gql`
 `;
 
 export const getCompanyById = gql`
-    query getCompanyById(
-        $id: Int!,
-    ){
-        getCompanyById(
-            id: $id
-        ){
+    query getCompanyById($id: Int!) {
+        getCompanyById(id: $id) {
             company_code
             company_id
             company_name
             is_new_product
+            logistix_credentials_flag
+            netsuite_id
         }
     }
 `;
 
 export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
-    ){
+    mutation createCompany($company_code: String!, $company_name: String!, $logistix_credentials_flag: String, $netsuite_id: Int) {
         createCompany(
             input: {
-                company_code: $company_code,
+                company_code: $company_code
                 company_name: $company_name
+                logistix_credentials_flag: $logistix_credentials_flag
+                netsuite_id: $netsuite_id
             }
-        ){
+        ) {
             company_code
             company_id
             company_name
             is_new_product
+            logistix_credentials_flag
+            netsuite_id
         }
     }
 `;
 
 export const updateCompany = gql`
-    mutation updateCompany(
-        $id: Int!,
-        $company_code: String!,
-        $company_name: String!,
-    ){
+    mutation updateCompany($id: Int!, $company_code: String!, $company_name: String!, $logistix_credentials_flag: String, $netsuite_id: Int) {
         updateCompany(
-            id: $id,
+            id: $id
             input: {
-                company_code: $company_code,
+                company_code: $company_code
                 company_name: $company_name
+                logistix_credentials_flag: $logistix_credentials_flag
+                netsuite_id: $netsuite_id
             }
-        ){
+        ) {
             company_code
             company_id
             company_name
             is_new_product
+            logistix_credentials_flag
+            netsuite_id
         }
     }
 `;
 
 export const deleteCompany = gql`
-    mutation deleteCompany (
-        $id: Int!
-    ){
-        deleteCompany(
-            id: $id
-        )
+    mutation deleteCompany($id: Int!) {
+        deleteCompany(id: $id)
     }
 `;
 
 export const multideleteCompany = gql`
-    mutation multideleteCompany (
-        $id: [Int!]!
-    ){
-        multideleteCompany(
-            id: $id
-        )
+    mutation multideleteCompany($id: [Int!]!) {
+        multideleteCompany(id: $id)
     }
 `;
 
