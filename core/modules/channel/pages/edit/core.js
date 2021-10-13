@@ -97,7 +97,7 @@ const ContentWrapper = (props) => {
             auto_confirm_shipment: optionsYesNo.find((e) => e.id === channel.auto_confirm_shipment),
             prio_one_store: optionsYesNo.find((e) => e.id === channel.prio_one_store) || 0,
             split_prio_one_store: optionsYesNo.find((e) => e.id === channel.split_prio_one_store),
-            release_stock: channel.release_stock.split(',').map((val) => ({ label: val, value: val })) || '',
+            release_stock: (channel.release_stock && channel.release_stock.split(',').map((val) => ({ label: val, value: val }))) || '',
             webhook_vendor_salesrule: channel.webhook_vendor_salesrule || '',
         },
         validationSchema: Yup.object().shape({
