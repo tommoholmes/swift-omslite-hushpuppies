@@ -30,12 +30,8 @@ const ShipmentMarketplaceEditContent = (props) => {
     const [getCourierOption, getCourierOptionRes] = gqlService.getCourierOption();
     const iconFilter = (channel_code) => {
         const codeExploded = channel_code.split('_');
-
-        if (codeExploded[1]) {
-            const code = codeExploded[1].toLowerCase();
-            return code;
-        }
-        return 'swift';
+        const code = codeExploded[1].toLowerCase();
+        return code;
     };
 
     return (
