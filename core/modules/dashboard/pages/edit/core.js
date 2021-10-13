@@ -167,6 +167,7 @@ const ContentWrapper = (props) => {
             newPassword: '',
             confirmPassword: '',
             customer_loc_code: userData.customer_loc_code,
+            channel_code: userData.channel_code,
             changeEmail: true,
             changePassword: true,
 

@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint max-len: ["error", { "code": 250 }] */
+/* eslint-disable no-shadow */
 import clsx from 'clsx';
 import useStyles from '@modules/dashboard/pages/default/components/style';
 import loginGqlService from '@modules/login/services/graphql';
@@ -22,15 +23,18 @@ const DashboardContent = (props) => {
     const [firstname, setFirstname] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [customer_loc_code, setCustomerLocCode] = React.useState('');
+    const [channel_code, setChannelCode] = React.useState('');
     const handleSetUserInfo = (customer) => {
         const firstnameTemp = customer && customer.firstname;
         const lastnameTemp = customer && customer.lastname;
         const emailTemp = customer && customer.email;
         const customerLocCodeTemp = customer && customer.customer_loc_code;
+        const channelCodeTemp = customer && customer.channel_code;
         setUsername(`${firstnameTemp} ${lastnameTemp}`);
         setFirstname(`${firstnameTemp}`);
         setEmail(`${emailTemp}`);
         setCustomerLocCode(`${customerLocCodeTemp}`);
+        setChannelCode(`${channelCodeTemp}`);
     };
     const limitString = (string, limit) => {
         return string.substring(0, limit);
@@ -135,7 +139,7 @@ const DashboardContent = (props) => {
                     <div className={styles.user}>
                         <span className={styles.textBold}>Channel Code</span>
                         <br />
-                        <span>SWI,SWIPOS,Jubelio,TKPD,SHPE,LZDA</span>
+                        <span>{channel_code}</span>
                     </div>
                     <div className={styles.user}>
                         <a href="#" onClick={() => router.push('/useredit')}>Edit</a>

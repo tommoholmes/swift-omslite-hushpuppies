@@ -27,6 +27,7 @@ query{
     lastname
     middlename
     customer_loc_code
+    channel_code
   }
 }
 `;
