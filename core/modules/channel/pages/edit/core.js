@@ -49,9 +49,9 @@ const ContentWrapper = (props) => {
             webhook_invoice: invoice,
             webhook_rma_refund: refund,
             webhook_creditmemo: creditmemo,
-            auto_confirm_shipment: auto_confirm_shipment.id ?? 0,
-            prio_one_store: prio_one_store.id ?? 0,
-            split_prio_one_store: split_prio_one_store.id ?? 0,
+            auto_confirm_shipment: auto_confirm_shipment?.id ?? 0,
+            prio_one_store: prio_one_store?.id ?? 0,
+            split_prio_one_store: split_prio_one_store?.id ?? 0,
             release_stock: release_stock.map((val) => val.value).toString(),
             webhook_vendor_salesrule,
         };
