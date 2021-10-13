@@ -10,7 +10,9 @@ import companyGqlService from '@modules/company/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/location/pages/create/components/style';
-import { optionsYesNo, optionsActive, optionsZone } from '@modules/location/helpers';
+import {
+    optionsYesNo, optionsActive, optionsZone, optionsQtyBuffer,
+} from '@modules/location/helpers';
 
 const LocationCreateContent = (props) => {
     const { formik } = props;
@@ -330,6 +332,62 @@ const LocationCreateContent = (props) => {
                             options={optionsActive}
                             error={!!(formik.touched.status && formik.errors.status)}
                             helperText={(formik.touched.status && formik.errors.status) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Qty Buffer</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.qty_buffer}
+                            onChange={(e) => formik.setFieldValue('qty_buffer', e)}
+                            options={optionsQtyBuffer}
+                            error={!!(formik.touched.qty_buffer && formik.errors.qty_buffer)}
+                            helperText={(formik.touched.qty_buffer && formik.errors.qty_buffer) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Is Manage Stock</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.is_manage_stock}
+                            onChange={(e) => formik.setFieldValue('is_manage_stock', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.is_manage_stock && formik.errors.is_manage_stock)}
+                            helperText={(formik.touched.is_manage_stock && formik.errors.is_manage_stock) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Is Shipment Auto Complete</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.is_shipment_auto_complete}
+                            onChange={(e) => formik.setFieldValue('is_shipment_auto_complete', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.is_shipment_auto_complete && formik.errors.is_shipment_auto_complete)}
+                            helperText={(formik.touched.is_shipment_auto_complete && formik.errors.is_shipment_auto_complete) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Shipper ID </span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="shipper_id"
+                            value={formik.values.shipper_id}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.shipper_id && formik.errors.shipper_id)}
+                            helperText={(formik.touched.shipper_id && formik.errors.shipper_id) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
                         />
                     </div>
                 </div>

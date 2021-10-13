@@ -55,6 +55,10 @@ export const getLocationById = gql`
             is_virtual_location
             priority
             is_active
+            qty_buffer
+            is_manage_stock
+            is_shipment_auto_complete
+            shipper_id
         }
     }
 `;
@@ -78,6 +82,10 @@ export const createLocation = gql`
         $is_virtual_location: Int
         $priority: Int
         $is_active: Int
+        $qty_buffer: Int
+        $is_manage_stock: Int
+        $is_shipment_auto_complete: Int
+        $shipper_id: String
     ) {
         createLocation(
             input: {
@@ -98,6 +106,10 @@ export const createLocation = gql`
                 is_virtual_location: $is_virtual_location
                 priority: $priority
                 is_active: $is_active
+                qty_buffer: $qty_buffer
+                is_manage_stock: $is_manage_stock
+                is_shipment_auto_complete: $is_shipment_auto_complete
+                shipper_id: $shipper_id
             }
         ) {
             loc_id
@@ -124,6 +136,10 @@ export const createLocation = gql`
             is_virtual_location
             priority
             is_active
+            qty_buffer
+            is_manage_stock
+            is_shipment_auto_complete
+            shipper_id
         }
     }
 `;
@@ -148,6 +164,10 @@ export const updateLocation = gql`
         $is_virtual_location: Int
         $priority: Int
         $is_active: Int
+        $qty_buffer: Int
+        $is_manage_stock: Int
+        $is_shipment_auto_complete: Int
+        $shipper_id: String
     ) {
         updateLocation(
             id: $id
@@ -169,6 +189,10 @@ export const updateLocation = gql`
                 is_virtual_location: $is_virtual_location
                 priority: $priority
                 is_active: $is_active
+                qty_buffer: $qty_buffer
+                is_manage_stock: $is_manage_stock
+                is_shipment_auto_complete: $is_shipment_auto_complete
+                shipper_id: $shipper_id
             }
         ) {
             loc_id
@@ -195,6 +219,10 @@ export const updateLocation = gql`
             is_virtual_location
             priority
             is_active
+            qty_buffer
+            is_manage_stock
+            is_shipment_auto_complete
+            shipper_id
         }
     }
 `;
