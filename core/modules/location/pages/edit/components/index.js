@@ -23,11 +23,17 @@ const LocationEditContent = (props) => {
     const isIndonesia = () => formik && formik.values && formik.values.countries && formik.values.countries.id === 'ID';
     const [getCityKecByRegionCode, getCityKecByRegionCodeRes] = locationGqlService.getCityKecByRegionCode();
 
-    const setCurrentRegion = (available_regions) => {
-        console.log('object');
-        const currentRegion = available_regions.find((val) => val.name === formik.values.region.name);
-        formik.setFieldValue('region', currentRegion);
-    };
+    React.useEffect(() => {
+        getCountry({ variables: { id: formik.values.countries && formik.values.countries.id } });
+    }, []);
+
+    React.useEffect(() => {
+        if (getCountryRes.data && getCountryRes.data.country && getCountryRes.data.country.available_regions) {
+            const currentRegion = getCountryRes.data.country.available_regions.find((val) => val.name === formik.values.region.name);
+            formik.setFieldValue('region', currentRegion);
+        }
+    }, [getCountryRes.data]);
+
     return (
         <>
             <Button className={classes.btnBack} onClick={() => router.push('/oms/location')} variant="contained" style={{ marginRight: 16 }}>
@@ -188,9 +194,6 @@ const LocationEditContent = (props) => {
                         </div>
                         {isIndonesia() && (
                             <Autocomplete
-                                onClick={() => {
-                                    setCurrentRegion(getCountryRes.data.country.available_regions);
-                                }}
                                 disabled={!(formik.values.region && formik.values.region.id)}
                                 className={classes.autocompleteRoot}
                                 mode="lazy"
