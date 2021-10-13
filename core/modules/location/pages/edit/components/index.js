@@ -10,12 +10,12 @@ import companyGqlService from '@modules/company/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/location/pages/edit/components/style';
-import { optionsYesNo, optionsActive, optionsZone } from '@modules/location/helpers';
+import {
+    optionsYesNo, optionsActive, optionsZone, optionsQtyBuffer,
+} from '@modules/location/helpers';
 
 const LocationEditContent = (props) => {
-    const {
-        formik,
-    } = props;
+    const { formik } = props;
     const classes = useStyles();
     const router = useRouter();
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
@@ -23,22 +23,30 @@ const LocationEditContent = (props) => {
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
     const [getCityList, getCityListRes] = locationGqlService.getCityList();
     const isIndonesia = () => formik && formik.values && formik.values.countries && formik.values.countries.id === 'ID';
+    const [getCityKecByRegionCode, getCityKecByRegionCodeRes] = locationGqlService.getCityKecByRegionCode();
+
+    React.useEffect(() => {
+        getCountry({ variables: { id: formik.values.countries && formik.values.countries.id } });
+    }, []);
+
+    React.useEffect(() => {
+        if (getCountryRes.data && getCountryRes.data.country && getCountryRes.data.country.available_regions) {
+            const currentRegion = getCountryRes.data.country.available_regions.find((val) => val.name === formik.values.region.name);
+            formik.setFieldValue('region', currentRegion);
+        }
+    }, [getCountryRes.data]);
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push('/oms/location')}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+            <Button className={classes.btnBack} onClick={() => router.push('/oms/location')} variant="contained" style={{ marginRight: 16 }}>
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
                 />
             </Button>
             <h2 className={classes.titleTop}>Edit Location</h2>
@@ -130,11 +138,7 @@ const LocationEditContent = (props) => {
                                 formik.setFieldValue('city', null);
                             }}
                             loading={getCountriesRes.loading}
-                            options={
-                                getCountriesRes
-                                && getCountriesRes.data
-                                && getCountriesRes.data.countries
-                            }
+                            options={getCountriesRes && getCountriesRes.data && getCountriesRes.data.countries}
                             getOptions={getCountries}
                             primaryKey="id"
                             labelKey="full_name_english"
@@ -158,15 +162,10 @@ const LocationEditContent = (props) => {
                                 }}
                                 loading={getCountryRes.loading}
                                 options={
-                                    getCountryRes
-                                    && getCountryRes.data
-                                    && getCountryRes.data.country
-                                    && getCountryRes.data.country.available_regions
+                                    getCountryRes && getCountryRes.data && getCountryRes.data.country && getCountryRes.data.country.available_regions
                                 }
                                 getOptions={getCountry}
-                                getOptionsVariables={
-                                    { variables: { id: formik.values.countries && formik.values.countries.id } }
-                                }
+                                getOptionsVariables={{ variables: { id: formik.values.countries && formik.values.countries.id } }}
                                 primaryKey="id"
                                 labelKey="name"
                                 error={!!(formik.touched.region && formik.errors.region)}
@@ -181,7 +180,8 @@ const LocationEditContent = (props) => {
                                 value={(formik.values.region && formik.values.region.name) || ''}
                                 onChange={(e) => {
                                     formik.setFieldValue('region', {
-                                        id: e.target.value, name: e.target.value,
+                                        id: e.target.value,
+                                        name: e.target.value,
                                     });
                                 }}
                                 error={!!(formik.touched.region && formik.errors.region)}
@@ -196,32 +196,25 @@ const LocationEditContent = (props) => {
                         </div>
                         {isIndonesia() && (
                             <Autocomplete
-                                disabled={
-                                    !(formik.values.region && formik.values.region.id)
-                                }
+                                disabled={!(formik.values.region && formik.values.region.id)}
                                 className={classes.autocompleteRoot}
                                 mode="lazy"
                                 value={formik.values.city}
                                 onChange={(e) => formik.setFieldValue('city', e)}
-                                loading={getCityListRes.loading}
+                                loading={getCityKecByRegionCodeRes.loading}
                                 options={
-                                    getCityListRes
-                                    && getCityListRes.data
-                                    && getCityListRes.data.getCityList
-                                    && getCityListRes.data.getCityList.items
+                                    getCityKecByRegionCodeRes
+                                    && getCityKecByRegionCodeRes.data
+                                    && getCityKecByRegionCodeRes.data.getCityKecByRegionCode
                                 }
-                                getOptions={getCityList}
-                                getOptionsVariables={
-                                    {
-                                        variables: {
-                                            filter: {
-                                                region_code: { eq: formik.values.region && formik.values.region.code },
-                                            },
-                                        },
-                                    }
-                                }
-                                primaryKey="id"
-                                labelKey="city"
+                                getOptions={getCityKecByRegionCode}
+                                getOptionsVariables={{
+                                    variables: {
+                                        region_code: formik.values.region.code,
+                                    },
+                                }}
+                                primaryKey="value"
+                                labelKey="label"
                                 error={!!(formik.touched.city && formik.errors.city)}
                                 helperText={(formik.touched.city && formik.errors.city) || ''}
                             />
@@ -234,7 +227,8 @@ const LocationEditContent = (props) => {
                                 value={(formik.values.city && formik.values.city.value) || ''}
                                 onChange={(e) => {
                                     formik.setFieldValue('city', {
-                                        id: e.target.value, value: e.target.value,
+                                        id: e.target.value,
+                                        value: e.target.value,
                                     });
                                 }}
                                 error={!!(formik.touched.city && formik.errors.city)}
@@ -406,13 +400,66 @@ const LocationEditContent = (props) => {
                             helperText={(formik.touched.status && formik.errors.status) || ''}
                         />
                     </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Qty Buffer</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.qty_buffer}
+                            onChange={(e) => formik.setFieldValue('qty_buffer', e)}
+                            options={optionsQtyBuffer}
+                            error={!!(formik.touched.qty_buffer && formik.errors.qty_buffer)}
+                            helperText={(formik.touched.qty_buffer && formik.errors.qty_buffer) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Is Manage Stock</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.is_manage_stock}
+                            onChange={(e) => formik.setFieldValue('is_manage_stock', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.is_manage_stock && formik.errors.is_manage_stock)}
+                            helperText={(formik.touched.is_manage_stock && formik.errors.is_manage_stock) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Is Shipment Auto Complete</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.is_shipment_auto_complete}
+                            onChange={(e) => formik.setFieldValue('is_shipment_auto_complete', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.is_shipment_auto_complete && formik.errors.is_shipment_auto_complete)}
+                            helperText={(formik.touched.is_shipment_auto_complete && formik.errors.is_shipment_auto_complete) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Shipper ID </span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="shipper_id"
+                            value={formik.values.shipper_id}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.shipper_id && formik.errors.shipper_id)}
+                            helperText={(formik.touched.shipper_id && formik.errors.shipper_id) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
                 </div>
+
                 <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained">
                         Submit
                     </Button>
                 </div>

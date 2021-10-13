@@ -4,11 +4,10 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/location/services/graphql';
+import { optionsQtyBuffer, optionsYesNo } from '@modules/location/helpers';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
     const router = useRouter();
     const [createLocation] = gqlService.createLocation();
 
@@ -31,6 +30,10 @@ const Core = (props) => {
         virtualLocation,
         priority,
         status,
+        qty_buffer,
+        is_manage_stock,
+        is_shipment_auto_complete,
+        shipper_id,
     }) => {
         const variables = {
             company_id: company.company_id,
@@ -39,7 +42,7 @@ const Core = (props) => {
             loc_street: street,
             id: countries.id,
             loc_region: region.name,
-            loc_city: city.city,
+            loc_city: city.value,
             loc_telephone: telephone,
             loc_postcode: postcode,
             loc_long: longitude,
@@ -51,26 +54,32 @@ const Core = (props) => {
             is_virtual_location: virtualLocation.id,
             priority: Number(priority || null),
             is_active: status.id,
+            qty_buffer: qty_buffer.id,
+            is_manage_stock: is_manage_stock.id,
+            is_shipment_auto_complete: is_shipment_auto_complete.id,
+            shipper_id,
         };
         window.backdropLoader(true);
         createLocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success create new Location',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success create new Location',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/oms/location'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/oms/location'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -96,6 +105,10 @@ const Core = (props) => {
             virtualLocation: { id: 0, name: 'No' },
             priority: '',
             status: { id: 1, name: 'Active' },
+            qty_buffer: optionsQtyBuffer[0],
+            is_manage_stock: optionsYesNo[0],
+            is_shipment_auto_complete: optionsYesNo[0],
+            shipper_id: '',
         },
         validationSchema: Yup.object().shape({
             company: Yup.object().required('Required!'),
@@ -116,6 +129,10 @@ const Core = (props) => {
             virtualLocation: Yup.object().nullable(),
             priority: Yup.number().nullable(),
             status: Yup.object().nullable(),
+            qty_buffer: Yup.object().nullable(),
+            is_manage_stock: Yup.object().nullable(),
+            is_shipment_auto_complete: Yup.object().nullable(),
+            shipper_id: Yup.string().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);

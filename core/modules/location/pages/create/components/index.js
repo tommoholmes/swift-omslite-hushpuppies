@@ -10,34 +10,30 @@ import companyGqlService from '@modules/company/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/location/pages/create/components/style';
-import { optionsYesNo, optionsActive, optionsZone } from '@modules/location/helpers';
+import {
+    optionsYesNo, optionsActive, optionsZone, optionsQtyBuffer,
+} from '@modules/location/helpers';
 
 const LocationCreateContent = (props) => {
-    const {
-        formik,
-    } = props;
+    const { formik } = props;
     const classes = useStyles();
     const router = useRouter();
     const [getCompanyList, getCompanyListRes] = companyGqlService.getCompanyList();
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const [getCountry, getCountryRes] = locationGqlService.getCountry();
-    const [getCityList, getCityListRes] = locationGqlService.getCityList();
+    const [getCityKecByRegionCode, getCityKecByRegionCodeRes] = locationGqlService.getCityKecByRegionCode();
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push('/oms/location')}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+            <Button className={classes.btnBack} onClick={() => router.push('/oms/location')} variant="contained" style={{ marginRight: 16 }}>
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
                 />
             </Button>
             <h2 className={classes.titleTop}>Create Location</h2>
@@ -125,11 +121,7 @@ const LocationCreateContent = (props) => {
                             value={formik.values.countries}
                             onChange={(e) => formik.setFieldValue('countries', e)}
                             loading={getCountriesRes.loading}
-                            options={
-                                getCountriesRes
-                                && getCountriesRes.data
-                                && getCountriesRes.data.countries
-                            }
+                            options={getCountriesRes && getCountriesRes.data && getCountriesRes.data.countries}
                             getOptions={getCountries}
                             primaryKey="id"
                             labelKey="full_name_english"
@@ -147,15 +139,10 @@ const LocationCreateContent = (props) => {
                             onChange={(e) => formik.setFieldValue('region', e)}
                             loading={getCountryRes.loading}
                             options={
-                                getCountryRes
-                                && getCountryRes.data
-                                && getCountryRes.data.country
-                                && getCountryRes.data.country.available_regions
+                                getCountryRes && getCountryRes.data && getCountryRes.data.country && getCountryRes.data.country.available_regions
                             }
                             getOptions={getCountry}
-                            getOptionsVariables={
-                                { variables: { id: formik.values.countries && formik.values.countries.id } }
-                            }
+                            getOptionsVariables={{ variables: { id: formik.values.countries && formik.values.countries.id } }}
                             primaryKey="id"
                             labelKey="name"
                         />
@@ -170,25 +157,18 @@ const LocationCreateContent = (props) => {
                             mode="lazy"
                             value={formik.values.city}
                             onChange={(e) => formik.setFieldValue('city', e)}
-                            loading={getCityListRes.loading}
+                            loading={getCityKecByRegionCodeRes.loading}
                             options={
-                                getCityListRes
-                                && getCityListRes.data
-                                && getCityListRes.data.getCityList
-                                && getCityListRes.data.getCityList.items
+                                getCityKecByRegionCodeRes && getCityKecByRegionCodeRes.data && getCityKecByRegionCodeRes.data.getCityKecByRegionCode
                             }
-                            getOptions={getCityList}
-                            getOptionsVariables={
-                                {
-                                    variables: {
-                                        filter: {
-                                            region_code: { eq: formik.values.region && formik.values.region.code },
-                                        },
-                                    },
-                                }
-                            }
-                            primaryKey="id"
-                            labelKey="city"
+                            getOptions={getCityKecByRegionCode}
+                            getOptionsVariables={{
+                                variables: {
+                                    region_code: formik.values.region.code,
+                                },
+                            }}
+                            primaryKey="value"
+                            labelKey="label"
                         />
                     </div>
                     <div className={classes.formField}>
@@ -354,13 +334,65 @@ const LocationCreateContent = (props) => {
                             helperText={(formik.touched.status && formik.errors.status) || ''}
                         />
                     </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Qty Buffer</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.qty_buffer}
+                            onChange={(e) => formik.setFieldValue('qty_buffer', e)}
+                            options={optionsQtyBuffer}
+                            error={!!(formik.touched.qty_buffer && formik.errors.qty_buffer)}
+                            helperText={(formik.touched.qty_buffer && formik.errors.qty_buffer) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Is Manage Stock</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.is_manage_stock}
+                            onChange={(e) => formik.setFieldValue('is_manage_stock', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.is_manage_stock && formik.errors.is_manage_stock)}
+                            helperText={(formik.touched.is_manage_stock && formik.errors.is_manage_stock) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Is Shipment Auto Complete</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.is_shipment_auto_complete}
+                            onChange={(e) => formik.setFieldValue('is_shipment_auto_complete', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.is_shipment_auto_complete && formik.errors.is_shipment_auto_complete)}
+                            helperText={(formik.touched.is_shipment_auto_complete && formik.errors.is_shipment_auto_complete) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Shipper ID </span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="shipper_id"
+                            value={formik.values.shipper_id}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.shipper_id && formik.errors.shipper_id)}
+                            helperText={(formik.touched.shipper_id && formik.errors.shipper_id) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained">
                         Submit
                     </Button>
                 </div>

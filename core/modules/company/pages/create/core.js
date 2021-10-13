@@ -6,43 +6,50 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/company/services/graphql';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
     const router = useRouter();
     const [createCompany] = gqlService.createCompany();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { company_code: code, company_name: name };
-        window.backdropLoader(true);
+    const handleSubmit = ({
+        code, name, logistix_credentials_flag, netsuite_id,
+    }) => {
+        const variables = {
+            company_code: code, company_name: name, logistix_credentials_flag, netsuite_id: Number(netsuite_id) || null,
+        };
         createCompany({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success create new company!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success create new company!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/oms/company'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/oms/company'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
         initialValues: {
             code: '',
             name: '',
+            logistix_credentials_flag: '',
+            netsuite_id: '',
         },
         validationSchema: Yup.object().shape({
             code: Yup.string().required('Required!'),
             name: Yup.string().required('Required!'),
+            logistix_credentials_flag: Yup.string().nullable(),
+            netsuite_id: Yup.number().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
