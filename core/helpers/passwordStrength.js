@@ -66,16 +66,18 @@ const getScore = (password, minValue, numberOfRequiredClass) => {
     return 0;
 };
 
-const GetScore = ({
+const GetScore = (
     value,
     minValue = defaultValue,
     numberOfRequiredClass = defaultRequiredClass,
-}) => {
+) => {
     const score = getScore(value, minValue, numberOfRequiredClass);
     switch (score) {
     case 0:
         return {
             status: 'No Password',
+            message: `Password must be ${minValue} caracters and required ${numberOfRequiredClass}
+            of class (Uppercase, Lowercase, Numeric or Special caracters)`,
         };
     case 1:
         return {

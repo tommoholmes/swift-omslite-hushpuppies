@@ -10,7 +10,7 @@ const tokopedia = '#3F8B3D';
 const shopee = '#EC4D2C';
 const lazada = '#F20474';
 const blibli = '#2689CA';
-const bukalapak = '#E2004D';
+const red = '#E2004D';
 
 const useStyles = makeStyles((theme) => ({
     salesChannelTableWrapper: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         },
         '& tbody td': {
             background: '#FFFFFF',
-            padding: '11px 0',
+            padding: '11px 5px',
             color: black,
         },
         '& .channelIcon': {
@@ -53,22 +53,28 @@ const useStyles = makeStyles((theme) => ({
             height: '100%',
             borderLeft: '7px double purple',
         },
-        '& tbody tr:nth-child(2) .channelIcon::before': {
+        '& tbody tr .tokopedia.channelIcon::before': {
             borderColor: tokopedia,
         },
-        '& tbody tr:nth-child(3) .channelIcon::before': {
+        '& tbody tr .shopee.channelIcon::before': {
             borderColor: shopee,
         },
-        '& tbody tr:nth-child(4) .channelIcon::before': {
+        '& tbody tr .lazada.channelIcon::before': {
             borderColor: lazada,
         },
-        '& tbody tr:nth-child(5) .channelIcon::before': {
+        '& tbody tr .blibli.channelIcon::before': {
             borderColor: blibli,
         },
-        '& tbody tr:nth-child(6) .channelIcon::before': {
-            borderColor: bukalapak,
+        '& tbody tr .red.channelIcon::before': {
+            borderColor: red,
         },
-        [theme.breakpoints.down('xs')]: {
+        '& tbody tr .blue.channelIcon::before': {
+            borderColor: blue,
+        },
+        '& tbody tr .black.channelIcon::before': {
+            borderColor: black,
+        },
+        [theme.breakpoints.down('sm')]: {
             height: '100%',
             width: '100%',
             overflowX: 'scroll',
@@ -92,6 +98,9 @@ const useStyles = makeStyles((theme) => ({
     },
     info: {
         margin: '30px -8px',
+        [theme.breakpoints.down('md')]: {
+            margin: '5px -8px',
+        },
     },
     boxInfo: {
         borderRadius: 16,
@@ -104,7 +113,16 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             margin: '15px 16px',
         },
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.down('md')]: {
+            marginTop: '16px',
+            '& span': {
+                fontSize: '0.65rem',
+            },
+            '& h2 + span': {
+                color: gray,
+            },
+        },
+        [theme.breakpoints.up('md')]: {
             width: 'calc(33.333% - 16px)',
             display: 'inline-block',
         },
@@ -189,10 +207,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'grid',
         gridTemplateColumns: '30% 30% 30% 10%',
         gridColumnGap: '10px',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('md')]: {
             margin: '15px 8px',
             display: 'inline-grid',
-            gridTemplateColumns: '70vw',
+            gridTemplateColumns: 'minmax(0, 1fr)',
             gridRowGap: '20px',
         },
     },
@@ -242,6 +260,13 @@ const useStyles = makeStyles((theme) => ({
     },
     noMargin: {
         marginBottom: 0,
+    },
+    contentGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 1fr)',
+    },
+    imageIcon: {
+        marginLeft: '10px',
     },
 }));
 
