@@ -22,6 +22,8 @@ const PickByWaveListContent = (props) => {
     const optionsStatus = [
         { name: 'Pick Uncomplete', id: 'pick_uncomplete' },
         { name: 'Pick Complete', id: 'pick_complete' },
+        { name: 'Pack in Progress', id: 'pack_in_progress' },
+        { name: 'Pack Complete', id: 'pack_complete' },
     ];
 
     const filters = [
@@ -47,7 +49,7 @@ const PickByWaveListContent = (props) => {
             name: 'status',
             type: 'in',
             label: 'Status',
-            initialValue: ['pick_uncomplete', 'pick_complete'],
+            initialValue: ['pick_uncomplete', 'pick_complete', 'pack_in_progress'],
             hidden: true,
         },
     ];

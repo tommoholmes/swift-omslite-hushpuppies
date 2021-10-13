@@ -29,10 +29,15 @@ export const donePickByWavePacking = (options) => useMutation(Schema.donePickByW
     ...options, ...context,
 });
 
+export const updatePickByWaveQtyPacked = (options) => useMutation(Schema.updatePickByWaveQtyPacked, {
+    ...options, ...context,
+});
+
 export default {
     getPickByWaveList,
     getPickByWavePacklist,
     startPickByWavePacking,
     getPackList,
     donePickByWavePacking,
+    updatePickByWaveQtyPacked,
 };

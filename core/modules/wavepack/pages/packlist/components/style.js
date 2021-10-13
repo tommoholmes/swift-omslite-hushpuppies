@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 600,
     },
     container: {
-        padding: '0 16px',
+        padding: '0 16px 32px 16px',
         borderRadius: 16,
         backgroundColor: 'unset',
         boxShadow: 'none',
@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
     checkmark: {
         position: 'absolute',
         right: 0,
-        top: '25%',
+        top: '-10px',
         backgroundColor: colorGreen,
         height: 20,
         width: 20,

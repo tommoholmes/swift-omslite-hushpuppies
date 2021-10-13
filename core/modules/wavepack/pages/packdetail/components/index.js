@@ -146,6 +146,7 @@ const BatchListPickListContent = (props) => {
                 <button
                     className={classes.btnFooterDisabled}
                     type="submit"
+                    onClick={() => router.push(`/pickpack/wavepack/packlist/scan/${packList.pick_id}/${packList.id}`)}
                 >
                     Start Scanning
                 </button>
@@ -175,7 +176,7 @@ const BatchListPickListContent = (props) => {
                                 <button
                                     className={classes.btnModal}
                                     type="submit"
-                                    onClick={handleDone}
+                                    onClick={() => router.push(`/pickpack/wavepack/packlist/detail/${nextShipment}`)}
                                 >
                                     Pack Next Shipment
                                 </button>

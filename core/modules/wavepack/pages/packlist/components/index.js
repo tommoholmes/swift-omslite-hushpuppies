@@ -86,15 +86,17 @@ const BatchListPickListContent = (props) => {
                                 ))}
                             </div>
                             <div className={clsx(classes.divList, 'end')}>
-                                <Link onClick={() => handleClick(list.shipment_id)}>
-                                    {list.statusLabel === 'Ready for Ship' ? (
-                                        <span className={classes.checkmark} />
-                                    ) : (
+                                {list.status.value === 'pick_uncomplete' || list.status.value === 'ready_for_pack' ? (
+                                    <Link onClick={() => handleClick(list.shipment_id)}>
                                         <h5 className={classes.spanStart}>
                                             Start Packing
                                         </h5>
-                                    )}
-                                </Link>
+                                    </Link>
+                                ) : (
+                                    <h5 className={clsx(classes.bodyList)}>
+                                        <span className={classes.checkmark} />
+                                    </h5>
+                                )}
                             </div>
                         </div>
                     </div>

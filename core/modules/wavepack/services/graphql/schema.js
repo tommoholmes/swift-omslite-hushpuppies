@@ -115,9 +115,35 @@ mutation donePickByWavePacking($id: Int!, $shipment_id: Int!) {
   }
 `;
 
+export const updatePickByWaveQtyPacked = gql`
+mutation updatePickByWaveQtyPacked(
+    $wave_id: Int!
+    $shipment_id: Int!
+    $barcode: String!
+  ) {
+    updatePickByWaveQtyPacked(
+      wave_id: $wave_id
+      shipment_id: $shipment_id
+      barcode: $barcode
+    ) {
+      pick_by_wave_item {
+        entity_id
+        parent_id
+        shipment_id
+        sku
+        qty_to_pick
+        qty_picked
+        qty_packed
+        name
+      }
+    }
+  }
+`;
+
 export default {
     getPickByWaveList,
     getPickByWavePacklist,
     getPackList,
     donePickByWavePacking,
+    updatePickByWaveQtyPacked,
 };
