@@ -7,6 +7,7 @@ export const getCustomer = gql`
             firstname
             lastname
             customer_loc_code
+            channel_code
         }
     }
 `;

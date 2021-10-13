@@ -123,6 +123,7 @@ const EditUserFormContent = (props) => {
                             shrink: true,
                         }}
                         disabled
+                        value={formik.values.channel_code}
                     />
 
                     <FormControl component="fieldset" className={clsx(classes.formControl, 'formControlSpace')}>
