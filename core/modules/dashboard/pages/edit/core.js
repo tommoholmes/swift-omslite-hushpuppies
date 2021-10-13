@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import gqlService from '@modules/dashboard/services/graphql';
 
 const ContentWrapper = (props) => {
@@ -9,6 +10,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+    const router = useRouter();
     const userData = data.customer;
     const [changePasswordGql] = gqlService.changePassword();
     const [changeNameGql] = gqlService.changeName();
@@ -39,6 +41,7 @@ const ContentWrapper = (props) => {
                             text: 'Success edit information!',
                             variant: 'success',
                         });
+                        setTimeout(() => router.push('/'), 250);
                     }).catch((e) => {
                         window.backdropLoader(false);
                         window.toastMessage({
@@ -80,6 +83,7 @@ const ContentWrapper = (props) => {
                         text: 'Success edit password and name!',
                         variant: 'success',
                     });
+                    setTimeout(() => router.push('/'), 250);
                 }).catch((e) => {
                     window.backdropLoader(false);
                     window.toastMessage({
@@ -113,6 +117,7 @@ const ContentWrapper = (props) => {
                         text: 'Success edit email and name!',
                         variant: 'success',
                     });
+                    setTimeout(() => router.push('/'), 250);
                 }).catch((e) => {
                     window.backdropLoader(false);
                     window.toastMessage({
@@ -141,6 +146,7 @@ const ContentWrapper = (props) => {
                     text: 'Success edit name!',
                     variant: 'success',
                 });
+                setTimeout(() => router.push('/'), 250);
             }).catch((e) => {
                 window.backdropLoader(false);
                 window.toastMessage({
