@@ -29,7 +29,7 @@ const ContentWrapper = (props) => {
 
     const handleClick = (id) => {
         if (packlist.status.value && packlist.status.value === 'pack_in_progress') {
-            router.push(`/pickpack/wavepack/packlist/slot/${id}`);
+            router.push(`/pickpack/wavepack/packlist/detail/${id}`);
         } else {
             window.backdropLoader(true);
             startPickByWavePacking({
@@ -43,7 +43,7 @@ const ContentWrapper = (props) => {
                     text: 'Start your packing process!',
                     variant: 'success',
                 });
-                router.push(`/pickpack/wavepack/packlist/slot/${id}`);
+                router.push(`/pickpack/wavepack/packlist/detail/${id}`);
             }).catch((e) => {
                 window.backdropLoader(false);
                 window.toastMessage({
