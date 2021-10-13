@@ -23,7 +23,7 @@ const BatchListPickListContent = (props) => {
         if (status === 'pick_uncomplete') {
             return classes.red;
         }
-        return classes.grey;
+        return classes.gray;
     };
 
     const getIcon = (qty_picked, qty_to_pick) => {

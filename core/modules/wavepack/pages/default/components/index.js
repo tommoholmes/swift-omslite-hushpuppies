@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import CustomList from '@common_customlist';
-import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
-import Header from '@modules/wavelist/pages/list/components/Header';
-import useStyles from '@modules/wavelist/pages/list/components/style';
+import Header from '@modules/wavepack/pages/default/components/Header';
+import useStyles from '@modules/wavepack/pages/default/components/style';
 import Router from 'next/router';
 
 const PickByWaveListContent = (props) => {
@@ -13,7 +11,6 @@ const PickByWaveListContent = (props) => {
     const { data, loading, getPickByWaveList } = props;
     const PickByWaveList = (data && data.getPickByWaveList && data.getPickByWaveList.items) || [];
     const PickByWaveTotal = (data && data.getPickByWaveList && data.getPickByWaveList.total_count) || 0;
-    const [statusFilter, setStatusFilter] = React.useState('');
 
     const columns = [
         { field: 'entity_id', headerName: 'Wave Number', sortable: true, initialSort: 'DESC', hideable: true },
@@ -23,7 +20,6 @@ const PickByWaveListContent = (props) => {
     ];
 
     const optionsStatus = [
-        { name: 'Pick in Progress', id: 'pick_in_progress' },
         { name: 'Pick Uncomplete', id: 'pick_uncomplete' },
         { name: 'Pick Complete', id: 'pick_complete' },
     ];
@@ -40,7 +36,6 @@ const PickByWaveListContent = (props) => {
                     style={{ width: 228 }}
                     value={optionsStatus.find((e) => e.id === filterValue)}
                     onChange={(newValue) => {
-                        setStatusFilter(newValue && newValue.id);
                         setTimeout(() => { setFilterValue(newValue && newValue.id); }, 500);
                     }}
                     options={optionsStatus}
@@ -50,22 +45,19 @@ const PickByWaveListContent = (props) => {
         {
             field: 'status',
             name: 'status',
-            type: 'neq',
+            type: 'in',
             label: 'Status',
-            initialValue: statusFilter ? '' : 'pick_complete',
+            initialValue: ['pick_uncomplete', 'pick_complete'],
             hidden: true,
         },
     ];
 
     const getClassByStatus = (status) => {
-        if (status.value === 'new') {
-            return classes.green;
-        }
-        if (status.value === 'pick_in_progress' || status.value === 'sorting_in_progress') {
-            return classes.orange;
-        }
         if (status.value === 'pick_uncomplete') {
             return classes.red;
+        }
+        if (status.value === 'pick_in_progress' || status.value === 'pack_in_progress') {
+            return classes.orange;
         }
         return classes.gray;
     };
@@ -84,6 +76,7 @@ const PickByWaveListContent = (props) => {
             </span>
         ),
     }));
+
     return (
         <>
             <CustomList
@@ -93,11 +86,10 @@ const PickByWaveListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={PickByWaveTotal}
-                handleReset={() => setStatusFilter('')}
                 header={() => (
                     <Header />
                 )}
-                handleClickRow={(id) => Router.push(`/pickpack/wavelist/picklist/${id}`)}
+                handleClickRow={(id) => Router.push(`/pickpack/wavepack/packlist/${id}`)}
             />
         </>
     );

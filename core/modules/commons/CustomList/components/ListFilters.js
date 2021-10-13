@@ -18,10 +18,9 @@ const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => (
 );
 
 const ListFilters = (props) => {
-    const { initialFilters, setParentFilters, handleReset = () => {} } = props;
-
+    const { initialFilters, parentFilters, setParentFilters, handleReset = () => {} } = props;
     // state
-    const [filters, setFilters] = React.useState(initialFilters);
+    const [filters, setFilters] = React.useState(parentFilters);
     const emptyFiltersField = filters && !filters.length;
 
     // methods
@@ -73,11 +72,12 @@ const ListFilters = (props) => {
                 </Button>
                 <Button
                     buttonType="link"
-                    onClick={() => {
+                    onClick={async () => {
                         if (!emptyFiltersField) {
-                            const resetedFilters = filters.map((filter) => ({ ...filter, value: '' }));
+                            const resetedFilters = await initialFilters.map((filter) => ({ ...filter, value: filter.initialValue }));
+                            console.log({ initialFilters }, { resetedFilters });
                             setFilters(resetedFilters);
-                            setParentFilters([]);
+                            setParentFilters(resetedFilters);
                             handleReset();
                         }
                     }}

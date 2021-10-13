@@ -27,7 +27,7 @@ const PickListEditContent = (props) => {
         if (status === 'pick_uncomplete') {
             return classes.red;
         }
-        return classes.grey;
+        return classes.gray;
     };
 
     const getColor = (isConfirmed, picked, toPick) => {
