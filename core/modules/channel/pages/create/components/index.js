@@ -7,33 +7,28 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
-import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
+import { optionsFramework, optionsRuleType, optionsYesNo } from '@modules/channel/helpers';
 import clsx from 'clsx';
 import useStyles from '@modules/channel/pages/create/components/style';
 
 const ChannelCreateContent = (props) => {
-    const {
-        formik,
-    } = props;
+    const { formik } = props;
     const classes = useStyles();
     const router = useRouter();
     const [getVirtualStockList, getVirtualStockListRes] = channelGqlService.getVirtualStockList();
+    const [getShipmentStatus, getShipmentStatusRes] = channelGqlService.getShipmentStatus();
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push('/oms/channel')}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+            <Button className={classes.btnBack} onClick={() => router.push('/oms/channel')} variant="contained" style={{ marginRight: 16 }}>
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
                 />
             </Button>
             <h2 className={classes.titleTop}>Create Sales Channel</h2>
@@ -207,6 +202,68 @@ const ChannelCreateContent = (props) => {
                             labelKey="vs_name"
                         />
                     </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Auto Confirm Shipment</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.auto_confirm_shipment}
+                            onChange={(e) => formik.setFieldValue('auto_confirm_shipment', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.auto_confirm_shipment && formik.errors.auto_confirm_shipment)}
+                            helperText={(formik.touched.auto_confirm_shipment && formik.errors.auto_confirm_shipment) || ''}
+                            primaryKey="id"
+                            labelKey="name"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Prio One Store</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.prio_one_store}
+                            onChange={(e) => formik.setFieldValue('prio_one_store', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.prio_one_store && formik.errors.prio_one_store)}
+                            helperText={(formik.touched.prio_one_store && formik.errors.prio_one_store) || ''}
+                            primaryKey="id"
+                            labelKey="name"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Split Prio One Store</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.split_prio_one_store}
+                            onChange={(e) => formik.setFieldValue('split_prio_one_store', e)}
+                            options={optionsYesNo}
+                            error={!!(formik.touched.split_prio_one_store && formik.errors.split_prio_one_store)}
+                            helperText={(formik.touched.split_prio_one_store && formik.errors.split_prio_one_store) || ''}
+                            primaryKey="id"
+                            labelKey="name"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Release Stock</span>
+                        </div>
+                        <Autocomplete
+                            className={clsx(classes.autocompleteRoot, classes.autocompleteMulti)}
+                            mode="lazy"
+                            multiple
+                            value={formik.values.release_stock}
+                            onChange={(e) => formik.setFieldValue('release_stock', e)}
+                            loading={getShipmentStatusRes.loading}
+                            options={getShipmentStatusRes && getShipmentStatusRes.data && getShipmentStatusRes.data.getShipmentStatus}
+                            getOptions={getShipmentStatus}
+                            primaryKey="value"
+                            labelKey="label"
+                        />
+                    </div>
                 </div>
                 <div className={classes.content}>
                     <h2 className={classes.title}>Shipment Webhook</h2>
@@ -289,11 +346,7 @@ const ChannelCreateContent = (props) => {
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained">
                         Submit
                     </Button>
                 </div>

@@ -149,7 +149,7 @@ const App = ({
                 </IconButton>
 
             </div>
-            <div className={classes.matchIcon}>
+            <div className={clsx(classes.matchIcon, 'hidden-sorting')}>
                 {isMatch !== null ? isMatch === 1 ? <CheckCircleIcon className={clsx(classes.icon, 'check')} />
                     : <CancelIcon className={clsx(classes.icon, 'cancel')} /> : null}
             </div>

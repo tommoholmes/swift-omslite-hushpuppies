@@ -112,6 +112,17 @@ const BatchListEditContent = (props) => {
                         </button>
                     </div>
                 )}
+                {(batchList.statusValue === 'sort_uncomplete') && (
+                    <div className={classes.footer}>
+                        <button
+                            className={classes.btnFooter}
+                            type="submit"
+                            onClick={() => router.push(`/pickpack/batchlist/edit/sorting/${batchList.id}`)}
+                        >
+                            Continue Sorting
+                        </button>
+                    </div>
+                )}
             </Paper>
         </>
     );

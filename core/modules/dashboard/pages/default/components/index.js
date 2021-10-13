@@ -1,13 +1,19 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint max-len: ["error", { "code": 180 }] */
+/* eslint max-len: ["error", { "code": 250 }] */
+/* eslint-disable no-shadow */
 import clsx from 'clsx';
 import useStyles from '@modules/dashboard/pages/default/components/style';
 import loginGqlService from '@modules/login/services/graphql';
 import Cookies from 'js-cookie';
 import { custDataNameCookie } from '@config';
+import { useRouter } from 'next/router';
 
-const DashboardContent = () => {
+const DashboardContent = (props) => {
+    const {
+        summaryData,
+        channelListData,
+    } = props;
     const styles = useStyles();
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
     const getCustomerFromGql = () => getCustomerRes
@@ -17,19 +23,23 @@ const DashboardContent = () => {
     const [firstname, setFirstname] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [customer_loc_code, setCustomerLocCode] = React.useState('');
+    const [channel_code, setChannelCode] = React.useState('');
     const handleSetUserInfo = (customer) => {
         const firstnameTemp = customer && customer.firstname;
         const lastnameTemp = customer && customer.lastname;
         const emailTemp = customer && customer.email;
         const customerLocCodeTemp = customer && customer.customer_loc_code;
+        const channelCodeTemp = customer && customer.channel_code;
         setUsername(`${firstnameTemp} ${lastnameTemp}`);
         setFirstname(`${firstnameTemp}`);
         setEmail(`${emailTemp}`);
         setCustomerLocCode(`${customerLocCodeTemp}`);
+        setChannelCode(`${channelCodeTemp}`);
     };
     const limitString = (string, limit) => {
         return string.substring(0, limit);
     };
+    const router = useRouter();
 
     React.useEffect(() => {
         if (Cookies.getJSON(custDataNameCookie)) {
@@ -46,8 +56,54 @@ const DashboardContent = () => {
         }
     }, [getCustomerFromGql()]);
 
+    const iconFilter = (framework, channel_code) => {
+        if (framework === 'M1' || framework === 'M2') {
+            return '/assets/img/dashboard/channel_official.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
+            return '/assets/img/dashboard/channel_bukalapak.svg';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
+            return '/assets/img/dashboard/channel_blibli.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
+            return '/assets/img/dashboard/channel_jd.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
+            return '/assets/img/dashboard/channel_lazada.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
+            return '/assets/img/dashboard/channel_shopee.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
+            return '/assets/img/dashboard/channel_sirclo.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
+            return '/assets/img/dashboard/channel_tokopedia.png';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
+            return '/assets/img/dashboard/channel_zalora.png';
+        }
+        return null;
+    };
+
+    const borderColorFilter = (framework, channel_code) => {
+        if (framework === 'M1' || framework === 'M2') {
+            return 'purple';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
+            return 'red';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
+            return 'blibli';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
+            return 'red';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
+            return 'lazada';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
+            return 'shopee';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
+            return 'blue';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
+            return 'tokopedia';
+        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
+            return 'black';
+        }
+        return 'black';
+    };
+
     return (
-        <div>
+        <div className={clsx(styles.contentGrid)}>
             <div className={clsx(styles.info, styles.welcomeUser)}>
                 <div className="title">
                     <span>
@@ -83,10 +139,10 @@ const DashboardContent = () => {
                     <div className={styles.user}>
                         <span className={styles.textBold}>Channel Code</span>
                         <br />
-                        <span>SWI,SWIPOS,Jubelio,TKPD,SHPE,LZDA</span>
+                        <span>{channel_code}</span>
                     </div>
                     <div className={styles.user}>
-                        <a href="#">Edit</a>
+                        <a href="#" onClick={() => router.push('/useredit')}>Edit</a>
                     </div>
                 </div>
 
@@ -98,17 +154,27 @@ const DashboardContent = () => {
                         <span>
                             You have
                             <br />
-                            <b>70 new order</b>
+                            <b>
+                                {summaryData.order_new}
+                                {' '}
+                                new order
+                            </b>
                             {' '}
                             to confirm
                         </span>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_order.svg" />
                     </div>
-                    <div className={styles.infoStatus}>
-                        <h2 className={clsx('colorBlue', styles.noMargin)}>12</h2>
-                        <span>Failed Order</span>
+                    <div className={styles.infoStatusWrapper}>
+                        <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                            <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_no_allocation}</h2>
+                            <span>No Allocation Order</span>
+                        </div>
+                        <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                            <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_failed}</h2>
+                            <span>Failed Order</span>
+                        </div>
                     </div>
-                    <a className="link" href="#">Manage Order</a>
+                    <a className="link" href="#" onClick={() => router.push('/pickpack/batchlist')}>Manage Order</a>
                 </div>
                 <div className={styles.boxInfo}>
                     <h3 className={clsx('colorGreen', styles.noMargin)}>Shipment</h3>
@@ -116,40 +182,52 @@ const DashboardContent = () => {
                         <span>
                             You have
                             <br />
-                            <b> 610 orders to full fill</b>
+                            <b>
+                                {' '}
+                                {summaryData.shipment_unconfirmed_total}
+                                {' '}
+                                orders to fullfill
+                            </b>
                             {' '}
                             and
                             <br />
-                            <b> 2 orders cannot fullfill</b>
+                            <b>
+                                {' '}
+                                {summaryData.shipment_cannot_fulfill}
+                                {' '}
+                                orders cannot fullfill
+                            </b>
                         </span>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_shipment.svg" />
                     </div>
                     <div className={styles.infoStatusWrapper}>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                            <h2 className={clsx('colorGreen', styles.noMargin)}>12</h2>
+                            <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_store_pickup}</h2>
                             <span>Store Pickup</span>
                         </div>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                            <h2 className={clsx('colorGreen', styles.noMargin)}>251</h2>
+                            <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_home_delivery}</h2>
                             <span>Home Delivery</span>
                         </div>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
-                            <h2 className={clsx('colorGreen', styles.noMargin)}>347</h2>
+                            <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_marketplace}</h2>
                             <span>Marketplace</span>
                         </div>
                     </div>
-                    <a className="link" href="#">Manage Shipment</a>
+                    <a className="link" href="#" onClick={() => router.push('/sales/shipment')}>Manage Shipment</a>
                 </div>
                 <div className={styles.boxInfo}>
                     <h3 className={clsx('colorOrange', styles.noMargin)}>Return</h3>
                     <div className={styles.infoDetail}>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_return.svg" />
                     </div>
-                    <div className={styles.infoStatus}>
-                        <h2 className={clsx('colorOrange', styles.noMargin)}>12</h2>
-                        <span>Request to Proceed</span>
+                    <div className={styles.infoStatusWrapper}>
+                        <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                            <h2 className={clsx('colorOrange', styles.noMargin)}>{summaryData.return_new}</h2>
+                            <span>Request to Proceed</span>
+                        </div>
                     </div>
-                    <a className="link" href="#">Manage Return</a>
+                    <a className="link" href="#" onClick={() => router.push(' /sales/managerma')}>Manage Return</a>
                 </div>
 
                 <div className={styles.salesChannelTableWrapper}>
@@ -166,55 +244,73 @@ const DashboardContent = () => {
                                     <td>LOCATION</td>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <tr>
-                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_official.png" /></td>
-                                    <td>Official Website</td>
-                                    <td>Official Website</td>
-                                    <td>SWIFTPOS</td>
-                                    <td>VSSWIFTPOS</td>
-                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                </tr>
-                                <tr>
-                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_tokopedia.png" /></td>
-                                    <td>Tokopedia</td>
-                                    <td>Tokopedia</td>
-                                    <td>SWIFTPOS</td>
-                                    <td>VSSWIFTPOS</td>
-                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                </tr>
-                                <tr>
-                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_shopee.png" /></td>
-                                    <td>Shopee</td>
-                                    <td>Shopee</td>
-                                    <td>SWIFTPOS</td>
-                                    <td>VSSWIFTPOS</td>
-                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                </tr>
-                                <tr>
-                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_lazada.png" /></td>
-                                    <td>Lazada</td>
-                                    <td>Lazada</td>
-                                    <td>SWIFTPOS</td>
-                                    <td>VSSWIFTPOS</td>
-                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                </tr>
-                                <tr>
-                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_blibli.png" /></td>
-                                    <td>Blibli</td>
-                                    <td>Blibli</td>
-                                    <td>SWIFTPOS</td>
-                                    <td>VSSWIFTPOS</td>
-                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                </tr>
-                                <tr>
-                                    <td className="channelIcon"><img className="imgIcon" alt="" src="/assets/img/dashboard/channel_bukalapak.svg" /></td>
-                                    <td>Bukalapak</td>
-                                    <td>Bukalapak</td>
-                                    <td>SWIFTPOS</td>
-                                    <td>VSSWIFTPOS</td>
-                                    <td>Warehouse 1 - Neo Soho Central Park, Jakarta Barat</td>
-                                </tr>
+                                {channelListData.map((e) => (
+                                    <>
+                                        <tr>
+                                            <td className={clsx(borderColorFilter(e.framework, e.channel_code), 'channelIcon')}><img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} /></td>
+                                            <td>{e.channel_name}</td>
+                                            <td>{e.channel_name}</td>
+                                            <td>{e.channel_code}</td>
+                                            {e.virtual_stock_list.length > 3
+                                                && (
+                                                    <td>
+                                                        {e.virtual_stock_list[0]}
+                                                        ,
+                                                        {' '}
+                                                        {e.virtual_stock_list[1]}
+                                                        ,
+                                                        {' '}
+                                                        {e.virtual_stock_list[2]}
+                                                        ,
+                                                        {' '}
+                                                        <a className="link" href="#" onClick={() => router.push('/cataloginventory/virtualstock')}><u>see more...</u></a>
+                                                    </td>
+                                                )}
+                                            {e.virtual_stock_list.length <= 3
+                                                && (
+                                                    <td>
+                                                        {e.virtual_stock_list[0]}
+                                                        ,
+                                                        {' '}
+                                                        {e.virtual_stock_list[1]}
+                                                        ,
+                                                        {' '}
+                                                        {e.virtual_stock_list[2]}
+                                                    </td>
+                                                )}
+
+                                            {e.location_list.length > 3
+                                                && (
+                                                    <td>
+                                                        {e.location_list[0]}
+                                                        ,
+                                                        {' '}
+                                                        {e.location_list[1]}
+                                                        ,
+                                                        {' '}
+                                                        {e.location_list[2]}
+                                                        ,
+                                                        {' '}
+                                                        <a className="link" href="#" onClick={() => router.push('/oms/location')}><u>see more...</u></a>
+                                                    </td>
+                                                )}
+                                            {e.location_list.length <= 3
+                                                && (
+                                                    <td>
+                                                        {e.location_list[0]}
+                                                        ,
+                                                        {' '}
+                                                        {e.location_list[1]}
+                                                        ,
+                                                        {' '}
+                                                        {e.location_list[2]}
+                                                    </td>
+                                                )}
+                                        </tr>
+                                    </>
+                                ))}
                             </tbody>
                         </table>
                     </div>

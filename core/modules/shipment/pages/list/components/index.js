@@ -44,6 +44,7 @@ const ShipmentListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -66,6 +67,7 @@ const ShipmentListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}

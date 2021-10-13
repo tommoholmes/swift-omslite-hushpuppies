@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
+import useStyles from '@common_autocomplete/style';
 
 function usePrevious(value) {
     const ref = React.useRef();
@@ -35,6 +36,7 @@ function useDebounce(value, delay) {
 }
 
 const CustomAutocomplete = (props) => {
+    const classes = useStyles();
     const {
         error,
         disableCloseOnSelect,
@@ -104,9 +106,7 @@ const CustomAutocomplete = (props) => {
                 autoComplete: 'no-autocomplete',
                 endAdornment: (
                     <>
-                        {loading ? (
-                            <CircularProgress color="inherit" size={20} />
-                        ) : null}
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
                         {params.InputProps.endAdornment}
                     </>
                 ),
@@ -120,7 +120,7 @@ const CustomAutocomplete = (props) => {
 
     return (
         <Autocomplete
-            value={multiple ? (value || []) : value}
+            value={multiple ? value || [] : value}
             open={open}
             getOptionSelected={(option, selectedValue) => option[primaryKey] === selectedValue[primaryKey]}
             getOptionLabel={getOptionLabel || ((option) => (option && option[labelKey]) || '')}
@@ -133,6 +133,7 @@ const CustomAutocomplete = (props) => {
             options={options || []}
             loading={loading}
             renderInput={renderInput}
+            classes={classes}
             {...others}
         />
     );
