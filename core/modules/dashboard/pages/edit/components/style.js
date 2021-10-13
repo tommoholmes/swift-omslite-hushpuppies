@@ -9,6 +9,19 @@ const useStyles = makeStyles((theme) => ({
         padding: '16px 0',
         borderRadius: 16,
     },
+    btnBack: {
+        '&.buttonBack': {
+            display: 'inline-block',
+            borderRadius: '10px 0px 0px 10px',
+            minWidth: 'unset',
+            height: 36,
+            width: 42,
+            marginBottom: 6,
+            [theme.breakpoints.down('xs')]: {
+                marginLeft: 18,
+            },
+        },
+    },
     nameGrid: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',

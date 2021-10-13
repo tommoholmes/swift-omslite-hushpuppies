@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import useStyles from '@modules/dashboard/pages/edit/components/style';
 import Button from '@common_button';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@common_textfield';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,12 +12,14 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import GetScore from '@helper_passwordstrength';
+import { useRouter } from 'next/router';
 
 const EditUserFormContent = (props) => {
     const {
         formik,
     } = props;
     const classes = useStyles();
+    const router = useRouter();
 
     const [changeEmail, setChangeEmail] = useState(true);
     const [changePassword, setChangePassword] = useState(true);
@@ -46,6 +49,21 @@ const EditUserFormContent = (props) => {
 
     return (
         <div>
+            <Button
+                className={clsx(classes.btnBack, 'buttonBack')}
+                onClick={() => router.push('/')}
+                variant="contained"
+                style={{ marginRight: 16 }}
+            >
+                <ChevronLeftIcon style={{
+                    fontSize: 30,
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+                />
+            </Button>
             <h2 className={classes.titleTop}>Edit My Account</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
