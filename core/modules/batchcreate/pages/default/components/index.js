@@ -17,6 +17,10 @@ const ScanItemContent = (props) => {
     const handlePickerClose = () => {
         setPickerOpen(false);
     };
+    const [skuOpen, setSkuOpen] = React.useState(false);
+    const handleSkuClose = () => {
+        setSkuOpen(false);
+    };
 
     return (
         <>
@@ -38,13 +42,21 @@ const ScanItemContent = (props) => {
                         Create Batch by Picker
                         <ChevronRightIcon className={classes.icon} />
                     </Button>
-                    <BatchDialog open={pickerOpen} handleClose={handlePickerClose} />
+                    <BatchDialog open={pickerOpen} handleClose={handlePickerClose} title="Picker" titleChild="picker" />
                     <div style={{ height: 18 }} />
-                    <Button className={classes.btn} variant="contained" buttonType="primary-rounded">
+                    <Button
+                        className={classes.btn}
+                        variant="contained"
+                        buttonType="primary-rounded"
+                        onClick={() => {
+                            setSkuOpen(true);
+                        }}
+                    >
                         <img className={classes.iconImg} src="/assets/img/icon-tag.svg" alt="" />
                         Create Batch by Sku
                         <ChevronRightIcon className={classes.icon} />
                     </Button>
+                    <BatchDialog open={skuOpen} handleClose={handleSkuClose} title="SKU" titleChild="SKU" />
                     <div style={{ height: 18 }} />
                     <Button className={classes.btn} variant="contained" buttonType="primary-rounded">
                         <img className={classes.iconImg} src="/assets/img/search_box.svg" alt="" />
