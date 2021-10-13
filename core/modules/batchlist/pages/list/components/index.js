@@ -58,7 +58,7 @@ const PickByBatchListContent = (props) => {
         if (status.value === 'pick_uncomplete') {
             return classes.red;
         }
-        return classes.grey;
+        return classes.gray;
     };
 
     const rows = PickByBatchList.map((batchlist) => ({

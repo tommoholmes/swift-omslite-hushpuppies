@@ -212,6 +212,20 @@ export const itemSortingPickByBatch = gql`
     }
 `;
 
+export const doneSortingPickByBatch = gql`
+    mutation doneSortingPickByBatch(
+        $batch_id: Int!,
+    ){
+        doneSortingPickByBatch(
+            batch_id: $batch_id
+        ){
+            pick_by_batch {
+                entity_id
+            }
+        }
+    }
+`;
+
 export default {
     getPickByBatchList,
     getPickByBatchById,
@@ -222,4 +236,5 @@ export default {
     updatePickByBatchItem,
     startSortingPickByBatch,
     itemSortingPickByBatch,
+    doneSortingPickByBatch,
 };
