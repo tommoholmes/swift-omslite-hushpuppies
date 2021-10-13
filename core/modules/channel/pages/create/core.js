@@ -4,11 +4,10 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/channel/services/graphql';
+import { optionsYesNo } from '@modules/channel/helpers';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
     const router = useRouter();
     const [createChannel] = gqlService.createChannel();
 
@@ -27,6 +26,11 @@ const Core = (props) => {
         invoice,
         refund,
         creditmemo,
+        auto_confirm_shipment,
+        prio_one_store,
+        split_prio_one_store,
+        release_stock,
+        webhook_vendor_salesrule,
     }) => {
         const variables = {
             channel_code: code,
@@ -43,26 +47,33 @@ const Core = (props) => {
             webhook_invoice: invoice,
             webhook_rma_refund: refund,
             webhook_creditmemo: creditmemo,
+            auto_confirm_shipment: auto_confirm_shipment.id ?? 0,
+            prio_one_store: prio_one_store.id ?? 0,
+            split_prio_one_store: split_prio_one_store.id ?? 0,
+            release_stock: release_stock.map((val) => val.value).toString(),
+            webhook_vendor_salesrule,
         };
         window.backdropLoader(true);
         createChannel({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success create new channel!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success create new channel!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/oms/channel'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/oms/channel'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -81,6 +92,11 @@ const Core = (props) => {
             invoice: '',
             refund: '',
             creditmemo: '',
+            auto_confirm_shipment: optionsYesNo[0],
+            prio_one_store: optionsYesNo[0],
+            split_prio_one_store: optionsYesNo[0],
+            release_stock: [],
+            webhook_vendor_salesrule: '',
         },
         validationSchema: Yup.object().shape({
             code: Yup.string().required('Required!'),
@@ -97,6 +113,11 @@ const Core = (props) => {
             invoice: Yup.string().nullable(),
             refund: Yup.string().nullable(),
             creditmemo: Yup.string().nullable(),
+            auto_confirm_shipment: Yup.object().nullable(),
+            prio_one_store: Yup.object().nullable(),
+            split_prio_one_store: Yup.object().nullable(),
+            release_stock: Yup.string().nullable(),
+            webhook_vendor_salesrule: Yup.string().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);

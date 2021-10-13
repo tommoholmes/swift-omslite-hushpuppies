@@ -1,4 +1,4 @@
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import * as Schema from '@modules/channel/services/graphql/schema';
 
 const context = {
@@ -10,29 +10,42 @@ const fetchPolicy = {
 };
 
 export const getChannelList = (variables) => useLazyQuery(Schema.getChannelList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getChannelById = (variables) => useQuery(Schema.getChannelById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const createChannel = (variables) => useMutation(Schema.createChannel, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const updateChannel = (variables) => useMutation(Schema.updateChannel, {
-    variables, ...context,
-});
-export const getVirtualStockList = (variables) => useLazyQuery(Schema.getVirtualStockList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
 });
 
+export const getVirtualStockList = (variables) => useLazyQuery(Schema.getVirtualStockList, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
+export const getShipmentStatus = (variables) => useLazyQuery(Schema.getShipmentStatus, { variables, ...context, ...fetchPolicy });
+
 export const deleteChannel = (variables) => useMutation(Schema.deleteChannel, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 export const multideleteChannel = (variables) => useMutation(Schema.multideleteChannel, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export default {
@@ -43,4 +56,5 @@ export default {
     getVirtualStockList,
     deleteChannel,
     multideleteChannel,
+    getShipmentStatus,
 };

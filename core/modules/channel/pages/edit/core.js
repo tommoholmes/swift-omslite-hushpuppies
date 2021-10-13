@@ -3,20 +3,35 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import { optionsFramework, optionsRuleType } from '@modules/channel/helpers';
+import { optionsFramework, optionsRuleType, optionsYesNo } from '@modules/channel/helpers';
 import gqlService from '@modules/channel/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const channel = data.getChannelById;
     const [updateChannel] = gqlService.updateChannel();
 
     const handleSubmit = ({
-        code, name, notes, url, token, endPoint, deltaStock, framework, type, virtualStock, shipment, invoice, refund, creditmemo,
+        code,
+        name,
+        notes,
+        url,
+        token,
+        endPoint,
+        deltaStock,
+        framework,
+        type,
+        virtualStock,
+        shipment,
+        invoice,
+        refund,
+        creditmemo,
+        auto_confirm_shipment,
+        prio_one_store,
+        split_prio_one_store,
+        release_stock,
+        webhook_vendor_salesrule,
     }) => {
         const variables = {
             id: channel.channel_id,
@@ -34,26 +49,33 @@ const ContentWrapper = (props) => {
             webhook_invoice: invoice,
             webhook_rma_refund: refund,
             webhook_creditmemo: creditmemo,
+            auto_confirm_shipment: auto_confirm_shipment.id ?? 0,
+            prio_one_store: prio_one_store.id ?? 0,
+            split_prio_one_store: split_prio_one_store.id ?? 0,
+            release_stock: release_stock.map((val) => val.value).toString(),
+            webhook_vendor_salesrule,
         };
         window.backdropLoader(true);
         updateChannel({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit company!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit channel!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/oms/channel'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/oms/company'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -72,6 +94,11 @@ const ContentWrapper = (props) => {
             invoice: channel.webhook_invoice || '',
             refund: channel.webhook_rma_refund || '',
             creditmemo: channel.webhook_creditmemo || '',
+            auto_confirm_shipment: optionsYesNo.find((e) => e.id === channel.auto_confirm_shipment),
+            prio_one_store: optionsYesNo.find((e) => e.id === channel.prio_one_store) || 0,
+            split_prio_one_store: optionsYesNo.find((e) => e.id === channel.split_prio_one_store),
+            release_stock: channel.release_stock.split(',').map((val) => ({ label: val, value: val })) || '',
+            webhook_vendor_salesrule: channel.webhook_vendor_salesrule || '',
         },
         validationSchema: Yup.object().shape({
             code: Yup.string().nullable().required('Required!'),
@@ -88,6 +115,11 @@ const ContentWrapper = (props) => {
             invoice: Yup.string().nullable(),
             refund: Yup.string().nullable(),
             creditmemo: Yup.string().nullable(),
+            auto_confirm_shipment: Yup.object().nullable(),
+            prio_one_store: Yup.object().nullable(),
+            split_prio_one_store: Yup.object().nullable(),
+            release_stock: Yup.string().nullable(),
+            webhook_vendor_salesrule: Yup.string().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);
@@ -98,9 +130,7 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -110,15 +140,11 @@ const Core = (props) => {
     });
 
     if (loading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        return <Layout>Data not found!</Layout>;
     }
 
     return (

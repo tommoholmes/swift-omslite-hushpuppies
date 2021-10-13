@@ -15,3 +15,8 @@ export const optionsRuleType = [
     { id: 3, name: 'Priotiy by zone' },
     { id: 4, name: 'Disable' },
 ];
+
+export const optionsYesNo = [
+    { id: 0, name: 'No' },
+    { id: 1, name: 'Yes' },
+];
