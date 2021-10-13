@@ -185,7 +185,8 @@ const DashboardContent = (props) => {
                                 orders to fullfill
                             </b>
                             {' '}
-                            and
+                            {firstname}
+                            ,
                             <br />
                             <b>
                                 {' '}
@@ -194,7 +195,6 @@ const DashboardContent = (props) => {
                                 orders cannot fullfill
                             </b>
                         </span>
-                        <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_shipment.svg" />
                     </div>
                     <div className={styles.infoStatusWrapper}>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
@@ -212,10 +212,34 @@ const DashboardContent = (props) => {
                     </div>
                     <a className="link" href="#" onClick={() => router.push('/sales/shipment')}>Manage Shipment</a>
                 </div>
-                <div className={styles.boxInfo}>
-                    <h3 className={clsx('colorOrange', styles.noMargin)}>Return</h3>
-                    <div className={styles.infoDetail}>
-                        <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_return.svg" />
+                <div className={styles.info}>
+                    <div className={styles.boxInfo}>
+                        <h3 className={clsx('colorBlue', styles.noMargin)}>Order</h3>
+                        <div className={styles.infoDetail}>
+                            <span>
+                                You have
+                                <br />
+                                <b>
+                                    {summaryData.order_new}
+                                    {' '}
+                                    new order
+                                </b>
+                                {' '}
+                                to confirm
+                            </span>
+                            <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_order.svg" />
+                        </div>
+                        <div className={styles.infoStatusWrapper}>
+                            <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                                <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_no_allocation}</h2>
+                                <span>No Allocation Order</span>
+                            </div>
+                            <div className={clsx(styles.infoStatus, 'statusCenter')}>
+                                <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_failed}</h2>
+                                <span>Failed Order</span>
+                            </div>
+                        </div>
+                        <a className="link" href="#" onClick={() => router.push('/pickpack/batchlist')}>Manage Order</a>
                     </div>
                     <div className={styles.infoStatusWrapper}>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
