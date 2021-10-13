@@ -28,6 +28,15 @@ const ShipmentMarketplaceEditContent = (props) => {
     const router = useRouter();
     const [getShipmentCancelReason, getShipmentCancelReasonRes] = gqlService.getShipmentCancelReason();
     const [getCourierOption, getCourierOptionRes] = gqlService.getCourierOption();
+    const iconFilter = (channel_code) => {
+        const codeExploded = channel_code.split('_');
+
+        if (codeExploded[1]) {
+            const code = codeExploded[1].toLowerCase();
+            return code;
+        }
+        return 'swift';
+    };
 
     return (
         <>
@@ -50,7 +59,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                 {`Marketplace #${shipmentMarketplace.shipmentNumber}`}
             </h2>
             <div style={{ position: 'relative' }}>
-                <img className={classes.headerImg} alt="" src={`/assets/img/print_icon/${shipmentMarketplace.channelName}.png`} />
+                <img className={classes.headerImg} alt="" src={`/assets/img/print_icon/${iconFilter(shipmentMarketplace.channelCode)}.png`} />
             </div>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>

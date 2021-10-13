@@ -208,6 +208,7 @@ const ContentWrapper = (props) => {
         id: shipmentmarketplace.entity_id,
         shipmentNumber: shipmentmarketplace.increment_id,
         channelName: shipmentmarketplace.channel.channel_name,
+        channelCode: shipmentmarketplace.channel.channel_code,
         orderNumber: shipmentmarketplace.marketplace_order_number,
         statusLabel: shipmentmarketplace.status.label,
         statusValue: shipmentmarketplace.status.value,

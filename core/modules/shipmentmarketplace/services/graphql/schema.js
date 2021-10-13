@@ -56,6 +56,7 @@ export const getStoreShipmentById = gql`
             channel_order_increment_id
             channel{
                 channel_name
+                channel_code
             }
             marketplace_order_number
             status {
