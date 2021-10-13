@@ -27,7 +27,7 @@ const BatchListEditContent = (props) => {
         if (status === 'pick_uncomplete') {
             return classes.red;
         }
-        return classes.grey;
+        return classes.gray;
     };
 
     const getIcon = (status) => {
@@ -109,6 +109,17 @@ const BatchListEditContent = (props) => {
                             onClick={formikStartSorting.handleSubmit}
                         >
                             Start Sorting
+                        </button>
+                    </div>
+                )}
+                {(batchList.statusValue === 'sort_uncomplete') && (
+                    <div className={classes.footer}>
+                        <button
+                            className={classes.btnFooter}
+                            type="submit"
+                            onClick={() => router.push(`/pickpack/batchlist/edit/sorting/${batchList.id}`)}
+                        >
+                            Continue Sorting
                         </button>
                     </div>
                 )}

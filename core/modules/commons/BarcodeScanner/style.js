@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
         position: 'absolute',
         top: 5,
         right: 50,
+        zIndex: 1,
     },
     closeIcon: {
         color: 'white',
