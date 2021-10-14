@@ -245,9 +245,21 @@ const useStyles = makeStyles((theme) => ({
             maxWidth: '82%',
         },
     },
-    infoStatusWrapper: {
+    infoStatusWrapperShipment: {
         display: 'grid',
         gridTemplateColumns: '33% 33% 33%',
+        gridColumnGap: '4px',
+        marginTop: '10px',
+    },
+    infoStatusWrapperOrder: {
+        display: 'grid',
+        gridTemplateColumns: '50% 50%',
+        gridColumnGap: '4px',
+        marginTop: '10px',
+    },
+    infoStatusWrapperReturn: {
+        display: 'grid',
+        gridTemplateColumns: '100%',
         gridColumnGap: '4px',
         marginTop: '10px',
     },
@@ -267,6 +279,9 @@ const useStyles = makeStyles((theme) => ({
     },
     imageIcon: {
         marginLeft: '10px',
+    },
+    dialogTextContainer: {
+        width: '500px',
     },
 }));
 
