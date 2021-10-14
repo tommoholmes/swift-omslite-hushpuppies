@@ -247,7 +247,7 @@ const CustomList = (props) => {
                     </div>
                 </Collapse>
                 <Collapse in={expandedToolbar === 'filters'}>
-                    <ListFilters initialFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
+                    <ListFilters initialFilters={initialFilters} parentFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
                 </Collapse>
             </div>
         </div>

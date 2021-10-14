@@ -16,13 +16,17 @@ const App = ({
     readers, barcode, handleDetect = () => { }, handleClose = () => { },
 }) => {
     const classes = useStyles();
-    const [isMatch, setIsMatch] = useState(true);
+    const [isMatch, setIsMatch] = useState(null);
 
     const _onDetected = (res) => {
-        if (barcode === res.codeResult.code) {
-            setIsMatch(1);
+        if (barcode) {
+            if (barcode === res.codeResult.code) {
+                setIsMatch(1);
+            } else {
+                setIsMatch(0);
+            }
         } else {
-            setIsMatch(0);
+            setIsMatch(1);
         }
         handleDetect(res.codeResult.code);
         setTimeout(() => setIsMatch(null), 3000);

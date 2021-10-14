@@ -23,7 +23,7 @@ const BatchListPickListContent = (props) => {
         if (status === 'pick_uncomplete') {
             return classes.red;
         }
-        return classes.grey;
+        return classes.gray;
     };
 
     const getIcon = (qty_picked, qty_to_pick) => {
@@ -75,42 +75,46 @@ const BatchListPickListContent = (props) => {
                 </div>
                 {waveList.items.slice().sort((a, b) => a.is_confirmed - b.is_confirmed).map((e) => (
                     <div className={classes.content} key={e.entity_id}>
-                        <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
-                            <div className={classes.gridList}>
-                                <div>
-                                    <h5
-                                        className={classes.titleList}
-                                    >
-                                        SKU
-                                    </h5>
-                                    <h5 className={classes.bodyList} style={{ textAlign: 'left' }}>{e.sku}</h5>
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <h5
-                                        className={classes.titleList}
-                                    >
-                                        QTY
-                                    </h5>
-                                    <h5 className={classes.bodyList}>
-                                        {`${e.qty_picked}/${e.qty_to_pick}`}
-                                    </h5>
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <h5
-                                        className={classes.titleList}
-                                    >
-                                        LOCATION
-                                    </h5>
-                                    <h5 className={classes.bodyList}>{e.bin_code}</h5>
-                                    {e.is_confirmed}
-                                </div>
-                                <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
-                                    {e.is_confirmed ? (
-                                        <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
-                                    ) : <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />}
+                        <div className={classes.gridList}>
+                            <div>
+                                <h5
+                                    className={classes.titleList}
+                                >
+                                    SKU
+                                </h5>
+                                <h5 className={classes.bodyList} style={{ textAlign: 'left' }}>{e.sku}</h5>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <h5
+                                    className={classes.titleList}
+                                >
+                                    QTY
+                                </h5>
+                                <h5 className={classes.bodyList}>
+                                    {`${e.qty_picked}/${e.qty_to_pick}`}
                                 </h5>
                             </div>
-                        </a>
+                            <div style={{ textAlign: 'center' }}>
+                                <h5
+                                    className={classes.titleList}
+                                >
+                                    LOCATION
+                                </h5>
+                                <h5 className={classes.bodyList}>{e.bin_code}</h5>
+                                {e.is_confirmed}
+                            </div>
+                            <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
+                                {e.is_confirmed ? (
+                                    <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                )
+                                    : (
+                                        <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+
+                                            <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
+                                        </a>
+                                    )}
+                            </h5>
+                        </div>
                     </div>
                 ))}
                 {waveList.statusValue === 'pick_in_progress'
