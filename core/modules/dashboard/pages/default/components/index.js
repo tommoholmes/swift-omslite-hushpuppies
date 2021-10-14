@@ -8,6 +8,12 @@ import loginGqlService from '@modules/login/services/graphql';
 import Cookies from 'js-cookie';
 import { custDataNameCookie } from '@config';
 import { useRouter } from 'next/router';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const DashboardContent = (props) => {
     const {
@@ -15,6 +21,7 @@ const DashboardContent = (props) => {
         channelListData,
     } = props;
     const styles = useStyles();
+    // User Info
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
     const getCustomerFromGql = () => getCustomerRes
         && getCustomerRes.data
@@ -55,6 +62,24 @@ const DashboardContent = (props) => {
             handleSetUserInfo(getCustomerFromGql());
         }
     }, [getCustomerFromGql()]);
+
+    // See more Dialog (virtual stock & location)
+    const [openSeemoreDialog, setOpenSeemoreDialog] = React.useState(false);
+    const [seemore, setSeemore] = React.useState({});
+
+    const handleSeemoreOpen = (title, name, data) => {
+        setOpenSeemoreDialog(true);
+        setSeemore({
+            title,
+            name,
+            data: data.join(', '),
+        });
+    };
+
+    const handleSeemoreClose = () => {
+        setOpenSeemoreDialog(false);
+        setSeemore({});
+    };
 
     const iconFilter = (framework, channel_code) => {
         if (framework === 'M1' || framework === 'M2') {
@@ -160,11 +185,11 @@ const DashboardContent = (props) => {
                                 new order
                             </b>
                             {' '}
-                            to confirm
+                            to process
                         </span>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_order.svg" />
                     </div>
-                    <div className={styles.infoStatusWrapper}>
+                    <div className={styles.infoStatusWrapperOrder}>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
                             <h2 className={clsx('colorBlue', styles.noMargin)}>{summaryData.order_no_allocation}</h2>
                             <span>No Allocation Order</span>
@@ -200,7 +225,7 @@ const DashboardContent = (props) => {
                         </span>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_shipment.svg" />
                     </div>
-                    <div className={styles.infoStatusWrapper}>
+                    <div className={styles.infoStatusWrapperShipment}>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
                             <h2 className={clsx('colorGreen', styles.noMargin)}>{summaryData.shipment_unconfirmed_store_pickup}</h2>
                             <span>Store Pickup</span>
@@ -221,7 +246,7 @@ const DashboardContent = (props) => {
                     <div className={styles.infoDetail}>
                         <img className="imgIcon" alt="" src="/assets/img/dashboard/icon_return.svg" />
                     </div>
-                    <div className={styles.infoStatusWrapper}>
+                    <div className={styles.infoStatusWrapperReturn}>
                         <div className={clsx(styles.infoStatus, 'statusCenter')}>
                             <h2 className={clsx('colorOrange', styles.noMargin)}>{summaryData.return_new}</h2>
                             <span>Request to Proceed</span>
@@ -265,19 +290,15 @@ const DashboardContent = (props) => {
                                                         {e.virtual_stock_list[2]}
                                                         ,
                                                         {' '}
-                                                        <a className="link" href="#" onClick={() => router.push('/cataloginventory/virtualstock')}><u>see more...</u></a>
+                                                        <a className="link" href="#" onClick={() => handleSeemoreOpen('Virtual Stock List', e.channel_name, e.virtual_stock_list)}><u>see more...</u></a>
                                                     </td>
                                                 )}
                                             {e.virtual_stock_list.length <= 3
                                                 && (
                                                     <td>
                                                         {e.virtual_stock_list[0]}
-                                                        ,
-                                                        {' '}
-                                                        {e.virtual_stock_list[1]}
-                                                        ,
-                                                        {' '}
-                                                        {e.virtual_stock_list[2]}
+                                                        {e.virtual_stock_list[1] ? `, ${ e.virtual_stock_list[1]}` : ''}
+                                                        {e.virtual_stock_list[2] ? `, ${ e.virtual_stock_list[2]}` : ''}
                                                     </td>
                                                 )}
 
@@ -293,19 +314,15 @@ const DashboardContent = (props) => {
                                                         {e.location_list[2]}
                                                         ,
                                                         {' '}
-                                                        <a className="link" href="#" onClick={() => router.push('/oms/location')}><u>see more...</u></a>
+                                                        <a className="link" href="#" onClick={() => handleSeemoreOpen('Location List', e.channel_name, e.location_list)}><u>see more...</u></a>
                                                     </td>
                                                 )}
                                             {e.location_list.length <= 3
                                                 && (
                                                     <td>
                                                         {e.location_list[0]}
-                                                        ,
-                                                        {' '}
-                                                        {e.location_list[1]}
-                                                        ,
-                                                        {' '}
-                                                        {e.location_list[2]}
+                                                        {e.location_list[1] ? `, ${ e.location_list[1]}` : ''}
+                                                        {e.location_list[2] ? `, ${ e.location_list[2]}` : ''}
                                                     </td>
                                                 )}
                                         </tr>
@@ -316,6 +333,31 @@ const DashboardContent = (props) => {
                     </div>
                 </div>
             </div>
+            <Dialog
+                open={openSeemoreDialog}
+                onClose={handleSeemoreClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    <b>{seemore.name}</b>
+                    &#39;s
+                    {' '}
+                    {seemore.title}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <span className={clsx(styles.dialogTextContainer)}>
+                            {seemore.data}
+                        </span>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleSeemoreClose} color="primary" autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

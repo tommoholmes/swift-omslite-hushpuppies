@@ -35,7 +35,13 @@ const Core = (props) => {
     const { loading: loadingSummaryData, data: summaryData } = gqlService.getDashboardData();
     const { loading: loadingChannelListData, data: channelListData } = gqlService.getChannelList();
 
-    if (loadingSummaryData || loadingChannelListData) {
+    if (loadingSummaryData) {
+        return (
+            <Layout>Loading...</Layout>
+        );
+    }
+
+    if (loadingChannelListData) {
         return (
             <Layout>Loading...</Layout>
         );
