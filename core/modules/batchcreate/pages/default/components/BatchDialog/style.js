@@ -5,7 +5,7 @@ const titleFont = 'normal normal bold 30px/37px Roboto';
 const colorPurple = '#BE1F93';
 const textFont = 'normal normal normal 14px/17px Roboto';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
         borderRadius: 16,
     },
@@ -26,6 +26,15 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'center',
     },
+    contentCounter: {
+        margin: 'auto auto 8px auto',
+        borderBottom: '1px solid lightgray',
+        overflow: 'hidden',
+        width: '28%',
+        [theme.breakpoints.down('xs')]: {
+            width: '40%',
+        },
+    },
     counter: {
         display: 'flex',
         alignItems: 'center',
@@ -38,6 +47,10 @@ const useStyles = makeStyles(() => ({
     },
     counterBtn: {
         cursor: 'pointer',
+        '&:hover': {
+            '& img': {
+            },
+        },
     },
     btn: {
         borderRadius: 27,
@@ -50,8 +63,8 @@ const useStyles = makeStyles(() => ({
         height: 55,
         position: 'relative',
         fontSize: 18,
-        '@media (max-width: 767px )': {
-            width: '100%',
+        [theme.breakpoints.down('xs')]: {
+            width: '65%',
         },
     },
     textFooter: {

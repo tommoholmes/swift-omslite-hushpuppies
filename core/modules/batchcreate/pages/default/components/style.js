@@ -60,6 +60,9 @@ const useStyles = makeStyles(() => ({
         '@media (max-width: 767px )': {
             width: '100%',
         },
+        '&.MuiButton-contained.Mui-disabled': {
+            borderColor: 'rgba(0, 0, 0, 0.12)',
+        },
     },
     iconImg: {
         width: 32,
