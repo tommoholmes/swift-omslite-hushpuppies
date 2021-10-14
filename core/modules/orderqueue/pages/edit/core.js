@@ -48,6 +48,7 @@ const ContentWrapper = (props) => {
         channelCode: orderqueue.channel_code,
         email: orderqueue.email,
         customerGroup: orderqueue.customer_group,
+        custom_order_attributes: JSON.parse(orderqueue.custom_order_attributes),
         firstname: orderqueue.billing_address.firstname,
         lastname: orderqueue.billing_address.lastname,
         street: orderqueue.billing_address.street,

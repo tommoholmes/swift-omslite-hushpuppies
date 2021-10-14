@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
+import gqlService from '@modules/orderqueue/services/graphql';
 
 const OrderQueueEditContent = (props) => {
     const {
@@ -26,6 +27,10 @@ const OrderQueueEditContent = (props) => {
 
         return value;
     };
+
+    const { loading: aclCheckLoading, data: aclCheckData } = gqlService.isAccessAllowed({
+        acl_code: 'sales_order_queue_edit_replacement',
+    });
 
     return (
         <>
@@ -171,6 +176,9 @@ const OrderQueueEditContent = (props) => {
                                 <th className={classes.th}>QTY</th>
                                 <th className={classes.th}>Discount Amount</th>
                                 <th className={classes.th}>Location Code</th>
+                                <th className={classes.th}>Pickup At</th>
+                                {(aclCheckData && aclCheckData.isAccessAllowed) === true
+                                    && <th className={classes.th}>Replacement For</th>}
                             </tr>
                             {orderQueue.orderItem.map((e) => (
                                 <tr>
@@ -180,6 +188,9 @@ const OrderQueueEditContent = (props) => {
                                     <td className={classes.td}>{e.qty}</td>
                                     <td className={classes.td}>{e.discount_amount}</td>
                                     <td className={classes.td}>{e.loc_code}</td>
+                                    <td className={classes.td}>{e.pickup_name}</td>
+                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true
+                                        && <td className={classes.td}>{e.replacement_for}</td>}
                                 </tr>
                             ))}
                         </tbody>
@@ -188,7 +199,7 @@ const OrderQueueEditContent = (props) => {
                 <div className={classes.content}>
                     <div className={classes.contentLeft}>
                         <h5 className={classes.title}>Notes for this Order</h5>
-                        <span className={classes.orderLabel}>This is my note for delivery (contoh)</span>
+                        <span className={classes.orderLabel}>{orderQueue.custom_order_attributes.remark}</span>
                         <br />
                     </div>
                     <div className={classes.contentLeft}>
