@@ -18,6 +18,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 const DashboardContent = (props) => {
     const {
         summaryData,
+
         channelListData,
     } = props;
     const styles = useStyles();
@@ -44,6 +45,9 @@ const DashboardContent = (props) => {
         setChannelCode(`${channelCodeTemp}`);
     };
     const limitString = (string, limit) => {
+        if (string.length > limit) {
+            return `${string.substring(0, limit)}...`;
+        }
         return string.substring(0, limit);
     };
     const router = useRouter();
@@ -158,13 +162,12 @@ const DashboardContent = (props) => {
                         <br />
                         <span>
                             {limitString(customer_loc_code, 64)}
-                            ...
                         </span>
                     </div>
                     <div className={styles.user}>
                         <span className={styles.textBold}>Channel Code</span>
                         <br />
-                        <span>{channel_code}</span>
+                        <span>{limitString(channel_code, 64)}</span>
                     </div>
                     <div className={styles.user}>
                         <a href="#" onClick={() => router.push('/useredit')}>Edit</a>
