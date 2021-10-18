@@ -97,11 +97,12 @@ const useStyles = makeStyles((theme) => ({
     spanStart: {
         color: colorPurple,
         margin: 0,
-        fontWeight: 100,
+        fontWeight: 400,
         fontSize: 13,
         textDecoration: 'underline',
         textAlign: 'right',
         cursor: 'pointer',
+        fontFamily: font,
     },
     loading: {
         position: 'absolute',

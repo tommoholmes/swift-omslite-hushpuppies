@@ -81,7 +81,7 @@ const PickByWaveListContent = (props) => {
                     <span>
                         {checked.length}
                         {' '}
-                        Shipment selected
+                        Order selected
                     </span>
                 </div>
             </div>

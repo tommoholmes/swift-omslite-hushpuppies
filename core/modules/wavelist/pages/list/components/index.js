@@ -13,7 +13,6 @@ const PickByWaveListContent = (props) => {
     const { data, loading, getPickByWaveList } = props;
     const PickByWaveList = (data && data.getPickByWaveList && data.getPickByWaveList.items) || [];
     const PickByWaveTotal = (data && data.getPickByWaveList && data.getPickByWaveList.total_count) || 0;
-    const [statusFilter, setStatusFilter] = React.useState('');
 
     const columns = [
         { field: 'entity_id', headerName: 'Wave Number', sortable: true, initialSort: 'DESC', hideable: true },
@@ -40,7 +39,6 @@ const PickByWaveListContent = (props) => {
                     style={{ width: 228 }}
                     value={optionsStatus.find((e) => e.id === filterValue)}
                     onChange={(newValue) => {
-                        setStatusFilter(newValue && newValue.id);
                         setTimeout(() => { setFilterValue(newValue && newValue.id); }, 500);
                     }}
                     options={optionsStatus}
@@ -50,9 +48,9 @@ const PickByWaveListContent = (props) => {
         {
             field: 'status',
             name: 'status',
-            type: 'neq',
+            type: 'nin',
             label: 'Status',
-            initialValue: statusFilter ? '' : 'pick_complete',
+            initialValue: ['pick_complete', 'pack_in_progress', 'pack_complete '],
             hidden: true,
         },
     ];
@@ -93,7 +91,6 @@ const PickByWaveListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={PickByWaveTotal}
-                handleReset={() => setStatusFilter('')}
                 header={() => (
                     <Header />
                 )}

@@ -34,6 +34,12 @@ const ContentWrapper = (props) => {
         shipping: packlist.channel_shipping_label,
     };
 
+    const [packShipment] = gqlService.packShipment({
+        variables: {
+            id: [Number(packList.id)],
+        },
+    });
+
     const [donePickByWavePacking] = gqlService.donePickByWavePacking({
         variables: {
             id: Number(packList.pick_id),
@@ -56,8 +62,9 @@ const ContentWrapper = (props) => {
         },
     });
 
-    const handleDone = () => {
+    const handleDone = async () => {
         window.backdropLoader(true);
+        await packShipment();
         donePickByWavePacking();
     };
 
@@ -83,7 +90,7 @@ const Core = (props) => {
 
     if (loading) {
         return (
-            <Layout>
+            <Layout useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
                     Loading . . .
                 </div>
@@ -93,7 +100,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>
+            <Layout useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
                     No records to display
                 </div>
@@ -102,7 +109,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

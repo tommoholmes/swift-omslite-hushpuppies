@@ -105,7 +105,14 @@ const BatchListPickListContent = (props) => {
                             </div>
                             <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
                                 {e.is_confirmed ? (
-                                    <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                    e.qty_picked === e.qty_to_pick
+                                        ? <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                        : (
+                                            <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+
+                                                <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                            </a>
+                                        )
                                 )
                                     : (
                                         <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>

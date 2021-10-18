@@ -2,6 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const colorPurple = '#BE1F93';
 const colorText = '#435179';
+const borderColor = '#DDE1EC';
+const colorGray = '#B1BCDB';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -57,6 +59,10 @@ const useStyles = makeStyles(() => ({
         fontSize: 18,
         justifyContent: 'left',
         paddingLeft: 26,
+        '&.disabled': {
+            borderColor,
+            background: colorGray,
+        },
         '@media (max-width: 767px )': {
             width: '100%',
         },

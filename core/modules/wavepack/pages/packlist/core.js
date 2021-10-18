@@ -73,7 +73,7 @@ const Core = (props) => {
 
     if (loading) {
         return (
-            <Layout>
+            <Layout useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
                     Loading . . .
                 </div>
@@ -83,7 +83,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>
+            <Layout useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
                     No records to display
                 </div>
@@ -92,7 +92,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );
