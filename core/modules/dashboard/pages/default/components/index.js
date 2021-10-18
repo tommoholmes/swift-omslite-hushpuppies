@@ -202,7 +202,7 @@ const DashboardContent = (props) => {
                             <span>Failed Order</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push('/pickpack/batchlist')}>Manage Order</a>
+                    <a className="link" href="#" onClick={() => router.push('/sales/orderqueue')}>Manage Order</a>
                 </div>
                 <div className={styles.boxInfo}>
                     <h3 className={clsx('colorGreen', styles.noMargin)}>Shipment</h3>
