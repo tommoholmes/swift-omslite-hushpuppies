@@ -128,9 +128,34 @@ export const exportOrderToCsv = gql`
     }
 `;
 
+export const bulkOrderReallocation = gql`
+    mutation bulkOrderReallocation(
+        $binary: String!,
+    ){
+        bulkOrderReallocation(
+            input: {
+                binary: $binary,
+            }
+        )
+    }
+`;
+
+export const downloadSampleCsv = gql`
+    mutation downloadSampleCsv(
+        $type: String!,
+    ){
+        downloadSampleCsv(
+            type: $type,
+        )
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
     setReallocation,
     isAccessAllowed,
+    exportOrderToCsv,
+    bulkOrderReallocation,
+    downloadSampleCsv,
 };

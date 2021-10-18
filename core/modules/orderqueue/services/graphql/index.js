@@ -29,10 +29,20 @@ export const exportOrderToCsv = (options) => useLazyQuery(Schema.exportOrderToCs
     ...options, ...context, ...fetchPolicy,
 });
 
+export const bulkOrderReallocation = (variables) => useMutation(Schema.bulkOrderReallocation, {
+    variables, ...context,
+});
+
+export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
+    variables, ...context,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
     setReallocation,
     isAccessAllowed,
     exportOrderToCsv,
+    bulkOrderReallocation,
+    downloadSampleCsv,
 };

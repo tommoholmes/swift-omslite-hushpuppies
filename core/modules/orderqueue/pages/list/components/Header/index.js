@@ -17,6 +17,12 @@ const HeaderContent = (props) => {
             >
                 Create Sales Channel
             </Button> */}
+            <Button
+                className={classes.buttonAdd}
+                onClick={() => router.push('/sales/orderqueue/import')}
+            >
+                Bulk Reallocation
+            </Button>
         </div>
     );
 };
