@@ -70,6 +70,7 @@ export const getOrderQueueById = gql`
                 telephone
             }
             channel_payment_method
+            channel_shipping_cost
             channel_shipping_method
             channel_name
             channel_order_status
@@ -109,6 +110,20 @@ export const isAccessAllowed = gql`
     ){
         isAccessAllowed(
             acl_code: $acl_code
+        )
+    }
+`;
+
+export const exportOrderToCsv = gql`
+    query exportOrderToCsv(
+        $id: [Int],
+        $filter: OrderFilterInput,
+        $sort: OrderSortInput,
+    ){
+        exportOrderToCsv(
+            id: $id,
+            filter: $filter,
+            sort: $sort,
         )
     }
 `;

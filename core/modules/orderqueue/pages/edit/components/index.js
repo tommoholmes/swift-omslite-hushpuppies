@@ -204,11 +204,18 @@ const OrderQueueEditContent = (props) => {
                     </div>
                     <div className={classes.contentLeft}>
                         <h5 className={classes.title}>Order Totals</h5>
-                        <span className={classes.orderLabel}>Grand Total</span>
-                        <span className={classes.grandTotal}>
-                            {' '}
-                            {convertToRupiah(orderQueue.grandTotal)}
-                        </span>
+                        <table className={classes.table}>
+                            <tbody>
+                                <tr className={classes.tr}>
+                                    <th className={classes.th}>Shipping Cost</th>
+                                    <td className={classes.td}>{convertToRupiah(orderQueue.shippingCost)}</td>
+                                </tr>
+                                <tr>
+                                    <th className={classes.th}>Grand Total</th>
+                                    <td className={classes.td}>{convertToRupiah(orderQueue.grandTotal)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </Paper>

@@ -69,6 +69,7 @@ const ContentWrapper = (props) => {
         channelShippingMethod: orderqueue.channel_shipping_method,
         orderItem: orderqueue.order_item,
         errorLog: orderqueue.error_log,
+        shippingCost: orderqueue.channel_shipping_cost,
         grandTotal: orderqueue.channel_grand_total,
     };
 
@@ -81,7 +82,6 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
-            console.log(values);
         },
     });
 
@@ -94,7 +94,6 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
-            console.log(values);
         },
     });
 

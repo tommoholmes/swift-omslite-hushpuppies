@@ -90,7 +90,9 @@ const CustomTable = (props) => {
         handleClickRow = null,
         handleReset,
         handleExport,
+        varExport,
         setVarExport,
+        exportWithId,
     } = props;
 
     // hooks
@@ -175,6 +177,15 @@ const CustomTable = (props) => {
             variant: 'error',
         });
     };
+
+    React.useEffect(() => {
+        if (exportWithId === true) {
+            const variables = checkedRows && checkedRows.map((checkedRow) => checkedRow.id);
+            const prevState = varExport;
+            prevState.id = variables;
+            setVarExport(prevState);
+        }
+    }, [checkedRows]);
 
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
@@ -322,6 +333,13 @@ const CustomTable = (props) => {
     };
 
     const renderTableHeader = () => {
+        const getIdsForExport = (newCheckedRows) => {
+            const variables = newCheckedRows.map((checkedRow) => checkedRow.id);
+            const prevState = varExport;
+            prevState.id = variables;
+            setVarExport(prevState);
+        };
+
         const handleChangeCheckboxAllRows = (checked) => {
             const newCheckedRows = rows.reduce((accumulator, currentValue) => {
                 const i = accumulator.findIndex((checkedRow) => checkedRow[primaryKey] === currentValue[primaryKey]);
@@ -332,9 +350,13 @@ const CustomTable = (props) => {
                 }
                 return accumulator;
             }, checkedRows);
+            if (exportWithId === true) {
+                getIdsForExport(newCheckedRows);
+            }
             setCheckedRows(newCheckedRows);
             setIsCheckedAllRows(checked);
         };
+
         const setSortByField = (field) => {
             setSorts(sorts.map((sort) => ({
                 ...sort,

@@ -25,9 +25,14 @@ export const isAccessAllowed = (variables) => useQuery(Schema.isAccessAllowed, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const exportOrderToCsv = (options) => useLazyQuery(Schema.exportOrderToCsv, {
+    ...options, ...context, ...fetchPolicy,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
     setReallocation,
     isAccessAllowed,
+    exportOrderToCsv,
 };

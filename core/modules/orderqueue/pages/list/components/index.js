@@ -11,7 +11,7 @@ import useStyles from '@modules/orderqueue/pages/list/components/style';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getOrderQueueList, setReallocation, handleExport, setVarExport } = props;
+    const { data, loading, getOrderQueueList, setReallocation, varExport, handleExport, setVarExport } = props;
     const orderQueueList = (data && data.getOrderQueueList && data.getOrderQueueList.items) || [];
     const orderQueueTotal = (data && data.getOrderQueueList && data.getOrderQueueList.total_count) || 0;
     const [getOrderQueueListx, getOrderQueueListRes] = orderQueueGqlService.getOrderQueueList();
@@ -199,7 +199,9 @@ const OrderQueueListContent = (props) => {
                 count={orderQueueTotal}
                 showCheckbox
                 handleExport={handleExport}
+                varExport={varExport}
                 setVarExport={setVarExport}
+                exportWithId
             />
         </>
     );
