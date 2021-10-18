@@ -214,7 +214,7 @@ const DashboardContent = (props) => {
                                 {' '}
                                 {summaryData.shipment_unconfirmed_total}
                                 {' '}
-                                orders to fullfill
+                                orders to confirm
                             </b>
                             {' '}
                             and
