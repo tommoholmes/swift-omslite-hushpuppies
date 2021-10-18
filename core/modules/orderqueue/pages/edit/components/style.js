@@ -48,17 +48,22 @@ const useStyles = makeStyles((theme) => ({
         borderBottom: '1px solid #DDE1EC',
     },
     btn: {
-        borderRadius: 20,
-        backgroundColor: '#ffffff',
-        color: colorPurple,
-        boxShadow: 'none',
-        border: '1px solid',
-        borderColor: colorPurple,
-        letterSpacing: 0,
-        textTransform: 'capitalize',
-        padding: '0 10px',
-        '&:hover': {
-            background: 'transparent',
+        '&.set-as-button': {
+            borderRadius: 20,
+            backgroundColor: '#ffffff',
+            color: colorPurple,
+            boxShadow: 'none',
+            border: '1px solid',
+            borderColor: colorPurple,
+            letterSpacing: 0,
+            textTransform: 'capitalize',
+            padding: '0 10px',
+            '& span': {
+                paddingRight: '0px',
+            },
+            '&:hover': {
+                background: 'transparent',
+            },
         },
     },
     content: {

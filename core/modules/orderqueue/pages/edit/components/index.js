@@ -74,7 +74,7 @@ const OrderQueueEditContent = (props) => {
                                             {(orderQueue.errorLog === 'Allocation not found') ? (
                                                 <td className={classes.td}>
                                                     <Button
-                                                        className={classes.btn}
+                                                        className={clsx(classes.btn, 'set-as-button')}
                                                         onClick={formikAllocation.handleSubmit}
                                                         variant="contained"
                                                     >
@@ -84,7 +84,7 @@ const OrderQueueEditContent = (props) => {
                                             ) : (
                                                 <td className={classes.td}>
                                                     <Button
-                                                        className={classes.btn}
+                                                        className={clsx(classes.btn, 'set-as-button')}
                                                         onClick={formikNew.handleSubmit}
                                                         variant="contained"
                                                     >
