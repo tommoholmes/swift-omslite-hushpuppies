@@ -47,7 +47,8 @@ export const getOrderQueueById = gql`
             channel_order_increment_id
             channel_code
             email
-            customer_group    
+            customer_group
+            custom_order_attributes
             billing_address {
                 firstname
                 lastname
@@ -69,6 +70,7 @@ export const getOrderQueueById = gql`
                 telephone
             }
             channel_payment_method
+            channel_shipping_cost
             channel_shipping_method
             channel_name
             channel_order_status
@@ -81,6 +83,8 @@ export const getOrderQueueById = gql`
                 qty
                 discount_amount
                 loc_code
+                pickup_name
+                replacement_for
             }
             oms_order_status
             channel_grand_total
@@ -100,8 +104,33 @@ export const setReallocation = gql`
     }
 `;
 
+export const isAccessAllowed = gql`
+    query isAccessAllowed(
+        $acl_code: String!,
+    ){
+        isAccessAllowed(
+            acl_code: $acl_code
+        )
+    }
+`;
+
+export const exportOrderToCsv = gql`
+    query exportOrderToCsv(
+        $id: [Int],
+        $filter: OrderFilterInput,
+        $sort: OrderSortInput,
+    ){
+        exportOrderToCsv(
+            id: $id,
+            filter: $filter,
+            sort: $sort,
+        )
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
     setReallocation,
+    isAccessAllowed,
 };
