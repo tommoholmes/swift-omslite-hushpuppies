@@ -15,6 +15,7 @@ const ScanItemContent = (props) => {
         data, loading, autoGenerate,
     } = props;
     const classes = useStyles();
+    const disabledButton = loading || data.getSummaryShipmentToPick.total_shipments === 0;
     return (
         <>
             <h2 className={clsx(classes.h2, 'title')}>Pick by Wave</h2>
@@ -30,6 +31,7 @@ const ScanItemContent = (props) => {
                     </p>
                     <Button
                         className={classes.btn}
+                        disabled={disabledButton}
                         variant="contained"
                         buttonType="primary-rounded"
                         onClick={() => { autoGenerate(); }}
@@ -41,6 +43,7 @@ const ScanItemContent = (props) => {
                     <div style={{ height: 18 }} />
                     <Button
                         className={classes.btn}
+                        disabled={disabledButton}
                         variant="contained"
                         buttonType="primary-rounded"
                         onClick={() => Router.push('/pickpack/wavecreate/manualorder')}

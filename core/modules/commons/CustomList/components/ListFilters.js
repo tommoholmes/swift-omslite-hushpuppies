@@ -75,7 +75,6 @@ const ListFilters = (props) => {
                     onClick={async () => {
                         if (!emptyFiltersField) {
                             const resetedFilters = await initialFilters.map((filter) => ({ ...filter, value: filter.initialValue }));
-                            console.log({ initialFilters }, { resetedFilters });
                             setFilters(resetedFilters);
                             setParentFilters(resetedFilters);
                             handleReset();

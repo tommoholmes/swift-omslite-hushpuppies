@@ -174,7 +174,7 @@ const useStyles = makeStyles((theme) => ({
     },
     spanStart: {
         color: colorPurple,
-        fontWeight: 100,
+        fontWeight: 400,
         fontSize: 9,
         textDecoration: 'underline',
     },

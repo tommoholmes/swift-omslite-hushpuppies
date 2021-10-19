@@ -29,6 +29,10 @@ export const donePickByWavePacking = (options) => useMutation(Schema.donePickByW
     ...options, ...context,
 });
 
+export const packShipment = (options) => useMutation(Schema.packShipment, {
+    ...options, ...context,
+});
+
 export const updatePickByWaveQtyPacked = (options) => useMutation(Schema.updatePickByWaveQtyPacked, {
     ...options, ...context,
 });
@@ -38,6 +42,7 @@ export default {
     getPickByWavePacklist,
     startPickByWavePacking,
     getPackList,
+    packShipment,
     donePickByWavePacking,
     updatePickByWaveQtyPacked,
 };

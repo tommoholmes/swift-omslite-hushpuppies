@@ -140,10 +140,17 @@ mutation updatePickByWaveQtyPacked(
   }
 `;
 
+export const packShipment = gql`
+mutation packShipment($id: [Int!]){
+  packShipment(id: $id)
+}
+`;
+
 export default {
     getPickByWaveList,
     getPickByWavePacklist,
     getPackList,
+    packShipment,
     donePickByWavePacking,
     updatePickByWaveQtyPacked,
 };

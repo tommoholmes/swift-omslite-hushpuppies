@@ -90,6 +90,8 @@ const useStyles = makeStyles((theme) => ({
         color: colorGray,
         fontSize: 10,
         fontWeight: 400,
+        marginTop: 0,
+        marginBottom: 5,
     },
     bodyList: {
         fontSize: 13,
@@ -107,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     spanStart: {
         color: colorPurple,
         margin: 0,
-        fontWeight: 100,
+        fontWeight: 400,
         fontSize: 13,
         textDecoration: 'underline',
         textAlign: 'right',
@@ -126,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     checkmark: {
         position: 'absolute',
         right: 5,
-        top: 50,
+        top: 22,
         backgroundColor: colorGreen,
         height: 20,
         width: 20,
@@ -147,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
     exclamation: {
         position: 'absolute',
         right: 5,
-        top: 50,
+        top: 22,
         backgroundColor: colorRed,
         height: 20,
         width: 20,
@@ -269,7 +271,7 @@ const useStyles = makeStyles((theme) => ({
     spanBack: {
         color: colorPurple,
         margin: 0,
-        fontWeight: 100,
+        fontWeight: 400,
         fontSize: 14,
         textDecoration: 'underline',
         cursor: 'pointer',

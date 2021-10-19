@@ -78,6 +78,7 @@ const CustomList = (props) => {
         handleClickRow,
         handleChecked = () => {},
         count,
+        usePagination = false,
     } = props;
     // hooks
     const classes = useStyles();
@@ -298,7 +299,7 @@ const CustomList = (props) => {
                     </div>
                 ))
                     : <div className={classes.loading}>No records to display</div>}
-            {count > rowsPerPage
+            {usePagination && count > rowsPerPage
                 ? <Pagination count={count / rowsPerPage} page={page} onChange={() => { setPage(page + 1); }} />
                 : null}
         </div>

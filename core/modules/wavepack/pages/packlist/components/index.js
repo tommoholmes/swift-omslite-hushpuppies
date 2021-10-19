@@ -71,8 +71,9 @@ const BatchListPickListContent = (props) => {
                         <div className={classes.gridList}>
                             <div className={clsx(classes.divList, 'start')}>
                                 <h5 className={clsx(classes.bodyList, 'left')}>
-                                    Shipment #
+                                    Shipment
                                     {' '}
+                                    #
                                     {list.shipment_inc_id}
                                 </h5>
                             </div>
