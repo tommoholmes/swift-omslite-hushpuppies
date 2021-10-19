@@ -14,8 +14,8 @@ const PickByBatchListContent = (props) => {
     const PickByBatchTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
-        { field: 'channel_order_date', headerName: 'Date', hideable: true },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Date', initialSort: 'ASC', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
     ];
 
