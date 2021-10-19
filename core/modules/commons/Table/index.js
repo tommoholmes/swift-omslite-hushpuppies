@@ -40,7 +40,7 @@ const getComponentOrString = (param) => (
 const useColumns = (initialColumns) => {
     const _initialColumns = initialColumns.map((column) => ({
         ...column,
-        hidden: false,
+        hidden: column.hidden ? column.hidden : false,
     }));
     const [columns, setColumns] = React.useState(_initialColumns);
     const [hiddenColumns, setHiddenColumns] = React.useState(_initialColumns);

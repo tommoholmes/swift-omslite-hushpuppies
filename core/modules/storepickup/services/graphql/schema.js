@@ -19,6 +19,9 @@ query getStoreShipment(
             channel_order_increment_id
             allocation_status
             channel_order_date
+            location {
+                loc_name
+            }
             status{
                 value
                 label
@@ -83,10 +86,8 @@ query getStoreShipmentId(
         }
         pickup_info {
             name
-            loc_details
-            vehicle_number
-            vehicle_desc
-            notes
+            email
+            phone
         }
         order_item {
             sku
@@ -175,6 +176,15 @@ export const pickedupShipment = gql`
     }
 `;
 
+export const getShipmentStatusByType = gql`
+    query{
+        getShipmentStatusByType(type: "store_pickup"){
+            label
+            value
+        }
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getShipmentById,
@@ -184,4 +194,5 @@ export default {
     packShipmentPickup,
     pickedupShipment,
     saveShipmentNotes,
+    getShipmentStatusByType,
 };

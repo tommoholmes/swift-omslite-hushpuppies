@@ -41,6 +41,10 @@ export const saveShipmentNotes = (variables) => useMutation(Schema.saveShipmentN
     variables, ...context,
 });
 
+export const getShipmentStatusByType = (variables) => useQuery(Schema.getShipmentStatusByType, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getStoreShipmentList,
     getShipmentById,
@@ -50,4 +54,5 @@ export default {
     packShipment,
     pickedupShipment,
     saveShipmentNotes,
+    getShipmentStatusByType,
 };

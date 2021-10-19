@@ -6,10 +6,28 @@ const Core = (props) => {
         Content,
     } = props;
 
+    const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmShipment] = gqlService.confirmShipment();
     const [pickShipment] = gqlService.pickShipment();
     const [packShipment] = gqlService.packShipment();
+
+    if (loadingOptionStatus) {
+        return (
+            <Layout useBreadcrumbs={false}>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading
+                </div>
+            </Layout>
+        );
+    }
 
     const contentProps = {
         getStoreShipmentList,
@@ -18,6 +36,7 @@ const Core = (props) => {
         packShipment,
         data,
         loading,
+        optionsStatus: optionsStatus.getShipmentStatusByType,
     };
 
     return (

@@ -42,7 +42,7 @@ const StorePickupEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                {`Store Pickup # ${storePickup.shipmentNumber}`}
+                {`Store Pickup #${storePickup.shipmentNumber}`}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>
@@ -54,15 +54,15 @@ const StorePickupEditContent = (props) => {
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Order Date
+                            Channel Order Date
                         </h5>
                         <span className="spanHeader">{storePickup.date}</span>
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Shipped From
+                            Pickup At
                         </h5>
-                        <span className="spanHeader">{storePickup.location || 'kosong'}</span>
+                        <span className="spanHeader">{storePickup.location || '-'}</span>
                     </div>
                 </div>
                 <div className={classes.content}>
@@ -81,7 +81,7 @@ const StorePickupEditContent = (props) => {
                                 <div className="step line">
                                     <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
                                     <div className={classes.statusLabelActive}>
-                                        Process for Pack
+                                        {storePickup.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
                                     </div>
                                 </div>
                                 <div className="step line">
@@ -107,14 +107,14 @@ const StorePickupEditContent = (props) => {
                                         <>
                                             <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
                                             <div className={classes.statusLabelInactive}>
-                                                Ready for Pick
+                                                Ready for Pickup
                                             </div>
                                         </>
                                     ) : (
                                         <>
                                             <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
                                             <div className={classes.statusLabelActive}>
-                                                Ready for Pick
+                                                Ready for Pickup
                                             </div>
                                         </>
                                     )}
@@ -145,7 +145,8 @@ const StorePickupEditContent = (props) => {
                     <hr />
                     <div className={classes.printProgress}>
 
-                        {(storePickup.statusValue === 'process_for_shipping')
+                        {(storePickup.statusValue === 'process_for_shipping' || storePickup.statusValue === 'pick_in_progress'
+                        || storePickup.statusValue === 'pick_uncomplete')
                             && (storePickup.allocation !== 'cannot_fulfill') && (
                             <>
                                 <div className={classes.progressTitle}>
@@ -167,7 +168,7 @@ const StorePickupEditContent = (props) => {
                                                 style={{ marginRight: 10 }}
                                             >
                                                 <CheckIcon style={{ marginRight: 10 }} />
-                                                Confirm Order
+                                                Confirm
                                             </Button>
                                             <Button
                                                 className={classes.btn}
@@ -191,7 +192,7 @@ const StorePickupEditContent = (props) => {
                                             >
                                                 Print Pick List
                                             </Button>
-                                            <Button
+                                            {/* <Button
                                                 className={clsx(classes.btn)}
                                                 onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
                                                 variant="contained"
@@ -199,7 +200,7 @@ const StorePickupEditContent = (props) => {
                                                 buttonType="outlined-rounded"
                                             >
                                                 Print Shipping Label
-                                            </Button>
+                                            </Button> */}
                                             <Button
                                                 className={classes.btn}
                                                 onClick={formikPicked.handleSubmit}
@@ -224,7 +225,7 @@ const StorePickupEditContent = (props) => {
                                 <div className={classes.formFieldButton}>
                                     <Button
                                         className={classes.btn}
-                                        onClick={() => router.push('/shipment/storepickup')}
+                                        onClick={() => router.push(`/sales/orderreallocation/edit/${storePickup.id}`)}
                                         variant="contained"
                                     >
                                         Reallocating Order
@@ -242,14 +243,14 @@ const StorePickupEditContent = (props) => {
                                 <div className={classes.formFieldButton}>
                                     <Button
                                         className={classes.btn}
-                                        onClick={() => window.open(`/printoms/pick/${storePickup.id}`)}
+                                        onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
                                         buttonType="outlined-rounded"
                                         variant="contained"
                                         style={{ marginRight: 10 }}
                                     >
-                                        Print Pick List
+                                        Print Pack List
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         className={classes.btn}
                                         onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
                                         variant="contained"
@@ -257,7 +258,7 @@ const StorePickupEditContent = (props) => {
                                         style={{ marginRight: 10 }}
                                     >
                                         Print Shipping Label
-                                    </Button>
+                                    </Button> */}
                                     <br />
                                     <Button
                                         className={classes.btn}
@@ -362,10 +363,8 @@ const StorePickupEditContent = (props) => {
                             {(storePickup.pickup) ? (
                                 <>
                                     <span className={classes.orderLabel}>{storePickup.pickup.name || '-'}</span>
-                                    <span className={classes.orderLabel}>{storePickup.pickup.loc_details || '-'}</span>
-                                    <span className={classes.orderLabel}>{storePickup.pickup.vehice_number || '-'}</span>
-                                    <span className={classes.orderLabel}>{storePickup.pickup.vehicle_desc || '-'}</span>
-                                    <span className={classes.orderLabel}>{storePickup.pickup.notes || '-'}</span>
+                                    <span className={classes.orderLabel}>{storePickup.pickup.email || '-'}</span>
+                                    <span className={classes.orderLabel}>{storePickup.pickup.phone || '-'}</span>
                                 </>
                             ) : <span className={classes.orderLabel}>-</span>}
                         </div>
@@ -447,7 +446,6 @@ const StorePickupEditContent = (props) => {
                             type="submit"
                             onClick={formikNotes.handleSubmit}
                             variant="contained"
-                            disabled={!formikNotes.values.notes}
                         >
                             Save
                         </Button>
