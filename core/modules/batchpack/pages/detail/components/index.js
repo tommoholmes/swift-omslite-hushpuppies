@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -65,15 +66,13 @@ const BatchListPickListContent = (props) => {
             <Paper className={classes.container}>
                 <div className={classes.headerContent}>
                     <div style={{ marginBottom: 10 }}>
-                        <span className={getValueStatus(packList.statusLabel || packList.statusValue)}>
+                        <span style={{ display: 'inline-block', width: '70%' }} className={getValueStatus(packList.statusLabel || packList.statusValue)}>
                             {packList.statusLabel || packList.statusValue}
                         </span>
+                        <span>{`Batch #${packList.pick_id || '-'}`}</span>
                     </div>
                     <div>
-                        <span>{`Batch: ${packList.pick_id || '-'}`}</span>
-                    </div>
-                    <div>
-                        <span>{`Slot: ${packList.slot || '-'}`}</span>
+                        <span style={{ fontSize: 18 }}>{`Slot: ${packList.slot || '-'}`}</span>
                     </div>
                     <div style={{ marginBottom: 10 }}>
                         <span>{`Order: #${packList.shipmentId}`}</span>

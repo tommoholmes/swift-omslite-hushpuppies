@@ -8,13 +8,14 @@ import Router from 'next/router';
 
 const PickByBatchListContent = (props) => {
     const classes = useStyles();
+    const [checked, setChecked] = React.useState([]);
     const { data, loading, getStoreShipmentList } = props;
     const PickByBatchList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const PickByBatchTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
-        { field: 'channel_order_date', headerName: 'Date', hideable: true },
+        { field: 'increment_id', headerName: 'Shipment Number', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Date', initialSort: 'ASC', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
     ];
 
@@ -113,7 +114,30 @@ const PickByBatchListContent = (props) => {
                     <Header />
                 )}
                 handleClickRow={(id) => Router.push(`/pickpack/batchpack/detail/${id}`)}
+                handleChecked={setChecked}
             />
+            <div className={classes.footer}>
+                {(checked.length !== 0) ? (
+                    <button
+                        className={classes.btnFooter}
+                        type="submit"
+                        onClick={() => {
+                            const idPrint = checked.map((checkedRow) => checkedRow.id);
+                            window.open(`/printoms/pack/${ idPrint.toString().replace(/,/g, '/')}`);
+                        }}
+                    >
+                        Print Pack List
+                    </button>
+                ) : (
+                    <button
+                        className={classes.btnFooterDisabled}
+                        type="submit"
+                        disabled
+                    >
+                        Print Pack List
+                    </button>
+                )}
+            </div>
         </>
     );
 };

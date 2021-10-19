@@ -128,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     checkmark: {
         position: 'absolute',
         right: 5,
-        top: 50,
+        top: 22,
         backgroundColor: colorGreen,
         height: 20,
         width: 20,
@@ -149,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
     exclamation: {
         position: 'absolute',
         right: 5,
-        top: 50,
+        top: 22,
         backgroundColor: colorRed,
         height: 20,
         width: 20,
