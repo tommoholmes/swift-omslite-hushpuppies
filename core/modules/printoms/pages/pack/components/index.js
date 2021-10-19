@@ -40,19 +40,30 @@ const PrintPickContent = (props) => {
                                 <img className="imgIcon" alt="" src="/assets/img/swiftoms_logo_expanded.png" />
                                 <h2 className={classes.titleTop}>{packList.title}</h2>
                             </div>
-                            <div className={classes.content}>
-                                <h5 className={classes.titleSmall}>
-                                    Shipment Date :
-                                    {eParent.created_at}
-                                </h5>
-                                <h5 className={classes.titleSmall}>
-                                    Shipment Number :
-                                    {eParent.increment_id}
-                                </h5>
-                                <h5 className={classes.titleSmall}>
-                                    Channel Order Number :
-                                    {eParent.channel_order_increment_id}
-                                </h5>
+                            <div className={clsx(classes.content, classes.wrapperColumn)}>
+                                <div className="column">
+                                    <h5 className={classes.titleSmall}>
+                                        Shipment Date :
+                                        {eParent.created_at}
+                                    </h5>
+                                    <h5 className={classes.titleSmall}>
+                                        Shipment Number :
+                                        {eParent.increment_id}
+                                    </h5>
+                                    <h5 className={classes.titleSmall}>
+                                        Channel Order Number :
+                                        {eParent.channel_order_increment_id}
+                                    </h5>
+                                </div>
+                                <div className="column">
+                                    {eParent.slot_no.map((slotArray) => (
+                                        <h5 className={classes.titleSmall}>
+                                            {(slotArray) && (
+                                                <>{`Slot ${slotArray}`}</>
+                                            )}
+                                        </h5>
+                                    ))}
+                                </div>
                             </div>
                             <div className={clsx(classes.content, classes.wrapperColumn)}>
                                 <div className="column">
@@ -82,9 +93,9 @@ const PrintPickContent = (props) => {
                                     </h5>
                                 </div>
                                 <div className="column">
-                                    <h2 className={classes.title}>Pickup info</h2>
-                                    {(eParent.pickup_info) && (
+                                    {(eParent.is_pickup === 1) && (
                                         <>
+                                            <h2 className={classes.title}>Pickup info</h2>
                                             <h5 className={classes.titleSmall}>
                                                 {eParent.pickup_info.name}
                                             </h5>
@@ -102,6 +113,34 @@ const PrintPickContent = (props) => {
                                             </h5>
                                             <h5 className={classes.titleSmall}>
                                                 {eParent.pickup_info.notes}
+                                            </h5>
+                                        </>
+                                    )}
+                                    {(eParent.is_pickup === 0) && (
+                                        <>
+                                            <h2 className={classes.title}>Ship To</h2>
+                                            <h5 className={classes.titleSmall}>
+                                                {eParent.shipping_address.firstname}
+                                                {' '}
+                                                {eParent.shipping_address.lastname}
+                                            </h5>
+                                            <h5 className={classes.titleSmall}>
+                                                {eParent.shipping_address.street}
+                                            </h5>
+                                            <h5 className={classes.titleSmall}>
+                                                {eParent.shipping_address.city}
+                                                ,
+                                                {eParent.shipping_address.region}
+                                                ,
+                                                {eParent.shipping_address.city}
+                                            </h5>
+                                            <h5 className={classes.titleSmall}>
+                                                {eParent.shipping_address.postcode}
+                                                ,
+                                                {eParent.shipping_address.country_name}
+                                            </h5>
+                                            <h5 className={classes.titleSmall}>
+                                                {eParent.shipping_address.telephone}
                                             </h5>
                                         </>
                                     )}

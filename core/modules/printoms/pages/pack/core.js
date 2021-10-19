@@ -17,6 +17,7 @@ const ContentWrapper = (props) => {
         checkedBy: packlist.checked_by,
         approvedBy: packlist.approved_by,
         receivedBy: packlist.received_by,
+        slot: ['10', '22', '55'],
 
     };
 

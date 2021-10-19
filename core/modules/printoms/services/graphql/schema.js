@@ -39,6 +39,7 @@ export const getPackList = gql`
                     country_name
                     telephone
                 }
+                is_pickup
                 pickup_info {
                     created_at
                     name
@@ -54,6 +55,8 @@ export const getPackList = gql`
                     name
                     qty
                 }
+                slot_no
+                pick_id
             }
             created_by
             checked_by
