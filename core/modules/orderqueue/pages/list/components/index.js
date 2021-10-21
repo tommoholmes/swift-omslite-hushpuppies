@@ -8,6 +8,7 @@ import orderQueueGqlService from '@modules/orderqueue/services/graphql';
 import channelGqlService from '@modules/channel/services/graphql';
 import Header from '@modules/orderqueue/pages/list/components/Header';
 import useStyles from '@modules/orderqueue/pages/list/components/style';
+import { optionsStatus } from '@modules/orderqueue/helpers';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();
@@ -102,7 +103,21 @@ const OrderQueueListContent = (props) => {
         //         />
         //     ),
         // },
-        { field: 'oms_order_status', name: 'oms_order_status', type: 'like', label: 'OMS Status', initialValue: '' },
+        {
+            field: 'status',
+            name: 'status',
+            type: 'match',
+            label: 'Queue Status',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsStatus.find((e) => e.idValue === filterValue)}
+                    onChange={(newValue) => setFilterValue(newValue && newValue.idValue)}
+                    options={optionsStatus}
+                />
+            ),
+        },
         { field: 'error_log', name: 'error_log', type: 'like', label: 'Error Log', initialValue: '' },
     ];
 
