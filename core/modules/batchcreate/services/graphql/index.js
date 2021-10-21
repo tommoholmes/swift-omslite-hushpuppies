@@ -12,7 +12,17 @@ const fetchPolicy = {
 export const getSummaryShipmentToPick = (variables) => useLazyQuery(Schema.getSummaryShipmentToPick, { variables, ...context, ...fetchPolicy });
 export const createPickByBatch = (variables) => useMutation(Schema.createPickByBatch, { variables, ...context });
 
+export const getStoreShipmentList = (variables) => useLazyQuery(Schema.getStoreShipmentList, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const createPickByBatchManually = (variables) => useMutation(Schema.createPickByBatchManually, {
+    variables, ...context,
+});
+
 export default {
     getSummaryShipmentToPick,
     createPickByBatch,
+    getStoreShipmentList,
+    createPickByBatchManually,
 };

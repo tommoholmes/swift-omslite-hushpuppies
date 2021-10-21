@@ -89,7 +89,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

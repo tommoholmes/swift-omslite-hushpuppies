@@ -25,6 +25,7 @@ const ScanItemContent = (props) => {
     };
 
     const [getSummaryShipmentToPick, getSummaryShipmentToPickRes] = gqlService.getSummaryShipmentToPick();
+    const disabledButton = getSummaryShipmentToPickRes?.data?.getSummaryShipmentToPick.total_shipments === 0;
 
     useEffect(() => {
         getSummaryShipmentToPick();
@@ -70,11 +71,7 @@ const ScanItemContent = (props) => {
                         onClick={() => {
                             setPickerOpen(true);
                         }}
-                        disabled={
-                            getSummaryShipmentToPickRes
-                            && getSummaryShipmentToPickRes.data
-                            && getSummaryShipmentToPickRes.data.getSummaryShipmentToPick.total_shipments === 0
-                        }
+                        disabled={disabledButton}
                     >
                         <img className={classes.iconImg} src="/assets/img/user.svg" alt="" />
                         Create Batch by Picker
@@ -95,11 +92,7 @@ const ScanItemContent = (props) => {
                         onClick={() => {
                             setSkuOpen(true);
                         }}
-                        disabled={
-                            getSummaryShipmentToPickRes
-                            && getSummaryShipmentToPickRes.data
-                            && getSummaryShipmentToPickRes.data.getSummaryShipmentToPick.total_shipments === 0
-                        }
+                        disabled={disabledButton}
                     >
                         <img className={classes.iconImg} src="/assets/img/icon-tag.svg" alt="" />
                         Create Batch by Sku
@@ -122,7 +115,8 @@ const ScanItemContent = (props) => {
                         className={classes.btn}
                         variant="contained"
                         buttonType="primary-rounded"
-                        onClick={() => Router.push('/pickpack/wavecreate/manualorder')}
+                        onClick={() => Router.push('/pickpack/batchcreate/manualorder')}
+                        disabled={disabledButton}
                     >
                         <img className={classes.iconImg} src="/assets/img/search_box.svg" alt="" />
                         Select Order Manually

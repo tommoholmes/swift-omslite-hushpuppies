@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const textColor = '#435179';
-const titleFont = 'normal normal bold 30px/37px Roboto';
+const titleFont = 'normal normal bold 30px/37px "Roboto", "Helvetica", "Arial", sans-serif';
 const colorPurple = '#BE1F93';
-const textFont = 'normal normal normal 14px/17px Roboto';
+const textFont = 'normal normal normal 14px/17px "Roboto", "Helvetica", "Arial", sans-serif';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
