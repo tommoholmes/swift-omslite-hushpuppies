@@ -445,7 +445,7 @@ const Layout = (props) => {
                 {showHeader() && useBreadcrumbs && (
                     <Hidden smUp implementation="css">
                         {/* <Breadcrumb data={getBreadcrumbData()} /> */}
-                        <div style={{ height: 10 }} />
+                        <div style={{ height: 25 }} />
                     </Hidden>
                 )}
                 {children}
