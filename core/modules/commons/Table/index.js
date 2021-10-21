@@ -40,7 +40,7 @@ const getComponentOrString = (param) => (
 const useColumns = (initialColumns) => {
     const _initialColumns = initialColumns.map((column) => ({
         ...column,
-        hidden: false,
+        hidden: column.hidden ? column.hidden : false,
     }));
     const [columns, setColumns] = React.useState(_initialColumns);
     const [hiddenColumns, setHiddenColumns] = React.useState(_initialColumns);
@@ -93,6 +93,7 @@ const CustomTable = (props) => {
         varExport,
         setVarExport,
         exportWithId,
+        indexType = 0,
     } = props;
 
     // hooks
@@ -136,7 +137,7 @@ const CustomTable = (props) => {
             filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = {
                     ...accumulator[currentValue.field],
-                    [currentValue.type]: currentValue.value,
+                    [typeof currentValue.type === 'object' ? currentValue.type[indexType[currentValue.name]] : currentValue.type]: currentValue.value,
                 };
                 return accumulator;
             }, {}),

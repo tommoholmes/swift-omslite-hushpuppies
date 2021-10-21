@@ -53,10 +53,8 @@ export const getOrderReallocationById = gql`
             created_at
             order_increment_id
             channel_order_increment_id
-            loc_code{
-                loc_code
-                loc_name
-            }
+            loc_code
+            loc_name
             company{
                 company_id
                 company_code

@@ -1,19 +1,22 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-param-reassign */
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Tabs from '@common_tabs';
-import { optionsAllocation, optionsStatus, dataTab } from '@modules/storepickup/helpers';
+import { dataTab, optionsAllocation } from '@modules/storepickup/helpers';
 import Header from '@modules/storepickup/pages/list/components/Header';
 import useStyles from '@modules/storepickup/pages/list/components/style';
 import clsx from 'clsx';
 
 const StorePickupListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment } = props;
+    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, optionsStatus } = props;
     const [tab, setTab] = React.useState(0);
+    const [indexType, setIndexType] = React.useState({
+        allocation_status: 0,
+    });
     const [load, setLoad] = React.useState(false);
 
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
@@ -22,13 +25,14 @@ const StorePickupListContent = (props) => {
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
-        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
-        { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
-        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Channel Order Date', hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
-        { field: 'email', headerName: 'Email/Mobile', hideable: true },
+        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'location', headerName: 'Location', sortable: true, hideable: true },
+        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true, hidden: true },
+        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
+        { field: 'email', headerName: 'Email/Mobile', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
     ];
 
@@ -38,14 +42,21 @@ const StorePickupListContent = (props) => {
         {
             field: 'allocation_status',
             name: 'allocation_status',
-            type: 'in',
+            type: ['in', 'null'],
             label: 'Allocation Status',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
-                    value={optionsAllocation.find((e) => e.name === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.name)}
+                    value={optionsAllocation.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => {
+                        if (newValue && newValue.id === 'true') {
+                            setIndexType({ ...indexType, allocation_status: 1 });
+                        } else {
+                            setIndexType({ ...indexType, allocation_status: 0 });
+                        }
+                        setFilterValue(newValue && newValue.id);
+                    }}
                     options={optionsAllocation}
                 />
             ),
@@ -56,24 +67,29 @@ const StorePickupListContent = (props) => {
             type: 'like',
             label: 'Status',
             initialValue: tab !== 0 ? tab : '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => {
-                        setTab(dataTab.find((e) => e.value === newValue.id) ? newValue.id : 0);
-                        setFilterValue(newValue && newValue.id);
-                    }}
-                    options={optionsStatus}
-                />
-            ),
+            component: ({ filterValue, setFilterValue }) => {
+                const options = optionsStatus.slice().map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={options.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => {
+                            setTab(dataTab.find((e) => e.value === newValue && newValue.id) || 0);
+                            setFilterValue(newValue && newValue.id);
+                        }}
+                        options={options}
+                    />
+                );
+            },
         },
-        { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Order Date', initialValue: '' },
-        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airwaybill Number', initialValue: '' },
+        { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Channel Order Date', initialValue: '' },
+        { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
-        { field: 'framework', name: 'framework', type: 'neq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
-        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '1', disabled: true },
-        { field: 'pickup_id', name: 'pickup_id', type: 'null', label: 'Pickup Id', class: 'fixed', initialValue: 'true', disabled: true },
+        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '1', hidden: true },
+        { field: 'pickup_id', name: 'pickup_id', type: 'null', label: 'Pickup Id', class: 'fixed', initialValue: 'true', hidden: true },
     ];
 
     const getIconByStatus = (status) => {
@@ -124,6 +140,7 @@ const StorePickupListContent = (props) => {
                 {storepickup.allocation_status?.split('_').join(' ') || 'Unconfirmed'}
             </div>
         ),
+        location: storepickup.location.loc_name || '-',
         track_number: storepickup.track_number || '-',
     }));
 
@@ -176,6 +193,13 @@ const StorePickupListContent = (props) => {
         setLoad(false);
     };
 
+    const handleReset = () => {
+        setIndexType({
+            allocation_status: 0,
+        });
+        setTab(0);
+    };
+
     return (
         <>
             <Header />
@@ -190,7 +214,8 @@ const StorePickupListContent = (props) => {
                     columns={columns}
                     count={storeShipmentTotal}
                     showCheckbox
-                    handleReset={() => setTab(0)}
+                    handleReset={() => handleReset()}
+                    indexType={indexType}
                 />
             )}
         </>

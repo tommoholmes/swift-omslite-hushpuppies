@@ -246,8 +246,8 @@ const ContentWrapper = (props) => {
             reference: '',
         },
         validationSchema: Yup.object().shape({
-            name: Yup.string().required('Required!'),
-            reference: Yup.string().required('Required!'),
+            name: Yup.string().required('Name is required!'),
+            reference: Yup.string().required('Reference is equired!'),
         }),
         onSubmit: (values) => {
             handlePickedUpShipment(values);
@@ -260,7 +260,7 @@ const ContentWrapper = (props) => {
             notes: '',
         },
         validationSchema: Yup.object().shape({
-            notes: Yup.string().required('Required!'),
+            notes: Yup.string().required('Notes is equired!'),
         }),
         onSubmit: (values) => {
             handleSaveNotes(values);
