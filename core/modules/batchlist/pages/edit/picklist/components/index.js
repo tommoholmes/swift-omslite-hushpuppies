@@ -81,43 +81,63 @@ const PickListEditContent = (props) => {
                 </div>
                 {pickList.items.map((e) => (
                     <div className={classes.content} style={getColor(e.is_confirmed, e.qty_picked, e.qty_to_pick)}>
-                        <Link href={`/pickpack/batchlist/picklistitem/${e.entity_id}`}>
-                            <a>
-                                <div className={classes.gridList}>
-                                    <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
-                                        <span className={classes.th}>SKU</span>
-                                        {' '}
-                                        <br />
-                                        <span className={classes.td}>{e.sku}</span>
-                                    </h5>
-                                    <h5 className={classes.titleList}>
-                                        <span className={classes.th}>QTY</span>
-                                        {' '}
-                                        <br />
-                                        <span className={classes.td}>{`${e.qty_picked}/${e.qty_to_pick}`}</span>
-                                    </h5>
-                                    <h5 className={classes.titleList}>
-                                        <span className={classes.th}>LOCATION</span>
-                                        {' '}
-                                        <br />
-                                        <span className={classes.td}>{e.bin_code || '-'}</span>
-                                    </h5>
-                                    <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
-                                        {!(e.is_confirmed) ? (
-                                            <img className={classes.iconBarcode} src="/assets/img/iconbarcode.svg" alt="" />
-                                        ) : (
-                                            <>
-                                                {(e.qty_picked === e.qty_to_pick) ? (
-                                                    <span className={classes.checkmark} />
-                                                ) : (
-                                                    <span className={classes.exclamation} />
-                                                )}
-                                            </>
-                                        )}
-                                    </h5>
-                                </div>
-                            </a>
-                        </Link>
+                        {(e.qty_picked === e.qty_to_pick) ? (
+                            <div className={classes.gridList}>
+                                <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
+                                    <span className={classes.th}>SKU</span>
+                                    {' '}
+                                    <br />
+                                    <span className={classes.td}>{e.sku}</span>
+                                </h5>
+                                <h5 className={classes.titleList}>
+                                    <span className={classes.th}>QTY</span>
+                                    {' '}
+                                    <br />
+                                    <span className={classes.td}>{`${e.qty_picked}/${e.qty_to_pick}`}</span>
+                                </h5>
+                                <h5 className={classes.titleList}>
+                                    <span className={classes.th}>LOCATION</span>
+                                    {' '}
+                                    <br />
+                                    <span className={classes.td}>{e.bin_code || '-'}</span>
+                                </h5>
+                                <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
+                                    <span className={classes.checkmark} />
+                                </h5>
+                            </div>
+                        ) : (
+                            <Link href={`/pickpack/batchlist/picklistitem/${e.entity_id}`}>
+                                <a>
+                                    <div className={classes.gridList}>
+                                        <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
+                                            <span className={classes.th}>SKU</span>
+                                            {' '}
+                                            <br />
+                                            <span className={classes.td}>{e.sku}</span>
+                                        </h5>
+                                        <h5 className={classes.titleList}>
+                                            <span className={classes.th}>QTY</span>
+                                            {' '}
+                                            <br />
+                                            <span className={classes.td}>{`${e.qty_picked}/${e.qty_to_pick}`}</span>
+                                        </h5>
+                                        <h5 className={classes.titleList}>
+                                            <span className={classes.th}>LOCATION</span>
+                                            {' '}
+                                            <br />
+                                            <span className={classes.td}>{e.bin_code || '-'}</span>
+                                        </h5>
+                                        <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
+                                            {!(e.is_confirmed) ? (
+                                                <img className={classes.iconBarcode} src="/assets/img/iconbarcode.svg" alt="" />
+                                            ) : (
+                                                <span className={classes.exclamation} />
+                                            )}
+                                        </h5>
+                                    </div>
+                                </a>
+                            </Link>
+                        )}
                     </div>
                 ))}
                 <div className={classes.footer}>
@@ -125,7 +145,7 @@ const PickListEditContent = (props) => {
                         <h2>{pickList.itemsLeft}</h2>
                         <span>items left to pick</span>
                     </div>
-                    {(pickList.itemsLeft === 0) ? (
+                    {((pickList.itemsLeft === 0) && !(pickList.statusValue === 'pick_complete')) ? (
                         <button
                             className={classes.btnFooter}
                             type="submit"

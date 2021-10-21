@@ -27,7 +27,44 @@ export const createPickByBatch = gql`
     }
 `;
 
+export const getStoreShipmentList = gql`
+    query getStoreShipmentList(
+        $filter: ShipmentFilterInput,
+    ) {
+        getStoreShipmentList(
+            filter: $filter,
+        ) {
+            items {
+                entity_id
+                increment_id
+                channel_order_increment_id
+                channel_shipping_label
+                channel {
+                    channel_code
+                    channel_name
+                }
+            }
+            total_count
+        }
+    }
+`;
+
+export const createPickByBatchManually = gql`
+    mutation createPickByBatch(
+        $type: String!,
+        $shipment_id: [Int],
+    ){
+        createPickByBatch(type: $type, shipment_id: $shipment_id){
+            pick_by_batch{
+                entity_id
+            }
+        }
+    }
+`;
+
 export default {
     getSummaryShipmentToPick,
     createPickByBatch,
+    getStoreShipmentList,
+    createPickByBatchManually,
 };
