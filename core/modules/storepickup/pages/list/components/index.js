@@ -14,6 +14,9 @@ const StorePickupListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, optionsStatus } = props;
     const [tab, setTab] = React.useState(0);
+    const [indexType, setIndexType] = React.useState({
+        allocation_status: 0,
+    });
     const [load, setLoad] = React.useState(false);
 
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
@@ -39,14 +42,19 @@ const StorePickupListContent = (props) => {
         {
             field: 'allocation_status',
             name: 'allocation_status',
-            type: 'in',
+            type: ['in', 'null'],
             label: 'Allocation Status',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
                     value={optionsAllocation.find((e) => e.id === filterValue)}
-                    onChange={async (newValue) => {
+                    onChange={(newValue) => {
+                        if (newValue && newValue.id === 'true') {
+                            setIndexType({ ...indexType, allocation_status: 1 });
+                        } else {
+                            setIndexType({ ...indexType, allocation_status: 0 });
+                        }
                         setFilterValue(newValue && newValue.id);
                     }}
                     options={optionsAllocation}
@@ -67,9 +75,9 @@ const StorePickupListContent = (props) => {
                 return (
                     <Autocomplete
                         style={{ width: 228 }}
-                        value={optionsStatus.find((e) => e.id === filterValue)}
+                        value={options.find((e) => e.id === filterValue)}
                         onChange={(newValue) => {
-                            setTab(dataTab.find((e) => e.value === newValue.id) ? newValue.id : 0);
+                            setTab(dataTab.find((e) => e.value === newValue && newValue.id) || 0);
                             setFilterValue(newValue && newValue.id);
                         }}
                         options={options}
@@ -185,6 +193,13 @@ const StorePickupListContent = (props) => {
         setLoad(false);
     };
 
+    const handleReset = () => {
+        setIndexType({
+            allocation_status: 0,
+        });
+        setTab(0);
+    };
+
     return (
         <>
             <Header />
@@ -199,7 +214,8 @@ const StorePickupListContent = (props) => {
                     columns={columns}
                     count={storeShipmentTotal}
                     showCheckbox
-                    handleReset={() => setTab(0)}
+                    handleReset={() => handleReset()}
+                    indexType={indexType}
                 />
             )}
         </>

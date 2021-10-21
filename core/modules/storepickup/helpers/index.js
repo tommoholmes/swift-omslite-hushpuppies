@@ -1,5 +1,5 @@
 export const optionsAllocation = [
-    { name: 'Unconfirmed', id: 'unconfirmed' },
+    { name: 'Unconfirmed', id: 'true' },
     { name: 'Confirmed', id: 'confirmed' },
     { name: 'Cannot Fulfill', id: 'cannot_fulfill' },
 ];

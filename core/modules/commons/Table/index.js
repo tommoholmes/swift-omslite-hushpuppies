@@ -93,6 +93,7 @@ const CustomTable = (props) => {
         varExport,
         setVarExport,
         exportWithId,
+        indexType = 0,
     } = props;
 
     // hooks
@@ -136,7 +137,7 @@ const CustomTable = (props) => {
             filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = {
                     ...accumulator[currentValue.field],
-                    [currentValue.type]: currentValue.value,
+                    [typeof currentValue.type === 'object' ? currentValue.type[indexType[currentValue.name]] : currentValue.type]: currentValue.value,
                 };
                 return accumulator;
             }, {}),
