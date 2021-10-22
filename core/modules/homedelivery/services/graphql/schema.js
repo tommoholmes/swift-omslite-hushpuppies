@@ -19,6 +19,9 @@ export const getStoreShipmentList = gql`
                 channel_order_increment_id
                 allocation_status
                 channel_order_date
+                location {
+                    loc_name
+                }
                 status{
                     value
                     label
@@ -79,6 +82,16 @@ export const getStoreShipmentById = gql`
                 country_id
                 telephone
             }
+           shipping_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                telephone
+            }
             pickup_info {
                 name
                 loc_details
@@ -99,6 +112,7 @@ export const getStoreShipmentById = gql`
                 status
                 comment
             }
+            channel_shipping_label
         }
     }
 `;
@@ -269,6 +283,15 @@ export const getActivity = gql`
     }
 `;
 
+export const getShipmentStatusByType = gql`
+    query{
+        getShipmentStatusByType(type: "home_delivery"){
+            label
+            value
+        }
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -286,4 +309,5 @@ export default {
     getShipmentCancelReason,
     bulkShipment,
     getActivity,
+    getShipmentStatusByType,
 };

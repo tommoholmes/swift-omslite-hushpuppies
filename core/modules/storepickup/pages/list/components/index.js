@@ -13,7 +13,7 @@ import clsx from 'clsx';
 const StorePickupListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, optionsStatus } = props;
-    const [tab, setTab] = React.useState(0);
+    const [tab, setTab] = React.useState('process_for_shipping');
     const [indexType, setIndexType] = React.useState({
         allocation_status: 0,
     });
@@ -30,7 +30,7 @@ const StorePickupListContent = (props) => {
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'location', headerName: 'Location', sortable: true, hideable: true },
-        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true, hidden: true },
+        { field: 'track_number', headerName: 'Airway Bill', hideable: false, hidden: true },
         { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
@@ -39,28 +39,6 @@ const StorePickupListContent = (props) => {
     const filters = [
         { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Shipment Number', initialValue: '' },
         { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Channel Order Number', initialValue: '' },
-        {
-            field: 'allocation_status',
-            name: 'allocation_status',
-            type: ['in', 'null'],
-            label: 'Allocation Status',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsAllocation.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => {
-                        if (newValue && newValue.id === 'true') {
-                            setIndexType({ ...indexType, allocation_status: 1 });
-                        } else {
-                            setIndexType({ ...indexType, allocation_status: 0 });
-                        }
-                        setFilterValue(newValue && newValue.id);
-                    }}
-                    options={optionsAllocation}
-                />
-            ),
-        },
         {
             field: 'status',
             name: 'status',
@@ -85,9 +63,32 @@ const StorePickupListContent = (props) => {
                 );
             },
         },
-        { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Channel Order Date', initialValue: '' },
+        // { field: 'channel_order_date', name: 'channel_order_date', type: 'like', label: 'Channel Order Date', initialValue: '' },
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
+        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
+        {
+            field: 'allocation_status',
+            name: 'allocation_status',
+            type: ['in', 'null'],
+            label: 'Allocation Status',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsAllocation.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => {
+                        if (newValue && newValue.id === 'true') {
+                            setIndexType({ ...indexType, allocation_status: 1 });
+                        } else {
+                            setIndexType({ ...indexType, allocation_status: 0 });
+                        }
+                        setFilterValue(newValue && newValue.id);
+                    }}
+                    options={optionsAllocation}
+                />
+            ),
+        },
         { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '1', hidden: true },
         { field: 'pickup_id', name: 'pickup_id', type: 'null', label: 'Pickup Id', class: 'fixed', initialValue: 'true', hidden: true },
     ];

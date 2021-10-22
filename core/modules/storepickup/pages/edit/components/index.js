@@ -77,68 +77,70 @@ const StorePickupEditContent = (props) => {
                         </div>
                     )
                         : (
-                            <div className={classes.progressBar}>
-                                <div className="step line">
-                                    <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
-                                    <div className={classes.statusLabelActive}>
-                                        {storePickup.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                            <div className={classes.progressBarContainer}>
+                                <div className={classes.progressBar}>
+                                    <div className="step line">
+                                        <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
+                                        <div className={classes.statusLabelActive}>
+                                            {storePickup.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="step line">
-                                    {(storePickup.statusValue === 'process_for_shipping') ? (
-                                        <>
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                                            <div className={classes.statusLabelInactive}>
-                                                Ready for Pack
-                                            </div>
-                                        </>
-                                    )
-                                        : (
+                                    <div className="step line">
+                                        {(storePickup.statusValue === 'process_for_shipping') ? (
                                             <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
-                                                <div className={classes.statusLabelActive}>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
                                                     Ready for Pack
                                                 </div>
                                             </>
+                                        )
+                                            : (
+                                                <>
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
+                                                    <div className={classes.statusLabelActive}>
+                                                        Ready for Pack
+                                                    </div>
+                                                </>
+                                            )}
+                                    </div>
+                                    <div className="step line">
+                                        {(storePickup.statusValue === 'process_for_shipping') || (storePickup.statusValue === 'ready_for_pack') ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready for Pickup
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Ready for Pickup
+                                                </div>
+                                            </>
                                         )}
-                                </div>
-                                <div className="step line">
-                                    {(storePickup.statusValue === 'process_for_shipping') || (storePickup.statusValue === 'ready_for_pack') ? (
-                                        <>
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                                            <div className={classes.statusLabelInactive}>
-                                                Ready for Pickup
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
-                                            <div className={classes.statusLabelActive}>
-                                                Ready for Pickup
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                                <div className="step">
-                                    {!(storePickup.statusValue === 'customer_picked_up') ? (
-                                        <>
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                                            <div className={classes.statusLabelInactive}>
-                                                Customer
-                                                <br />
-                                                Picked Up
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
-                                            <div className={classes.statusLabelActive}>
-                                                Customer
-                                                <br />
-                                                Picked Up
-                                            </div>
-                                        </>
-                                    )}
+                                    </div>
+                                    <div className="step">
+                                        {!(storePickup.statusValue === 'customer_picked_up') ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Customer
+                                                    <br />
+                                                    Picked Up
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Customer
+                                                    <br />
+                                                    Picked Up
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         )}

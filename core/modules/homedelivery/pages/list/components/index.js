@@ -5,30 +5,34 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Tabs from '@common_tabs';
-import { optionsAllocation, optionsStatus, dataTab } from '@modules/homedelivery/helpers';
+import { optionsAllocation, dataTab } from '@modules/homedelivery/helpers';
 import Header from '@modules/homedelivery/pages/list/components/Header';
 import useStyles from '@modules/homedelivery/pages/list/components/style';
 import clsx from 'clsx';
 
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier,
+    const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier, optionsStatus,
         handleExport, setVarExport } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
-    const [tab, setTab] = React.useState(0);
+    const [tab, setTab] = React.useState('process_for_shipping');
     const [load, setLoad] = React.useState(false);
+    const [indexType, setIndexType] = React.useState({
+        allocation_status: 0,
+    });
 
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
-        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
-        { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
-        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Channel Order Date', hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
-        { field: 'email', headerName: 'Email/Mobile', hideable: true },
+        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'location', headerName: 'Location', hideable: true },
+        { field: 'track_number', headerName: 'Airway Bill', hideable: true },
+        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
+        { field: 'email', headerName: 'Email/Mobile', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
     ];
 
@@ -36,40 +40,54 @@ const HomeDeliveryListContent = (props) => {
         { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Shipment Number', initialValue: '' },
         { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Channel Order Number', initialValue: '' },
         {
-            field: 'allocation_status',
-            name: 'allocation_status',
-            type: 'in',
-            label: 'Allocation Status',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsAllocation.find((e) => e.name === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.name)}
-                    options={optionsAllocation}
-                />
-            ),
-        },
-        {
             field: 'status',
             name: 'status',
             type: 'like',
             label: 'Status',
             initialValue: tab !== 0 ? tab : '',
+            component: ({ filterValue, setFilterValue }) => {
+                const options = optionsStatus.slice().map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={options.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => setFilterValue(newValue && newValue.id)}
+                        options={options}
+                    />
+                );
+            },
+        },
+        { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
+        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
+        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
+        {
+            field: 'allocation_status',
+            name: 'allocation_status',
+            type: ['in', 'null'],
+            label: 'Allocation Status',
+            initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.id)}
-                    options={optionsStatus}
+                    value={optionsAllocation.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => {
+                        if (newValue && newValue.id === 'true') {
+                            setIndexType({ ...indexType, allocation_status: 1 });
+                        } else {
+                            setIndexType({ ...indexType, allocation_status: 0 });
+                        }
+                        setFilterValue(newValue && newValue.id);
+                    }}
+                    options={optionsAllocation}
                 />
             ),
         },
         // { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Order Date', initialValue: '' },
-        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airwaybill Number', initialValue: '' },
-        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
-        { field: 'framework', name: 'framework', type: 'neq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
-        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '0', disabled: true },
+        { field: 'framework', name: 'framework', type: 'neq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace', hidden: true },
+        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '0', hidden: true },
     ];
 
     const getIconByStatus = (status) => {
@@ -106,6 +124,7 @@ const HomeDeliveryListContent = (props) => {
         ...homedelivery,
         id: homedelivery.entity_id,
         channel_name: homedelivery.channel.channel_name,
+        location: homedelivery.location.loc_name,
         email: `${homedelivery.shipping_email} ${homedelivery.shipping_telephone}`,
         action: () => (
             <Link href={`/shipment/homedelivery/edit/${homedelivery.entity_id}`}>
@@ -137,7 +156,7 @@ const HomeDeliveryListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/pick/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -145,7 +164,7 @@ const HomeDeliveryListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/pack/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -188,6 +207,13 @@ const HomeDeliveryListContent = (props) => {
         setLoad(false);
     };
 
+    const handleReset = () => {
+        setIndexType({
+            allocation_status: 0,
+        });
+        setTab(0);
+    };
+
     return (
         <>
             <Header />
@@ -202,9 +228,10 @@ const HomeDeliveryListContent = (props) => {
                     columns={columns}
                     count={storeShipmentTotal}
                     showCheckbox
-                    handleReset={() => setTab(0)}
+                    handleReset={() => handleReset()}
                     handleExport={handleExport}
                     setVarExport={setVarExport}
+                    indexType={indexType}
                 />
             )}
         </>

@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
+        margin: 0,
     },
     title: {
         fontFamily: font,
@@ -183,7 +184,24 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         fontWeight: 'bold',
     },
+    progressBarContainer: {
+        position: 'relative',
+    },
     progressBar: {
+        '&::before': {
+            content: "''",
+            position: 'absolute',
+            background: borderColor,
+            borderRadius: 10,
+            width: '75%',
+            height: 3,
+            top: '40%',
+            right: 0,
+            transform: 'translate(-17%, -50%)',
+            [theme.breakpoints.down('sm')]: {
+                top: '30%',
+            },
+        },
         display: 'grid',
         gridTemplateColumns: 'repeat(4, auto)',
         maxWidth: '90%',
@@ -191,32 +209,35 @@ const useStyles = makeStyles((theme) => ({
         '& .step': {
             textAlign: 'center',
             position: 'relative',
-            '&.line::after': {
-                content: "''",
-                position: 'absolute',
-                background: borderColor,
-                borderRadius: 10,
-                width: '35%',
-                [theme.breakpoints.down('sm')]: {
-                    width: '10%',
-                    top: '33%',
-                },
-                [theme.breakpoints.down('xs')]: {
-                    width: '20%',
-                    top: '25%',
-                },
-                height: 3,
-                top: '40%',
-                right: 0,
-                transform: 'translate(50%, -100%)',
-            },
+            // '&.line::after': {
+            //     content: "''",
+            //     position: 'absolute',
+            //     background: borderColor,
+            //     borderRadius: 10,
+            //     width: '35%',
+            //     [theme.breakpoints.down('sm')]: {
+            //         width: '10%',
+            //         top: '33%',
+            //     },
+            //     [theme.breakpoints.down('xs')]: {
+            //         width: '20%',
+            //         top: '25%',
+            //     },
+            //     height: 3,
+            //     top: '40%',
+            //     right: 0,
+            //     transform: 'translate(50%, -100%)',
+            // },
             '& .imgIcon': {
-                width: 88,
+                width: 98,
+                padding: 10,
+                backgroundColor: 'white',
                 [theme.breakpoints.down('sm')]: {
-                    width: 66,
+                    width: 76,
                 },
                 [theme.breakpoints.down('xs')]: {
-                    width: 44,
+                    width: 54,
+                    padding: 5,
                 },
             },
         },

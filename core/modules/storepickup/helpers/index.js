@@ -14,6 +14,7 @@ export const optionsStatus = [
 ];
 
 export const dataTab = [
+    { label: 'Process for Shipping', value: 'process_for_shipping' },
     { label: 'Ready for Pack', value: 'ready_for_pack' },
     { label: 'Ready for Pickup', value: 'ready_for_pickup' },
     { label: 'Customer Picked Up', value: 'customer_picked_up' },
