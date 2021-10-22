@@ -96,6 +96,7 @@ const clitoolsListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={queueTotal}
+                hideActions
             />
         </>
     );
