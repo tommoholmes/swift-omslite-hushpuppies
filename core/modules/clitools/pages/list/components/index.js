@@ -2,9 +2,9 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-// import TextField from '@common_textfield';
 import Button from '@common_button';
 import Autocomplete from '@common_autocomplete';
+import TextField from '@common_textfield';
 import Paper from '@material-ui/core/Paper';
 import clitoolsGqlService from '@modules/clitools/services/graphql';
 import Header from '@modules/clitools/pages/list/components/Header';
@@ -64,23 +64,23 @@ const clitoolsListContent = (props) => {
                             labelKey="title"
                         />
                     </div>
-                    {/* <div className={classes.formField}>
+                    <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Additional Command</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="additional"
+                            value={formik.values.additional}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.additional && formik.errors.additional)}
+                            helperText={(formik.touched.additional && formik.errors.additional) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
                         />
-                    </div> */}
+                    </div>
                     <Button
                         className={classes.btn}
                         onClick={formik.handleSubmit}

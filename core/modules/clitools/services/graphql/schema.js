@@ -40,11 +40,13 @@ export const getIcubeCommandLineList = gql`
 
 export const addQueueJob = gql`
     mutation addQueueJob(
-        $entity_id: Int!
+        $entity_id: Int!,
+        $additional: String
     ){
         addQueueJob(
             input: {
-                entity_id: $entity_id
+                entity_id: $entity_id,
+                additional: $additional
             }
         ){
             entity_id
