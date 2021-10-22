@@ -120,10 +120,20 @@ export const donePickByWave = gql`
   }
 `;
 
+export const getPickByWaveStatus = gql`
+query{
+    getPickByWaveStatus{
+      value
+      label
+    }
+  }
+`;
+
 export default {
     getPickByWaveList,
     getPickByWaveById,
     getPickByWaveItemById,
     donePickByWave,
     updatePickByWaveItem,
+    getPickByWaveStatus,
 };

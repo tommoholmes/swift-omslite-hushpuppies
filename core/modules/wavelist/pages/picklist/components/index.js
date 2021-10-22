@@ -107,18 +107,24 @@ const BatchListPickListContent = (props) => {
                                 {e.is_confirmed ? (
                                     e.qty_picked === e.qty_to_pick
                                         ? <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
-                                        : (
-                                            <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+                                        : (waveList.statusValue === 'pick_in_progress' || waveList.statusValue === 'pick_uncomplete'
+                                            ? (
+                                                <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
 
-                                                <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
-                                            </a>
+                                                    <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                                </a>
+                                            )
+                                            : <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
                                         )
                                 )
-                                    : (
-                                        <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+                                    : (waveList.statusValue === 'pick_in_progress' || waveList.statusValue === 'pick_uncomplete'
+                                        ? (
+                                            <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
 
-                                            <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
-                                        </a>
+                                                <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
+                                            </a>
+                                        )
+                                        : <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
                                     )}
                             </h5>
                         </div>

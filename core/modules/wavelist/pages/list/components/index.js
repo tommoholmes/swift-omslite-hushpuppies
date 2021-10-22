@@ -10,7 +10,7 @@ import Router from 'next/router';
 
 const PickByWaveListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getPickByWaveList } = props;
+    const { data, loading, getPickByWaveList, optionsStatus } = props;
     const PickByWaveList = (data && data.getPickByWaveList && data.getPickByWaveList.items) || [];
     const PickByWaveTotal = (data && data.getPickByWaveList && data.getPickByWaveList.total_count) || 0;
 
@@ -21,12 +21,6 @@ const PickByWaveListContent = (props) => {
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
     ];
 
-    const optionsStatus = [
-        { name: 'Pick in Progress', id: 'pick_in_progress' },
-        { name: 'Pick Uncomplete', id: 'pick_uncomplete' },
-        { name: 'Pick Complete', id: 'pick_complete' },
-    ];
-
     const filters = [
         {
             field: 'status',
@@ -34,16 +28,22 @@ const PickByWaveListContent = (props) => {
             type: 'eq',
             label: 'Status',
             initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => {
-                        setTimeout(() => { setFilterValue(newValue && newValue.id); }, 500);
-                    }}
-                    options={optionsStatus}
-                />
-            ),
+            component: ({ filterValue, setFilterValue }) => {
+                const options = optionsStatus.slice().map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={options.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => {
+                            setTimeout(() => { setFilterValue(newValue && newValue.id); }, 500);
+                        }}
+                        options={options}
+                    />
+                );
+            },
         },
         {
             field: 'status',

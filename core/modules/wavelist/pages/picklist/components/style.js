@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
+        marginTop: 0,
     },
     titleSmall: {
         color: colorText,
@@ -211,6 +212,7 @@ const useStyles = makeStyles((theme) => ({
     exclamation: {
         position: 'absolute',
         right: 0,
+        top: '25%',
         backgroundColor: colorRed,
         height: 20,
         width: 20,
