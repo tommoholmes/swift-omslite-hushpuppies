@@ -9,6 +9,7 @@ const Core = (props) => {
     const router = useRouter();
     const [varExport, setVarExport] = React.useState({});
 
+    const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmShipment] = gqlService.confirmShipment();
     const [pickShipment] = gqlService.pickShipment();
@@ -44,6 +45,23 @@ const Core = (props) => {
         });
     };
 
+    if (loadingOptionStatus) {
+        return (
+            <Layout useBreadcrumbs={false}>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading
+                </div>
+            </Layout>
+        );
+    }
+
     const contentProps = {
         getStoreShipmentList,
         confirmShipment,
@@ -56,6 +74,7 @@ const Core = (props) => {
         handleExport,
         varExport,
         setVarExport,
+        optionsStatus: optionsStatus.getShipmentStatusByType,
     };
 
     return (

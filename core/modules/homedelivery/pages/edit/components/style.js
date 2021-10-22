@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
+        margin: 0,
     },
     title: {
         fontFamily: font,
@@ -65,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 18,
     },
     formFieldButton: {
-        margin: '20px 0 10px 0',
+        margin: '0px 0 10px 0',
         '& .btnFormDialog': {
             borderRadius: 20,
             boxShadow: 'none',
@@ -95,7 +96,6 @@ const useStyles = makeStyles((theme) => ({
         '&.print': {
             background: '#FFFFFF',
             color: colorPurple,
-            marginTop: 0,
         },
         '&.Mui-disabled': {
             borderColor: 'rgba(0, 0, 0, 0.12)',
@@ -135,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
     },
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(3, 1fr)',
         [theme.breakpoints.down('xs')]: {
             display: 'block',
         },
@@ -190,27 +190,60 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         fontWeight: 'bold',
     },
+    progressBarContainer: {
+        position: 'relative',
+    },
     progressBar: {
+        '&::before': {
+            content: "''",
+            position: 'absolute',
+            background: borderColor,
+            borderRadius: 10,
+            width: '75%',
+            height: 3,
+            top: '40%',
+            right: 0,
+            transform: 'translate(-17%, -50%)',
+            [theme.breakpoints.down('xs')]: {
+                top: '30%',
+            },
+        },
         display: 'grid',
         gridTemplateColumns: 'repeat(5, auto)',
-        maxWidth: 425,
+        maxWidth: '90%',
         margin: '0 auto',
         '& .step': {
             textAlign: 'center',
             position: 'relative',
-            '&.line::after': {
-                content: "''",
-                position: 'absolute',
-                background: borderColor,
-                borderRadius: 10,
-                width: '15%',
-                height: 3,
-                top: '50%',
-                right: 0,
-                transform: 'translate(50%, -100%)',
-            },
+            // '&.line::after': {
+            //     content: "''",
+            //     position: 'absolute',
+            //     background: borderColor,
+            //     borderRadius: 10,
+            //     width: '100%',
+            //     [theme.breakpoints.down('sm')]: {
+            //         top: '33%',
+            //     },
+            //     [theme.breakpoints.down('xs')]: {
+            //         top: '22%',
+            //     },
+            //     height: 3,
+            //     top: '40%',
+            //     right: 0,
+            //     transform: 'translate(50%, -100%)',
+            // },
             '& .imgIcon': {
-                width: '80%',
+                width: 98,
+                padding: 10,
+                backgroundColor: 'white',
+                [theme.breakpoints.down('sm')]: {
+                    width: 76,
+                    padding: 5,
+                },
+                [theme.breakpoints.down('xs')]: {
+                    width: 54,
+                    padding: 2,
+                },
             },
         },
         '& .step span': {
@@ -222,11 +255,25 @@ const useStyles = makeStyles((theme) => ({
             display: 'block',
             margin: '0 auto',
         },
-        '&.cannot': {
-            gridTemplateColumns: 'repeat(1, auto)',
+    },
+    progressBarFail: {
+        maxWidth: '90%',
+        margin: '0 auto',
+        '& .step': {
+            textAlign: 'center',
+            position: 'relative',
             '& .imgIcon': {
-                width: '15% !important',
+                width: 66,
             },
+        },
+        '& .step span': {
+            color: colorBold,
+            fontWeight: 700,
+        },
+        '& span': {
+            width: '75%',
+            display: 'block',
+            margin: '0 auto',
         },
     },
     printProgress: {
@@ -320,6 +367,16 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             fontSize: 14,
         },
+    },
+    statusLabelActive: {
+        color: colorBold,
+        fontWeight: 600,
+        alignItems: 'center',
+    },
+    statusLabelInactive: {
+        color: borderColor,
+        fontWeight: 600,
+        alignItems: 'center',
     },
 }));
 

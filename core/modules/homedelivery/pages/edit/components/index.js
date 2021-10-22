@@ -12,6 +12,8 @@ import FormDialog from '@common_formdialog';
 import gqlService from '@modules/homedelivery/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/homedelivery/pages/edit/components/style';
+import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/Check';
 
 const HomeDeliveryEditContent = (props) => {
     const {
@@ -49,7 +51,7 @@ const HomeDeliveryEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                {`Home Delivery # ${homeDelivery.shipmentNumber}`}
+                {`Home Delivery #${homeDelivery.shipmentNumber}`}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>
@@ -61,7 +63,7 @@ const HomeDeliveryEditContent = (props) => {
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Order Date
+                            Channel Order Date
                         </h5>
                         <span className="spanHeader">{homeDelivery.date}</span>
                     </div>
@@ -71,49 +73,114 @@ const HomeDeliveryEditContent = (props) => {
                         </h5>
                         <span className="spanHeader">{homeDelivery.location}</span>
                     </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Shipping Method
+                        </h5>
+                        <span className="spanHeader">{homeDelivery.shipping || '-'}</span>
+                    </div>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.title}>
+                    {/* <h5 className={classes.title}>
                         {homeDelivery.statusLabel}
-                    </h5>
+                    </h5> */}
                     {homeDelivery.allocation === 'cannot_fulfill' ? (
-                        <div className={clsx(classes.progressBar, 'cannot')}>
+                        <div className={classes.progressBarFail}>
                             <div className="step">
                                 <img className="imgIcon" alt="" src="/assets/img/order_status/cannotfulfill.svg" />
+                                <div className={classes.statusLabelActive}>
+                                    Cannot Fulfill
+                                </div>
                             </div>
                         </div>
                     )
 
                         : (
-                            <div className={classes.progressBar}>
-                                <div className="step line">
-                                    <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
-                                </div>
-                                <div className="step line">
-                                    {(homeDelivery.statusValue === 'process_for_shipping') ? (
-                                        <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                                    ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />}
-                                </div>
-                                <div className="step line">
-                                    {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') ? (
-                                        <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                                    ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />}
-                                </div>
-                                <div className="step line">
-                                    {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered')
-                                        || (homeDelivery.statusValue === 'closed') || (homeDelivery.statusValue === 'canceled') ? (
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
-                                        ) : <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />}
-                                </div>
-                                <div className="step">
-                                    {!((homeDelivery.statusValue === 'order_delivered') || (homeDelivery.statusValue === 'closed')
-                                        || (homeDelivery.statusValue === 'canceled')) ? (
-                                            <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                                        ) : <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />}
+                            <div className={classes.progressBarContainer}>
+                                <div className={classes.progressBar}>
+                                    <div className="step line">
+                                        <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
+                                        <div className={classes.statusLabelActive}>
+                                            {homeDelivery.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                                        </div>
+                                    </div>
+                                    <div className="step line">
+                                        {(homeDelivery.statusValue === 'process_for_shipping') ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready for Pack
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Ready for Pack
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className="step line">
+                                        {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready to Ship
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Ready to Ship
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className="step line">
+                                        {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered')
+                                            || (homeDelivery.statusValue === 'closed') || (homeDelivery.statusValue === 'canceled') ? (
+                                                <>
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
+                                                    <div className={classes.statusLabelActive}>
+                                                        Order Shipped
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {' '}
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />
+                                                    <div className={classes.statusLabelInactive}>
+                                                        Order Shipped
+                                                    </div>
+                                                </>
+                                            )}
+                                    </div>
+                                    <div className="step">
+                                        {!((homeDelivery.statusValue === 'order_delivered') || (homeDelivery.statusValue === 'closed')
+                                            || (homeDelivery.statusValue === 'canceled')) ? (
+                                                <>
+                                                    {' '}
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                                    <div className={classes.statusLabelInactive}>
+                                                        Order Delivered
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
+                                                    <div className={classes.statusLabelActive}>
+                                                        Order Delivered
+                                                    </div>
+                                                </>
+                                            )}
+                                    </div>
                                 </div>
                             </div>
                         )}
                     <hr />
+                    <br />
                     <div className={classes.printProgress}>
                         {(homeDelivery.statusValue === 'process_for_shipping')
                             && (homeDelivery.allocation !== 'cannot_fulfill') && (
@@ -122,13 +189,13 @@ const HomeDeliveryEditContent = (props) => {
                                 <br />
                                 and pack your items
                                 <div className={classes.formFieldButton}>
-                                    <Button
+                                    {/* <Button
                                         className={clsx(classes.btn, 'print')}
                                         onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
                                         variant="contained"
                                     >
                                         Print Pick List
-                                    </Button>
+                                    </Button> */}
                                     <br />
                                     {!(homeDelivery.allocation) ? (
                                         <>
@@ -137,22 +204,26 @@ const HomeDeliveryEditContent = (props) => {
                                                 type="submit"
                                                 onClick={formikConfirm.handleSubmit}
                                                 variant="contained"
+                                                buttonType="primary-rounded"
+                                                style={{ marginRight: 10 }}
                                             >
-                                                Confirm Order
+                                                <CheckIcon style={{ marginRight: 10 }} />
+                                                Confirm
                                             </Button>
                                             <Button
                                                 className={classes.btn}
                                                 type="submit"
                                                 onClick={formikCantFullfill.handleSubmit}
                                                 variant="contained"
-                                                style={{ marginLeft: 10 }}
+                                                buttonType="outlined-rounded"
                                             >
+                                                <CloseIcon style={{ marginRight: 10 }} />
                                                 Cannot Fullfill
                                             </Button>
                                         </>
                                     ) : (
                                         <>
-                                            <FormDialog
+                                            {/* <FormDialog
                                                 labelButton="Canceled"
                                                 titleDialog="Cancel Reason"
                                                 message={(
@@ -186,13 +257,21 @@ const HomeDeliveryEditContent = (props) => {
                                                         </div>
                                                     </>
                                                 )}
-                                            />
+                                            /> */}
+                                            <Button
+                                                className={clsx(classes.btn, 'print')}
+                                                onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
+                                                variant="contained"
+                                            >
+                                                Print Pick List
+                                            </Button>
                                             <Button
                                                 className={classes.btn}
                                                 onClick={formikPicked.handleSubmit}
                                                 variant="contained"
                                                 style={{ marginLeft: 10 }}
                                             >
+                                                <CheckIcon style={{ marginRight: 10 }} />
                                                 Mark Pick Complete
                                             </Button>
                                         </>
@@ -211,7 +290,7 @@ const HomeDeliveryEditContent = (props) => {
                                 <div className={classes.formFieldButton}>
                                     <Button
                                         className={classes.btn}
-                                        onClick={() => router.push('/shipment/homedelivery')}
+                                        onClick={() => router.push(`/sales/orderreallocation/edit/${homeDelivery.id}`)}
                                         variant="contained"
                                     >
                                         Reallocating Order
@@ -223,27 +302,27 @@ const HomeDeliveryEditContent = (props) => {
                             <>
                                 the packing order is ready to be processed
                                 <div className={classes.formFieldButton}>
-                                    <Button
+                                    {/* <Button
                                         className={clsx(classes.btn, 'print')}
                                         onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
                                         variant="contained"
                                     >
                                         Print Pick List
-                                    </Button>
+                                    </Button> */}
                                     <Button
                                         className={clsx(classes.btn, 'print')}
                                         onClick={() => window.open(`/printoms/pack/${homeDelivery.id}`)}
                                         variant="contained"
-                                        style={{ marginLeft: 10 }}
                                     >
-                                        Print Shipping Label
+                                        Print Pack List
                                     </Button>
-                                    <br />
                                     <Button
                                         className={classes.btn}
                                         onClick={formikPacked.handleSubmit}
                                         variant="contained"
+                                        style={{ marginLeft: 10 }}
                                     >
+                                        <CheckIcon style={{ marginRight: 10 }} />
                                         Mark Pack Complete
                                     </Button>
                                 </div>
@@ -382,6 +461,14 @@ const HomeDeliveryEditContent = (props) => {
                             <span className={classes.orderLabel}>{homeDelivery.city}</span>
                             <span className={classes.orderLabel}>
                                 {`${homeDelivery.region}, ${homeDelivery.postcode}, ${homeDelivery.countryId}`}
+                            </span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Shipping Address</h5>
+                            <span className={classes.orderLabel}>{homeDelivery.shipping_address.street}</span>
+                            <span className={classes.orderLabel}>{homeDelivery.shipping_address.city}</span>
+                            <span className={classes.orderLabel}>
+                                {`${homeDelivery.shipping_address.region}, ${homeDelivery.shipping_address.postcode}, ${homeDelivery.shipping_address.countryId}`}
                             </span>
                         </div>
                     </div>

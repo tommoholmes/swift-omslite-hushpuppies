@@ -284,6 +284,7 @@ const ContentWrapper = (props) => {
         order: homedelivery.order_item,
         total: homedelivery.subtotal,
         history: homedelivery.status_history,
+        shipping_address: homedelivery.shipping_address,
     };
 
     const formikConfirm = useFormik({
