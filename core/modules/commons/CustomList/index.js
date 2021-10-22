@@ -266,7 +266,7 @@ const CustomList = (props) => {
                     <div
                         key={i}
                         className={clsx(classes.gridList, classes.content)}
-                        style={{ gridTemplateColumns: `repeat(${showCheckbox ? 1 + columns.length : columns.length}, 1fr)` }}
+                        style={{ gridTemplateColumns: showCheckbox ? `1fr repeat(${columns.length}, 2fr)` : `repeat(${columns.length}, 1fr)` }}
                     >
                         {showCheckbox && (
                             <Checkbox
@@ -279,7 +279,12 @@ const CustomList = (props) => {
                                 !column.hidden && (
                                     <div
                                         key={columnIndex}
-                                        style={{ paddingLeft: 10, cursor: handleClickRow ? 'pointer' : 'unset' }}
+                                        style={{ paddingLeft: 10,
+                                            cursor: handleClickRow ? 'pointer' : 'unset',
+                                            textOverflow: 'ellipsis',
+                                            overflow: 'hidden',
+                                            overflowWrap: 'break-word',
+                                        }}
                                         onClick={() => handleClickRow ? handleClickRow(row.id) : null}
                                     >
                                         <h5

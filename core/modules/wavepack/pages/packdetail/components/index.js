@@ -35,8 +35,8 @@ const BatchListPickListContent = (props) => {
         return classes.gray;
     };
 
-    const getIcon = (qty_picked, qty_to_pick) => {
-        if (qty_to_pick === qty_picked) {
+    const getIcon = (qty_packed, qty_to_pick) => {
+        if (qty_to_pick === qty_packed) {
             return classes.checkmark;
         }
         return classes.exclamation;
@@ -120,17 +120,21 @@ const BatchListPickListContent = (props) => {
                                     QTY
                                 </h5>
                                 <h5
-                                    className={clsx(classes.bodyList, 'bold', list.qty_picked !== list.qty && 'red')}
+                                    className={clsx(classes.bodyList, 'bold', list.qty_packed > 0 && list.qty_packed <= list.qty && 'red')}
                                     style={{ fontSize: 18 }}
                                 >
-                                    {`${list.qty_picked}/${list.qty}`}
+                                    {`${list.qty_packed}/${list.qty}`}
                                 </h5>
                             </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
-                                    <span className={getIcon(list.qty_picked, list.qty)} />
-                                </h5>
-                            </div>
+                            {list.qty_packed > 0
+                                ? (
+                                    <div style={{ textAlign: 'center' }}>
+                                        <h5 className={classes.bodyList} style={{ textAlign: 'right' }}>
+                                            <span className={getIcon(list.qty_packed, list.qty)} />
+                                        </h5>
+                                    </div>
+                                )
+                                : null}
                         </div>
                     </div>
                 ))}

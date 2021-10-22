@@ -34,13 +34,34 @@ const PickByWaveListContent = (props) => {
             initialValue: 'confirmed',
             hidden: true,
         },
+        {
+            field: 'channel_order_increment_id',
+            name: 'channel_order_increment_id',
+            type: 'like',
+            label: 'Order Number',
+            initialValue: '',
+        },
+        {
+            field: 'channel_shipping_label',
+            name: 'channel_shipping_label',
+            type: 'match',
+            label: 'Shipping Method',
+            initialValue: '',
+        },
+        {
+            field: 'channel_name',
+            name: 'channel_name',
+            type: 'like',
+            label: 'Channel',
+            initialValue: '',
+        },
     ];
 
     const rows = PickByWaveList.map((wavelist) => ({
         ...wavelist,
         id: wavelist.entity_id,
         order_number: wavelist.channel_order_increment_id,
-        shipping_label: wavelist.channel_shipping_label,
+        shipping_label: wavelist.channel_shipping_label.split('_').join(' '),
         channel: wavelist.channel.channel_name,
     }));
 
