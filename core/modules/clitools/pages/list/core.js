@@ -17,9 +17,11 @@ const Core = (props) => {
 
     const handleSubmit = ({
         id,
+        additional,
     }) => {
         const variables = {
             entity_id: id.entity_id,
+            additional,
         };
         window.backdropLoader(true);
         addQueueJob({
@@ -45,6 +47,7 @@ const Core = (props) => {
     const formik = useFormik({
         initialValues: {
             id: null,
+            additional: '',
         },
         validationSchema: Yup.object().shape({
             id: Yup.object().required('Required!'),
