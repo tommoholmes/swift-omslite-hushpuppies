@@ -207,6 +207,7 @@ const ContentWrapper = (props) => {
     const shipmentMarketplace = {
         id: shipmentmarketplace.entity_id,
         shipmentNumber: shipmentmarketplace.increment_id,
+        channelId: shipmentmarketplace.channel_order_increment_id,
         channelName: shipmentmarketplace.channel.channel_name,
         channelCode: shipmentmarketplace.channel.channel_code,
         orderNumber: shipmentmarketplace.marketplace_order_number,
@@ -216,6 +217,7 @@ const ContentWrapper = (props) => {
         date: shipmentmarketplace.channel_order_date,
         location: shipmentmarketplace.location.loc_name,
         awbSource: shipmentmarketplace.awb_source,
+        trackNumber: shipmentmarketplace.track_number,
         updated: shipmentmarketplace.updated_at,
         awb: shipmentmarketplace.all_track[0],
         email: shipmentmarketplace.shipping_email,
@@ -227,11 +229,12 @@ const ContentWrapper = (props) => {
         postcode: shipmentmarketplace.billing_address.postcode,
         countryId: shipmentmarketplace.billing_address.country_id,
         phone: shipmentmarketplace.billing_address.telephone,
+        shippingAddress: shipmentmarketplace.shipping_address,
         pickup: shipmentmarketplace.pickup_info,
-        order: shipmentmarketplace.order_item,
+        order: shipmentmarketplace.order_item || [],
         method: shipmentmarketplace.channel_shipping_label,
         total: shipmentmarketplace.subtotal,
-        history: shipmentmarketplace.status_history,
+        history: shipmentmarketplace.status_history || [],
     };
 
     const formikConfirm = useFormik({

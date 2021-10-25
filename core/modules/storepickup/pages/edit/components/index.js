@@ -387,8 +387,8 @@ const StorePickupEditContent = (props) => {
                                         <tr>
                                             <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
                                             <td className={classes.td}>{e.name}</td>
-                                            <td className={classes.td}>{e.price}</td>
-                                            <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty}</td>
+                                            <td className={classes.td}>{e.base_price}</td>
+                                            <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty_shipped}</td>
                                             <td className={classes.td}>{e.row_total}</td>
                                         </tr>
                                     ))}

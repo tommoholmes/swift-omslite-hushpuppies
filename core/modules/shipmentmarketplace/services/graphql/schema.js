@@ -77,12 +77,23 @@ export const getStoreShipmentById = gql`
             shipping_telephone
             shipping_email
             updated_at
+            track_number
             all_track{
                 created_at
                 title
                 track_number
             }
             billing_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                telephone
+            }
+            shipping_address {
                 firstname
                 lastname
                 street

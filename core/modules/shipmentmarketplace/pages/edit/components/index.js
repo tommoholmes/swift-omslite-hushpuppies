@@ -61,13 +61,19 @@ const ShipmentMarketplaceEditContent = (props) => {
                 <div className={classes.contentHeader}>
                     <div className="divHeader">
                         <h5 className="titleHeader">
+                            Channel Order Number
+                        </h5>
+                        <span className="spanHeader">{shipmentMarketplace.channelId}</span>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
                             {`${shipmentMarketplace.channelName} Order Number`}
                         </h5>
                         <span className="spanHeader">{shipmentMarketplace.orderNumber}</span>
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Order Date
+                            Channel Order Date
                         </h5>
                         <span className="spanHeader">{shipmentMarketplace.date}</span>
                     </div>
@@ -79,77 +85,151 @@ const ShipmentMarketplaceEditContent = (props) => {
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Source AWB
+                            Shipped Method
                         </h5>
-                        <span className="spanHeader">{shipmentMarketplace.awbSource}</span>
+                        <span className="spanHeader">{shipmentMarketplace.method}</span>
                     </div>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.title}>
-                        {shipmentMarketplace.statusLabel}
-                    </h5>
-                    <div className={classes.progressBar}>
-                        <div className="step line">
-                            <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
+                    {shipmentMarketplace.statusValue === 'canceled' ? (
+                        <div className={classes.progressBarFail}>
+                            <div className="step">
+                                <img className="imgIcon" alt="" src="/assets/img/order_status/cannotfulfill.svg" />
+                                <div className={classes.statusLabelActive}>
+                                    Canceled
+                                </div>
+                            </div>
                         </div>
-                        <div className="step line">
-                            {(shipmentMarketplace.statusValue === 'process_for_shipping') || (shipmentMarketplace.statusValue === 'closed') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />}
-                        </div>
-                        <div className="step line">
-                            {(shipmentMarketplace.statusValue === 'process_for_shipping') || (shipmentMarketplace.statusValue === 'ready_for_pack') || (shipmentMarketplace.statusValue === 'closed') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />}
-                        </div>
-                        <div className="step line">
-                            {(shipmentMarketplace.statusValue === 'order_shipped') || (shipmentMarketplace.statusValue === 'order_delivered') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />}
-                        </div>
-                        <div className="step">
-                            {!(shipmentMarketplace.statusValue === 'order_delivered') ? (
-                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                            ) : <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />}
-                        </div>
-                    </div>
+                    )
+
+                        : (
+                            <div className={classes.progressBarContainer}>
+                                <div className={classes.progressBar}>
+                                    <div className="step line">
+                                        <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
+                                        <div className={classes.statusLabelActive}>
+                                            {shipmentMarketplace.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                                        </div>
+                                    </div>
+                                    <div className="step line">
+                                        {(shipmentMarketplace.statusValue === 'process_for_shipping') ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready for Pack
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Ready for Pack
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className="step line">
+                                        {(shipmentMarketplace.statusValue === 'process_for_shipping') || (shipmentMarketplace.statusValue === 'ready_for_pack') ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready to Ship
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Ready to Ship
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className="step line">
+                                        {(shipmentMarketplace.statusValue === 'order_shipped') || (shipmentMarketplace.statusValue === 'order_delivered')
+                                            || (shipmentMarketplace.statusValue === 'closed') || (shipmentMarketplace.statusValue === 'canceled') ? (
+                                                <>
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
+                                                    <div className={classes.statusLabelActive}>
+                                                        Order Shipped
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {' '}
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />
+                                                    <div className={classes.statusLabelInactive}>
+                                                        Order Shipped
+                                                    </div>
+                                                </>
+                                            )}
+                                    </div>
+                                    <div className="step">
+                                        {!((shipmentMarketplace.statusValue === 'order_delivered') || (shipmentMarketplace.statusValue === 'closed')
+                                            || (shipmentMarketplace.statusValue === 'canceled')) ? (
+                                                <>
+                                                    {' '}
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                                    <div className={classes.statusLabelInactive}>
+                                                        Order Delivered
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
+                                                    <div className={classes.statusLabelActive}>
+                                                        Order Delivered
+                                                    </div>
+                                                </>
+                                            )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     <hr />
                     <div className={classes.printProgress}>
+                        {(shipmentMarketplace.statusValue === 'canceled') && (
+                            <>
+                                <span className={classes.orderLabel} style={{ marginTop: 10 }}>
+                                    Order Canceled
+                                </span>
+                            </>
+                        )}
                         {(shipmentMarketplace.statusValue === 'process_for_shipping') && (
                             <>
                                 Print your packlist, Pick your items
                                 <br />
                                 and pack your items
                                 <div className={classes.formFieldButton}>
-                                    <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/address/${shipmentMarketplace.id}`)}
-                                        variant="contained"
-                                        style={{ marginRight: 10 }}
-                                    >
-                                        Print Address
-                                    </Button>
-                                    <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/invoice/${shipmentMarketplace.id}`)}
-                                        variant="contained"
-                                        style={{ marginRight: 10 }}
-                                    >
-                                        Print Invoice
-                                    </Button>
-                                    {!(shipmentMarketplace.allocation) ? (
+                                    {(shipmentMarketplace.allocation) ? (
+                                        <>
+                                            <Button
+                                                className={clsx(classes.btn, 'print')}
+                                                onClick={() => window.open(`/printoms/pick/${shipmentMarketplace.id}`)}
+                                                variant="contained"
+                                            >
+                                                Print Pick List
+                                            </Button>
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikPicked.handleSubmit}
+                                                variant="contained"
+                                                style={{ marginLeft: 10 }}
+                                            >
+                                                Mark Pick Complete
+                                            </Button>
+                                        </>
+                                    ) : (
                                         <>
                                             <Button
                                                 className={classes.btn}
                                                 type="submit"
                                                 onClick={formikConfirm.handleSubmit}
                                                 variant="contained"
+                                                style={{ marginRight: 10 }}
                                             >
                                                 Confirm Order
                                             </Button>
-                                        </>
-                                    ) : (
-                                        <>
                                             <FormDialog
                                                 labelButton="Canceled"
                                                 titleDialog="Cancel Reason"
@@ -185,14 +265,6 @@ const ShipmentMarketplaceEditContent = (props) => {
                                                     </>
                                                 )}
                                             />
-                                            <Button
-                                                className={classes.btn}
-                                                onClick={formikPicked.handleSubmit}
-                                                variant="contained"
-                                                style={{ marginLeft: 10 }}
-                                            >
-                                                Mark Pick Complete
-                                            </Button>
                                         </>
                                     )}
                                 </div>
@@ -200,64 +272,58 @@ const ShipmentMarketplaceEditContent = (props) => {
                         )}
                         {(shipmentMarketplace.statusValue === 'ready_for_pack') && (
                             <>
-                                the packing order is ready to be processed
+                                The packing order is ready to be processed
                                 <div className={classes.formFieldButton}>
                                     <Button
                                         className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/address/${shipmentMarketplace.id}`)}
+                                        onClick={() => window.open(`/printoms/pack/${shipmentMarketplace.id}`)}
                                         variant="contained"
-                                        style={{ marginRight: 10 }}
                                     >
-                                        Print Address
-                                    </Button>
-                                    <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/invoice/${shipmentMarketplace.id}`)}
-                                        variant="contained"
-                                        style={{ marginRight: 10 }}
-                                    >
-                                        Print Invoice
+                                        Print Pack List
                                     </Button>
                                     <Button
                                         className={classes.btn}
                                         onClick={formikPacked.handleSubmit}
                                         variant="contained"
+                                        style={{ marginLeft: 10 }}
                                     >
                                         Mark Pack Complete
                                     </Button>
                                 </div>
                             </>
                         )}
-                        {(shipmentMarketplace.statusValue === 'ready_for_ship') && (
-                            <>
-                                <div>
-                                    <span className={classes.spanText}>Or enter shipping and tracking information</span>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        label="AWB Number"
-                                        variant="outlined"
-                                        name="awb"
-                                        value={formikShipped.values.awb}
-                                        onChange={formikShipped.handleChange}
-                                        error={!!(formikShipped.touched.awb && formikShipped.errors.awb)}
-                                        helperText={(formikShipped.touched.awb && formikShipped.errors.awb) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                    <div className={classes.formFieldButton2}>
-                                        <Button
-                                            className={classes.btn}
-                                            onClick={formikShipped.handleSubmit}
-                                            variant="contained"
-                                        >
-                                            Shipped
-                                        </Button>
+                        {(shipmentMarketplace.statusValue === 'ready_for_ship'
+                            || (shipmentMarketplace.statusValue === 'order_shipped' && !shipmentMarketplace.trackNumber))
+                            && (
+                                <>
+                                    <div>
+                                        <span className={classes.spanText}>Enter shipping and tracking information</span>
+                                        <TextField
+                                            className={classes.fieldRoot}
+                                            label="AWB Number"
+                                            variant="outlined"
+                                            name="awb"
+                                            value={formikShipped.values.awb}
+                                            onChange={formikShipped.handleChange}
+                                            error={!!(formikShipped.touched.awb && formikShipped.errors.awb)}
+                                            helperText={(formikShipped.touched.awb && formikShipped.errors.awb) || ''}
+                                            InputProps={{
+                                                className: classes.fieldInput,
+                                            }}
+                                        />
+                                        <div className={classes.formFieldButton2}>
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikShipped.handleSubmit}
+                                                variant="contained"
+                                            >
+                                                Shipped
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            </>
-                        )}
-                        {(shipmentMarketplace.statusValue === 'order_shipped') && (
+                                </>
+                            )}
+                        {(shipmentMarketplace.statusValue === 'order_shipped' && (shipmentMarketplace.trackNumber)) && (
                             <>
                                 {(shipmentMarketplace.awb) ? (
                                     <span className={classes.orderLabel} style={{ marginBottom: 10 }}>
@@ -267,7 +333,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                                     <span className={classes.orderLabel} style={{ marginBottom: 10 }}>
                                         AWB Number : -
                                     </span>
-                                ) }
+                                )}
                                 <div className={classes.formFieldButton2}>
                                     <Button
                                         className={classes.btn}
@@ -322,6 +388,14 @@ const ShipmentMarketplaceEditContent = (props) => {
                                 {`${shipmentMarketplace.region}, ${shipmentMarketplace.postcode}, ${shipmentMarketplace.countryId}`}
                             </span>
                         </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Shipping Address</h5>
+                            <span className={classes.orderLabel}>{shipmentMarketplace.shippingAddress.street}</span>
+                            <span className={classes.orderLabel}>{shipmentMarketplace.shippingAddress.city}</span>
+                            <span className={classes.orderLabel}>
+                                {`${shipmentMarketplace.shippingAddress.region}, ${shipmentMarketplace.shippingAddress.postcode}, ${shipmentMarketplace.shippingAddress.country_id}`}
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <h5 className={classes.titleSmall}>Items Ordered</h5>
@@ -349,10 +423,10 @@ const ShipmentMarketplaceEditContent = (props) => {
                         </div>
                     </div>
                     <div>
-                        <h5 className={classes.titleSmall}>Shipping and Tracking Information</h5>
+                        {/* <h5 className={classes.titleSmall}>Shipping and Tracking Information</h5>
                         <span className={classes.orderLabel}>
                             <strong>{`Shipping Method : ${shipmentMarketplace.method}`}</strong>
-                        </span>
+                        </span> */}
                         {(shipmentMarketplace.awb)
                             && (
                                 <div style={{ overflowX: 'auto' }}>
@@ -385,13 +459,20 @@ const ShipmentMarketplaceEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Notes</th>
                             </tr>
-                            {shipmentMarketplace.history.map((e) => (
+                            {shipmentMarketplace.history.length ? shipmentMarketplace.history.map((e) => (
                                 <tr>
-                                    <td className={classes.td} style={{ paddingLeft: 0 }}>{e.created_at}</td>
-                                    <td className={classes.td}>{e.status}</td>
-                                    <td className={classes.td}>{e.comment}</td>
+                                    <td className={classes.td} style={{ paddingLeft: 0 }}>{e.created_at || '-'}</td>
+                                    <td className={classes.td}>{e.status || '-'}</td>
+                                    <td className={classes.td}>{e.comment || '-'}</td>
                                 </tr>
-                            ))}
+                            ))
+                                : (
+                                    <tr>
+                                        <td className={classes.td} style={{ paddingLeft: 0 }}>-</td>
+                                        <td className={classes.td}>-</td>
+                                        <td className={classes.td}>-</td>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                 </div>
