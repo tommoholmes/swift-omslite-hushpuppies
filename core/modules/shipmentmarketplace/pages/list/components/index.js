@@ -1,75 +1,167 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Tabs from '@common_tabs';
-import { optionsAllocation, optionsStatus, dataTab } from '@modules/shipmentmarketplace/helpers';
+import { optionsAllocation, dataTab } from '@modules/shipmentmarketplace/helpers';
 import Header from '@modules/shipmentmarketplace/pages/list/components/Header';
 import useStyles from '@modules/shipmentmarketplace/pages/list/components/style';
 import clsx from 'clsx';
+import TextField from '@common_textfield';
 
 const ShipmentMarketplaceListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmMarketplaceShipment, pickShipment, packShipment,
-        setVarExport, varExport, handleExport, exportStoreShipmentToCsv, getExportStatusHistory } = props;
+        setVarExport, varExport, handleExport, exportStoreShipmentToCsv, getExportStatusHistory, optionsStatus } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
-    const [tab, setTab] = React.useState(0);
+    const [tab, setTab] = React.useState('process_for_shipping');
     const [load, setLoad] = React.useState(false);
+    const [awbNull, setAwbNull] = React.useState('');
+    const [indexType, setIndexType] = React.useState({
+        track_number: 0,
+        allocation_status: 0,
+    });
 
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
         { field: 'marketplace_order_number', headerName: 'Marketplace Order Number', hideable: true },
-        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
-        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
-        { field: 'loc_code', headerName: 'Loc Code', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Channel Order Date', hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
-        { field: 'connexi_order_status', headerName: 'Connexi Order Status', hideable: true },
+        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'location', headerName: 'Location', sortable: true, hideable: true },
+        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
+        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
+        { field: 'connexi_order_status', headerName: 'Connexi Order Status', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
     ];
 
+    const awbInput = ['Null', 'Not Null'];
     const filters = [
         { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Shipment Number', initialValue: '' },
         { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Channel Order Number', initialValue: '' },
-        {
-            field: 'allocation_status',
-            name: 'allocation_status',
-            type: 'in',
-            label: 'Allocation Status',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsAllocation.find((e) => e.name === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.name)}
-                    options={optionsAllocation}
-                />
-            ),
-        },
+        { field: 'marketplace_order_number', name: 'marketplace_order_number', type: 'like', label: 'Marketplace Order Number', initialValue: '' },
         {
             field: 'status',
             name: 'status',
             type: 'like',
             label: 'Status',
-            initialValue: tab !== 0 ? tab : '',
+            // eslint-disable-next-line no-nested-ternary
+            initialValue: tab !== 0 ? tab.includes('order_shipped') ? 'order_shipped' : tab : '',
+            component: ({ filterValue, setFilterValue }) => {
+                const options = optionsStatus.slice().map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={options.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => setFilterValue(newValue && newValue.id)}
+                        options={options}
+                    />
+                );
+            },
+        },
+        {
+            field: 'allocation_status',
+            name: 'allocation_status',
+            type: ['in', 'null'],
+            label: 'Allocation Status',
+            initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.id)}
-                    options={optionsStatus}
+                    value={optionsAllocation.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => {
+                        if (newValue && newValue.id === 'true') {
+                            setIndexType({ ...indexType, allocation_status: 1 });
+                        } else {
+                            setIndexType({ ...indexType, allocation_status: 0 });
+                        }
+                        setFilterValue(newValue && newValue.id);
+                    }}
+                    options={optionsAllocation}
                 />
             ),
         },
-        // { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Order Date', initialValue: '' },
-        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airwaybill Number', initialValue: '' },
+        {
+            field: 'channel_order_date',
+            name: 'channel_order_date_from',
+            type: 'from',
+            label: 'Channel Order Date From',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+
+        },
+        {
+            field: 'channel_order_date',
+            name: 'channel_order_date_to',
+            type: 'to',
+            label: 'Channel Order Date To',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+
+        },
+        { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
-        { field: 'framework', name: 'framework', type: 'eq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace' },
+        { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
+        { field: 'framework', name: 'framework', type: 'eq', label: 'Framework', class: 'fixed', initialValue: 'Marketplace', hidden: true },
+        {
+            field: 'track_number',
+            name: 'track_number',
+            type: ['like', 'null', 'notnull'],
+            label: 'Airwaybill Number',
+            initialValue: awbNull,
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    inputProps={{
+                        className: classes.input,
+                    }}
+                    variant="outlined"
+                    size="small"
+                    value={awbNull ? awbInput[indexType.track_number - 1] : filterValue}
+                    onChange={(e) => {
+                        setFilterValue(e.target.value);
+                    }}
+                    disabled={!!awbNull}
+                />
+            ),
+        },
+        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: 'is Pickup', class: 'fixed', initialValue: '0', hidden: true },
     ];
 
     const getIconByStatus = (status) => {
@@ -117,6 +209,7 @@ const ShipmentMarketplaceListContent = (props) => {
                 {shipmentmarketplace.status.label}
             </div>
         ),
+        location: shipmentmarketplace.location.loc_name,
         allocation_status: () => (
             <div
                 className={clsx(classes.statusRow, 'unbold')}
@@ -148,35 +241,27 @@ const ShipmentMarketplaceListContent = (props) => {
             },
         },
         {
-            label: 'Print Address',
-            message: 'ready for print?',
-            onClick: (checkedRows) => {
-                const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/address/${idPrint.toString().replace(/,/g, '/')}`);
-            },
-        },
-        {
-            label: 'Print Invoice',
-            message: 'ready for print?',
-            onClick: (checkedRows) => {
-                const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/printoms/invoice/${idPrint.toString().replace(/,/g, '/')}`);
-            },
-        },
-        {
-            label: 'Export Status History',
-            message: 'ready for print?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await getExportStatusHistory({ variables });
-            },
-        },
-        {
             label: 'Mark Confirm Complete',
             message: 'Are you sure to confirm ?',
             onClick: async (checkedRows) => {
                 const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
                 await confirmMarketplaceShipment({ variables });
+            },
+        },
+        {
+            label: 'Mark Pick Complete',
+            message: 'Are you sure to confirm ?',
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await pickShipment({ variables });
+            },
+        },
+        {
+            label: 'Mark Pack Complete',
+            message: 'Are you sure to confirm ?',
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await packShipment({ variables });
             },
         },
         {
@@ -201,27 +286,38 @@ const ShipmentMarketplaceListContent = (props) => {
             },
         },
         {
-            label: 'Mark Pick Complete',
-            message: 'Are you sure to confirm ?',
+            label: 'Export Status History',
+            message: 'ready for print?',
             onClick: async (checkedRows) => {
                 const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await pickShipment({ variables });
+                await getExportStatusHistory({ variables });
             },
         },
-        {
-            label: 'Mark Pack Complete',
-            message: 'Are you sure to confirm ?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await packShipment({ variables });
-            },
-        },
+
     ];
 
     const onChangeTab = async (e, v) => {
         setLoad(true);
+        if (e.target.innerHTML === 'Order Shipped - No AWB') {
+            await setIndexType({ ...indexType, track_number: 1 });
+            await setAwbNull('true');
+        } else if (e.target.innerHTML === 'Order Shipped - AWB') {
+            await setIndexType({ ...indexType, track_number: 2 });
+            await setAwbNull('true');
+        } else {
+            setIndexType({ ...indexType, track_number: 0 });
+            await setAwbNull('');
+        }
         await setTab(v);
         setLoad(false);
+    };
+
+    const handleReset = () => {
+        setIndexType({
+            allocation_status: 0,
+            track_number: 0,
+        });
+        setTab(0);
     };
 
     return (
@@ -238,9 +334,10 @@ const ShipmentMarketplaceListContent = (props) => {
                     columns={columns}
                     count={storeShipmentTotal}
                     showCheckbox
-                    handleReset={() => setTab(0)}
+                    handleReset={() => handleReset()}
                     handleExport={handleExport}
                     setVarExport={setVarExport}
+                    indexType={indexType}
                 />
             )}
         </>

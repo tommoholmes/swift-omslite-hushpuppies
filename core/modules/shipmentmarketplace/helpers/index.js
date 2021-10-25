@@ -1,7 +1,7 @@
 export const optionsAllocation = [
-    { id: 0, name: 'unconfirmed' },
-    { id: 1, name: 'confirmed' },
-    { id: 2, name: 'cannot_fulfill' },
+    { name: 'Unconfirmed', id: 'true' },
+    { name: 'Confirmed', id: 'confirmed' },
+    { name: 'Cannot Fulfill', id: 'cannot_fulfill' },
 ];
 
 export const optionsStatus = [
@@ -22,10 +22,11 @@ export const optionsStatus = [
 ];
 
 export const dataTab = [
-    { label: 'All', value: 0 },
     { label: 'Process for Shipping', value: 'process_for_shipping' },
     { label: 'Ready for Pack', value: 'ready_for_pack' },
     { label: 'Ready for Ship', value: 'ready_for_ship' },
-    { label: 'Order Shipped', value: 'order_shipped' },
+    { label: 'Order Shipped - No AWB', value: 'order_shipped_no_awb' },
+    { label: 'Order Shipped - AWB', value: 'order_shipped_awb' },
     { label: 'Order Delivered', value: 'order_delivered' },
+    { label: 'All', value: 0 },
 ];

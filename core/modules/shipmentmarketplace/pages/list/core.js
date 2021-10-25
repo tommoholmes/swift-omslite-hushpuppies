@@ -8,6 +8,7 @@ const Core = (props) => {
     } = props;
     const router = useRouter();
     const [varExport, setVarExport] = React.useState({});
+    const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
     const [getExportStatusHistory] = gqlService.getExportStatusHistory({
@@ -47,6 +48,23 @@ const Core = (props) => {
         });
     };
 
+    if (loadingOptionStatus) {
+        return (
+            <Layout useBreadcrumbs={false}>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading
+                </div>
+            </Layout>
+        );
+    }
+
     const contentProps = {
         getStoreShipmentList,
         confirmMarketplaceShipment,
@@ -59,6 +77,7 @@ const Core = (props) => {
         handleExport,
         setVarExport,
         varExport,
+        optionsStatus: optionsStatus.getShipmentStatusByType,
     };
 
     return (

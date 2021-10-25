@@ -33,6 +33,10 @@ export const getStoreShipmentList = gql`
                 shipping_email
                 shipping_telephone
                 connexi_order_status
+                channel_order_date
+                location {
+                    loc_name
+                }
             }
             total_count
             page_info {
@@ -96,11 +100,11 @@ export const getStoreShipmentById = gql`
                 notes
             }
             order_item {
-                sku
+                base_price
                 name
-                price
-                qty
+                qty_shipped
                 row_total
+                sku
             }
             channel_shipping_label
             subtotal
@@ -288,6 +292,15 @@ export const getActivity = gql`
     }
 `;
 
+export const getShipmentStatusByType = gql`
+    query{
+        getShipmentStatusByType(type: "marketplace"){
+            label
+            value
+        }
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -306,4 +319,5 @@ export default {
     bulkConfirmedMarketplaceShipment,
     getExportStatusHistory,
     getActivity,
+    getShipmentStatusByType,
 };
