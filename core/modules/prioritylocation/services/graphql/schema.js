@@ -15,11 +15,7 @@ export const getPriorityLocationList = gql`
         ){
             items {
                 id
-                channel_code{
-                    channel_code
-                    channel_id
-                    channel_name
-                }
+                channel_code
                 province{
                     code
                     id

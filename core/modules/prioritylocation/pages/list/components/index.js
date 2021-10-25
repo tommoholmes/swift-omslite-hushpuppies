@@ -35,7 +35,7 @@ const PriorityLocationListContent = (props) => {
     const rows = priorityLocationList.map((priorityLocation) => ({
         ...priorityLocation,
         id: priorityLocation.id,
-        channel_code: priorityLocation.channel_code.channel_code,
+        channel_code: priorityLocation.channel_code,
         province: priorityLocation.province.code,
         city: priorityLocation.city.city,
         loc_code: priorityLocation.loc_code.loc_code,
