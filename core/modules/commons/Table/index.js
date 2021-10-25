@@ -94,6 +94,7 @@ const CustomTable = (props) => {
         setVarExport,
         exportWithId,
         indexType = 0,
+        exports = [],
     } = props;
 
     // hooks
@@ -294,6 +295,31 @@ const CustomTable = (props) => {
                                 </Button>
                             </div>
                         )}
+                    {exports.length
+                        ? (
+                            <div className="top-item">
+                                <MenuPopover
+                                    openButton={{ label: 'Exports' }}
+                                    color="purple"
+                                    iconPosition="end"
+                                    icon={<PublishIcon />}
+                                    menuItems={exports.map((action) => ({
+                                        label: action.label,
+                                        onClick: () => {
+                                            setActiveAction(action);
+                                            if (action.label === 'Delete') {
+                                                setOpenConfirmDialog(true);
+                                            } else {
+                                                setTimeout(() => {
+                                                    document.getElementById('clickConfirm').click();
+                                                }, 100);
+                                            }
+                                        },
+                                    }))}
+                                />
+                            </div>
+                        )
+                        : null}
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>

@@ -13,6 +13,14 @@ const useStyles = makeStyles(() => ({
             boxShadow: 'none',
         },
     },
+    btnPurple: {
+        background: '#BE1F93',
+        boxShadow: 'none',
+        '&:hover': {
+            background: '#BE1F93',
+            boxShadow: 'none',
+        },
+    },
 }));
 
 const MenuPopover = (props) => {
@@ -20,6 +28,8 @@ const MenuPopover = (props) => {
         openButton,
         menuItems,
         icon,
+        iconPosition = 'start',
+        color = 'gray',
     } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const styles = useStyles();
@@ -40,9 +50,25 @@ const MenuPopover = (props) => {
 
     return (
         <div>
-            <Button variant="contained" buttonType="primary-rounded" className={styles.btn} onClick={handleClickOpenButton}>
-                {openButton.label}
-                {icon}
+            <Button
+                variant="contained"
+                buttonType="primary-rounded"
+                className={color === 'gray' ? styles.btn : styles.btnPurple}
+                onClick={handleClickOpenButton}
+            >
+                {iconPosition === 'start'
+                    ? (
+                        <>
+                            {openButton.label}
+                            {icon}
+                        </>
+                    )
+                    : (
+                        <>
+                            {icon}
+                            {openButton.label}
+                        </>
+                    )}
             </Button>
             <Menu
                 id="simple-menu"

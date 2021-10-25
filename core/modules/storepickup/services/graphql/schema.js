@@ -92,8 +92,8 @@ query getStoreShipmentId(
         order_item {
             sku
             name
-            price
-            qty
+            base_price
+            qty_shipped
             row_total
         }
         subtotal

@@ -79,6 +79,10 @@ export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
     fetchPolicy: 'no-cache',
 });
 
+export const getShipmentStatusByType = (variables) => useQuery(Schema.getShipmentStatusByType, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -97,4 +101,5 @@ export default {
     bulkConfirmedMarketplaceShipment,
     getExportStatusHistory,
     getActivity,
+    getShipmentStatusByType,
 };

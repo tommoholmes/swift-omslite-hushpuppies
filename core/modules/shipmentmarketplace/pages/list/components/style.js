@@ -91,6 +91,11 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         paddingTop: 20,
     },
+    input: {
+        paddingTop: '8.5px',
+        paddingBottom: '8.5px',
+        textTransform: 'capitalize',
+    },
 }));
 
 export default useStyles;

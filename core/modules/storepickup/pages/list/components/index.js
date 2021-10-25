@@ -8,6 +8,7 @@ import Tabs from '@common_tabs';
 import { dataTab, optionsAllocation } from '@modules/storepickup/helpers';
 import Header from '@modules/storepickup/pages/list/components/Header';
 import useStyles from '@modules/storepickup/pages/list/components/style';
+import TextField from '@common_textfield';
 import clsx from 'clsx';
 
 const StorePickupListContent = (props) => {
@@ -63,9 +64,57 @@ const StorePickupListContent = (props) => {
                 );
             },
         },
-        // { field: 'channel_order_date', name: 'channel_order_date', type: 'like', label: 'Channel Order Date', initialValue: '' },
+        {
+            field: 'channel_order_date',
+            name: 'channel_order_date_from',
+            type: 'from',
+            label: 'Channel Order Date From',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+
+        },
+        {
+            field: 'channel_order_date',
+            name: 'channel_order_date_to',
+            type: 'to',
+            label: 'Channel Order Date To',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+
+        },
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
+        { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
         { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
         {
             field: 'allocation_status',
