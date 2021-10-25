@@ -13,7 +13,7 @@ import TextField from '@common_textfield';
 const ShipmentMarketplaceListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmMarketplaceShipment, pickShipment, packShipment,
-        setVarExport, varExport, handleExport, exportStoreShipmentToCsv, getExportStatusHistory, optionsStatus } = props;
+        setVarExport, varExport, exportStoreShipmentToCsv, getExportStatusHistory, optionsStatus } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState('process_for_shipping');
@@ -264,6 +264,9 @@ const ShipmentMarketplaceListContent = (props) => {
                 await packShipment({ variables });
             },
         },
+    ];
+
+    const exports = [
         {
             label: 'Export With Items',
             message: 'ready for print?',
@@ -286,6 +289,26 @@ const ShipmentMarketplaceListContent = (props) => {
             },
         },
         {
+            label: 'Export Without Items',
+            message: 'ready for print?',
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
+                window.backdropLoader(true);
+                await exportStoreShipmentToCsv({
+                    variables: {
+                        type: 'marketplace',
+                        ...varExport,
+                        filter: {
+                            increment_id: {
+                                in: incrementIds,
+                            },
+                            ...varExport.filter,
+                        },
+                    },
+                });
+            },
+        },
+        {
             label: 'Export Status History',
             message: 'ready for print?',
             onClick: async (checkedRows) => {
@@ -293,7 +316,6 @@ const ShipmentMarketplaceListContent = (props) => {
                 await getExportStatusHistory({ variables });
             },
         },
-
     ];
 
     const onChangeTab = async (e, v) => {
@@ -335,9 +357,9 @@ const ShipmentMarketplaceListContent = (props) => {
                     count={storeShipmentTotal}
                     showCheckbox
                     handleReset={() => handleReset()}
-                    handleExport={handleExport}
                     setVarExport={setVarExport}
                     indexType={indexType}
+                    exports={exports}
                 />
             )}
         </>

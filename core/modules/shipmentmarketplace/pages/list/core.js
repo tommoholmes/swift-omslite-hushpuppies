@@ -38,16 +38,6 @@ const Core = (props) => {
         },
     });
 
-    const handleExport = () => {
-        window.backdropLoader(true);
-        exportStoreShipmentToCsv({
-            variables: {
-                type: 'marketplace',
-                ...varExport,
-            },
-        });
-    };
-
     if (loadingOptionStatus) {
         return (
             <Layout useBreadcrumbs={false}>
@@ -74,7 +64,6 @@ const Core = (props) => {
         data,
         loading,
         exportStoreShipmentToCsv,
-        handleExport,
         setVarExport,
         varExport,
         optionsStatus: optionsStatus.getShipmentStatusByType,
