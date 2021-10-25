@@ -31,7 +31,6 @@ const StorePickupListContent = (props) => {
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
         { field: 'location', headerName: 'Location', sortable: true, hideable: true },
-        { field: 'track_number', headerName: 'Airway Bill', hideable: false, hidden: true },
         { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
         { field: 'email', headerName: 'Email/Mobile', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
@@ -115,7 +114,6 @@ const StorePickupListContent = (props) => {
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
-        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
         {
             field: 'allocation_status',
             name: 'allocation_status',
