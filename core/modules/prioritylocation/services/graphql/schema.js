@@ -15,11 +15,7 @@ export const getPriorityLocationList = gql`
         ){
             items {
                 id
-                channel_code{
-                    channel_code
-                    channel_id
-                    channel_name
-                }
+                channel_code
                 province{
                     code
                     id
@@ -55,11 +51,7 @@ export const getPriorityLocationById = gql`
             id: $id
         ){
             id
-            channel_code{
-                channel_code
-                channel_id
-                channel_name
-            }
+            channel_code
             province{
                 code
                 id
@@ -95,11 +87,7 @@ export const createPriorityLocation = gql`
                 priority: $priority,
             }
         ){
-            channel_code{
-                channel_code
-                channel_id
-                channel_name
-            }
+            channel_code
             city{
                 city
                 id
@@ -132,11 +120,7 @@ export const updatePriorityLocation = gql`
                 priority: $priority,
             }
         ){
-            channel_code{
-                channel_code
-                channel_id
-                channel_name
-            }
+            channel_code
             city{
                 city
                 id
