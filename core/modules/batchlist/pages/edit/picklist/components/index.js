@@ -145,18 +145,18 @@ const PickListEditContent = (props) => {
                         <h2>{pickList.itemsLeft}</h2>
                         <span>items left to pick</span>
                     </div>
-                    {((pickList.itemsLeft === 0) && !(pickList.statusValue === 'pick_complete')) ? (
+                    {((pickList.statusValue === 'pick_complete')) ? (
                         <button
-                            className={classes.btnFooter}
-                            type="submit"
-                            onClick={formikDone.handleSubmit}
+                            className={classes.btnFooterDisabled}
+                            disable
                         >
                             Done Picking
                         </button>
                     ) : (
                         <button
-                            className={classes.btnFooterDisabled}
-                            disabled
+                            className={classes.btnFooter}
+                            type="submit"
+                            onClick={formikDone.handleSubmit}
                         >
                             Done Picking
                         </button>

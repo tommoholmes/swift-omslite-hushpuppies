@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/batchlist/helpers';
+import statusGqlService from '@modules/batchlist/services/graphql';
 import Header from '@modules/batchlist/pages/list/components/Header';
 import useStyles from '@modules/batchlist/pages/list/components/style';
 
@@ -28,14 +29,26 @@ const PickByBatchListContent = (props) => {
             type: 'eq',
             label: 'Status',
             initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.id)}
-                    options={optionsStatus}
-                />
-            ),
+            component: ({ filterValue, setFilterValue }) => {
+                const [getPickByBatchStatus, getPickByBatchStatusRes] = statusGqlService.getPickByBatchStatus();
+                const statusOptions = (getPickByBatchStatusRes
+                    && getPickByBatchStatusRes.data
+                    && getPickByBatchStatusRes.data.getPickByBatchStatus) || [];
+                const primaryKey = 'value';
+                const labelKey = 'label';
+                return (
+                    <Autocomplete
+                        mode="lazy"
+                        style={{ width: 228 }}
+                        getOptions={getPickByBatchStatus}
+                        value={statusOptions.find((e) => e[primaryKey] === filterValue)}
+                        onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
+                        options={statusOptions}
+                        primaryKey={primaryKey}
+                        labelKey={labelKey}
+                    />
+                );
+            },
         },
         {
             field: 'status',

@@ -9,6 +9,10 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
+export const getPickByBatchStatus = (variables) => useLazyQuery(Schema.getPickByBatchStatus, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export const getPickByBatchList = (variables) => useLazyQuery(Schema.getPickByBatchList, {
     variables, ...context, ...fetchPolicy,
 });
@@ -50,6 +54,7 @@ export const doneSortingPickByBatch = (variables) => useMutation(Schema.doneSort
 });
 
 export default {
+    getPickByBatchStatus,
     getPickByBatchList,
     getPickByBatchById,
     startPickByBatchPicklist,

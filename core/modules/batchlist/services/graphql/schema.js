@@ -40,6 +40,15 @@ const queryItemDetail = `
     sort_no
 `;
 
+export const getPickByBatchStatus = gql`
+    query{
+        getPickByBatchStatus{
+            value
+            label
+        }
+    }
+`;
+
 export const getPickByBatchList = gql`
     query getPickByBatchList(
         $pageSize: Int!,
@@ -227,6 +236,7 @@ export const doneSortingPickByBatch = gql`
 `;
 
 export default {
+    getPickByBatchStatus,
     getPickByBatchList,
     getPickByBatchById,
     startPickByBatchPicklist,
