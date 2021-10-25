@@ -34,6 +34,9 @@ const PickByBatchListContent = (props) => {
             initialValue: 'confirmed',
             hidden: true,
         },
+        { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Order Number', initialValue: '' },
+        { field: 'channel_shipping_label', name: 'channel_shipping_label', type: 'match', label: 'Shipping Method', initialValue: '' },
+        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
     ];
 
     const rows = PickByBatchList.map((batchlist) => ({
