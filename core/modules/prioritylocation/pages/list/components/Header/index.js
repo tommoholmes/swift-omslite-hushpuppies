@@ -13,6 +13,12 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Manage Priority Location</h2>
             <Button
                 className={classes.buttonAdd}
+                onClick={() => router.push('/oms/prioritylocation/import')}
+            >
+                Upload Priority Location
+            </Button>
+            <Button
+                className={classes.buttonAdd}
                 onClick={() => router.push('/oms/prioritylocation/create')}
             >
                 Create Priority Location

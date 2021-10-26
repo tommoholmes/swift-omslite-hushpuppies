@@ -19,6 +19,11 @@ const PriorityLocationEditContent = (props) => {
     const [getCityList, getCityListRes] = priorityLocationGqlService.getCityList();
     const [getLocationList, getLocationListRes] = priorityLocationGqlService.getLocationList();
 
+    console.log(getChannelListRes
+        && getChannelListRes.data
+        && getChannelListRes.data.getChannelList
+        && getChannelListRes.data.getChannelList.items);
+
     return (
         <>
             <Button

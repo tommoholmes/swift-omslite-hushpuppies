@@ -40,6 +40,12 @@ export const deletePriorityLocation = (variables) => useMutation(Schema.deletePr
 export const multideletePriorityLocation = (variables) => useMutation(Schema.multideletePriorityLocation, {
     variables, ...context,
 });
+export const uploadPriorityLocation = (variables) => useMutation(Schema.uploadPriorityLocation, {
+    variables, ...context,
+});
+export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
+    variables, ...context,
+});
 
 export default {
     getPriorityLocationList,
@@ -51,4 +57,6 @@ export default {
     getLocationList,
     deletePriorityLocation,
     multideletePriorityLocation,
+    uploadPriorityLocation,
+    downloadSampleCsv,
 };
