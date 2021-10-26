@@ -47,6 +47,48 @@ const Layout = (props) => {
         );
     };
 
+    const dataStoreConfigWave = [];
+    const varianStoreConfigWave = () => {
+        const { loading, data } = gqlService.getStoreConfig({
+            path: 'swiftoms_pickpack/wave/enable',
+        });
+        if (loading) {
+            return (
+                <>Loading...</>
+            );
+        }
+
+        if (!data) {
+            return (
+                <>Data not found!</>
+            );
+        }
+        dataStoreConfigWave.push(
+            data.getStoreConfig,
+        );
+    };
+
+    const dataStoreConfigBatch = [];
+    const varianStoreConfigBatch = () => {
+        const { loading, data } = gqlService.getStoreConfig({
+            path: 'swiftoms_pickpack/batch/enable',
+        });
+        if (loading) {
+            return (
+                <>Loading...</>
+            );
+        }
+
+        if (!data) {
+            return (
+                <>Data not found!</>
+            );
+        }
+        dataStoreConfigBatch.push(
+            data.getStoreConfig,
+        );
+    };
+
     const menuList = [
         { key: 'dashboard', label: 'Dashboard', url: '/' },
         {
@@ -427,8 +469,12 @@ const Layout = (props) => {
                         setOpen={setOpen}
                         menuList={menuList}
                         aclDetail={dataAcl}
+                        storeConfigDetailWave={dataStoreConfigWave}
+                        storeConfigDetailBatch={dataStoreConfigBatch}
                     >
                         {varianAcl()}
+                        {varianStoreConfigWave()}
+                        {varianStoreConfigBatch()}
                     </Sidebar>
                 </>
             )}

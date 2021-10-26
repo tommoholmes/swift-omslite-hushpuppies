@@ -8,6 +8,17 @@ export const customerAccessControlList = gql`
     }
 `;
 
+export const getStoreConfig = gql`
+    query getStoreConfig(
+        $path: String!
+    ){
+        getStoreConfig(
+            path: $path
+        )
+    }
+`;
+
 export default {
     customerAccessControlList,
+    getStoreConfig,
 };

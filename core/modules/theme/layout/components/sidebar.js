@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Sidebar = ({
-    activeParentMenu, setActiveParentMenu, activeChildMenu, setActiveChildMenu, open, setOpen, menuList, aclDetail,
+    activeParentMenu, setActiveParentMenu, activeChildMenu, setActiveChildMenu, open, setOpen, menuList, aclDetail, storeConfigDetailBatch, storeConfigDetailWave,
 }) => {
     const router = useRouter();
     const classes = useStyles();
@@ -198,21 +198,73 @@ const Sidebar = ({
                                                         {((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode))
                                                             || menu.key === 'vendor') && (
                                                             <>
-                                                                <Link href={`${menuChild.url}`} key={menuChild.key}>
-                                                                    <a>
-                                                                        <ListItem
-                                                                            button
-                                                                            key={menuChild.key}
-                                                                            className={clsx(
-                                                                                classes.menuChildItem,
-                                                                                menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
-                                                                            )}
-                                                                            onClick={() => handleClickChild(menuChild)}
-                                                                        >
-                                                                            <ListItemText className="itemText" primary={menuChild.label} />
-                                                                        </ListItem>
-                                                                    </a>
-                                                                </Link>
+                                                                {(menu.key === 'pickpack') && (
+                                                                    <>
+                                                                        {(storeConfigDetailWave[0] === '1') && (
+                                                                            <>
+                                                                                {((menuChild.key === 'wavelist')
+                                                                                    || (menuChild.key === 'wavecreate')
+                                                                                    || (menuChild.key === 'wavepack')) && (
+                                                                                    <Link href={`${menuChild.url}`} key={menuChild.key}>
+                                                                                        <a>
+                                                                                            <ListItem
+                                                                                                button
+                                                                                                key={menuChild.key}
+                                                                                                className={clsx(
+                                                                                                    classes.menuChildItem,
+                                                                                                    menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
+                                                                                                )}
+                                                                                                onClick={() => handleClickChild(menuChild)}
+                                                                                            >
+                                                                                                <ListItemText className="itemText" primary={menuChild.label} />
+                                                                                            </ListItem>
+                                                                                        </a>
+                                                                                    </Link>
+                                                                                )}
+                                                                            </>
+                                                                        )}
+                                                                        {(storeConfigDetailBatch[0] === '1') && (
+                                                                            <>
+                                                                                {((menuChild.key === 'batchlist')
+                                                                                    || (menuChild.key === 'batchcreate')
+                                                                                    || (menuChild.key === 'batchpack')) && (
+                                                                                    <Link href={`${menuChild.url}`} key={menuChild.key}>
+                                                                                        <a>
+                                                                                            <ListItem
+                                                                                                button
+                                                                                                key={menuChild.key}
+                                                                                                className={clsx(
+                                                                                                    classes.menuChildItem,
+                                                                                                    menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
+                                                                                                )}
+                                                                                                onClick={() => handleClickChild(menuChild)}
+                                                                                            >
+                                                                                                <ListItemText className="itemText" primary={menuChild.label} />
+                                                                                            </ListItem>
+                                                                                        </a>
+                                                                                    </Link>
+                                                                                )}
+                                                                            </>
+                                                                        )}
+                                                                    </>
+                                                                )}
+                                                                {!(menu.key === 'pickpack') && (
+                                                                    <Link href={`${menuChild.url}`} key={menuChild.key}>
+                                                                        <a>
+                                                                            <ListItem
+                                                                                button
+                                                                                key={menuChild.key}
+                                                                                className={clsx(
+                                                                                    classes.menuChildItem,
+                                                                                    menuChild.key === (activeChildMenu && activeChildMenu.key) && 'active',
+                                                                                )}
+                                                                                onClick={() => handleClickChild(menuChild)}
+                                                                            >
+                                                                                <ListItemText className="itemText" primary={menuChild.label} />
+                                                                            </ListItem>
+                                                                        </a>
+                                                                    </Link>
+                                                                )}
                                                             </>
                                                         )}
                                                     </>
