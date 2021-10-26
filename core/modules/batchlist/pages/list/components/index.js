@@ -5,7 +5,7 @@ import CustomList from '@common_customlist';
 import Link from 'next/link';
 import Router from 'next/router';
 import Autocomplete from '@common_autocomplete';
-import { optionsStatus } from '@modules/batchlist/helpers';
+// import { optionsStatus } from '@modules/batchlist/helpers';
 import statusGqlService from '@modules/batchlist/services/graphql';
 import Header from '@modules/batchlist/pages/list/components/Header';
 import useStyles from '@modules/batchlist/pages/list/components/style';
@@ -55,7 +55,7 @@ const PickByBatchListContent = (props) => {
             name: 'status',
             type: 'neq',
             label: 'Status',
-            initialValue: 'pick_complete',
+            initialValue: 'sort_complete',
             hidden: true,
         },
 
