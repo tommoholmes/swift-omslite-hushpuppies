@@ -63,6 +63,7 @@ const useColumns = (initialColumns) => {
 const CustomList = (props) => {
     const {
         showCheckbox = false,
+        checkboxAll = false,
         primaryKey = 'id',
         rows,
         getRows,
@@ -86,6 +87,7 @@ const CustomList = (props) => {
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     // eslint-disable-next-line no-unused-vars
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
+    const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
     const {
@@ -258,9 +260,39 @@ const CustomList = (props) => {
         fetchRows();
     }, [filters, sorts]);
 
+    const handleChangeCheckboxAllRows = (checked) => {
+        const newCheckedRows = rows.reduce((accumulator, currentValue) => {
+            const i = accumulator.findIndex((checkedRow) => checkedRow[primaryKey] === currentValue[primaryKey]);
+            if (checked && i < 0) {
+                accumulator.push(currentValue);
+                setCheckedRows([...accumulator, currentValue]);
+                handleChecked([...accumulator, currentValue]);
+            } else if (!checked && i >= 0) {
+                setCheckedRows(accumulator.filter((checkedRow) => checkedRow[primaryKey] != currentValue[primaryKey]));
+                handleChecked(accumulator.filter((checkedRow) => checkedRow[primaryKey] != currentValue[primaryKey]));
+                return accumulator.filter((checkedRow) => checkedRow[primaryKey] != currentValue[primaryKey]);
+            }
+            return accumulator;
+        }, checkedRows);
+        setCheckedRows(newCheckedRows);
+        setIsCheckedAllRows(checked);
+    };
+
     return (
         <div>
             {renderTableToolbar()}
+            {checkboxAll && (
+                <div
+                    className={clsx(classes.gridList, classes.content, classes.boxAll)}
+                    style={{ gridTemplateColumns: `1fr repeat(${columns.length}, 2fr)` }}
+                >
+                    <Checkbox
+                        checked={isCheckedAllRows}
+                        onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)}
+                    />
+                    <span className={classes.title}>Select All</span>
+                </div>
+            )}
             {loading ? <div className={classes.loading}>Loading . . .</div>
                 : rows.length ? rows.map((row, i) => (
                     <div

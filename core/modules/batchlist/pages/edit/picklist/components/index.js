@@ -79,7 +79,7 @@ const PickListEditContent = (props) => {
                         </div>
                     </div>
                 </div>
-                {pickList.items.map((e) => (
+                {pickList.items.slice().sort((a, b) => a.is_confirmed - b.is_confirmed).map((e) => (
                     <div className={classes.content} style={getColor(e.is_confirmed, e.qty_picked, e.qty_to_pick)}>
                         {(e.qty_picked === e.qty_to_pick) ? (
                             <div className={classes.gridList}>
