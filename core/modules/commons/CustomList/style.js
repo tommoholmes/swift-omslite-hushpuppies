@@ -109,6 +109,16 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         padding: '20px 0',
     },
+    boxAll: {
+        background: 'unset',
+        padding: '0 15px',
+    },
+    title: {
+        padding: '11px 0',
+        color: colorText,
+        fontWeight: 700,
+        width: 200,
+    },
 }));
 
 export default useStyles;

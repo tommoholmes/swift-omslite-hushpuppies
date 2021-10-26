@@ -110,6 +110,7 @@ const PickByBatchListContent = (props) => {
                 columns={columns}
                 count={PickByBatchTotal}
                 showCheckbox
+                checkboxAll
                 header={() => (
                     <Header />
                 )}
