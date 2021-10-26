@@ -9,10 +9,12 @@ import Link from 'next/link';
 import Router from 'next/router';
 import Scan from '@common_barcodescanner';
 import useStyles from '@modules/batchlist/pages/sorting/components/style';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const SortingItemContent = (props) => {
     const {
         pickList, handleDetect, handleDoneSorting, name, sku, slot,
+        config, dataMultiple, loadSorting,
     } = props;
     const classes = useStyles();
 
@@ -25,6 +27,7 @@ const SortingItemContent = (props) => {
                         handleDetect={handleDetect}
                         handleClose={() => Router.push(`/pickpack/batchlist/edit/${pickList.id}`)}
                     />
+                    {loadSorting && <CircularProgress className={classes.progress} />}
                     <h2 className={classes.h2}>
                         {name}
                     </h2>
@@ -32,12 +35,29 @@ const SortingItemContent = (props) => {
                         {`SKU ${sku}`}
                     </span>
                     <br />
-                    <span className={classes.text}>
-                        Add to
-                    </span>
-                    <span className={classes.textSlot}>
-                        {`Slot ${slot}`}
-                    </span>
+                    {!loadSorting && dataMultiple && (
+                        <>
+                            <span className={classes.text}>
+                                Add to
+                            </span>
+                            {config === 'single_item'
+                                ? (
+                                    <span className={classes.textSlot}>
+                                        {`Slot ${slot}`}
+                                    </span>
+                                )
+                                : dataMultiple.map((item) => (
+                                    <div key={item.shipment_id} className={classes.itemSlot}>
+                                        <span className={classes.textSlot}>
+                                            {`Slot ${item.slot_no}`}
+                                        </span>
+                                        <span className={classes.slotPcs}>
+                                            {`${item.qty}pcs`}
+                                        </span>
+                                    </div>
+                                ))}
+                        </>
+                    )}
                     <br />
 
                     <Button
