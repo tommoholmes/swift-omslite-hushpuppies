@@ -115,7 +115,6 @@ const PickByBatchListContent = (props) => {
                 )}
                 handleClickRow={(id) => Router.push(`/pickpack/batchpack/detail/${id}`)}
                 handleChecked={setChecked}
-                usePagination
             />
             <div className={classes.footer}>
                 {(checked.length !== 0) ? (
