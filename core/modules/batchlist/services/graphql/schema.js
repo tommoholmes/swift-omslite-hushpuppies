@@ -235,6 +235,29 @@ export const doneSortingPickByBatch = gql`
     }
 `;
 
+export const getStoreConfigSorting = gql`
+    query{
+        getStoreConfig(path: "swiftoms_pickpack/batch/sorting_method")
+    }
+`;
+
+export const multipleItemSortingPickByBatch = gql`
+    mutation multipleItemSortingPickByBatch(
+        $batch_id: Int!
+        $barcode: String!
+    ){
+    multipleItemSortingPickByBatch(
+      batch_id: $batch_id
+      barcode: $barcode
+    ){
+      slot_no
+      shipment_id
+      slot_no
+      qty
+    }
+  }
+`;
+
 export default {
     getPickByBatchStatus,
     getPickByBatchList,
@@ -247,4 +270,6 @@ export default {
     startSortingPickByBatch,
     itemSortingPickByBatch,
     doneSortingPickByBatch,
+    getStoreConfigSorting,
+    multipleItemSortingPickByBatch,
 };

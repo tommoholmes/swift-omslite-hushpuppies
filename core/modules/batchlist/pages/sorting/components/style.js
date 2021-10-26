@@ -66,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
         color: colorText,
         fontSize: 26,
     },
+    slotPcs: {
+        display: 'block',
+        color: colorText,
+        fontSize: 20,
+        marginLeft: 10,
+    },
     img: {
         width: '50%',
         marginTop: 17,
@@ -88,6 +94,12 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 600,
         padding: 0,
         maxWidth: 100,
+    },
+    itemSlot: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }));
 
