@@ -2,14 +2,10 @@ import { gql } from '@apollo/client';
 
 export const getStoreShipmentList = gql`
     query getStoreShipmentList(
-        $pageSize: Int!,
-        $currentPage: Int!,
         $filter: ShipmentFilterInput,
         $sort: ShipmentSortInput,
     ){
         getStoreShipmentList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
             filter: $filter,
             sort: $sort,
         ){
