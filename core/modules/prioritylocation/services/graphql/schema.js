@@ -16,22 +16,10 @@ export const getPriorityLocationList = gql`
             items {
                 id
                 channel_code
-                province{
-                    code
-                    id
-                    name
-                }
-                city{
-                    city
-                    id
-                    value
-                }
+                province
+                city
                 priority
-                loc_code{
-                    loc_code
-                    loc_country_id
-                    loc_name
-                }
+                loc_code
             }
             total_count
             page_info {
@@ -51,7 +39,12 @@ export const getPriorityLocationById = gql`
             id: $id
         ){
             id
-            channel_code
+            channel_code{
+                channel_code
+                channel_name
+                channel_url
+                channel_id
+            }
             province{
                 code
                 id
@@ -88,17 +81,9 @@ export const createPriorityLocation = gql`
             }
         ){
             channel_code
-            city{
-                city
-                id
-                value
-            }
+            city
             priority
-            loc_code{
-                loc_code
-                loc_country_id
-                loc_name
-            }
+            loc_code
         }
     }
 `;
@@ -109,7 +94,7 @@ export const updatePriorityLocation = gql`
         $channel_code: String,
         $city: String,
         $loc_code: String,
-        $priority: Int,
+        $priority: String,
     ){
         updatePriorityLocation(
             id: $id,
@@ -121,17 +106,9 @@ export const updatePriorityLocation = gql`
             }
         ){
             channel_code
-            city{
-                city
-                id
-                value
-            }
+            city
             priority
-            loc_code{
-                loc_code
-                loc_country_id
-                loc_name
-            }
+            loc_code
         }
     }
 `;
@@ -234,6 +211,28 @@ export const multideletePriorityLocation = gql`
     }
 `;
 
+export const uploadPriorityLocation = gql`
+    mutation uploadPriorityLocation(
+        $binary: String!,
+    ){
+        uploadPriorityLocation(
+            input: {
+                binary: $binary
+            }
+        )
+    }
+`;
+
+export const downloadSampleCsv = gql`
+    mutation downloadSampleCsv(
+        $type: String!,
+    ){
+        downloadSampleCsv(
+            type: $type,
+        )
+    }
+`;
+
 export default {
     getPriorityLocationList,
     getPriorityLocationById,
@@ -244,4 +243,6 @@ export default {
     getLocationList,
     deletePriorityLocation,
     multideletePriorityLocation,
+    uploadPriorityLocation,
+    downloadSampleCsv,
 };
