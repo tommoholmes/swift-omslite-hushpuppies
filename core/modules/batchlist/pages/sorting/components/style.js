@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     slotPcs: {
         display: 'block',
         color: colorText,
-        fontSize: 20,
+        fontSize: 26,
         marginLeft: 10,
     },
     img: {
