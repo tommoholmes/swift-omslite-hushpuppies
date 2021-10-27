@@ -103,6 +103,7 @@ const CustomTable = (props) => {
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
+    const [showMessageActions, setShowMessageActions] = React.useState(true);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
     const {
@@ -232,11 +233,13 @@ const CustomTable = (props) => {
                                     if (checkedRows && checkedRows.length) {
                                         await activeAction.onClick(checkedRows);
                                         fetchRows();
-                                        window.toastMessage({
-                                            open: true,
-                                            text: 'Success!',
-                                            variant: 'success',
-                                        });
+                                        if (showMessageActions) {
+                                            window.toastMessage({
+                                                open: true,
+                                                text: 'Success!',
+                                                variant: 'success',
+                                            });
+                                        }
                                         // window.location.reload();
                                     }
                                 }}
@@ -250,6 +253,11 @@ const CustomTable = (props) => {
                                     label: action.label,
                                     onClick: () => {
                                         setActiveAction(action);
+                                        if (action.showMessage !== null) {
+                                            setShowMessageActions(action.showMessage);
+                                        } else {
+                                            setShowMessageActions(action.true);
+                                        }
                                         if (action.label === 'Delete') {
                                             setOpenConfirmDialog(true);
                                         } else {

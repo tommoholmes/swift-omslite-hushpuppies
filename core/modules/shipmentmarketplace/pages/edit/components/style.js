@@ -195,6 +195,9 @@ const useStyles = makeStyles((theme) => ({
     td: {
         padding: '5px 8px',
         fontFamily: font,
+        '&.status': {
+            textTransform: 'capitalize',
+        },
     },
     grandTotal: {
         fontFamily: font,
@@ -301,7 +304,7 @@ const useStyles = makeStyles((theme) => ({
         },
         '&.fieldNotes': {
             maxWidth: 'unset',
-            width: '50%',
+            width: '100%',
             [theme.breakpoints.down('xs')]: {
                 width: '100%',
             },

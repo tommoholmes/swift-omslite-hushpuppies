@@ -12,6 +12,7 @@ const Core = (props) => {
     } = props;
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
+    const [showProgress, setshowProgress] = React.useState(false);
     const [bulkShipment] = gqlService.bulkShippedMarketplaceShipment();
     const [getActivity] = gqlService.getActivity({
         variables: {
@@ -48,6 +49,7 @@ const Core = (props) => {
             variables,
         });
         setTimeout(() => {
+            setshowProgress(true);
             getActivity();
             window.backdropLoader(false);
         }, 2000);
@@ -78,6 +80,7 @@ const Core = (props) => {
         handleDropFile,
         activityState,
         firstLoad,
+        showProgress,
     };
 
     return (

@@ -62,7 +62,6 @@ const HomeDeliveryListContent = (props) => {
             },
         },
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
-        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         {
             field: 'channel_order_date',
             name: 'channel_order_date_from',
@@ -111,6 +110,7 @@ const HomeDeliveryListContent = (props) => {
             ),
 
         },
+        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
         { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
         {
@@ -208,6 +208,7 @@ const HomeDeliveryListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Print Pack List',
@@ -216,6 +217,7 @@ const HomeDeliveryListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Mark Confirm Complete',
