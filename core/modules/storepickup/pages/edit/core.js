@@ -10,6 +10,7 @@ const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        refetch,
     } = props;
     const storepickup = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
@@ -33,7 +34,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Confirm',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -58,7 +59,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Confirm',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -83,7 +84,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Picked',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -108,7 +109,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Packaged',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -138,7 +139,7 @@ const ContentWrapper = (props) => {
                 text: 'Pick Up Completed!',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -166,7 +167,7 @@ const ContentWrapper = (props) => {
                 text: 'Notes saved',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -195,6 +196,7 @@ const ContentWrapper = (props) => {
         region: storepickup.billing_address.region,
         postcode: storepickup.billing_address.postcode,
         countryId: storepickup.billing_address.country_id,
+        countryName: storepickup.billing_address.country_name,
         phone: storepickup.billing_address.telephone,
         pickup: storepickup.pickup_info,
         order: storepickup.order_item,
@@ -284,13 +286,24 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getShipmentById({
+    const { loading, data, refetch } = gqlService.getShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
     if (loading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading...
+                </div>
+            </Layout>
         );
     }
 
@@ -302,7 +315,7 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} />
+            <ContentWrapper data={data} {...props} refetch={refetch} />
         </Layout>
     );
 };

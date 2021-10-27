@@ -200,6 +200,7 @@ const StorePickupListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Print Pack List',
@@ -208,6 +209,7 @@ const StorePickupListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Mark Confirm Complete',

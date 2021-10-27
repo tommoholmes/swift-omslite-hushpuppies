@@ -91,6 +91,11 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         paddingTop: 20,
     },
+    fieldInput: {
+        '& .MuiInputBase-input': {
+            padding: '8.5px 14px',
+        },
+    },
 }));
 
 export default useStyles;
