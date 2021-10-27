@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useStyles from '@modules/wavelist/pages/pickitem/components/style';
 
@@ -58,9 +59,11 @@ const BatchListPickListContent = (props) => {
                 </div>
                 <div className={classes.divider} />
                 <div className={classes.section}>
-                    <a className={classes.back} href={`/pickpack/wavelist/picklist/${itemProps.parentId}`}>
-                        Back to Pick List
-                    </a>
+                    <Link href={`/pickpack/wavelist/picklist/${itemProps.parentId}`}>
+                        <a className={classes.back}>
+                            Back to Pick List
+                        </a>
+                    </Link>
                 </div>
             </Paper>
         </div>
