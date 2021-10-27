@@ -254,6 +254,7 @@ export const multipleItemSortingPickByBatch = gql`
       shipment_id
       slot_no
       qty
+      name
     }
   }
 `;
