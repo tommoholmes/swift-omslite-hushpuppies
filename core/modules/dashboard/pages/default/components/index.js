@@ -286,68 +286,66 @@ const DashboardContent = (props) => {
                             </thead>
 
                             <tbody>
-                                {channelListData.map((e) => (
-                                    <>
-                                        <tr>
-                                            <td className={clsx(borderColorFilter(e.framework, e.channel_code), 'channelIcon')}>
-                                                <img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} />
+                                {channelListData.map((e, idx) => (
+                                    <tr key={idx}>
+                                        <td className={clsx(borderColorFilter(e.framework, e.channel_code), 'channelIcon')}>
+                                            <img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} />
+                                        </td>
+                                        <td>{e.channel_name}</td>
+                                        <td>{e.channel_name}</td>
+                                        <td>{e.channel_code}</td>
+                                        {e.virtual_stock_list?.length > 3 && (
+                                            <td>
+                                                {e.virtual_stock_list[0]}
+                                                ,
+                                                {e.virtual_stock_list[1]}
+                                                ,
+                                                {e.virtual_stock_list[2]}
+                                                ,
+                                                {' '}
+                                                <a
+                                                    className="link"
+                                                    href="#"
+                                                    onClick={() => handleSeemoreOpen('Virtual Stock List', e.channel_name, e.virtual_stock_list)}
+                                                >
+                                                    <u>see more...</u>
+                                                </a>
                                             </td>
-                                            <td>{e.channel_name}</td>
-                                            <td>{e.channel_name}</td>
-                                            <td>{e.channel_code}</td>
-                                            {e.virtual_stock_list?.length > 3 && (
-                                                <td>
-                                                    {e.virtual_stock_list[0]}
-                                                    ,
-                                                    {e.virtual_stock_list[1]}
-                                                    ,
-                                                    {e.virtual_stock_list[2]}
-                                                    ,
-                                                    {' '}
-                                                    <a
-                                                        className="link"
-                                                        href="#"
-                                                        onClick={() => handleSeemoreOpen('Virtual Stock List', e.channel_name, e.virtual_stock_list)}
-                                                    >
-                                                        <u>see more...</u>
-                                                    </a>
-                                                </td>
-                                            )}
-                                            {e.virtual_stock_list?.length <= 3 && (
-                                                <td>
-                                                    {e.virtual_stock_list[0]}
-                                                    {e.virtual_stock_list[1] ? `, ${e.virtual_stock_list[1]}` : ''}
-                                                    {e.virtual_stock_list[2] ? `, ${e.virtual_stock_list[2]}` : ''}
-                                                </td>
-                                            )}
+                                        )}
+                                        {e.virtual_stock_list?.length <= 3 && (
+                                            <td>
+                                                {e.virtual_stock_list[0]}
+                                                {e.virtual_stock_list[1] ? `, ${e.virtual_stock_list[1]}` : ''}
+                                                {e.virtual_stock_list[2] ? `, ${e.virtual_stock_list[2]}` : ''}
+                                            </td>
+                                        )}
 
-                                            {e.location_list?.length > 3 && (
-                                                <td>
-                                                    {e.location_list[0]}
-                                                    ,
-                                                    {e.location_list[1]}
-                                                    ,
-                                                    {e.location_list[2]}
-                                                    ,
-                                                    {' '}
-                                                    <a
-                                                        className="link"
-                                                        href="#"
-                                                        onClick={() => handleSeemoreOpen('Location List', e.channel_name, e.location_list)}
-                                                    >
-                                                        <u>see more...</u>
-                                                    </a>
-                                                </td>
-                                            )}
-                                            {e.location_list?.length <= 3 && (
-                                                <td>
-                                                    {e.location_list[0]}
-                                                    {e.location_list[1] ? `, ${e.location_list[1]}` : ''}
-                                                    {e.location_list[2] ? `, ${e.location_list[2]}` : ''}
-                                                </td>
-                                            )}
-                                        </tr>
-                                    </>
+                                        {e.location_list?.length > 3 && (
+                                            <td>
+                                                {e.location_list[0]}
+                                                ,
+                                                {e.location_list[1]}
+                                                ,
+                                                {e.location_list[2]}
+                                                ,
+                                                {' '}
+                                                <a
+                                                    className="link"
+                                                    href="#"
+                                                    onClick={() => handleSeemoreOpen('Location List', e.channel_name, e.location_list)}
+                                                >
+                                                    <u>see more...</u>
+                                                </a>
+                                            </td>
+                                        )}
+                                        {e.location_list?.length <= 3 && (
+                                            <td>
+                                                {e.location_list[0]}
+                                                {e.location_list[1] ? `, ${e.location_list[1]}` : ''}
+                                                {e.location_list[2] ? `, ${e.location_list[2]}` : ''}
+                                            </td>
+                                        )}
+                                    </tr>
                                 ))}
                             </tbody>
                         </table>
