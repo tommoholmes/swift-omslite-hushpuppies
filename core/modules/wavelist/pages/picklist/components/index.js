@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/wavelist/pages/picklist/components/style';
@@ -109,20 +110,22 @@ const BatchListPickListContent = (props) => {
                                         ? <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
                                         : (waveList.statusValue === 'pick_in_progress' || waveList.statusValue === 'pick_uncomplete'
                                             ? (
-                                                <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
-
-                                                    <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
-                                                </a>
+                                                <Link href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+                                                    <a>
+                                                        <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                                    </a>
+                                                </Link>
                                             )
                                             : <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
                                         )
                                 )
                                     : (waveList.statusValue === 'pick_in_progress' || waveList.statusValue === 'pick_uncomplete'
                                         ? (
-                                            <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
-
-                                                <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
-                                            </a>
+                                            <Link href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+                                                <a href={`/pickpack/wavelist/picklist/item/${e.entity_id}`}>
+                                                    <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
+                                                </a>
+                                            </Link>
                                         )
                                         : <img className="imgIcon" alt="" src="/assets/img/iconbarcode.svg" />
                                     )}

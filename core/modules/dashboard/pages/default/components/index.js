@@ -5,8 +5,6 @@
 import clsx from 'clsx';
 import useStyles from '@modules/dashboard/pages/default/components/style';
 import loginGqlService from '@modules/login/services/graphql';
-import Cookies from 'js-cookie';
-import { custDataNameCookie } from '@config';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -53,16 +51,11 @@ const DashboardContent = (props) => {
     const router = useRouter();
 
     React.useEffect(() => {
-        if (Cookies.getJSON(custDataNameCookie)) {
-            handleSetUserInfo(Cookies.getJSON(custDataNameCookie));
-        } else {
-            getCustomer();
-        }
+        getCustomer();
     }, []);
 
     React.useEffect(() => {
         if (getCustomerFromGql()) {
-            Cookies.set(custDataNameCookie, getCustomerFromGql());
             handleSetUserInfo(getCustomerFromGql());
         }
     }, [getCustomerFromGql()]);

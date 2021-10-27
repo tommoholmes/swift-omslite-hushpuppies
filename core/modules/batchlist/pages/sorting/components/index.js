@@ -49,10 +49,10 @@ const SortingItemContent = (props) => {
                                 : dataMultiple.map((item) => (
                                     <div key={item.shipment_id} className={classes.itemSlot}>
                                         <span className={classes.textSlot}>
-                                            {`Slot ${item.slot_no}`}
+                                            {`Slot ${item.slot_no} : `}
                                         </span>
                                         <span className={classes.slotPcs}>
-                                            {`${item.qty}pcs`}
+                                            {`Qty${item.qty}`}
                                         </span>
                                     </div>
                                 ))}
