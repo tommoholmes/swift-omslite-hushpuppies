@@ -297,27 +297,35 @@ const CustomTable = (props) => {
                         )}
                     {exports.length
                         ? (
-                            <div className="top-item">
-                                <MenuPopover
-                                    openButton={{ label: 'Exports' }}
-                                    color="purple"
-                                    iconPosition="end"
-                                    icon={<PublishIcon />}
-                                    menuItems={exports.map((action) => ({
-                                        label: action.label,
-                                        onClick: () => {
-                                            setActiveAction(action);
-                                            if (action.label === 'Delete') {
-                                                setOpenConfirmDialog(true);
-                                            } else {
+                            <>
+                                <button
+                                    id="clickConfirmExport"
+                                    className="hide"
+                                    type="submit"
+                                    onClick={() => {
+                                        activeAction.onClick(checkedRows);
+                                    }}
+                                >
+                                    Auto Confirm
+                                </button>
+                                <div className="top-item">
+                                    <MenuPopover
+                                        openButton={{ label: 'Exports' }}
+                                        color="purple"
+                                        iconPosition="end"
+                                        icon={<PublishIcon />}
+                                        menuItems={exports.map((action) => ({
+                                            label: action.label,
+                                            onClick: () => {
+                                                setActiveAction(action);
                                                 setTimeout(() => {
-                                                    document.getElementById('clickConfirm').click();
+                                                    document.getElementById('clickConfirmExport').click();
                                                 }, 100);
-                                            }
-                                        },
-                                    }))}
-                                />
-                            </div>
+                                            },
+                                        }))}
+                                    />
+                                </div>
+                            </>
                         )
                         : null}
                 </div>

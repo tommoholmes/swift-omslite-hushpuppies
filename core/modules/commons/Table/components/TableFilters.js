@@ -33,7 +33,7 @@ const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => {
 };
 
 const TableFilters = (props) => {
-    const { initialFilters, setParentFilters, handleReset = () => {} } = props;
+    const { initialFilters, setParentFilters, handleReset = () => { } } = props;
 
     // state
     const [filters, setFilters] = React.useState(initialFilters);
@@ -87,9 +87,11 @@ const TableFilters = (props) => {
                     buttonType="link"
                     onClick={() => {
                         if (!emptyFiltersField) {
-                            const resetedFilters = filters.map((filter) => ({ ...filter, value: '' }));
+                            const resetedFilters = filters.map((filter) => (
+                                { ...filter, value: filter.class === 'fixed' ? filter.initialValue : '' }
+                            ));
                             setFilters(resetedFilters);
-                            setParentFilters([]);
+                            setParentFilters(resetedFilters);
                             handleReset();
                         }
                     }}

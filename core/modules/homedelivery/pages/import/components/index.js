@@ -24,6 +24,7 @@ const HomeDeliveryImport = (props) => {
         handleDropFile,
         activityState,
         firstLoad,
+        showProgress,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -69,7 +70,7 @@ const HomeDeliveryImport = (props) => {
                         Submit
                     </Button>
                 </div>
-                {activityState && (activityState.run_status === 'running' || activityState.run_status === 'finished')
+                {activityState && ((activityState.run_status === 'running' || activityState.run_status === 'pending ') || showProgress)
                     ? (
                         <div className={classes.progressContainer}>
                             <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />

@@ -14,6 +14,7 @@ import clsx from 'clsx';
 import useStyles from '@modules/homedelivery/pages/edit/components/style';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
+import { formatPriceNumber } from '@helper_currency';
 
 const HomeDeliveryEditContent = (props) => {
     const {
@@ -460,7 +461,7 @@ const HomeDeliveryEditContent = (props) => {
                             <span className={classes.orderLabel}>{homeDelivery.street}</span>
                             <span className={classes.orderLabel}>{homeDelivery.city}</span>
                             <span className={classes.orderLabel}>
-                                {`${homeDelivery.region}, ${homeDelivery.postcode}, ${homeDelivery.countryId}`}
+                                {`${homeDelivery.region}, ${homeDelivery.postcode}, ${homeDelivery.countryName}`}
                             </span>
                         </div>
                         <div className="grid-child">
@@ -468,7 +469,7 @@ const HomeDeliveryEditContent = (props) => {
                             <span className={classes.orderLabel}>{homeDelivery.shipping_address.street}</span>
                             <span className={classes.orderLabel}>{homeDelivery.shipping_address.city}</span>
                             <span className={classes.orderLabel}>
-                                {`${homeDelivery.shipping_address.region}, ${homeDelivery.shipping_address.postcode}, ${homeDelivery.shipping_address.countryId}`}
+                                {`${homeDelivery.shipping_address.region}, ${homeDelivery.shipping_address.postcode}, ${homeDelivery.shipping_address.country_name}`}
                             </span>
                         </div>
                     </div>
@@ -488,9 +489,9 @@ const HomeDeliveryEditContent = (props) => {
                                         <tr>
                                             <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
                                             <td className={classes.td}>{e.name}</td>
-                                            <td className={classes.td}>{e.base_price}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
                                             <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty_shipped}</td>
-                                            <td className={classes.td}>{e.row_total}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.row_total)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -507,13 +508,25 @@ const HomeDeliveryEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Notes</th>
                             </tr>
-                            {homeDelivery.history.map((e) => (
-                                <tr>
-                                    <td className={classes.td} style={{ paddingLeft: 0 }}>{e.created_at}</td>
-                                    <td className={classes.td}>{e.status}</td>
-                                    <td className={classes.td}>{e.comment}</td>
-                                </tr>
-                            ))}
+                            {homeDelivery.history.map((e) => {
+                                const date = new Date(e.created_at);
+                                return (
+                                    <tr>
+                                        <td className={classes.td} style={{ paddingLeft: 0 }}>
+                                            {date.toLocaleString('en-US', {
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                second: 'numeric',
+                                            })}
+                                        </td>
+                                        <td className={clsx(classes.td, 'status')}>{e.status.split('_').join(' ')}</td>
+                                        <td className={classes.td}>{e.comment}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>

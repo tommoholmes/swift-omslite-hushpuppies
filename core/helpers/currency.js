@@ -7,4 +7,9 @@ export const formatPrice = (value, currency) => {
     return price;
 };
 
-export default { formatPrice };
+export const formatPriceNumber = (value) => {
+    const price = new Intl.NumberFormat('id-ID').format(value);
+    return price;
+};
+
+export default { formatPrice, formatPriceNumber };

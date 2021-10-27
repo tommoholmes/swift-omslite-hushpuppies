@@ -14,7 +14,7 @@ import clsx from 'clsx';
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier, optionsStatus,
-        handleExport, setVarExport } = props;
+        setVarExport, exportStoreShipmentToCsv, varExport } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState('process_for_shipping');
@@ -251,6 +251,33 @@ const HomeDeliveryListContent = (props) => {
         },
     ];
 
+    const exports = [
+        {
+            label: 'Export Without Items',
+            message: 'ready for print?',
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
+                const variables = {
+                    type: 'delivery',
+                    ...varExport,
+                    filter: {
+                        ...varExport.filter,
+                    },
+                };
+                if (incrementIds.length) {
+                    variables.filter = {
+                        ...variables.filter,
+                        increment_id: {
+                            in: incrementIds,
+                        },
+                    };
+                }
+                window.backdropLoader(true);
+                await exportStoreShipmentToCsv({ variables });
+            },
+        },
+    ];
+
     const onChangeTab = async (e, v) => {
         setLoad(true);
         await setTab(v);
@@ -279,7 +306,7 @@ const HomeDeliveryListContent = (props) => {
                     count={storeShipmentTotal}
                     showCheckbox
                     handleReset={() => handleReset()}
-                    handleExport={handleExport}
+                    exports={exports}
                     setVarExport={setVarExport}
                     indexType={indexType}
                 />

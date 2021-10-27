@@ -10,6 +10,7 @@ const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        refetch,
     } = props;
     const homedelivery = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
@@ -36,7 +37,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Confirm',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -61,7 +62,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Confirm',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -86,7 +87,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Picked',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -114,7 +115,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was canceled',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -139,7 +140,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Packaged',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -164,7 +165,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Booked',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -196,7 +197,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Shipped',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -221,7 +222,7 @@ const ContentWrapper = (props) => {
                 text: 'Order was Delivered',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -249,7 +250,7 @@ const ContentWrapper = (props) => {
                 text: 'notes has been saved',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => refetch(), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -279,12 +280,14 @@ const ContentWrapper = (props) => {
         region: homedelivery.billing_address.region,
         postcode: homedelivery.billing_address.postcode,
         countryId: homedelivery.billing_address.country_id,
+        countryName: homedelivery.billing_address.country_name,
         phone: homedelivery.billing_address.telephone,
         pickup: homedelivery.pickup_info,
         order: homedelivery.order_item,
         total: homedelivery.subtotal,
         history: homedelivery.status_history,
         shipping_address: homedelivery.shipping_address,
+        shipping: homedelivery.channel_shipping_label,
     };
 
     const formikConfirm = useFormik({
@@ -404,13 +407,25 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getStoreShipmentById({
+    const { loading, data, refetch } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
     if (loading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading...
+                </div>
+
+            </Layout>
         );
     }
 
@@ -422,7 +437,7 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} />
+            <ContentWrapper data={data} {...props} refetch={refetch} />
         </Layout>
     );
 };
