@@ -254,7 +254,7 @@ const StockAdjustmentEdit = (props) => {
                                                                                         source_id: e?.source_id ?? '',
                                                                                     });
                                                                                 }}
-                                                                                loading={getSourceListRes.loading}
+                                                                                loading={!values.items[idx].sku && getSourceListRes.loading}
                                                                                 options={baseSkuOption}
                                                                                 getOptionsVariables={{
                                                                                     variables: {
