@@ -21,8 +21,18 @@ export const confirmShipment = (variables) => useMutation(Schema.confirmShipment
     variables, ...context,
 });
 
+export const getShipmentStatus = (variables) => useQuery(Schema.getShipmentStatus, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const saveShipmentNotes = (variables) => useMutation(Schema.saveShipmentNotes, {
+    variables, ...context,
+});
+
 export default {
     getShipmentList,
     getShipmentById,
     confirmShipment,
+    getShipmentStatus,
+    saveShipmentNotes,
 };
