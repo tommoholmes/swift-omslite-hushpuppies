@@ -12,6 +12,7 @@ import FormDialog from '@common_formdialog';
 import gqlService from '@modules/shipmentmarketplace/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/shipmentmarketplace/pages/edit/components/style';
+import { formatPriceNumber } from '@helper_currency';
 
 const ShipmentMarketplaceEditContent = (props) => {
     const {
@@ -85,7 +86,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Shipped Method
+                            Shipping Method
                         </h5>
                         <span className="spanHeader">{shipmentMarketplace.method}</span>
                     </div>
@@ -405,17 +406,17 @@ const ShipmentMarketplaceEditContent = (props) => {
                                     <tr className={classes.tr}>
                                         <th className={classes.th} style={{ paddingLeft: 0 }}>SKU Product</th>
                                         <th className={classes.th}>Name</th>
-                                        <th className={classes.th}>Unit Price</th>
-                                        <th className={classes.th}>QTY</th>
-                                        <th className={classes.th}>Subtotal</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Unit Price</th>
+                                        <th className={classes.th} style={{ textAlign: 'center' }}>QTY</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Subtotal</th>
                                     </tr>
                                     {shipmentMarketplace.order.map((e) => (
                                         <tr>
                                             <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
                                             <td className={classes.td}>{e.name}</td>
-                                            <td className={classes.td}>{e.price}</td>
-                                            <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty}</td>
-                                            <td className={classes.td}>{e.row_total}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
+                                            <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty_shipped}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.row_total)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

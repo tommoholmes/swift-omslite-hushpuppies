@@ -108,7 +108,6 @@ const HomeDeliveryListContent = (props) => {
                     }}
                 />
             ),
-
         },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },

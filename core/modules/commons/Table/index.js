@@ -483,7 +483,7 @@ const CustomTable = (props) => {
                                 key={columnIndex}
                                 className={clsx(column.hidden && 'hide')}
                             >
-                                {getComponentOrString(row[column.field])}
+                                {getComponentOrString(row[column.field]) || '-'}
                             </TableCell>
                         ))}
                     </TableRow>
