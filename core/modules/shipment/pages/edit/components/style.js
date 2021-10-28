@@ -3,12 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
+const colorGray = '#B1BCDB';
+const colorBold = '#435179';
 const borderColor = '#DDE1EC';
+const borderGray = '#E5E9F1';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: '16px 0',
+        padding: '0 16px',
         borderRadius: 16,
+        backgroundColor: 'unset',
+        boxShadow: 'none',
         '& .title-information': {
             [theme.breakpoints.down('xs')]: {
                 height: 75,
@@ -21,12 +26,22 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    headerImg: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        transform: 'translateY(-100%)',
+        [theme.breakpoints.down('xs')]: {
+            top: -10,
+            transform: 'unset',
+        },
+    },
     btnBack: {
         display: 'inline-block',
         borderRadius: '10px 0px 0px 10px',
         minWidth: 'unset',
         height: 36,
-        width: 42,
+        width: 36,
         marginBottom: 6,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 18,
@@ -37,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
+        marginTop: 0,
     },
     title: {
         fontFamily: font,
@@ -44,33 +60,116 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 14,
         textTransform: 'uppercase',
         margin: 0,
-        padding: '17px 0',
-        borderBottom: '1px solid #DDE1EC',
+        marginBottom: 18,
+        textAlign: 'center',
+        '&.jarak': {
+            marginBottom: 0,
+        },
+    },
+    titleSmall: {
+        fontFamily: font,
+        color: colorGray,
+        fontSize: 12,
+        textTransform: 'uppercase',
+        margin: 0,
+        marginBottom: 8,
+        marginTop: 18,
+    },
+    formFieldButton: {
+        margin: '20px 0 10px 0',
+        '& .btnFormDialog': {
+            borderRadius: 20,
+            boxShadow: 'none',
+            border: '1px solid',
+            borderColor: colorPurple,
+            letterSpacing: 0,
+            textTransform: 'capitalize',
+            padding: '5px 25px',
+            marginTop: 15,
+        },
+    },
+    formFieldButton2: {
+        margin: 0,
+        '& button': {
+            marginTop: 0,
+        },
     },
     btn: {
         borderRadius: 20,
-        backgroundColor: '#ffffff',
-        color: colorPurple,
         boxShadow: 'none',
         border: '1px solid',
         borderColor: colorPurple,
         letterSpacing: 0,
         textTransform: 'capitalize',
-        padding: '0 10px',
-        '&:hover': {
-            background: 'transparent',
+        padding: '5px 25px',
+        marginTop: 15,
+        '&.print': {
+            background: '#FFFFFF',
+            color: colorPurple,
+        },
+        '&.Mui-disabled': {
+            borderColor: 'rgba(0, 0, 0, 0.12)',
+        },
+    },
+    contentHeader: {
+        padding: '18px 15px',
+        borderRadius: 16,
+        '& .divHeader': {
+            display: 'inline-block',
+            marginRight: 20,
+            marginBottom: 10,
+            verticalAlign: 'top',
+        },
+        '& .titleHeader': {
+            color: colorGray,
+            fontSize: 12,
+            textTransform: 'uppercase',
+            margin: 0,
+        },
+        '& .titleHeaderWithIcon': {
+            color: colorBold,
+            fontSize: 14,
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        '& .iconHeader': {
+            height: 36,
+            width: 36,
+            marginRight: 10,
+        },
+        '& .spanHeader': {
+            color: colorBold,
         },
     },
     content: {
         borderBottom: '3px solid #F5F7FB',
-        padding: '10px 29px 12px 22px',
+        padding: '18px 15px',
         background: '#ffffff',
         borderRadius: 16,
-        marginBottom: 8,
+        marginBottom: 18,
+        '& hr': {
+            margin: '12px -15px',
+            background: borderGray,
+            border: 0,
+            height: 1,
+        },
+    },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        [theme.breakpoints.down('xs')]: {
+            display: 'block',
+        },
     },
     orderLabel: {
         fontFamily: font,
         display: 'block',
+        '& .imgIcon': {
+            width: 18,
+            verticalAlign: 'top',
+            marginRight: 5,
+        },
     },
     contentLeft: {
         display: 'inline-block',
@@ -102,15 +201,182 @@ const useStyles = makeStyles((theme) => ({
     },
     th: {
         textAlign: 'left',
-        padding: '5px 0',
+        padding: '5px 8px',
+        color: colorBold,
     },
     td: {
-        padding: '5px 0',
+        padding: '5px 8px',
         fontFamily: font,
+        '&.status': {
+            textTransform: 'capitalize',
+        },
     },
     grandTotal: {
         fontFamily: font,
         fontWeight: 'bold',
+    },
+    progressBarContainer: {
+        position: 'relative',
+    },
+    progressBar: {
+        '&::before': {
+            content: "''",
+            position: 'absolute',
+            background: borderColor,
+            borderRadius: 10,
+            width: '75%',
+            height: 3,
+            top: '40%',
+            right: 0,
+            transform: 'translate(-17%, -50%)',
+            [theme.breakpoints.down('xs')]: {
+                top: '30%',
+            },
+        },
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, auto)',
+        maxWidth: '90%',
+        margin: '0 auto',
+        '& .step': {
+            textAlign: 'center',
+            position: 'relative',
+            '& .imgIcon': {
+                width: 98,
+                padding: 10,
+                backgroundColor: 'white',
+                [theme.breakpoints.down('sm')]: {
+                    width: 76,
+                    padding: 5,
+                },
+                [theme.breakpoints.down('xs')]: {
+                    width: 54,
+                    padding: 2,
+                },
+            },
+        },
+        '& .step span': {
+            color: colorBold,
+            fontWeight: 700,
+        },
+        '& span': {
+            width: '75%',
+            display: 'block',
+            margin: '0 auto',
+        },
+    },
+    progressBarFail: {
+        maxWidth: '90%',
+        margin: '0 auto',
+        '& .step': {
+            textAlign: 'center',
+            position: 'relative',
+            '& .imgIcon': {
+                width: 66,
+            },
+        },
+        '& .step span': {
+            color: colorBold,
+            fontWeight: 700,
+        },
+        '& span': {
+            width: '75%',
+            display: 'block',
+            margin: '0 auto',
+        },
+    },
+    statusLabelActive: {
+        color: colorBold,
+        fontWeight: 600,
+        alignItems: 'center',
+    },
+    statusLabelInactive: {
+        color: borderColor,
+        fontWeight: 600,
+        alignItems: 'center',
+    },
+    printProgress: {
+        textAlign: 'center',
+    },
+    fieldRoot: {
+        maxWidth: 200,
+        verticalAlign: 'middle',
+        marginBottom: 10,
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
+        '&.fieldCenter': {
+            marginLeft: 10,
+            marginRight: 10,
+        },
+        '& .MuiInputLabel-outlined': {
+            transform: 'translate(10px, 10px)',
+        },
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6px) scale(0.75)',
+        },
+        '&.fieldNotes': {
+            maxWidth: 'unset',
+            width: '100%',
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
+        },
+        '&.newLine': {
+            maxWidth: 'unset',
+            width: '100%',
+            display: 'block',
+        },
+    },
+    fieldInput: {
+        height: 36,
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: colorText,
+        },
+    },
+    spanText: {
+        display: 'block',
+        margin: '20px 0 10px 0',
+    },
+    spanLabel: {
+        display: 'inline-block',
+        margin: '0 0 10px 0',
+        position: 'relative',
+    },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: -9,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
+    },
+    wrapperDialog: {
+        '& .MuiDialog-paperWidthSm': {
+            minWidth: 500,
+        },
+    },
+    autocompleteRoot: {
+        maxWidth: 200,
+        width: '100%',
+        verticalAlign: 'middle',
+        marginBottom: 10,
+        display: 'inline-flex',
+        '&.popup': {
+            display: 'block',
+            maxWidth: 'unset',
+        },
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
     },
 }));
 
