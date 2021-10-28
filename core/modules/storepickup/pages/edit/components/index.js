@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import useStyles from '@modules/storepickup/pages/edit/components/style';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
+import { formatPriceNumber } from '@helper_currency';
 
 const StorePickupEditContent = (props) => {
     const {
@@ -357,7 +358,7 @@ const StorePickupEditContent = (props) => {
                             <span className={classes.orderLabel}>{storePickup.street}</span>
                             <span className={classes.orderLabel}>{storePickup.city}</span>
                             <span className={classes.orderLabel}>
-                                {`${storePickup.region}, ${storePickup.postcode}, ${storePickup.countryId}`}
+                                {`${storePickup.region}, ${storePickup.postcode}, ${storePickup.countryName}`}
                             </span>
                         </div>
                         <div className="grid-child">
@@ -387,9 +388,9 @@ const StorePickupEditContent = (props) => {
                                         <tr>
                                             <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
                                             <td className={classes.td}>{e.name}</td>
-                                            <td className={classes.td}>{e.base_price}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
                                             <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty_shipped}</td>
-                                            <td className={classes.td}>{e.row_total}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.row_total)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

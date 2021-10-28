@@ -103,6 +103,7 @@ const CustomTable = (props) => {
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
+    const [showMessageActions, setShowMessageActions] = React.useState(true);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
     const {
@@ -232,11 +233,13 @@ const CustomTable = (props) => {
                                     if (checkedRows && checkedRows.length) {
                                         await activeAction.onClick(checkedRows);
                                         fetchRows();
-                                        window.toastMessage({
-                                            open: true,
-                                            text: 'Success!',
-                                            variant: 'success',
-                                        });
+                                        if (showMessageActions) {
+                                            window.toastMessage({
+                                                open: true,
+                                                text: 'Success!',
+                                                variant: 'success',
+                                            });
+                                        }
                                         // window.location.reload();
                                     }
                                 }}
@@ -250,6 +253,11 @@ const CustomTable = (props) => {
                                     label: action.label,
                                     onClick: () => {
                                         setActiveAction(action);
+                                        if (action.showMessage !== null) {
+                                            setShowMessageActions(action.showMessage);
+                                        } else {
+                                            setShowMessageActions(action.true);
+                                        }
                                         if (action.label === 'Delete') {
                                             setOpenConfirmDialog(true);
                                         } else {
@@ -297,27 +305,35 @@ const CustomTable = (props) => {
                         )}
                     {exports.length
                         ? (
-                            <div className="top-item">
-                                <MenuPopover
-                                    openButton={{ label: 'Exports' }}
-                                    color="purple"
-                                    iconPosition="end"
-                                    icon={<PublishIcon />}
-                                    menuItems={exports.map((action) => ({
-                                        label: action.label,
-                                        onClick: () => {
-                                            setActiveAction(action);
-                                            if (action.label === 'Delete') {
-                                                setOpenConfirmDialog(true);
-                                            } else {
+                            <>
+                                <button
+                                    id="clickConfirmExport"
+                                    className="hide"
+                                    type="submit"
+                                    onClick={() => {
+                                        activeAction.onClick(checkedRows);
+                                    }}
+                                >
+                                    Auto Confirm
+                                </button>
+                                <div className="top-item">
+                                    <MenuPopover
+                                        openButton={{ label: 'Exports' }}
+                                        color="purple"
+                                        iconPosition="end"
+                                        icon={<PublishIcon />}
+                                        menuItems={exports.map((action) => ({
+                                            label: action.label,
+                                            onClick: () => {
+                                                setActiveAction(action);
                                                 setTimeout(() => {
-                                                    document.getElementById('clickConfirm').click();
+                                                    document.getElementById('clickConfirmExport').click();
                                                 }, 100);
-                                            }
-                                        },
-                                    }))}
-                                />
-                            </div>
+                                            },
+                                        }))}
+                                    />
+                                </div>
+                            </>
                         )
                         : null}
                 </div>

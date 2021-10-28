@@ -385,7 +385,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                             <span className={classes.orderLabel}>{shipmentMarketplace.street}</span>
                             <span className={classes.orderLabel}>{shipmentMarketplace.city}</span>
                             <span className={classes.orderLabel}>
-                                {`${shipmentMarketplace.region}, ${shipmentMarketplace.postcode}, ${shipmentMarketplace.countryId}`}
+                                {`${shipmentMarketplace.region}, ${shipmentMarketplace.postcode}, ${shipmentMarketplace.countryName}`}
                             </span>
                         </div>
                         <div className="grid-child">
@@ -393,7 +393,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                             <span className={classes.orderLabel}>{shipmentMarketplace.shippingAddress.street}</span>
                             <span className={classes.orderLabel}>{shipmentMarketplace.shippingAddress.city}</span>
                             <span className={classes.orderLabel}>
-                                {`${shipmentMarketplace.shippingAddress.region}, ${shipmentMarketplace.shippingAddress.postcode}, ${shipmentMarketplace.shippingAddress.country_id}`}
+                                {`${shipmentMarketplace.shippingAddress.region}, ${shipmentMarketplace.shippingAddress.postcode}, ${shipmentMarketplace.shippingAddress.country_name}`}
                             </span>
                         </div>
                     </div>
@@ -422,33 +422,6 @@ const ShipmentMarketplaceEditContent = (props) => {
                             </table>
                         </div>
                     </div>
-                    <div>
-                        {/* <h5 className={classes.titleSmall}>Shipping and Tracking Information</h5>
-                        <span className={classes.orderLabel}>
-                            <strong>{`Shipping Method : ${shipmentMarketplace.method}`}</strong>
-                        </span> */}
-                        {(shipmentMarketplace.awb)
-                            && (
-                                <div style={{ overflowX: 'auto' }}>
-                                    <table className={classes.table}>
-                                        <tbody>
-                                            <tr className={classes.tr}>
-                                                <th className={classes.th} style={{ paddingLeft: 0 }}>Date</th>
-                                                <th className={classes.th}>Courier</th>
-                                                <th className={classes.th}>Name</th>
-                                                <th className={classes.th}>AWB Number</th>
-                                            </tr>
-                                            <tr>
-                                                <td className={classes.td} style={{ paddingLeft: 0 }}>{shipmentMarketplace.awb.created_at}</td>
-                                                <td className={classes.td}>{shipmentMarketplace.method}</td>
-                                                <td className={classes.td}>{shipmentMarketplace.awb.title}</td>
-                                                <td className={classes.td}>{shipmentMarketplace.awb.track_number}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                    </div>
                 </div>
                 <div className={classes.content}>
                     <h5 className={classes.titleSmall}>Status History</h5>
@@ -459,13 +432,25 @@ const ShipmentMarketplaceEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Notes</th>
                             </tr>
-                            {shipmentMarketplace.history.length ? shipmentMarketplace.history.map((e) => (
-                                <tr>
-                                    <td className={classes.td} style={{ paddingLeft: 0 }}>{e.created_at || '-'}</td>
-                                    <td className={classes.td}>{e.status || '-'}</td>
-                                    <td className={classes.td}>{e.comment || '-'}</td>
-                                </tr>
-                            ))
+                            {shipmentMarketplace.history.length ? shipmentMarketplace.history.map((e) => {
+                                const date = new Date(e.created_at);
+                                return (
+                                    <tr>
+                                        <td className={classes.td} style={{ paddingLeft: 0 }}>
+                                            {date.toLocaleString('en-US', {
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                second: 'numeric',
+                                            })}
+                                        </td>
+                                        <td className={clsx(classes.td, 'status')}>{e.status.split('_').join(' ')}</td>
+                                        <td className={classes.td}>{e.comment}</td>
+                                    </tr>
+                                );
+                            })
                                 : (
                                     <tr>
                                         <td className={classes.td} style={{ paddingLeft: 0 }}>-</td>

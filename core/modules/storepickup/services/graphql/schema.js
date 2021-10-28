@@ -82,6 +82,7 @@ query getStoreShipmentId(
             region
             postcode
             country_id
+            country_name
             telephone
         }
         pickup_info {

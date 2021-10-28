@@ -18,11 +18,6 @@ const Core = (props) => {
     const [exportStoreShipmentToCsv] = gqlService.exportStoreShipmentToCsv({
         onCompleted: (res) => {
             window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success export Shipments',
-                variant: 'success',
-            });
             router.push(res.exportStoreShipmentToCsv);
         },
         onError: (e) => {
@@ -34,16 +29,6 @@ const Core = (props) => {
             });
         },
     });
-
-    const handleExport = () => {
-        window.backdropLoader(true);
-        exportStoreShipmentToCsv({
-            variables: {
-                type: 'delivery',
-                ...varExport,
-            },
-        });
-    };
 
     if (loadingOptionStatus) {
         return (
@@ -71,7 +56,6 @@ const Core = (props) => {
         data,
         loading,
         exportStoreShipmentToCsv,
-        handleExport,
         varExport,
         setVarExport,
         optionsStatus: optionsStatus.getShipmentStatusByType,

@@ -81,6 +81,7 @@ export const getStoreShipmentById = gql`
                 postcode
                 country_id
                 telephone
+                country_name
             }
            shipping_address {
                 firstname
@@ -91,6 +92,7 @@ export const getStoreShipmentById = gql`
                 postcode
                 country_id
                 telephone
+                country_name
             }
             pickup_info {
                 name

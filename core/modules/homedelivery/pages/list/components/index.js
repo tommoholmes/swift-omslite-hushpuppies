@@ -14,7 +14,7 @@ import clsx from 'clsx';
 const HomeDeliveryListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getStoreShipmentList, confirmShipment, pickShipment, packShipment, bookCourier, optionsStatus,
-        handleExport, setVarExport } = props;
+        setVarExport, exportStoreShipmentToCsv, varExport } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState('process_for_shipping');
@@ -62,7 +62,6 @@ const HomeDeliveryListContent = (props) => {
             },
         },
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
-        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         {
             field: 'channel_order_date',
             name: 'channel_order_date_from',
@@ -111,6 +110,7 @@ const HomeDeliveryListContent = (props) => {
             ),
 
         },
+        { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
         { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
         {
@@ -208,6 +208,7 @@ const HomeDeliveryListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Print Pack List',
@@ -216,6 +217,7 @@ const HomeDeliveryListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Mark Confirm Complete',
@@ -251,6 +253,33 @@ const HomeDeliveryListContent = (props) => {
         },
     ];
 
+    const exports = [
+        {
+            label: 'Export Without Items',
+            message: 'ready for print?',
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
+                const variables = {
+                    type: 'delivery',
+                    ...varExport,
+                    filter: {
+                        ...varExport.filter,
+                    },
+                };
+                if (incrementIds.length) {
+                    variables.filter = {
+                        ...variables.filter,
+                        increment_id: {
+                            in: incrementIds,
+                        },
+                    };
+                }
+                window.backdropLoader(true);
+                await exportStoreShipmentToCsv({ variables });
+            },
+        },
+    ];
+
     const onChangeTab = async (e, v) => {
         setLoad(true);
         await setTab(v);
@@ -279,7 +308,7 @@ const HomeDeliveryListContent = (props) => {
                     count={storeShipmentTotal}
                     showCheckbox
                     handleReset={() => handleReset()}
-                    handleExport={handleExport}
+                    exports={exports}
                     setVarExport={setVarExport}
                     indexType={indexType}
                 />

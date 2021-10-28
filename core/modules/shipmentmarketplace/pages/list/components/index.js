@@ -67,28 +67,6 @@ const ShipmentMarketplaceListContent = (props) => {
             },
         },
         {
-            field: 'allocation_status',
-            name: 'allocation_status',
-            type: ['in', 'null'],
-            label: 'Allocation Status',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsAllocation.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => {
-                        if (newValue && newValue.id === 'true') {
-                            setIndexType({ ...indexType, allocation_status: 1 });
-                        } else {
-                            setIndexType({ ...indexType, allocation_status: 0 });
-                        }
-                        setFilterValue(newValue && newValue.id);
-                    }}
-                    options={optionsAllocation}
-                />
-            ),
-        },
-        {
             field: 'channel_order_date',
             name: 'channel_order_date_from',
             type: 'from',
@@ -136,6 +114,28 @@ const ShipmentMarketplaceListContent = (props) => {
             ),
 
         },
+        {
+            field: 'allocation_status',
+            name: 'allocation_status',
+            type: ['in', 'null'],
+            label: 'Allocation Status',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsAllocation.find((e) => e.id === filterValue)}
+                    onChange={(newValue) => {
+                        if (newValue && newValue.id === 'true') {
+                            setIndexType({ ...indexType, allocation_status: 1 });
+                        } else {
+                            setIndexType({ ...indexType, allocation_status: 0 });
+                        }
+                        setFilterValue(newValue && newValue.id);
+                    }}
+                    options={optionsAllocation}
+                />
+            ),
+        },
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         { field: 'channel_name', name: 'channel_name', type: 'like', label: 'Channel', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
@@ -171,7 +171,7 @@ const ShipmentMarketplaceListContent = (props) => {
             }
             return '/assets/img/order_status/processforpack.svg';
         }
-        if (status.value === 'cannot_fulfill') {
+        if (status.value === 'cannot_fulfill' || status.value === 'canceled') {
             return '/assets/img/order_status/cannotfulfill.svg';
         }
         if (status.value === 'ready_for_pack') {
@@ -231,6 +231,7 @@ const ShipmentMarketplaceListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pick/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Print Pack List',
@@ -239,6 +240,7 @@ const ShipmentMarketplaceListContent = (props) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
                 window.open(`/printoms/pack/${idPrint.toString().replace(/,/g, '/')}`);
             },
+            showMessage: false,
         },
         {
             label: 'Mark Confirm Complete',
@@ -268,7 +270,7 @@ const ShipmentMarketplaceListContent = (props) => {
 
     const exports = [
         {
-            label: 'Export With Items',
+            label: 'Export Without Items',
             message: 'ready for print?',
             onClick: async (checkedRows) => {
                 const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
@@ -276,7 +278,6 @@ const ShipmentMarketplaceListContent = (props) => {
                 await exportStoreShipmentToCsv({
                     variables: {
                         type: 'marketplace',
-                        with_items: true,
                         ...varExport,
                         filter: {
                             increment_id: {
@@ -289,7 +290,7 @@ const ShipmentMarketplaceListContent = (props) => {
             },
         },
         {
-            label: 'Export Without Items',
+            label: 'Export With Items',
             message: 'ready for print?',
             onClick: async (checkedRows) => {
                 const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
@@ -297,6 +298,7 @@ const ShipmentMarketplaceListContent = (props) => {
                 await exportStoreShipmentToCsv({
                     variables: {
                         type: 'marketplace',
+                        with_items: true,
                         ...varExport,
                         filter: {
                             increment_id: {

@@ -96,6 +96,11 @@ const useStyles = makeStyles(() => ({
         paddingBottom: '8.5px',
         textTransform: 'capitalize',
     },
+    fieldInput: {
+        '& .MuiInputBase-input': {
+            padding: '8.5px 14px',
+        },
+    },
 }));
 
 export default useStyles;
