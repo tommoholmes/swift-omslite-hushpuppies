@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     return (
         <>
             <div className={classes.headerContainer}>
-                <h2 className={classes.title}>Curb Pickup</h2>
+                <h2 className={classes.title}>Curbside Pickup</h2>
             </div>
         </>
     );

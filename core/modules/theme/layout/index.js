@@ -150,7 +150,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'shipment_curbside_pickup',
                     key: 'curbpickup',
-                    label: 'Curb Pickup',
+                    label: 'Curbside Pickup',
                     url: '/shipment/curbpickup',
                 },
                 {
