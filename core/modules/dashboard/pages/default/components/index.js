@@ -22,9 +22,7 @@ const DashboardContent = (props) => {
     const styles = useStyles();
     // User Info
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
-    const getCustomerFromGql = () => getCustomerRes
-        && getCustomerRes.data
-        && getCustomerRes.data.customer;
+    const getCustomerFromGql = () => getCustomerRes && getCustomerRes.data && getCustomerRes.data.customer;
     const [username, setUsername] = React.useState('');
     const [firstname, setFirstname] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -81,21 +79,29 @@ const DashboardContent = (props) => {
     const iconFilter = (framework, channel_code) => {
         if (framework === 'M1' || framework === 'M2') {
             return '/assets/img/dashboard/channel_official.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
             return '/assets/img/dashboard/channel_bukalapak.svg';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
             return '/assets/img/dashboard/channel_blibli.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
             return '/assets/img/dashboard/channel_jd.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
             return '/assets/img/dashboard/channel_lazada.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
             return '/assets/img/dashboard/channel_shopee.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
             return '/assets/img/dashboard/channel_sirclo.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
             return '/assets/img/dashboard/channel_tokopedia.png';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
             return '/assets/img/dashboard/channel_zalora.png';
         }
         return null;
@@ -104,21 +110,29 @@ const DashboardContent = (props) => {
     const borderColorFilter = (framework, channel_code) => {
         if (framework === 'M1' || framework === 'M2') {
             return 'purple';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
             return 'red';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
             return 'blibli';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
             return 'red';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
             return 'lazada';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
             return 'shopee';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
             return 'blue';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
             return 'tokopedia';
-        } if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
+        }
+        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
             return 'black';
         }
         return 'black';
@@ -153,9 +167,7 @@ const DashboardContent = (props) => {
                     <div className={styles.user}>
                         <span className={styles.textBold}>Location Code</span>
                         <br />
-                        <span>
-                            {limitString(customer_loc_code, 64)}
-                        </span>
+                        <span>{limitString(customer_loc_code, 64)}</span>
                     </div>
                     <div className={styles.user}>
                         <span className={styles.textBold}>Channel Code</span>
@@ -163,10 +175,11 @@ const DashboardContent = (props) => {
                         <span>{limitString(channel_code, 64)}</span>
                     </div>
                     <div className={styles.user}>
-                        <a href="#" onClick={() => router.push('/useredit')}>Edit</a>
+                        <a href="#" onClick={() => router.push('/useredit')}>
+                            Edit
+                        </a>
                     </div>
                 </div>
-
             </div>
             <div className={styles.info}>
                 <div className={styles.boxInfo}>
@@ -195,7 +208,9 @@ const DashboardContent = (props) => {
                             <span>Failed Order</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push('/sales/orderqueue')}>Manage Order</a>
+                    <a className="link" href="#" onClick={() => router.push('/sales/orderqueue')}>
+                        Manage Order
+                    </a>
                 </div>
                 <div className={styles.boxInfo}>
                     <h3 className={clsx('colorGreen', styles.noMargin)}>Shipment</h3>
@@ -235,7 +250,9 @@ const DashboardContent = (props) => {
                             <span>Marketplace</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push('/sales/shipment')}>Manage Shipment</a>
+                    <a className="link" href="#" onClick={() => router.push('/sales/shipment')}>
+                        Manage Shipment
+                    </a>
                 </div>
                 <div className={styles.boxInfo}>
                     <h3 className={clsx('colorOrange', styles.noMargin)}>Return</h3>
@@ -248,7 +265,9 @@ const DashboardContent = (props) => {
                             <span>Request to Proceed</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push(' /sales/managerma')}>Manage Return</a>
+                    <a className="link" href="#" onClick={() => router.push(' /sales/managerma')}>
+                        Manage Return
+                    </a>
                 </div>
 
                 <div className={styles.salesChannelTableWrapper}>
@@ -267,62 +286,66 @@ const DashboardContent = (props) => {
                             </thead>
 
                             <tbody>
-                                {channelListData.map((e) => (
-                                    <>
-                                        <tr>
-                                            <td className={clsx(borderColorFilter(e.framework, e.channel_code), 'channelIcon')}><img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} /></td>
-                                            <td>{e.channel_name}</td>
-                                            <td>{e.channel_name}</td>
-                                            <td>{e.channel_code}</td>
-                                            {e.virtual_stock_list.length > 3
-                                                && (
-                                                    <td>
-                                                        {e.virtual_stock_list[0]}
-                                                        ,
-                                                        {' '}
-                                                        {e.virtual_stock_list[1]}
-                                                        ,
-                                                        {' '}
-                                                        {e.virtual_stock_list[2]}
-                                                        ,
-                                                        {' '}
-                                                        <a className="link" href="#" onClick={() => handleSeemoreOpen('Virtual Stock List', e.channel_name, e.virtual_stock_list)}><u>see more...</u></a>
-                                                    </td>
-                                                )}
-                                            {e.virtual_stock_list.length <= 3
-                                                && (
-                                                    <td>
-                                                        {e.virtual_stock_list[0]}
-                                                        {e.virtual_stock_list[1] ? `, ${ e.virtual_stock_list[1]}` : ''}
-                                                        {e.virtual_stock_list[2] ? `, ${ e.virtual_stock_list[2]}` : ''}
-                                                    </td>
-                                                )}
+                                {channelListData.map((e, idx) => (
+                                    <tr key={idx}>
+                                        <td className={clsx(borderColorFilter(e.framework, e.channel_code), 'channelIcon')}>
+                                            <img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} />
+                                        </td>
+                                        <td>{e.channel_name}</td>
+                                        <td>{e.channel_name}</td>
+                                        <td>{e.channel_code}</td>
+                                        {e.virtual_stock_list?.length > 3 && (
+                                            <td>
+                                                {e.virtual_stock_list[0]}
+                                                ,
+                                                {e.virtual_stock_list[1]}
+                                                ,
+                                                {e.virtual_stock_list[2]}
+                                                ,
+                                                {' '}
+                                                <a
+                                                    className="link"
+                                                    href="#"
+                                                    onClick={() => handleSeemoreOpen('Virtual Stock List', e.channel_name, e.virtual_stock_list)}
+                                                >
+                                                    <u>see more...</u>
+                                                </a>
+                                            </td>
+                                        )}
+                                        {e.virtual_stock_list?.length <= 3 && (
+                                            <td>
+                                                {e.virtual_stock_list[0]}
+                                                {e.virtual_stock_list[1] ? `, ${e.virtual_stock_list[1]}` : ''}
+                                                {e.virtual_stock_list[2] ? `, ${e.virtual_stock_list[2]}` : ''}
+                                            </td>
+                                        )}
 
-                                            {e.location_list.length > 3
-                                                && (
-                                                    <td>
-                                                        {e.location_list[0]}
-                                                        ,
-                                                        {' '}
-                                                        {e.location_list[1]}
-                                                        ,
-                                                        {' '}
-                                                        {e.location_list[2]}
-                                                        ,
-                                                        {' '}
-                                                        <a className="link" href="#" onClick={() => handleSeemoreOpen('Location List', e.channel_name, e.location_list)}><u>see more...</u></a>
-                                                    </td>
-                                                )}
-                                            {e.location_list.length <= 3
-                                                && (
-                                                    <td>
-                                                        {e.location_list[0]}
-                                                        {e.location_list[1] ? `, ${ e.location_list[1]}` : ''}
-                                                        {e.location_list[2] ? `, ${ e.location_list[2]}` : ''}
-                                                    </td>
-                                                )}
-                                        </tr>
-                                    </>
+                                        {e.location_list?.length > 3 && (
+                                            <td>
+                                                {e.location_list[0]}
+                                                ,
+                                                {e.location_list[1]}
+                                                ,
+                                                {e.location_list[2]}
+                                                ,
+                                                {' '}
+                                                <a
+                                                    className="link"
+                                                    href="#"
+                                                    onClick={() => handleSeemoreOpen('Location List', e.channel_name, e.location_list)}
+                                                >
+                                                    <u>see more...</u>
+                                                </a>
+                                            </td>
+                                        )}
+                                        {e.location_list?.length <= 3 && (
+                                            <td>
+                                                {e.location_list[0]}
+                                                {e.location_list[1] ? `, ${e.location_list[1]}` : ''}
+                                                {e.location_list[2] ? `, ${e.location_list[2]}` : ''}
+                                            </td>
+                                        )}
+                                    </tr>
                                 ))}
                             </tbody>
                         </table>
@@ -343,9 +366,7 @@ const DashboardContent = (props) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <span className={clsx(styles.dialogTextContainer)}>
-                            {seemore.data}
-                        </span>
+                        <span className={clsx(styles.dialogTextContainer)}>{seemore.data}</span>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

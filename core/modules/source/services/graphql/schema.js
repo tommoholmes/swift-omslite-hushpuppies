@@ -1,18 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const getSourceList = gql`
-    query getSourceList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-        $filter: SourceFilterInput,
-        $sort: SourceSortInput,
-    ){
-        getSourceList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
-            filter: $filter,
-            sort: $sort,
-        ){
+    query getSourceList($pageSize: Int!, $currentPage: Int!, $filter: SourceFilterInput, $sort: SourceSortInput, $search: String) {
+        getSourceList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort, search: $search) {
             items {
                 source_id
                 loc_name
@@ -35,12 +25,8 @@ export const getSourceList = gql`
 `;
 
 export const getSourceById = gql`
-    query getSourceById(
-        $id: Int!,
-    ){
-        getSourceById(
-            id: $id
-        ){
+    query getSourceById($id: Int!) {
+        getSourceById(id: $id) {
             source_id
             loc_name
             sku
@@ -55,34 +41,20 @@ export const getSourceById = gql`
 `;
 
 export const uploadSource = gql`
-    mutation uploadSource(
-        $binary: String!,
-    ){
-        uploadSource(
-            input: {
-                binary: $binary,
-            }
-        )
+    mutation uploadSource($binary: String!) {
+        uploadSource(input: { binary: $binary })
     }
 `;
 
 export const downloadSampleCsv = gql`
-    mutation downloadSampleCsv(
-        $type: String!,
-    ){
-        downloadSampleCsv(
-            type: $type,
-        )
+    mutation downloadSampleCsv($type: String!) {
+        downloadSampleCsv(type: $type)
     }
 `;
 
 export const downloadSource = gql`
-    mutation downloadSource(
-        $location_id: Int!,
-    ){
-        downloadSource(
-            location_id: $location_id,
-        )
+    mutation downloadSource($location_id: Int!) {
+        downloadSource(location_id: $location_id)
     }
 `;
 

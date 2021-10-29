@@ -32,19 +32,13 @@ const Layout = (props) => {
     const varianAcl = () => {
         const { loading, data } = gqlService.customerAccessControlList();
         if (loading) {
-            return (
-                <>Loading...</>
-            );
+            return <>Loading...</>;
         }
 
         if (!data) {
-            return (
-                <>Data not found!</>
-            );
+            return <>Data not found!</>;
         }
-        dataAcl.push(
-            data.customerAccessControlList,
-        );
+        dataAcl.push(data.customerAccessControlList);
     };
 
     const dataStoreConfigWave = [];
@@ -53,19 +47,13 @@ const Layout = (props) => {
             path: 'swiftoms_pickpack/wave/enable',
         });
         if (loading) {
-            return (
-                <>Loading...</>
-            );
+            return <>Loading...</>;
         }
 
         if (!data) {
-            return (
-                <>Data not found!</>
-            );
+            return <>Data not found!</>;
         }
-        dataStoreConfigWave.push(
-            data.getStoreConfig,
-        );
+        dataStoreConfigWave.push(data.getStoreConfig);
     };
 
     const dataStoreConfigBatch = [];
@@ -74,19 +62,13 @@ const Layout = (props) => {
             path: 'swiftoms_pickpack/batch/enable',
         });
         if (loading) {
-            return (
-                <>Loading...</>
-            );
+            return <>Loading...</>;
         }
 
         if (!data) {
-            return (
-                <>Data not found!</>
-            );
+            return <>Data not found!</>;
         }
-        dataStoreConfigBatch.push(
-            data.getStoreConfig,
-        );
+        dataStoreConfigBatch.push(data.getStoreConfig);
     };
 
     const menuList = [
@@ -97,7 +79,10 @@ const Layout = (props) => {
             label: 'Order',
             children: [
                 {
-                    aclCode: 'oms_lite_sales_order_queue', key: 'orderqueue', label: 'All Orders', url: '/sales/orderqueue',
+                    aclCode: 'oms_lite_sales_order_queue',
+                    key: 'orderqueue',
+                    label: 'All Orders',
+                    url: '/sales/orderqueue',
                 },
                 // { aclCode: 'orderreallocation', label: 'Order Reallocation', url: '/sales/orderreallocation' },
             ],
@@ -108,22 +93,40 @@ const Layout = (props) => {
             label: 'Pick and Pack',
             children: [
                 {
-                    aclCode: 'pick_by_wave_list', key: 'wavelist', label: 'Pick List', url: '/pickpack/wavelist',
+                    aclCode: 'pick_by_wave_list',
+                    key: 'wavelist',
+                    label: 'Pick List',
+                    url: '/pickpack/wavelist',
                 },
                 {
-                    aclCode: 'pick_by_wave_create', key: 'wavecreate', label: 'Create Pick by Wave', url: '/pickpack/wavecreate',
+                    aclCode: 'pick_by_wave_create',
+                    key: 'wavecreate',
+                    label: 'Create Pick by Wave',
+                    url: '/pickpack/wavecreate',
                 },
                 {
-                    aclCode: 'pick_by_wave_packlist', key: 'wavepack', label: 'Pack List', url: '/pickpack/wavepack',
+                    aclCode: 'pick_by_wave_packlist',
+                    key: 'wavepack',
+                    label: 'Pack List',
+                    url: '/pickpack/wavepack',
                 },
                 {
-                    aclCode: 'pick_by_batch_list', key: 'batchlist', label: 'Batch List', url: '/pickpack/batchlist',
+                    aclCode: 'pick_by_batch_list',
+                    key: 'batchlist',
+                    label: 'Batch List',
+                    url: '/pickpack/batchlist',
                 },
                 {
-                    aclCode: 'pick_by_batch_create', key: 'batchcreate', label: 'Create Pick By Batch', url: '/pickpack/batchcreate',
+                    aclCode: 'pick_by_batch_create',
+                    key: 'batchcreate',
+                    label: 'Create Pick By Batch',
+                    url: '/pickpack/batchcreate',
                 },
                 {
-                    aclCode: 'pick_by_batch_packlist', key: 'batchpack', label: 'Pack List', url: '/pickpack/batchpack',
+                    aclCode: 'pick_by_batch_packlist',
+                    key: 'batchpack',
+                    label: 'Pack List',
+                    url: '/pickpack/batchpack',
                 },
             ],
         },
@@ -133,19 +136,34 @@ const Layout = (props) => {
             label: 'Shipment',
             children: [
                 {
-                    aclCode: 'oms_lite_sales_shipment', key: 'allshipment', label: 'All Shipment', url: '/sales/shipment',
+                    aclCode: 'oms_lite_sales_shipment',
+                    key: 'allshipment',
+                    label: 'All Shipment',
+                    url: '/sales/shipment',
                 },
                 {
-                    aclCode: 'shipment_pickup_dashboard', key: 'storepickup', label: 'Store Pickup', url: '/shipment/storepickup',
+                    aclCode: 'shipment_pickup_dashboard',
+                    key: 'storepickup',
+                    label: 'Store Pickup',
+                    url: '/shipment/storepickup',
                 },
                 {
-                    aclCode: 'shipment_curbside_pickup', key: 'curbpickup', label: 'Curb Pickup', url: '/shipment/curbpickup',
+                    aclCode: 'shipment_curbside_pickup',
+                    key: 'curbpickup',
+                    label: 'Curb Pickup',
+                    url: '/shipment/curbpickup',
                 },
                 {
-                    aclCode: 'shipment_delivery_dashboard', key: 'homedelivery', label: 'Home Delivery', url: '/shipment/homedelivery',
+                    aclCode: 'shipment_delivery_dashboard',
+                    key: 'homedelivery',
+                    label: 'Home Delivery',
+                    url: '/shipment/homedelivery',
                 },
                 {
-                    aclCode: 'shipment_marketplace_dashboard', key: 'shipmentmarketplace', label: 'Marketplace', url: '/shipment/shipmentmarketplace',
+                    aclCode: 'shipment_marketplace_dashboard',
+                    key: 'shipmentmarketplace',
+                    label: 'Marketplace',
+                    url: '/shipment/shipmentmarketplace',
                 },
             ],
         },
@@ -155,13 +173,22 @@ const Layout = (props) => {
             label: 'Return',
             children: [
                 {
-                    aclCode: 'oms_lite_credit_memos', key: 'creditmemos', label: 'Credit Memos', url: '/sales/creditmemos',
+                    aclCode: 'oms_lite_credit_memos',
+                    key: 'creditmemos',
+                    label: 'Credit Memos',
+                    url: '/sales/creditmemos',
                 },
                 {
-                    aclCode: 'oms_lite_rma_manage', key: 'managerma', label: 'Manage RMA', url: '/sales/managerma',
+                    aclCode: 'oms_lite_rma_manage',
+                    key: 'managerma',
+                    label: 'Manage RMA',
+                    url: '/sales/managerma',
                 },
                 {
-                    aclCode: 'oms_lite_rma_statuses', key: 'rmastatuses', label: 'RMA Statuses', url: '/sales/rmastatuses',
+                    aclCode: 'oms_lite_rma_statuses',
+                    key: 'rmastatuses',
+                    label: 'RMA Statuses',
+                    url: '/sales/rmastatuses',
                 },
             ],
         },
@@ -171,25 +198,52 @@ const Layout = (props) => {
             label: 'Inventory',
             children: [
                 {
-                    aclCode: 'oms_lite_product_list', key: 'productlist', label: 'Products', url: '/cataloginventory/productlist',
+                    aclCode: 'oms_lite_product_list',
+                    key: 'productlist',
+                    label: 'Products',
+                    url: '/cataloginventory/productlist',
                 },
                 {
-                    aclCode: 'oms_lite_source', key: 'source', label: 'Manage Source', url: '/cataloginventory/source',
+                    aclCode: 'oms_lite_source',
+                    key: 'source',
+                    label: 'Manage Source',
+                    url: '/cataloginventory/source',
                 },
                 {
-                    aclCode: 'oms_lite_override_stock', key: 'overridestock', label: 'Override Stock', url: '/cataloginventory/overridestock',
+                    aclCode: 'oms_lite_override_stock',
+                    key: 'overridestock',
+                    label: 'Override Stock',
+                    url: '/cataloginventory/overridestock',
                 },
                 {
-                    aclCode: 'oms_lite_stock_transfer', key: 'stocktransfer', label: 'Stock Transfer', url: '/cataloginventory/stocktransfer',
+                    aclCode: 'oms_lite_stock_transfer',
+                    key: 'stocktransfer',
+                    label: 'Stock Transfer',
+                    url: '/cataloginventory/stocktransfer',
                 },
                 {
-                    aclCode: 'oms_lite_location_price_upload', key: 'locationpriceupload', label: 'Price by Location', url: '/cataloginventory/locationpriceupload/import',
+                    aclCode: 'inventory_adjustment_dashboard',
+                    key: 'stockadjustment',
+                    label: 'Stock Adjustment',
+                    url: '/cataloginventory/stockadjustment',
                 },
                 {
-                    aclCode: 'oms_lite_tools_history', key: 'toolshistory', label: 'Update Stock History', url: '/tools/history',
+                    aclCode: 'oms_lite_location_price_upload',
+                    key: 'locationpriceupload',
+                    label: 'Price by Location',
+                    url: '/cataloginventory/locationpriceupload/import',
                 },
                 {
-                    aclCode: 'oms_lite_stock_history', key: 'updatestockbyfilehistory', label: 'Update Stock by File History', url: '/cataloginventory/updatestockbyfilehistory',
+                    aclCode: 'oms_lite_tools_history',
+                    key: 'toolshistory',
+                    label: 'Update Stock History',
+                    url: '/tools/history',
+                },
+                {
+                    aclCode: 'oms_lite_stock_history',
+                    key: 'updatestockbyfilehistory',
+                    label: 'Update Stock by File History',
+                    url: '/cataloginventory/updatestockbyfilehistory',
                 },
             ],
         },
@@ -199,25 +253,46 @@ const Layout = (props) => {
             label: 'OMS',
             children: [
                 {
-                    aclCode: 'oms_lite_company', key: 'company', label: 'Company', url: '/oms/company',
+                    aclCode: 'oms_lite_company',
+                    key: 'company',
+                    label: 'Company',
+                    url: '/oms/company',
                 },
                 {
-                    aclCode: 'oms_lite_channel', key: 'channel', label: 'Channel', url: '/oms/channel',
+                    aclCode: 'oms_lite_channel',
+                    key: 'channel',
+                    label: 'Channel',
+                    url: '/oms/channel',
                 },
                 {
-                    aclCode: 'oms_lite_virtual_stock', key: 'virtualstock', label: 'Virtual Stock', url: '/cataloginventory/virtualstock',
+                    aclCode: 'oms_lite_virtual_stock',
+                    key: 'virtualstock',
+                    label: 'Virtual Stock',
+                    url: '/cataloginventory/virtualstock',
                 },
                 {
-                    aclCode: 'oms_lite_location', key: 'location', label: 'Location', url: '/oms/location',
+                    aclCode: 'oms_lite_location',
+                    key: 'location',
+                    label: 'Location',
+                    url: '/oms/location',
                 },
                 {
-                    aclCode: 'oms_lite_location_pickup', key: 'locationpickup', label: 'Location Pickup', url: '/oms/locationpickup',
+                    aclCode: 'oms_lite_location_pickup',
+                    key: 'locationpickup',
+                    label: 'Location Pickup',
+                    url: '/oms/locationpickup',
                 },
                 {
-                    aclCode: 'oms_lite_virtual_location', key: 'virtuallocationinventory', label: 'Virtual Location', url: '/cataloginventory/virtuallocationinventory',
+                    aclCode: 'oms_lite_virtual_location',
+                    key: 'virtuallocationinventory',
+                    label: 'Virtual Location',
+                    url: '/cataloginventory/virtuallocationinventory',
                 },
                 {
-                    aclCode: 'oms_lite_priority_location_by_city', key: 'prioritylocation', label: 'Priority Location', url: '/oms/prioritylocation',
+                    aclCode: 'oms_lite_priority_location_by_city',
+                    key: 'prioritylocation',
+                    label: 'Priority Location',
+                    url: '/oms/prioritylocation',
                 },
             ],
         },
@@ -227,28 +302,52 @@ const Layout = (props) => {
             label: 'Marketplace',
             children: [
                 {
-                    aclCode: 'oms_lite_marketplace', key: 'marketplaces', label: 'Marketplace', url: '/marketplace/marketplace',
+                    aclCode: 'oms_lite_marketplace',
+                    key: 'marketplaces',
+                    label: 'Marketplace',
+                    url: '/marketplace/marketplace',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_store', key: 'store', label: 'Store', url: '/marketplace/store',
+                    aclCode: 'oms_lite_marketplace_store',
+                    key: 'store',
+                    label: 'Store',
+                    url: '/marketplace/store',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_warehouse', key: 'warehouse', label: 'Warehouse', url: '/marketplace/warehouse',
+                    aclCode: 'oms_lite_marketplace_warehouse',
+                    key: 'warehouse',
+                    label: 'Warehouse',
+                    url: '/marketplace/warehouse',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_product_categories', key: 'productcategory', label: 'Product Category', url: '/marketplace/productcategory',
+                    aclCode: 'oms_lite_marketplace_product_categories',
+                    key: 'productcategory',
+                    label: 'Product Category',
+                    url: '/marketplace/productcategory',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_attribute_set_mapping', key: 'attributesetmapping', label: 'Attribute Set Mapping', url: '/marketplace/attributesetmapping',
+                    aclCode: 'oms_lite_marketplace_attribute_set_mapping',
+                    key: 'attributesetmapping',
+                    label: 'Attribute Set Mapping',
+                    url: '/marketplace/attributesetmapping',
                 },
                 {
-                    aclCode: 'oms_lite_mapping_product_attribute', key: 'productattributemapping', label: 'Product Attribute Mapping', url: '/marketplace/productattributemapping',
+                    aclCode: 'oms_lite_mapping_product_attribute',
+                    key: 'productattributemapping',
+                    label: 'Product Attribute Mapping',
+                    url: '/marketplace/productattributemapping',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_product_status', key: 'productstatus', label: 'Product Status', url: '/marketplace/productstatus',
+                    aclCode: 'oms_lite_marketplace_product_status',
+                    key: 'productstatus',
+                    label: 'Product Status',
+                    url: '/marketplace/productstatus',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_update_stock_history', key: 'updatestockhistory', label: 'Update Stock History', url: '/marketplace/updatestockhistory',
+                    aclCode: 'oms_lite_marketplace_update_stock_history',
+                    key: 'updatestockhistory',
+                    label: 'Update Stock History',
+                    url: '/marketplace/updatestockhistory',
                 },
             ],
         },
@@ -258,22 +357,40 @@ const Layout = (props) => {
             label: 'Vendor',
             children: [
                 {
-                    aclCode: 'requestVendor', key: 'requestvendor', label: 'Request Vendor', url: '/vendorportal/requestvendor',
+                    aclCode: 'requestVendor',
+                    key: 'requestvendor',
+                    label: 'Request Vendor',
+                    url: '/vendorportal/requestvendor',
                 },
                 {
-                    aclCode: 'manageVendor', key: 'managevendor', label: 'Manage Vendor', url: '/vendorportal/managevendor',
+                    aclCode: 'manageVendor',
+                    key: 'managevendor',
+                    label: 'Manage Vendor',
+                    url: '/vendorportal/managevendor',
                 },
                 {
-                    aclCode: 'categoryUpload', key: 'categoryupload', label: 'Category Upload', url: '/vendorportal/categoryupload',
+                    aclCode: 'categoryUpload',
+                    key: 'categoryupload',
+                    label: 'Category Upload',
+                    url: '/vendorportal/categoryupload',
                 },
                 {
-                    aclCode: 'productUploadMaster', key: 'productuploadmaster', label: 'Product Upload Master', url: '/vendorportal/productuploadmaster',
+                    aclCode: 'productUploadMaster',
+                    key: 'productuploadmaster',
+                    label: 'Product Upload Master',
+                    url: '/vendorportal/productuploadmaster',
                 },
                 {
-                    aclCode: 'productApproval', key: 'productapproval', label: 'Product Approval', url: '/vendorportal/productapproval',
+                    aclCode: 'productApproval',
+                    key: 'productapproval',
+                    label: 'Product Approval',
+                    url: '/vendorportal/productapproval',
                 },
                 {
-                    aclCode: 'irisPayoutApproval', key: 'irispayoutapproval', label: 'Iris Payout Approval', url: '/vendorportal/irispayoutapproval',
+                    aclCode: 'irisPayoutApproval',
+                    key: 'irispayoutapproval',
+                    label: 'Iris Payout Approval',
+                    url: '/vendorportal/irispayoutapproval',
                 },
             ],
         },
@@ -283,13 +400,22 @@ const Layout = (props) => {
             label: 'TADA',
             children: [
                 {
-                    aclCode: 'oms_lite_tada_category', key: 'tadacategory', label: 'Tada Category', url: '/tada/tadacategory',
+                    aclCode: 'oms_lite_tada_category',
+                    key: 'tadacategory',
+                    label: 'Tada Category',
+                    url: '/tada/tadacategory',
                 },
                 {
-                    aclCode: 'oms_lite_tada_config', key: 'configuration', label: 'Configuration', url: '/tada/configuration',
+                    aclCode: 'oms_lite_tada_config',
+                    key: 'configuration',
+                    label: 'Configuration',
+                    url: '/tada/configuration',
                 },
                 {
-                    aclCode: 'oms_lite_tada_shipping_company', key: 'shippingcompany', label: 'Shipping Company', url: '/tada/shippingcompany',
+                    aclCode: 'oms_lite_tada_shipping_company',
+                    key: 'shippingcompany',
+                    label: 'Shipping Company',
+                    url: '/tada/shippingcompany',
                 },
             ],
         },
@@ -299,22 +425,40 @@ const Layout = (props) => {
             label: 'Report',
             children: [
                 {
-                    aclCode: 'oms_lite_reports_sales_order', key: 'salesorder', label: 'Sales Order', url: '/reports/salesorder',
+                    aclCode: 'oms_lite_reports_sales_order',
+                    key: 'salesorder',
+                    label: 'Sales Order',
+                    url: '/reports/salesorder',
                 },
                 {
-                    aclCode: 'oms_lite_reports_sales_overview', key: 'salesoverview', label: 'Sales Overview', url: '/reports/salesoverview',
+                    aclCode: 'oms_lite_reports_sales_overview',
+                    key: 'salesoverview',
+                    label: 'Sales Overview',
+                    url: '/reports/salesoverview',
                 },
                 {
-                    aclCode: 'oms_lite_reports_product_performance', key: 'productperformance', label: 'Product Performance', url: '/reports/productperformance',
+                    aclCode: 'oms_lite_reports_product_performance',
+                    key: 'productperformance',
+                    label: 'Product Performance',
+                    url: '/reports/productperformance',
                 },
                 {
-                    aclCode: 'oms_lite_reports_sales_by_payment', key: 'salesbypaymenttype', label: 'Sales By Payment Type', url: '/reports/salesbypaymenttype',
+                    aclCode: 'oms_lite_reports_sales_by_payment',
+                    key: 'salesbypaymenttype',
+                    label: 'Sales By Payment Type',
+                    url: '/reports/salesbypaymenttype',
                 },
                 {
-                    aclCode: 'oms_lite_reports_sales_by_shipping', key: 'salesbyshippingtype', label: 'Sales by Shipping Type', url: '/reports/salesbyshippingtype',
+                    aclCode: 'oms_lite_reports_sales_by_shipping',
+                    key: 'salesbyshippingtype',
+                    label: 'Sales by Shipping Type',
+                    url: '/reports/salesbyshippingtype',
                 },
                 {
-                    aclCode: 'oms_lite_reports_best_sku', key: 'bestperformingskus', label: 'Top 10 Best Performing SKUs', url: '/reports/bestperformingskus',
+                    aclCode: 'oms_lite_reports_best_sku',
+                    key: 'bestperformingskus',
+                    label: 'Top 10 Best Performing SKUs',
+                    url: '/reports/bestperformingskus',
                 },
                 // { aclCode: 'orderReport', label: 'Order Report', url: '/reports/orderreport' },
             ],
@@ -325,13 +469,22 @@ const Layout = (props) => {
             label: 'Configurations',
             children: [
                 {
-                    aclCode: 'oms_lite_config_integrations', key: 'integrations', label: 'Integrations', url: '/configurations/integrations',
+                    aclCode: 'oms_lite_config_integrations',
+                    key: 'integrations',
+                    label: 'Integrations',
+                    url: '/configurations/integrations',
                 },
                 {
-                    aclCode: 'oms_lite_config_shipments', key: 'shipments', label: 'Shipments', url: '/configurations/shipments',
+                    aclCode: 'oms_lite_config_shipments',
+                    key: 'shipments',
+                    label: 'Shipments',
+                    url: '/configurations/shipments',
                 },
                 {
-                    aclCode: 'oms_lite_logistix_provider', key: 'logistixprovider', label: 'Logistix Provider', url: '/configurations/logistixprovider',
+                    aclCode: 'oms_lite_logistix_provider',
+                    key: 'logistixprovider',
+                    label: 'Logistix Provider',
+                    url: '/configurations/logistixprovider',
                 },
             ],
         },
@@ -341,10 +494,16 @@ const Layout = (props) => {
             label: 'Tools',
             children: [
                 {
-                    aclCode: 'oms_lite_tools_cli', key: 'clitools', label: 'CLI Tools', url: '/tools/clitools',
+                    aclCode: 'oms_lite_tools_cli',
+                    key: 'clitools',
+                    label: 'CLI Tools',
+                    url: '/tools/clitools',
                 },
                 {
-                    aclCode: 'oms_lite_notification', key: 'notification', label: 'Notification', url: '/oms/notification',
+                    aclCode: 'oms_lite_notification',
+                    key: 'notification',
+                    label: 'Notification',
+                    url: '/oms/notification',
                 },
             ],
         },
@@ -354,7 +513,10 @@ const Layout = (props) => {
             label: 'User',
             children: [
                 {
-                    aclCode: 'oms_lite_admin_store', key: 'adminstore', label: 'All Users', url: '/userdata/adminstore',
+                    aclCode: 'oms_lite_admin_store',
+                    key: 'adminstore',
+                    label: 'All Users',
+                    url: '/userdata/adminstore',
                 },
             ],
         },
@@ -419,7 +581,7 @@ const Layout = (props) => {
             let activeMenuSecondChild = null;
 
             for (let i = 0; i < mappedMenuList.length; i += 1) {
-                if (mappedMenuList[i].url.includes(removeLastPathOnUrl((router && router.pathname)))) {
+                if (mappedMenuList[i].url.includes(removeLastPathOnUrl(router && router.pathname))) {
                     activeMenuSecondChild = mappedMenuList[i];
                     break;
                 }
@@ -450,14 +612,7 @@ const Layout = (props) => {
 
     return (
         <div className={classes.root}>
-            {showHeader() && (
-                <Header
-                    mappedMenuList={mappedMenuList}
-                    breadcrumbData={getBreadcrumbData()}
-                    open={open}
-                    setOpen={setOpen}
-                />
-            )}
+            {showHeader() && <Header mappedMenuList={mappedMenuList} breadcrumbData={getBreadcrumbData()} open={open} setOpen={setOpen} />}
             {showSidebar() && (
                 <>
                     <Sidebar
@@ -480,12 +635,7 @@ const Layout = (props) => {
             )}
             <main className={showHeader() ? classes.content : classes.contentNoHeader}>
                 <Loading open={backdropLoader} />
-                <Message
-                    open={toastMessage.open}
-                    variant={toastMessage.variant}
-                    setOpen={handleCloseMessage}
-                    message={toastMessage.text}
-                />
+                <Message open={toastMessage.open} variant={toastMessage.variant} setOpen={handleCloseMessage} message={toastMessage.text} />
                 {/* necessary for content to be below app bar */}
                 <div className={showHeader() ? classes.toolbar : ''} />
                 {showHeader() && useBreadcrumbs && (
