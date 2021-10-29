@@ -8,6 +8,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable eqeqeq */
 /* eslint-disable arrow-body-style */
+/* eslint-disable max-len */
 import useStyles from '@common_customlist/style';
 import Button from '@common_button';
 import ListFilters from '@common_customlist/components/ListFilters';
@@ -67,6 +68,7 @@ const CustomList = (props) => {
         primaryKey = 'id',
         rows,
         getRows,
+        deleteRows,
         loading,
         filters: initialFilters = [],
         actions,
@@ -80,6 +82,7 @@ const CustomList = (props) => {
         handleChecked = () => {},
         count,
         usePagination = false,
+        twoColumns = false,
     } = props;
     // hooks
     const classes = useStyles();
@@ -139,63 +142,82 @@ const CustomList = (props) => {
         }
     };
 
-    const renderTableToolbar = () => (
-        <div className={classes.tableToolbar}>
-            <div className={header ? 'top-header' : 'top'}>
-                {header && header()}
-                <div className="top-buttons-wrapper">
-                    {!hideActions && actions.length && (
-                        <div className="top-item">
-                            <ConfirmDialog
-                                open={openConfirmDialog}
-                                onConfirm={async () => {
-                                    if (checkedRows && checkedRows.length) {
-                                        await activeAction.onClick(checkedRows);
-                                        fetchRows();
-                                    }
-                                    setOpenConfirmDialog(false);
-                                }}
-                                message={activeAction && activeAction.message}
-                            />
-                            <button
-                                id="clickConfirm"
-                                className="hide"
-                                type="submit"
-                                onClick={async () => {
-                                    if (checkedRows && checkedRows.length) {
-                                        await activeAction.onClick(checkedRows);
-                                        fetchRows();
-                                        window.toastMessage({
-                                            open: true,
-                                            text: 'Success!',
-                                            variant: 'success',
-                                        });
-                                    // window.location.reload();
-                                    }
-                                }}
-                            >
-                                Auto Confirm
-                            </button>
-                            <MenuPopover
-                                openButton={{ label: 'Actions' }}
-                                icon={<ExpandMoreIcon />}
-                                menuItems={actions.map((action) => ({
-                                    label: action.label,
-                                    onClick: () => {
-                                        setActiveAction(action);
-                                        if (action.label === 'Delete') {
-                                            setOpenConfirmDialog(true);
-                                        } else {
-                                            setTimeout(() => {
-                                                document.getElementById('clickConfirm').click();
-                                            }, 100);
+    const renderTableToolbar = () => {
+        const toolbarActions = actions || [
+            {
+                label: 'Delete',
+                message: 'Are you sure you want to delete?',
+                onClick: async (_checkedRows) => {
+                    const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
+                    await deleteRows({ variables });
+                    window.toastMessage({
+                        open: true,
+                        text: 'Delete success!',
+                        variant: 'success',
+                    });
+                },
+            },
+        ];
+        return (
+            <div className={classes.tableToolbar}>
+                <div
+                    className={header ? 'top-header' : 'top'}
+                    style={actions && { display: 'block' }}
+                >
+                    {header && header()}
+                    <div className="top-buttons-wrapper">
+                        {!hideActions && actions.length && (
+                            <div className="top-item">
+                                <ConfirmDialog
+                                    open={openConfirmDialog}
+                                    onConfirm={async () => {
+                                        if (checkedRows && checkedRows.length) {
+                                            await activeAction.onClick(checkedRows);
+                                            fetchRows();
                                         }
-                                    },
-                                }))}
-                            />
-                        </div>
-                    )}
-                    {!hideColumn
+                                        setOpenConfirmDialog(false);
+                                    }}
+                                    message={activeAction && activeAction.message}
+                                />
+                                <button
+                                    id="clickConfirm"
+                                    className="hide"
+                                    type="submit"
+                                    onClick={async () => {
+                                        if (checkedRows && checkedRows.length) {
+                                            await activeAction.onClick(checkedRows);
+                                            fetchRows();
+                                            window.toastMessage({
+                                                open: true,
+                                                text: 'Success!',
+                                                variant: 'success',
+                                            });
+                                            // window.location.reload();
+                                        }
+                                    }}
+                                >
+                                    Auto Confirm
+                                </button>
+                                <MenuPopover
+                                    openButton={{ label: 'Actions' }}
+                                    icon={<ExpandMoreIcon />}
+                                    menuItems={toolbarActions.map((action) => ({
+                                        label: action.label,
+                                        onClick: () => {
+                                            setActiveAction(action);
+                                            if (action.label === 'Delete') {
+                                                setOpenConfirmDialog(true);
+                                            } else {
+                                                setTimeout(() => {
+                                                    document.getElementById('clickConfirm').click();
+                                                }, 100);
+                                            }
+                                        },
+                                    }))}
+                                />
+                            </div>
+                        )}
+                        {!hideColumn
                 && (
                     <div className="top-item">
                         <Button
@@ -206,55 +228,56 @@ const CustomList = (props) => {
                         </Button>
                     </div>
                 )}
-                    <div className="top-item">
-                        <Button
-                            className={clsx(classes.btn, 'filter')}
-                            onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
-                            variant="contained"
-                            buttonType="primary-rounded"
-                        >
-                            <FilterListIcon style={{ marginRight: 10 }} />
-                            filters
-                        </Button>
-                    </div>
-                </div>
-            </div>
-            <div style={{ background: '#EBEFF6' }}>
-                <Collapse in={expandedToolbar === 'toggleColums'}>
-                    <div style={{ padding: 12 }}>
-                        {(hiddenColumns.find((c) => c.hideable)) && (
-                            <div style={{ padding: 12 }}>
-                                {`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}
-                            </div>
-                        )}
-                        {!(hiddenColumns.find((c) => c.hideable)) && (
-                            <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
-                        )}
-                        {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
-                            <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
-                                <Checkbox
-                                    checked={!column.hidden}
-                                    onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
-                                />
-                                {column.headerName}
-                            </div>
-                        ))}
-                        <div style={{ padding: 12 }}>
-                            <Button buttonType="primary-rounded" onClick={applyHiddenColumns}>
-                                Apply
-                            </Button>
-                            <Button buttonType="link" onClick={resetHiddenColumn}>
-                                Reset
+                        <div className="top-item">
+                            <Button
+                                className={clsx(classes.btn, 'filter')}
+                                onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                <FilterListIcon style={{ marginRight: 10 }} />
+                                filters
                             </Button>
                         </div>
                     </div>
-                </Collapse>
-                <Collapse in={expandedToolbar === 'filters'}>
-                    <ListFilters initialFilters={initialFilters} parentFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
-                </Collapse>
+                </div>
+                <div style={{ background: '#EBEFF6' }}>
+                    <Collapse in={expandedToolbar === 'toggleColums'}>
+                        <div style={{ padding: 12 }}>
+                            {(hiddenColumns.find((c) => c.hideable)) && (
+                                <div style={{ padding: 12 }}>
+                                    {`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}
+                                </div>
+                            )}
+                            {!(hiddenColumns.find((c) => c.hideable)) && (
+                                <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
+                            )}
+                            {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
+                                <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
+                                    <Checkbox
+                                        checked={!column.hidden}
+                                        onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
+                                    />
+                                    {column.headerName}
+                                </div>
+                            ))}
+                            <div style={{ padding: 12 }}>
+                                <Button buttonType="primary-rounded" onClick={applyHiddenColumns}>
+                                    Apply
+                                </Button>
+                                <Button buttonType="link" onClick={resetHiddenColumn}>
+                                    Reset
+                                </Button>
+                            </div>
+                        </div>
+                    </Collapse>
+                    <Collapse in={expandedToolbar === 'filters'}>
+                        <ListFilters initialFilters={initialFilters} parentFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
+                    </Collapse>
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     React.useEffect(() => {
         fetchRows();
@@ -295,45 +318,53 @@ const CustomList = (props) => {
             )}
             {loading ? <div className={classes.loading}>Loading . . .</div>
                 : rows.length ? rows.map((row, i) => (
-                    <div
-                        key={i}
-                        className={clsx(classes.gridList, classes.content)}
-                        style={{ gridTemplateColumns: showCheckbox ? `1fr repeat(${columns.length}, 2fr)` : `repeat(${columns.length}, 1fr)` }}
-                    >
-                        {showCheckbox && (
-                            <Checkbox
-                                checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
-                                onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
-                            />
-                        )}
-                        {columns.map((column, columnIndex) => {
-                            return (
-                                !column.hidden && (
-                                    <div
-                                        key={columnIndex}
-                                        style={{ paddingLeft: 10,
-                                            cursor: handleClickRow ? 'pointer' : 'unset',
-                                            textOverflow: 'ellipsis',
-                                            overflow: 'hidden',
-                                            overflowWrap: 'break-word',
-                                        }}
-                                        onClick={() => handleClickRow ? handleClickRow(row.id) : null}
-                                    >
-                                        <h5
-                                            className={classes.titleList}
+                    <>
+                        <div
+                            key={i}
+                            className={clsx(classes.gridList, classes.content)}
+                            style={
+                                twoColumns ? { gridTemplateColumns: showCheckbox ? `1fr repeat(2, ${columns.length}fr)` : 'repeat(2, 1fr)' }
+                                    : { gridTemplateColumns: showCheckbox ? `1fr repeat(${columns.length}, 2fr)` : `repeat(${columns.length}, 1fr)` }
+
+                            }
+                        >
+                            {showCheckbox && (
+                                <Checkbox
+                                    checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
+                                    onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
+                                    style={twoColumns ? { gridRow: `1 / span ${columns.length}`, alignSelf: 'start' } : { gridRow: 1 }}
+                                />
+                            )}
+                            {columns.map((column, columnIndex) => {
+                                return (
+                                    !column.hidden && (
+                                        <div
+                                            key={columnIndex}
+                                            style={{ paddingLeft: 10,
+                                                cursor: handleClickRow ? 'pointer' : 'unset',
+                                                textOverflow: 'ellipsis',
+                                                overflow: 'hidden',
+                                                overflowWrap: 'break-word',
+                                                marginBottom: 10,
+                                            }}
+                                            onClick={() => handleClickRow ? handleClickRow(row.id) : null}
                                         >
-                                            {column.headerName}
-                                        </h5>
-                                        <h5
-                                            className={classes.bodyList}
-                                        >
-                                            {getComponentOrString(row[column.field])}
-                                        </h5>
-                                    </div>
-                                )
-                            );
-                        })}
-                    </div>
+                                            <h5
+                                                className={classes.titleList}
+                                            >
+                                                {column.headerName}
+                                            </h5>
+                                            <h5
+                                                className={classes.bodyList}
+                                            >
+                                                {getComponentOrString(row[column.field])}
+                                            </h5>
+                                        </div>
+                                    )
+                                );
+                            })}
+                        </div>
+                    </>
                 ))
                     : <div className={classes.loading}>No records to display</div>}
             {usePagination && count > rowsPerPage
