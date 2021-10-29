@@ -6,18 +6,37 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getCurbPickupList, { data, loading }] = gqlService.getCurbPickupList();
-    const [confirmPickShipment] = gqlService.confirmPickShipment();
+    const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
+    const [confirmShipment] = gqlService.confirmShipment();
     const [packShipment] = gqlService.packShipment();
     const [pickedupShipment] = gqlService.pickedupShipment();
+    const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
+
+    if (loadingOptionStatus) {
+        return (
+            <Layout useBreadcrumbs={false}>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading
+                </div>
+            </Layout>
+        );
+    }
 
     const contentProps = {
-        getCurbPickupList,
-        confirmPickShipment,
+        getStoreShipmentList,
+        confirmShipment,
         packShipment,
         pickedupShipment,
         data,
         loading,
+        optionsStatus: optionsStatus.getShipmentStatusByType,
     };
 
     return (

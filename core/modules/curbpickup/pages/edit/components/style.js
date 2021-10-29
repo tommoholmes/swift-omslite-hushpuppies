@@ -42,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
+        marginTop: 0,
+        marginBottom: 20,
     },
     title: {
         fontFamily: font,
@@ -65,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 18,
     },
     formFieldButton: {
-        margin: '20px 0 10px 0',
+        margin: '10px 0 10px 0',
     },
     btn: {
         borderRadius: 20,

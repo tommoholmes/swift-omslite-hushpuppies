@@ -5,7 +5,8 @@ const colorOrange = '#FF962C';
 const colorGreen = '#5EC929';
 const colorAqua = '#29c3c9';
 const colorBlue = '#2689ca';
-const varPadding = '5px 10px';
+const varPadding = '0 10px';
+const iconFont = '#435179';
 
 const useStyles = makeStyles(() => ({
     process: {
@@ -57,6 +58,20 @@ const useStyles = makeStyles(() => ({
         textAlign: 'center',
         width: '100%',
         padding: varPadding,
+    },
+    statusRow: {
+        display: 'flex',
+        color: iconFont,
+        fontWeight: 600,
+        alignItems: 'center',
+        '&.unbold': {
+            fontWeight: 'unset',
+        },
+    },
+    statusIcon: {
+        width: 36,
+        height: 'auto',
+        marginRight: 8,
     },
 }));
 
