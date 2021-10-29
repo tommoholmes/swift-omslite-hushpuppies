@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable consistent-return */
+/* eslint-disable indent */
+/* eslint-disable max-len */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-closing-tag-location */
 
 import React from 'react';
 import { useRouter } from 'node_modules/next/router';
@@ -9,7 +12,7 @@ import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import {
-    Formik, Field, Form, FieldArray,
+ Formik, Field, Form, FieldArray,
 } from 'formik';
 import Autocomplete from '@common_autocomplete';
 import gqlLocation from '@modules/location/services/graphql';
@@ -31,13 +34,14 @@ const StockAdjustmentEdit = (props) => {
     const [searchLocation, setSearchLocation] = React.useState('');
     const [customer_loc_code, setCustomerLocCode] = React.useState([]);
     const [baseSkuOption, setBaseSkuOption] = React.useState([]);
-    const alreadyFetch = React.useRef(true);
-    const firstRender1 = React.useRef(true);
-    const firstRender2 = React.useRef(true);
+    const [locationOption, setLocationOption] = React.useState([]);
+    const firstRenderLocation = React.useRef(true);
+    const firstRenderSetLocation = React.useRef(true);
 
     React.useEffect(() => {
-        if (!firstRender1.current) {
-            const onChangeTimeOut = setTimeout(() => {
+        const onChangeTimeOut = setTimeout(() => {
+            const isExist = searchSku && baseSkuOption.filter((elm) => elm?.sku?.toLowerCase().includes(searchSku?.toLowerCase()));
+            if (searchSku && isExist.length === 0) {
                 getSourceList({
                     variables: {
                         search: searchSku,
@@ -51,87 +55,13 @@ const StockAdjustmentEdit = (props) => {
                         },
                     },
                 });
-                return 0;
-            }, 500);
-
-            return () => clearTimeout(onChangeTimeOut);
-        }
-        firstRender1.current = false;
-    }, [searchSku]);
-
-    React.useEffect(() => {
-        if (!firstRender2.current) {
-            const onChangeTimeOut = setTimeout(() => {
-                getLocationList({
-                    variables: {
-                        search: searchLocation,
-                        pageSize: 20,
-                        currentPage: 1,
-                        filter: {
-                            loc_code: {
-                                in: customer_loc_code,
-                            },
-                        },
-                    },
-                });
-                return 0;
-            }, 500);
-
-            return () => clearTimeout(onChangeTimeOut);
-        }
-        if (
-            getLocationListRes
-            && getLocationListRes.data
-            && getLocationListRes.data.getLocationList
-            && getLocationListRes.data.getLocationList.items
-        ) {
-            firstRender2.current = false;
-        }
-    }, [searchLocation]);
-
-    const handleSearchSkuChange = (e) => {
-        setSearchSku(e && e.target && e.target.value.toString());
-    };
-
-    const handleSearchLocationChange = (e) => {
-        setSearchLocation(e && e.target && e.target.value.toString());
-    };
-
-    const handleSetUserInfo = (customer) => {
-        const customerLocCodeTemp = customer && customer.customer_loc_code;
-        setCustomerLocCode(customerLocCodeTemp.split(','));
-    };
-
-    React.useEffect(() => {
-        getLocationList({
-            variables: {
-                pageSize: 1,
-                currentPage: 1,
-                filter: {
-                    loc_code: {
-                        eq: initialValues.loc_code.loc_code,
-                    },
-                },
-            },
-        });
-        if (Cookies.getJSON(custDataNameCookie)) {
-            handleSetUserInfo(Cookies.getJSON(custDataNameCookie));
-        }
-    }, []);
-
-    React.useEffect(() => {
-        if (alreadyFetch.current) {
-            if (
-                getLocationListRes
-                && getLocationListRes.data
-                && getLocationListRes.data.getLocationList
-                && getLocationListRes.data.getLocationList.items
-            ) {
-                setLocID(getLocationListRes.data.getLocationList.items[0].loc_id);
-                alreadyFetch.current = false;
             }
-        }
-    }, [getLocationListRes.data]);
+
+            return null;
+        }, 500);
+
+        return () => clearTimeout(onChangeTimeOut);
+    }, [searchSku]);
 
     React.useEffect(() => {
         if (getSourceListRes && getSourceListRes.data && getSourceListRes.data.getSourceList && getSourceListRes.data.getSourceList.items) {
@@ -139,14 +69,77 @@ const StockAdjustmentEdit = (props) => {
         }
     }, [getSourceListRes.data]);
 
-    const editchemaValidaton = Yup.object().shape({
+    React.useEffect(() => {
+        const onChangeTimeOut = setTimeout(
+            () => {
+                let filter = {};
+                if (firstRenderLocation.current) {
+                    filter = {
+                        loc_code: {
+                            eq: initialValues.loc_code.loc_code,
+                        },
+                    };
+                } else {
+                    filter = {
+                        loc_code: {
+                            in: customer_loc_code,
+                        },
+                    };
+                }
+                const isExist = searchLocation && locationOption.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchLocation?.toLowerCase()));
+                if (firstRenderLocation.current || (searchLocation && isExist.length === 0)) {
+                    getLocationList({
+                        variables: {
+                            search: searchLocation,
+                            pageSize: 20,
+                            currentPage: 1,
+                            filter,
+                        },
+                    });
+                    firstRenderLocation.current = false;
+                }
+
+                return null;
+            },
+            firstRenderLocation.current ? 0 : 500,
+        );
+
+        return () => clearTimeout(onChangeTimeOut);
+    }, [searchLocation]);
+
+    React.useEffect(() => {
+        if (
+            getLocationListRes
+            && getLocationListRes.data
+            && getLocationListRes.data.getLocationList
+            && getLocationListRes.data.getLocationList.items
+        ) {
+            if (firstRenderSetLocation.current && getLocationListRes.data.getLocationList.items.length > 0) {
+                setLocID(getLocationListRes.data.getLocationList.items[0].loc_id);
+            }
+
+            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items]);
+        }
+    }, [getLocationListRes.data]);
+
+    const handleSetUserInfo = (customer) => {
+        const customerLocCodeTemp = customer && customer.customer_loc_code;
+        setCustomerLocCode(customerLocCodeTemp.split(','));
+    };
+
+    React.useEffect(() => {
+        if (Cookies.getJSON(custDataNameCookie)) {
+            handleSetUserInfo(Cookies.getJSON(custDataNameCookie));
+        }
+    }, []);
+
+    const editSchemaValidaton = Yup.object().shape({
         loc_code: Yup.object().required('Required!'),
         reason: Yup.string().required('Required!'),
         items: Yup.array()
             .of(
                 Yup.object().shape({
-                    sku: Yup.object().required('Required!'),
-                    stock_adjustment: Yup.number().required('Required!'),
+                    sku: Yup.string().required('required!'),
                 }),
             )
             .min(1)
@@ -172,14 +165,16 @@ const StockAdjustmentEdit = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                Edit Stock Adjustment #
-                {initialValues.increment_id}
-            </h2>
+Edit Stock Adjustment #
+{initialValues.increment_id}
+</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <h2 className={classes.title}>Stock Adjustment Information</h2>
-                    <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={editchemaValidaton}>
-                        {({ values, setFieldValue, submitForm }) => (
+                    <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={editSchemaValidaton}>
+                        {({
+ values, setFieldValue, submitForm, errors, touched,
+}) => (
                             <Form>
                                 <div className={classes.formField}>
                                     <div className={classes.divLabel}>
@@ -191,16 +186,11 @@ const StockAdjustmentEdit = (props) => {
                                         value={values.loc_code}
                                         onChange={(e) => {
                                             setFieldValue('loc_code', e);
-                                            setLocID(e.loc_id);
+                                            setLocID(e?.loc_id);
                                             setFieldValue('items', []);
                                         }}
-                                        loading={getLocationListRes.loading}
-                                        options={
-                                            getLocationListRes
-                                            && getLocationListRes.data
-                                            && getLocationListRes.data.getLocationList
-                                            && getLocationListRes.data.getLocationList.items
-                                        }
+                                        loading={!firstRenderSetLocation.current && getLocationListRes.loading}
+                                        options={locationOption}
                                         getOptions={getLocationList}
                                         getOptionsVariables={{
                                             variables: {
@@ -216,13 +206,18 @@ const StockAdjustmentEdit = (props) => {
                                         }}
                                         primaryKey="loc_code"
                                         labelKey="loc_name"
-                                        onInputChange={handleSearchLocationChange}
+                                        onInputChange={(e) => setSearchLocation(e && e.target && e.target.value)}
+                                        error={!!(touched.loc_code && errors.loc_code)}
+                                        helperText={(touched.loc_code && errors.loc_code) || ''}
                                     />
                                 </div>
                                 <div className={classes.formField}>
                                     <div className={classes.divLabel}>
                                         <span className={[classes.label, classes.labelRequired].join(' ')}>Product</span>
                                     </div>
+                                    {errors?.items && touched?.items && typeof errors?.items === 'string' && (
+                                        <p style={{ margin: 0, color: 'red', fontSize: 12 }}>{errors?.items}</p>
+                                    )}
 
                                     <FieldArray name="items">
                                         {({ remove, push }) => (
@@ -245,7 +240,7 @@ const StockAdjustmentEdit = (props) => {
                                                                             <Autocomplete
                                                                                 name={`items.${idx}.sku`}
                                                                                 mode="lazy"
-                                                                                className={classes.autocomplete}
+                                                                                className={`${classes.autocomplete}`}
                                                                                 value={values.items[idx].sku}
                                                                                 onChange={(e) => {
                                                                                     setFieldValue(`items.${idx}.stock_available`, e?.qty_total ?? 0);
@@ -263,8 +258,8 @@ const StockAdjustmentEdit = (props) => {
                                                                                         currentPage: 1,
                                                                                         filter: {
                                                                                             loc_id: {
-                                                                                                from: locID.toString(),
-                                                                                                to: locID.toString(),
+                                                                                                from: locID?.toString(),
+                                                                                                to: locID?.toString(),
                                                                                             },
                                                                                         },
                                                                                     },
@@ -272,8 +267,11 @@ const StockAdjustmentEdit = (props) => {
                                                                                 getOptions={getSourceList}
                                                                                 primaryKey="source_id"
                                                                                 labelKey="sku"
-                                                                                onInputChange={handleSearchSkuChange}
-                                                                                defaultValue={{ sku: 'select', source_id: 0 }}
+                                                                                onInputChange={(e) => setSearchSku(e && e.target && e.target.value)}
+                                                                                error={!!(errors?.items?.[idx]?.sku && touched?.items?.[idx]?.sku)}
+                                                                                helperText={
+                                                                                    (errors?.items?.[idx]?.sku && touched?.items?.[idx]?.sku) || ''
+                                                                                }
                                                                             />
                                                                         ) : (
                                                                             item.sku
@@ -303,11 +301,11 @@ const StockAdjustmentEdit = (props) => {
                                                         className={classes.btn}
                                                         variant="contained"
                                                         onClick={() => push({
-                                                            sku: null,
-                                                            entity_id: null,
-                                                            stock_adjustment: 0,
-                                                            stock_available: 0,
-                                                        })}
+                                                                sku: null,
+                                                                entity_id: null,
+                                                                stock_adjustment: 0,
+                                                                stock_available: 0,
+                                                            })}
                                                     >
                                                         Add Product
                                                     </Button>
@@ -323,10 +321,17 @@ const StockAdjustmentEdit = (props) => {
                                     <div style={{ widht: '100%' }}>
                                         <TextareaAutosize
                                             minRows={4}
-                                            style={{ width: '100%', padding: '5px' }}
+                                            style={{
+                                                width: '100%',
+                                                padding: '5px',
+                                                borderColor: `${errors?.reason && touched?.reason ? 'red' : 'black'}`,
+                                            }}
                                             value={values.reason}
                                             onChange={(e) => setFieldValue('reason', e.target.value)}
                                         />
+                                        {errors?.reason && touched?.reason && (
+                                            <p style={{ margin: 0, color: 'red', fontSize: 12 }}>{errors?.reason}</p>
+                                        )}
                                     </div>
                                 </div>
 
