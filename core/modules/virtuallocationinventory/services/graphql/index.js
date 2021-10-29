@@ -10,19 +10,30 @@ const fetchPolicy = {
 };
 
 export const getVirtualLocationList = (variables) => useLazyQuery(Schema.getVirtualLocationList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getVirtualLocationById = (variables) => useQuery(Schema.getVirtualLocationById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const createVirtualLocation = (variables) => useMutation(Schema.createVirtualLocation, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const updateVirtualLocation = (variables) => useMutation(Schema.updateVirtualLocation, {
-    variables, ...context,
+    variables,
+    ...context,
+});
+
+export const deleteVirtualLocation = (variables) => useMutation(Schema.deleteVirtualLocation, {
+    variables,
+    ...context,
 });
 
 export default {
@@ -30,4 +41,5 @@ export default {
     getVirtualLocationById,
     createVirtualLocation,
     updateVirtualLocation,
+    deleteVirtualLocation,
 };
