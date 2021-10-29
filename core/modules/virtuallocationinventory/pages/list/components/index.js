@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Header from '@modules/virtuallocationinventory/pages/list/components/Header';
 
 const VirtualLocationListContent = (props) => {
-    const { data, loading, getVirtualLocationList } = props;
+    const { data, loading, getVirtualLocationList, deleteMultipleRowsHandle } = props;
     const virtualLocationList = (data && data.getVirtualLocationList && data.getVirtualLocationList.items) || [];
     const virtualLocationTotal = (data && data.getVirtualLocationList && data.getVirtualLocationList.total_count) || 0;
 
@@ -39,12 +39,6 @@ const VirtualLocationListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
@@ -55,6 +49,8 @@ const VirtualLocationListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={virtualLocationTotal}
+                deleteRows={deleteMultipleRowsHandle}
+                showCheckbox
             />
         </>
     );
