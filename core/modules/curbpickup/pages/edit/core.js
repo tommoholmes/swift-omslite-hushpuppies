@@ -10,9 +10,10 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
-    const curbpickup = data.getCurbPickupById;
-    const [confirmPickShipment] = gqlService.confirmPickShipment();
+    const curbpickup = data.getStoreShipmentById;
+    const [confirmShipment] = gqlService.confirmShipment();
     const [cantFulfillShipment] = gqlService.cantFulfillShipment();
+    const [pickShipment] = gqlService.pickShipment();
     const [packShipment] = gqlService.packShipment();
     const [pickedupShipment] = gqlService.pickedupShipment();
 
@@ -21,7 +22,7 @@ const ContentWrapper = (props) => {
             id: curbPickup.id,
         };
         window.backdropLoader(true);
-        confirmPickShipment({
+        confirmShipment({
             variables,
         }).then(() => {
             window.backdropLoader(false);
@@ -53,6 +54,31 @@ const ContentWrapper = (props) => {
             window.toastMessage({
                 open: true,
                 text: 'Order was Confirm',
+                variant: 'success',
+            });
+            setTimeout(() => window.location.reload(true), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    const handlePicked = () => {
+        const variables = {
+            id: curbPickup.id,
+        };
+        window.backdropLoader(true);
+        pickShipment({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order was Packaged',
                 variant: 'success',
             });
             setTimeout(() => window.location.reload(true), 250);
@@ -125,6 +151,7 @@ const ContentWrapper = (props) => {
         id: curbpickup.entity_id,
         shipmentNumber: curbpickup.increment_id,
         orderNumber: curbpickup.channel_order_increment_id,
+        location: curbpickup.pickup_info.loc_details,
         allocation: curbpickup.allocation_status,
         status: curbpickup.status.label,
         statusValue: curbpickup.status.value,
@@ -139,7 +166,7 @@ const ContentWrapper = (props) => {
         postcode: curbpickup.billing_address.postcode,
         countryId: curbpickup.billing_address.country_id,
         pickup: curbpickup.pickup_info,
-        locName: curbpickup.loc_code.loc_name,
+        locName: curbpickup.loc_code,
         order: curbpickup.items,
         total: curbpickup.subtotal,
 
@@ -160,6 +187,15 @@ const ContentWrapper = (props) => {
         },
         onSubmit: (values) => {
             handleCantFulfill(values);
+        },
+    });
+
+    const formikPicked = useFormik({
+        initialValues: {
+            id: curbpickup.entity_id,
+        },
+        onSubmit: (values) => {
+            handlePicked(values);
         },
     });
 
@@ -187,6 +223,7 @@ const ContentWrapper = (props) => {
         curbPickup,
         formikConfirm,
         formikCantFullfill,
+        formikPicked,
         formikPacked,
         formikComplete,
     };
@@ -198,7 +235,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCurbPickupById({
+    const { loading, data } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 

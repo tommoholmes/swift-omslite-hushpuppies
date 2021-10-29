@@ -5,7 +5,7 @@ const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 
 const useStyles = makeStyles((theme) => ({
     headerContainer: {
-        paddingBottom: '32px',
+        display: 'flex',
         [theme.breakpoints.down('xs')]: {
             paddingLeft: 17,
             paddingRight: 17,
@@ -20,21 +20,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             display: 'block',
             margin: 0,
-        },
-    },
-    buttonTab: {
-        display: 'inline',
-        borderRadius: 20,
-        textTransform: 'capitalize',
-        [theme.breakpoints.down('xs')]: {
-            marginTop: 7,
-        },
-        '&.nonactive': {
-            background: '#ffffff',
-            color: colorPurple,
-            border: '2px solid',
-            borderColor: colorPurple,
-            marginLeft: 20,
         },
     },
 }));

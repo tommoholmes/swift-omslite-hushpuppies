@@ -1,48 +1,82 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 import React from 'react';
-import Table from '@common_table';
-import Link from 'next/link';
+import Autocomplete from '@common_autocomplete';
+import CustomList from '@common_customlist';
+import Router from 'next/router';
+import Tabs from '@common_tabs';
+import { dataTab } from '@modules/curbpickup/helpers';
 import Header from '@modules/curbpickup/pages/list/components/Header';
 import useStyles from '@modules/curbpickup/pages/list/components/style';
 
 const CurbPickupListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getCurbPickupList, confirmPickShipment, packShipment, pickedupShipment } = props;
-    const curbPickupList = (data && data.getCurbPickupList && data.getCurbPickupList.items) || [];
-    const curbPickupTotal = (data && data.getCurbPickupList && data.getCurbPickupList.total_count) || 0;
+    const { data, loading, getStoreShipmentList, confirmShipment, packShipment, pickedupShipment, optionsStatus } = props;
+    const curbPickupList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
+    const curbPickupTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
+    const [tab, setTab] = React.useState(0);
+    const [load, setLoad] = React.useState(false);
 
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', hideable: true },
         { field: 'status', headerName: 'Status', hideable: true },
-        { field: 'loc_name', headerName: 'Location', hideable: true },
+        { field: 'location', headerName: 'Location', hideable: true },
         { field: 'shipping_telephone', headerName: 'Phone Number', hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
-        { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
-        { field: 'status', name: 'status', type: 'eq', label: 'Status', initialValue: 'customer_waiting' },
-        { field: 'Shipment Number', name: 'increment_id', type: 'like', label: 'Increment ID', initialValue: '' },
+        { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Shipment Number', initialValue: '' },
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
-        { field: 'shipping_telephone', name: 'shipping_telephone', type: 'like', label: 'Phone Number', initialValue: '' },
         { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
+        { field: 'is_pickup', name: 'is_pickup', type: 'eq', label: '', initialValue: '1', hidden: true },
+        { field: 'pickup_id', name: 'pickup_id', type: 'notnull', label: '', initialValue: 'true', hidden: true },
+        {
+            field: 'status',
+            name: 'status',
+            type: tab === 'true' ? 'null' : 'eq',
+            label: 'Status',
+            initialValue: tab !== 0 ? tab : '',
+            component: ({ filterValue, setFilterValue }) => {
+                const options = optionsStatus.slice().map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={options.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => {
+                            setTab(dataTab.find((e) => e.value === newValue && newValue.id) || 0);
+                            setFilterValue(newValue && newValue.id);
+                        }}
+                        options={options}
+                    />
+                );
+            },
+        },
     ];
 
-    const getClassByStatus = (status) => {
-        if (status === 'Process for Pack' || status === 'Process for Shipping' || status === 'Cannot Fulfill') {
-            return classes.process;
+    const getIconByStatus = (status) => {
+        if (status.value === 'process_for_pack' || status.value === 'process_for_shipping') {
+            if (status.label === 'Cannot Fulfill') {
+                return '/assets/img/order_status/cannotfulfill.svg';
+            }
+            return '/assets/img/order_status/processforpack.svg';
         }
-        if (status === 'Ready for Pack') {
-            return classes.readyPack;
+        if (status.value === 'cannot_fulfill') {
+            return '/assets/img/order_status/cannotfulfill.svg';
         }
-        if (status === 'Ready for Pickup') {
-            return classes.readyPickup;
+        if (status.value === 'ready_for_pack') {
+            return '/assets/img/order_status/readyforpack.svg';
         }
-        if (status === 'Customer Picked Up') {
-            return classes.customerPicked;
+        if (status.value === 'ready_for_pickup') {
+            return '/assets/img/order_status/readyforpickup.svg';
         }
-        return classes.waiting;
+        if (status.value === 'customer_picked_up' || status.value === 'customer_waiting') {
+            return '/assets/img/order_status/customerpicked.svg';
+        }
+        return '/assets/img/order_status/customerpicked.svg';
     };
 
     const actions = [
@@ -51,7 +85,7 @@ const CurbPickupListContent = (props) => {
             message: 'Are you sure to confirm ?',
             onClick: async (checkedRows) => {
                 const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await confirmPickShipment({ variables });
+                await confirmShipment({ variables });
             },
         },
         {
@@ -75,7 +109,7 @@ const CurbPickupListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/shipment/curbpickup/print/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pick/${ idPrint.toString().replace(/,/g, '/')}`);
             },
         },
         {
@@ -83,7 +117,7 @@ const CurbPickupListContent = (props) => {
             message: 'ready for print?',
             onClick: (checkedRows) => {
                 const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
-                window.open(`/shipment/curbpickup/printpack/${ idPrint.toString().replace(/,/g, '/')}`);
+                window.open(`/printoms/pack/${ idPrint.toString().replace(/,/g, '/')}`);
             },
         },
     ];
@@ -91,37 +125,42 @@ const CurbPickupListContent = (props) => {
     const rows = curbPickupList.map((curbPickup) => ({
         ...curbPickup,
         id: curbPickup.entity_id,
+        location: curbPickup.location.loc_name,
         status: () => (
-            <div className={getClassByStatus(curbPickup.status.label)}>
+            <div className={classes.statusRow}>
+                <img src={getIconByStatus(curbPickup.status)} alt="" className={classes.statusIcon} />
                 {curbPickup.status.label}
             </div>
         ),
-        actions: () => (
-            <Link href={`/shipment/curbpickup/edit/${curbPickup.entity_id}`}>
-                <a className="link-button">view</a>
-            </Link>
-        ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
+    const onChangeTab = async (e, v) => {
+        setLoad(true);
+        await setTab(v);
+        setLoad(false);
+    };
 
     return (
         <>
             <Header />
-            <Table
-                filters={filters}
-                actions={actions}
-                rows={rows}
-                getRows={getCurbPickupList}
-                loading={loading}
-                columns={columns}
-                count={curbPickupTotal}
-                showCheckbox
-            />
+            <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
+            {!load && (
+                <CustomList
+                    filters={filters}
+                    actions={actions}
+                    hideActions={false}
+                    rows={rows}
+                    getRows={getStoreShipmentList}
+                    loading={loading}
+                    columns={columns}
+                    count={curbPickupTotal}
+                    handleReset={() => setTab(0)}
+                    showCheckbox
+                    checkboxAll
+                    twoColumns
+                    handleClickRow={(id) => Router.push(`/shipment/curbpickup/edit/${id}`)}
+                />
+            )}
         </>
     );
 };

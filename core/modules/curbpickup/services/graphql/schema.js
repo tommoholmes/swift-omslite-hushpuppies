@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 
-export const getCurbPickupById = gql`
-    query getCurbPickupById(
+export const getStoreShipmentById = gql`
+    query getStoreShipmentById(
         $id: Int!
     ){
-        getCurbPickupById(
+        getStoreShipmentById(
             id: $id
         ){
             entity_id
@@ -43,9 +43,7 @@ export const getCurbPickupById = gql`
                 vehicle_desc
                 notes
             }
-            loc_code{
-                loc_name
-            }
+            loc_code
             items {
                 sku
                 name
@@ -58,18 +56,13 @@ export const getCurbPickupById = gql`
     }
 `;
 
-export const getCurbPickupList = gql`
-    query getCurbPickupList(
-        $pageSize: Int!,
-        $currentPage: Int!,
+export const getStoreShipmentList = gql`
+    query getStoreShipmentList(
         $filter: ShipmentFilterInput,
-        
     ){
-        getCurbPickupList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
+        getStoreShipmentList(
             filter: $filter,
-            sort:{
+            sort: {
                 priority_status: ASC
             }
         ){
@@ -80,8 +73,10 @@ export const getCurbPickupList = gql`
                   label
                   value
                 }
+                location{
+                    loc_name
+                }
                 priority_status
-                loc_name
                 shipping_telephone
                 shipping_name
             }
@@ -95,11 +90,11 @@ export const getCurbPickupList = gql`
     }
 `;
 
-export const confirmPickShipment = gql`
-    mutation confirmPickShipment(
+export const confirmShipment = gql`
+    mutation confirmShipment(
         $id: [Int!],
     ){
-        confirmPickShipment(
+        confirmShipment(
             id: $id
         )
     }
@@ -110,6 +105,16 @@ export const cantFulfillShipment = gql`
         $id: [Int!],
     ){
         cantFulfillShipment(
+            id: $id
+        )
+    }
+`;
+
+export const pickShipment = gql`
+    mutation pickShipment(
+        $id: [Int!],
+    ){
+        pickShipment(
             id: $id
         )
     }
@@ -198,13 +203,24 @@ export const getPackList = gql`
     }
 `;
 
+export const getShipmentStatusByType = gql`
+    query{
+        getShipmentStatusByType(type: "curbside_pickup"){
+            label
+            value
+        }
+    }
+`;
+
 export default {
-    getCurbPickupById,
-    getCurbPickupList,
-    confirmPickShipment,
+    getStoreShipmentById,
+    getStoreShipmentList,
+    confirmShipment,
     cantFulfillShipment,
+    pickShipment,
     packShipment,
     pickedupShipment,
     getPickList,
     getPackList,
+    getShipmentStatusByType,
 };
