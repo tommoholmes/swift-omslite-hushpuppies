@@ -73,7 +73,10 @@ const CurbPickupListContent = (props) => {
         if (status.value === 'ready_for_pickup') {
             return '/assets/img/order_status/readyforpickup.svg';
         }
-        if (status.value === 'customer_picked_up' || status.value === 'customer_waiting') {
+        if (status.value === 'customer_waiting') {
+            return '/assets/img/order_status/customerwaiting.svg';
+        }
+        if (status.value === 'customer_picked_up') {
             return '/assets/img/order_status/customerpicked.svg';
         }
         return '/assets/img/order_status/customerpicked.svg';
