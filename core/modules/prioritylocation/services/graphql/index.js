@@ -27,8 +27,8 @@ export const updatePriorityLocation = (variables) => useMutation(Schema.updatePr
 export const getChannelList = (variables) => useLazyQuery(Schema.getChannelList, {
     variables, ...context, ...fetchPolicy,
 });
-export const getCityList = () => useLazyQuery(Schema.getCityList, {
-    ...context, ...fetchPolicy,
+export const getCityList = (variables) => useLazyQuery(Schema.getCityList, {
+    variables, ...context, ...fetchPolicy,
 });
 export const getLocationList = (variables) => useLazyQuery(Schema.getLocationList, {
     variables, ...context, ...fetchPolicy,

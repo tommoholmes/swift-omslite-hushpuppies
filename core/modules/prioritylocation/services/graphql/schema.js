@@ -142,10 +142,15 @@ export const getChannelList = gql`
 `;
 
 export const getCityList = gql`
-    query getCityList{
+    query getCityList(
+        $pageSize: Int,
+        $currentPage: Int!,
+        $querySearch: String,
+    ){
         getCityList(
-            pageSize: 694,
-            currentPage: 1,
+            pageSize: $pageSize,
+            currentPage: $currentPage,
+            search: $querySearch,
         ){
             items {
                 id
@@ -166,10 +171,16 @@ export const getLocationList = gql`
     query getLocationList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $querySearch: String,
     ){
         getLocationList(
             pageSize: $pageSize,
             currentPage: $currentPage
+            filter:{
+                loc_name:{
+                    like: $querySearch
+                }
+            }
         ){
             items {
                 loc_id

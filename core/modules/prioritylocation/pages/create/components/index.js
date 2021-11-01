@@ -67,7 +67,7 @@ const PriorityLocationCreateContent = (props) => {
                         </div>
                         <Autocomplete
                             className={classes.autocompleteRoot}
-                            mode="lazy"
+                            mode="server"
                             value={formik.values.city}
                             onChange={(e) => formik.setFieldValue('city', e)}
                             loading={getCityListRes.loading}
@@ -88,7 +88,7 @@ const PriorityLocationCreateContent = (props) => {
                         </div>
                         <Autocomplete
                             className={classes.autocompleteRoot}
-                            mode="lazy"
+                            mode="server"
                             value={formik.values.locationCode}
                             onChange={(e) => formik.setFieldValue('locationCode', e)}
                             loading={getLocationListRes.loading}

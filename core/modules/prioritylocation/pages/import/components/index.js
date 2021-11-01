@@ -3,6 +3,7 @@ import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
 import useStyles from '@modules/prioritylocation/pages/import/components/style';
@@ -18,6 +19,21 @@ const PriorityLocationImport = (props) => {
 
     return (
         <>
+            <Button
+                className={classes.btnBack}
+                onClick={() => router.push('/oms/prioritylocation')}
+                variant="contained"
+                style={{ marginRight: 16 }}
+            >
+                <ChevronLeftIcon style={{
+                    fontSize: 30,
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+                />
+            </Button>
             <h2 className={classes.titleTop}>Priority Location Upload</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
