@@ -53,10 +53,6 @@ const ContentWrapper = (props) => {
         validationSchema: Yup.object().shape({
             loc: Yup.object().required('required!'),
             pickup_name: Yup.string().required('required!'),
-            pickup_phone: Yup.string().required('required!'),
-            pickup_type: Yup.string().required('required!'),
-            pickup_description: Yup.string().required('required!'),
-            pickup_charge: Yup.string().required('required!'),
             status: Yup.object().required('required!'),
         }),
         onSubmit: async (values) => {
