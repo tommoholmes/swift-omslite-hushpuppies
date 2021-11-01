@@ -25,9 +25,14 @@ export const getInvoice = (variables) => useQuery(Schema.getInvoice, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const printShippingLabel = (variables) => useQuery(Schema.printShippingLabel, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getPickList,
     getPackList,
     getAddress,
     getInvoice,
+    printShippingLabel,
 };
