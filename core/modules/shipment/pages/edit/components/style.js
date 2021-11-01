@@ -110,6 +110,9 @@ const useStyles = makeStyles((theme) => ({
         '&.Mui-disabled': {
             borderColor: 'rgba(0, 0, 0, 0.12)',
         },
+        '&.noMargin': {
+            marginTop: 0,
+        },
     },
     contentHeader: {
         padding: '18px 15px',
@@ -209,6 +212,11 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         '&.status': {
             textTransform: 'capitalize',
+        },
+        '&.check': {
+            color: colorPurple,
+            textDecoration: 'underline',
+            cursor: 'pointer',
         },
     },
     grandTotal: {
@@ -377,6 +385,52 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 140px)',
         },
+    },
+
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        '& .MuiListSubheader-gutters': {
+            padding: '0px !important',
+        },
+        '& .MuiListItem-gutters': {
+            padding: '0px !important',
+        },
+        '& .MuiListItem-root': {
+            padding: '0px !important',
+        },
+    },
+    progress: {
+        color: `${colorPurple} !important`,
+        position: 'absolute',
+        left: '50%',
+        marginLeft: -25,
+        top: '50%',
+        marginTop: -25,
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        padding: '0px 40px 25px 40px',
+        borderRadius: 5,
+        width: 380,
+        height: 350,
+        '@media (max-width: 767px )': {
+            width: '90%',
+        },
+        textAlign: 'left',
+        overflow: 'auto',
+    },
+    subHead: {
+        padding: 0,
+    },
+    modalTitle: {
+        color: colorPurple,
+        fontSize: 18,
+        fontWeight: 600,
+        margin: 0,
     },
 }));
 

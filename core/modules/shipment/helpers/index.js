@@ -15,9 +15,9 @@ export const dataTab = [
     { label: 'Cannot Fulfill', value: 'cannot_fulfill' },
 ];
 
-export const getIconByStatus = (status) => {
+export const getIconByStatus = (status, label) => {
     if (status === 'process_for_pack' || status === 'process_for_shipping') {
-        if (status.label === 'Cannot Fulfill') {
+        if (label === 'Cannot Fulfill') {
             return '/assets/img/order_status/cannotfulfill.svg';
         }
         return '/assets/img/order_status/processforpack.svg';

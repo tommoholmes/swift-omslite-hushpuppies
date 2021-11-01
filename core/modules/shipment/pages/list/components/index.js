@@ -172,7 +172,7 @@ const ShipmentListContent = (props) => {
         location: shipment.location.loc_name || '-',
         status: () => (
             <div className={classes.statusRow}>
-                <img src={getIconByStatus(shipment.status.value)} alt="" className={classes.statusIcon} />
+                <img src={getIconByStatus(shipment.status.value, shipment.status.label)} alt="" className={classes.statusIcon} />
                 {shipment.status.label}
             </div>
         ),

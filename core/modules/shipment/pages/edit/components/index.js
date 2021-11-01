@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -8,13 +10,35 @@ import useStyles from '@modules/shipment/pages/edit/components/style';
 import { formatPriceNumber } from '@helper_currency';
 import TextField from '@common_textfield';
 import { getIconByStatus } from '@modules/shipment/helpers';
+import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/Check';
+import Autocomplete from '@common_autocomplete';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 const shipmentEditContent = (props) => {
     const {
-        shipmentDetail, formikNotes,
+        shipmentDetail, formikNotes, formikConfirm, formikCantFullfill, formikRellocation, dataCompany,
+        getShipmentAvailableLocation, dataLocation, loadingLocation, companyId, setCompanyId, handleCheckAvailabilty,
+        showModal, setShowModal, dataLocationSku, loadingLocationSku,
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const companyOptions = dataCompany?.getShipmentAvailableCompany.slice().map((item) => ({
+        name: item.label,
+        id: item.value,
+    })) || [];
+
+    const locOptions = dataLocation?.getShipmentAvailableLocation.slice().map((item) => ({
+        name: item.label,
+        id: item.value,
+    })) || [];
 
     return (
         <>
@@ -40,7 +64,7 @@ const shipmentEditContent = (props) => {
                 <div className={classes.contentHeader}>
                     <div className="divHeader">
                         <h5 className="titleHeaderWithIcon">
-                            <img src={getIconByStatus(shipmentDetail.statusValue)} alt="" className="iconHeader" />
+                            <img src={getIconByStatus(shipmentDetail.statusValue, shipmentDetail.statusLabel)} alt="" className="iconHeader" />
                             {shipmentDetail.statusLabel}
                         </h5>
                     </div>
@@ -63,7 +87,82 @@ const shipmentEditContent = (props) => {
                         <span className="spanHeader">{shipmentDetail.location}</span>
                     </div>
                 </div>
+                {shipmentDetail.statusValue === 'process_for_shipping' && !shipmentDetail.allocation
+                    && (
+                        <div className={classes.content}>
+                            <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                                <Button
+                                    className={classes.btn}
+                                    type="submit"
+                                    onClick={formikConfirm.handleSubmit}
+                                    variant="contained"
+                                    buttonType="primary-rounded"
+                                    style={{ marginRight: 10 }}
+                                >
+                                    <CheckIcon style={{ marginRight: 10 }} />
+                                    Confirm
+                                </Button>
+                                <Button
+                                    className={classes.btn}
+                                    type="submit"
+                                    onClick={formikCantFullfill.handleSubmit}
+                                    variant="contained"
+                                    buttonType="outlined-rounded"
+                                >
+                                    <CloseIcon style={{ marginRight: 10 }} />
+                                    Cannot Fullfill
+                                </Button>
+                            </div>
+                        </div>
+                    )}
 
+                {shipmentDetail.statusValue === 'process_for_shipping' && shipmentDetail.allocation === 'cannot_fulfill'
+                    && (
+                        <div className={classes.content}>
+                            <div style={{
+                                display: 'flex', marginBottom: 10, justifyContent: 'center', alignItems: 'center',
+                            }}
+                            >
+                                <h3 className={classes.th}>Company</h3>
+                                <Autocomplete
+                                    name="company"
+                                    style={{ width: 300, marginRight: 10 }}
+                                    value={companyOptions.find((e) => e.id === companyId)}
+                                    onChange={async (newValue) => {
+                                        setCompanyId(newValue && newValue.id);
+                                        if (newValue && newValue.id) {
+                                            await getShipmentAvailableLocation();
+                                        }
+                                    }}
+                                    options={companyOptions}
+                                />
+
+                                <h3 className={classes.th}>Location</h3>
+                                <Autocomplete
+                                    name="loc_code"
+                                    style={{ width: 300, marginRight: 10 }}
+                                    value={locOptions.find((e) => e.id === formikRellocation.values.loc_code)}
+                                    onChange={(newValue) => {
+                                        formikRellocation.setFieldValue('loc_code', newValue && newValue.id);
+                                    }}
+                                    options={locOptions}
+                                    getOptions={getShipmentAvailableLocation}
+                                    loading={loadingLocation}
+                                    disabled={!companyId}
+                                />
+                                <Button
+                                    className={clsx(classes.btn, 'noMargin')}
+                                    type="submit"
+                                    onClick={formikRellocation.handleSubmit}
+                                    variant="contained"
+                                    buttonType="primary-rounded"
+                                    disabled={!formikRellocation.values.loc_code}
+                                >
+                                    Submit
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 <div className={classes.content}>
                     <div className={classes.grid}>
                         <div className="grid-child">
@@ -131,7 +230,13 @@ const shipmentEditContent = (props) => {
                                             <td className={classes.td} style={{ textAlign: 'center' }}>{e.name}</td>
                                             <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
                                             <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty_shipped}</td>
-                                            <td className={classes.td} style={{ textAlign: 'center' }}>Check Availability</td>
+                                            <td
+                                                className={clsx(classes.td, companyId && 'check')}
+                                                style={{ textAlign: 'center' }}
+                                                onClick={() => (companyId ? handleCheckAvailabilty(e.sku) : null)}
+                                            >
+                                                Check Availability
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -203,6 +308,44 @@ const shipmentEditContent = (props) => {
                     </div>
                 </div>
             </Paper>
+
+            <Modal
+                className={classes.modal}
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={showModal}>
+                    <div className={classes.paper}>
+                        <ListSubheader className={classes.subHead}>
+                            <h5 className={classes.modalTitle}>
+                                Available Location
+                            </h5>
+                        </ListSubheader>
+
+                        {loadingLocationSku ? <CircularProgress className={classes.progress} size={60} />
+                            : (
+                                <List sx={{
+                                    width: '100%', maxWidth: 360, bgcolor: 'background.paper', padding: 0,
+                                }}
+                                >
+                                    {dataLocationSku?.getShipmentAvailableLocation.map((item) => (
+                                        <ListItem
+                                            key={item.value}
+                                            disablePadding
+                                        >
+                                            <ListItemText id={item.value} primary={item.label} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
+                    </div>
+                </Fade>
+            </Modal>
         </>
     );
 };

@@ -9,10 +9,142 @@ const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        dataCompany,
         refetch,
     } = props;
+
+    const [companyId, setCompanyId] = React.useState();
+    const [showModal, setShowModal] = React.useState(false);
+
     const shipment = data.getStoreShipmentById;
+    const [confirmShipment] = gqlService.confirmShipment();
+    const [getShipmentAvailableLocation, { data: dataLocation, loading: loadingLocation }] = gqlService.getShipmentAvailableLocation({
+        variables: {
+            shipment_id: shipment.entity_id,
+            company_id: Number(companyId),
+        },
+        skip: !Number(companyId),
+    });
+
+    const [getShipmentAvailableLocationSku, { data: dataLocationSku, loading: loadingLocationSku }] = gqlService.getShipmentAvailableLocationSku();
+    const [cantFulfillShipment] = gqlService.cantFulfillShipment();
+    const [shipmentRellocation] = gqlService.shipmentRellocation();
     const [saveShipmentNotes] = gqlService.saveShipmentNotes();
+
+    const handleConfirm = () => {
+        const variables = {
+            id: shipment.entity_id,
+        };
+        window.backdropLoader(true);
+        confirmShipment({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order Confirmed',
+                variant: 'success',
+            });
+            setTimeout(() => refetch(), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    const handleCantFulfill = () => {
+        const variables = {
+            id: shipment.entity_id,
+        };
+        window.backdropLoader(true);
+        cantFulfillShipment({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order Confirmed',
+                variant: 'success',
+            });
+            setTimeout(() => refetch(), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    const handleRellocation = ({ loc_code }) => {
+        const variables = {
+            shipment_id: shipment.entity_id,
+            loc_code,
+        };
+        window.backdropLoader(true);
+        shipmentRellocation({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Rellocation Completed',
+                variant: 'success',
+            });
+            setTimeout(() => refetch(), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    const handleCheckAvailabilty = async (sku) => {
+        getShipmentAvailableLocationSku({
+            variables: {
+                shipment_id: shipment.entity_id,
+                company_id: Number(companyId),
+                sku,
+            },
+        });
+        setShowModal(true);
+    };
+
+    const handleNotes = ({
+        notes,
+    }) => {
+        const variables = {
+            id: shipment.entity_id,
+            notes,
+        };
+        window.backdropLoader(true);
+        saveShipmentNotes({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Notes has been saved',
+                variant: 'success',
+            });
+            setTimeout(() => refetch(), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
 
     const shipmentDetail = {
         id: shipment.entity_id,
@@ -32,35 +164,36 @@ const ContentWrapper = (props) => {
         shipMethod: shipment.channel_shipping_label || '-',
         tracking: shipment.all_track,
         statusHistory: shipment.status_history,
+        allocation: shipment.allocation_status,
     };
 
-    const handleNotes = ({
-        notes,
-    }) => {
-        const variables = {
-            id: shipmentDetail.id,
-            notes,
-        };
-        window.backdropLoader(true);
-        saveShipmentNotes({
-            variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'notes has been saved',
-                variant: 'success',
-            });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
-    };
+    const formikConfirm = useFormik({
+        initialValues: {
+            id: shipment.entity_id,
+        },
+        onSubmit: (values) => {
+            handleConfirm(values);
+        },
+    });
+
+    const formikCantFullfill = useFormik({
+        initialValues: {
+            id: shipment.entity_id,
+        },
+        onSubmit: (values) => {
+            handleCantFulfill(values);
+        },
+    });
+
+    const formikRellocation = useFormik({
+        initialValues: {
+            shipment_id: shipment.entity_id,
+            loc_code: '',
+        },
+        onSubmit: (values) => {
+            handleRellocation(values);
+        },
+    });
 
     const formikNotes = useFormik({
         initialValues: {
@@ -77,7 +210,21 @@ const ContentWrapper = (props) => {
 
     const contentProps = {
         shipmentDetail,
+        formikConfirm,
+        formikCantFullfill,
+        formikRellocation,
         formikNotes,
+        dataCompany,
+        getShipmentAvailableLocation,
+        handleCheckAvailabilty,
+        dataLocation,
+        loadingLocation,
+        companyId,
+        setCompanyId,
+        showModal,
+        setShowModal,
+        dataLocationSku,
+        loadingLocationSku,
     };
 
     return (
@@ -87,11 +234,15 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+    const { loading: loadingCompany, data: dataCompany } = gqlService.getShipmentAvailableCompany({
+        shipment_id: router && router.query && Number(router.query.id),
+    });
+
     const { loading, data, refetch } = gqlService.getShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    if (loading || loadingCompany) {
         return (
             <Layout>Loading...</Layout>
         );
@@ -105,7 +256,7 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} refetch={refetch} {...props} />
+            <ContentWrapper data={data} dataCompany={dataCompany} refetch={refetch} {...props} />
         </Layout>
     );
 };

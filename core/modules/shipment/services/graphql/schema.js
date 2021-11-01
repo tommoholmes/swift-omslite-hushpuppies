@@ -134,6 +134,16 @@ export const confirmShipment = gql`
     }
 `;
 
+export const cantFulfillShipment = gql`
+    mutation cantFulfillShipmentAll(
+        $id: [Int!],
+    ){
+        cantFulfillShipment(
+            id: $id
+        )
+    }
+`;
+
 export const saveShipmentNotes = gql`
     mutation saveShipmentNotes(
         $id: Int!,
@@ -155,10 +165,70 @@ export const getShipmentStatus = gql`
     }
 `;
 
+export const getShipmentAvailableCompany = gql`
+query getShipmentAvailableCompany($shipment_id: Int!){
+    getShipmentAvailableCompany(shipment_id: $shipment_id){
+      value
+      label
+    }
+  }
+`;
+
+export const getShipmentAvailableLocation = gql`
+query getShipmentAvailableLocation(
+    $shipment_id: Int!,
+    $company_id: Int,
+    ){
+    getShipmentAvailableLocation(
+        shipment_id: $shipment_id,
+        company_id: $company_id
+        ){
+      value
+      label
+    }
+  }
+`;
+
+export const getShipmentAvailableLocationSku = gql`
+query getShipmentAvailableLocationSku(
+    $shipment_id: Int!,
+    $company_id: Int,
+    $sku: String
+    ){
+    getShipmentAvailableLocation(
+        shipment_id: $shipment_id,
+        company_id: $company_id
+        sku: $sku
+        ){
+      value
+      label
+    }
+  }
+`;
+
+export const shipmentRellocation = gql`
+mutation shipmentRellocation(
+    $shipment_id: Int!,
+    $loc_code: String!
+    ){
+    shipmentRellocation(
+        shipment_id: $shipment_id,
+        loc_code: $loc_code
+        ){
+      value
+      label
+    }
+  }
+`;
+
 export default {
     getShipmentList,
     getShipmentById,
     confirmShipment,
     getShipmentStatus,
     saveShipmentNotes,
+    cantFulfillShipment,
+    getShipmentAvailableCompany,
+    getShipmentAvailableLocationSku,
+    shipmentRellocation,
 };
