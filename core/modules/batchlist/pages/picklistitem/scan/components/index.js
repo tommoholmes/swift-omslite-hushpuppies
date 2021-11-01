@@ -12,7 +12,7 @@ import useStyles from '@modules/batchlist/pages/picklistitem/scan/components/sty
 
 const ScanItemContent = (props) => {
     const {
-        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit,
+        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit, visibility,
     } = props;
     const classes = useStyles();
     const num = /^\d+$/;
@@ -55,7 +55,7 @@ const ScanItemContent = (props) => {
                         <button className={classes.button} style={{ marginTop: -6 }} onClick={incrementCount}> + </button>
                     </div>
                     <Button
-                        // disabled={!count || count > pickList.qty}
+                        disabled={!visibility}
                         className={classes.btn}
                         onClick={handleSubmit}
                         variant="contained"
