@@ -481,9 +481,9 @@ const HomeDeliveryEditContent = (props) => {
                                     <tr className={classes.tr}>
                                         <th className={classes.th} style={{ paddingLeft: 0 }}>SKU Product</th>
                                         <th className={classes.th}>Name</th>
-                                        <th className={classes.th}>Unit Price</th>
-                                        <th className={classes.th}>QTY</th>
-                                        <th className={classes.th}>Subtotal</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Unit Price</th>
+                                        <th className={classes.th} style={{ textAlign: 'center' }}>QTY</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Subtotal</th>
                                     </tr>
                                     {homeDelivery.order.map((e) => (
                                         <tr>

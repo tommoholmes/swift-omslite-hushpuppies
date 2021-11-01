@@ -7,14 +7,14 @@ import TextField from '@common_textfield';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
 import Tabs from '@common_tabs';
-import { optionsStatus, dataTab } from '@modules/shipment/helpers';
+import { dataTab, getIconByStatus } from '@modules/shipment/helpers';
 import useStyles from '@modules/shipment/pages/list/components/style';
 import Header from '@modules/shipment/pages/list/components/Header';
 import clsx from 'clsx';
 
 const ShipmentListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getShipmentList, confirmShipment } = props;
+    const { data, loading, getShipmentList, confirmShipment, optionsStatus } = props;
     const shipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const shipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState(0);
@@ -23,67 +23,91 @@ const ShipmentListContent = (props) => {
     const columns = [
         { field: 'increment_id', headerName: 'Shipment Number', sortable: true, initialSort: 'DESC', hideable: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
-        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true },
-        { field: 'channel_order_date', headerName: 'Order Date', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
-        { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
-        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'channel_order_date', headerName: 'Channel Order Date', sortable: true, hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
-        { field: 'email', headerName: 'Email/Mobile', hideable: true },
+        { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
+        { field: 'location', headerName: 'Location', hideable: true },
+        { field: 'track_number', headerName: 'Airway Bill', hideable: true },
+        { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
+        { field: 'marketplace_order_number', headerName: 'Marketplace Order Number', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
     ];
 
     const filters = [
-        { field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID from', initialValue: '' },
-        { field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID to', initialValue: '' },
-        {
-            field: 'updated_at',
-            name: 'updated_at_from',
-            type: 'from',
-            label: 'Last Update from',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <TextField
-                    variant="outlined"
-                    id="date"
-                    type="date"
-                    value={filterValue}
-                    className={classes.textField}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
-                    InputProps={{
-                        className: classes.fieldInput,
-                    }}
-                />
-            ),
-        },
-        {
-            field: 'updated_at',
-            name: 'updated_at_to',
-            type: 'to',
-            label: 'Last Update to',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <TextField
-                    variant="outlined"
-                    id="date"
-                    type="date"
-                    value={filterValue}
-                    className={classes.textField}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
-                    InputProps={{
-                        className: classes.fieldInput,
-                    }}
-                />
-            ),
-        },
         { field: 'increment_id', name: 'increment_id', type: 'like', label: 'Shipment Number', initialValue: '' },
-        { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Order Number', initialValue: '' },
+        { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Channel Order Number', initialValue: '' },
+        {
+            field: 'status',
+            name: 'status',
+            type: 'like',
+            label: 'Status',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => {
+                const options = optionsStatus.slice().map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={options.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => {
+                            setFilterValue(newValue && newValue.id);
+                        }}
+                        options={options}
+                    />
+                );
+            },
+        },
+        {
+            field: 'channel_order_date',
+            name: 'channel_order_date_from',
+            type: 'from',
+            label: 'Channel Order Date From',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+
+        },
+        {
+            field: 'channel_order_date',
+            name: 'channel_order_date_to',
+            type: 'to',
+            label: 'Channel Order Date To',
+            initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+        },
+        { field: 'shipping_name', name: 'shipping_name', type: 'like', label: 'Recipient Name', initialValue: '' },
         {
             field: 'channel_name',
             name: 'channel_name',
@@ -112,68 +136,43 @@ const ShipmentListContent = (props) => {
                 );
             },
         },
-        {
-            field: 'status',
-            name: 'status',
-            type: 'eq',
-            label: 'Status',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.idValue === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.idValue)}
-                    options={optionsStatus}
-                />
-            ),
-        },
+        { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
+        { field: 'track_number', name: 'track_number', type: 'like', label: 'Airway Bill', initialValue: '' },
         {
             field: 'allocation_status',
             name: 'allocation_status',
             type: tab === 'true' ? 'null' : 'eq',
             label: 'Allocation Status',
             initialValue: tab !== 0 ? tab : '',
-            hidden: true,
+            component: ({ filterValue, setFilterValue }) => {
+                const optionsAllocation = dataTab.slice(1).map((item) => ({
+                    name: item.label,
+                    id: item.value,
+                }));
+                optionsAllocation.splice(1, 0, { name: 'Confirmed', id: 'confirmed' });
+                return (
+                    <Autocomplete
+                        style={{ width: 228 }}
+                        value={optionsAllocation.find((e) => e.id === filterValue)}
+                        onChange={(newValue) => {
+                            setFilterValue(newValue && newValue.id);
+                        }}
+                        options={optionsAllocation}
+                    />
+                );
+            },
         },
+        { field: 'marketplace_order_number', name: 'marketplace_order_number', type: 'like', label: 'Marketplace Order Number', initialValue: '' },
     ];
-
-    const getIconByStatus = (status) => {
-        if (status.value === 'process_for_pack' || status.value === 'process_for_shipping') {
-            if (status.label === 'Cannot Fulfill') {
-                return '/assets/img/order_status/cannotfulfill.svg';
-            }
-            return '/assets/img/order_status/processforpack.svg';
-        }
-        if (status.value === 'cannot_fulfill') {
-            return '/assets/img/order_status/cannotfulfill.svg';
-        }
-        if (status.value === 'ready_for_pack') {
-            return '/assets/img/order_status/readyforpack.svg';
-        }
-        if (status.value === 'ready_for_pickup'
-            || status.value === 'ready_for_ship'
-            || status.value === 'shipment_booked'
-            || status.value === 'gosend_rejected'
-            || status.value === 'grabexpress_rejected') {
-            return '/assets/img/order_status/readyforpickup.svg';
-        }
-        if (status.value === 'customer_picked_up'
-            || status.value === 'customer_waiting'
-            || status.value === 'order_delivered'
-            || status.value === 'canceled'
-            || status.value === 'closed') {
-            return '/assets/img/order_status/customerpicked.svg';
-        }
-        return '/assets/img/order_status/ordershipped.svg';
-    };
 
     const rows = shipmentList.map((shipment) => ({
         ...shipment,
         id: shipment.entity_id,
         email: `${shipment.shipping_email} ${shipment.shipping_telephone}`,
+        location: shipment.location.loc_name || '-',
         status: () => (
             <div className={classes.statusRow}>
-                <img src={getIconByStatus(shipment.status)} alt="" className={classes.statusIcon} />
+                <img src={getIconByStatus(shipment.status.value, shipment.status.label)} alt="" className={classes.statusIcon} />
                 {shipment.status.label}
             </div>
         ),

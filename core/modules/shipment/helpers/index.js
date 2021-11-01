@@ -14,3 +14,33 @@ export const dataTab = [
     { label: 'Unconfirmed', value: 'true' },
     { label: 'Cannot Fulfill', value: 'cannot_fulfill' },
 ];
+
+export const getIconByStatus = (status, label) => {
+    if (status === 'process_for_pack' || status === 'process_for_shipping') {
+        if (label === 'Cannot Fulfill') {
+            return '/assets/img/order_status/cannotfulfill.svg';
+        }
+        return '/assets/img/order_status/processforpack.svg';
+    }
+    if (status === 'cannot_fulfill') {
+        return '/assets/img/order_status/cannotfulfill.svg';
+    }
+    if (status === 'ready_for_pack') {
+        return '/assets/img/order_status/readyforpack.svg';
+    }
+    if (status === 'ready_for_pickup'
+        || status === 'ready_for_ship'
+        || status === 'shipment_booked'
+        || status === 'gosend_rejected'
+        || status === 'grabexpress_rejected') {
+        return '/assets/img/order_status/readyforpickup.svg';
+    }
+    if (status === 'customer_picked_up'
+        || status === 'customer_waiting'
+        || status === 'order_delivered'
+        || status === 'canceled'
+        || status === 'closed') {
+        return '/assets/img/order_status/customerpicked.svg';
+    }
+    return '/assets/img/order_status/ordershipped.svg';
+};

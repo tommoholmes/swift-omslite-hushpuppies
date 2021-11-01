@@ -17,6 +17,7 @@ export const getShipmentList = gql`
                 entity_id
                 increment_id
                 channel_order_increment_id
+                marketplace_order_number
                 allocation_status
                 channel_order_date
                 status{
@@ -26,6 +27,9 @@ export const getShipmentList = gql`
                 track_number
                 channel{
                     channel_name
+                }
+                location {
+                    loc_name
                 }
                 shipping_name
                 shipping_email
@@ -50,6 +54,7 @@ export const getShipmentById = gql`
         ){
             entity_id
             increment_id
+            is_pickup
             channel_order_increment_id
             channel{
                 channel_name
@@ -84,6 +89,7 @@ export const getShipmentById = gql`
                 postcode
                 country_id
                 telephone
+                country_name
             }
             shipping_address {
                 firstname
@@ -97,16 +103,14 @@ export const getShipmentById = gql`
             }
             pickup_info {
                 name
-                loc_details
-                vehicle_number
-                vehicle_desc
-                notes
+                email
+                phone
             }
             order_item {
                 sku
                 name
-                price
-                qty
+                base_price
+                qty_shipped
                 row_total
             }
             channel_shipping_label
@@ -130,8 +134,101 @@ export const confirmShipment = gql`
     }
 `;
 
+export const cantFulfillShipment = gql`
+    mutation cantFulfillShipmentAll(
+        $id: [Int!],
+    ){
+        cantFulfillShipment(
+            id: $id
+        )
+    }
+`;
+
+export const saveShipmentNotes = gql`
+    mutation saveShipmentNotes(
+        $id: Int!,
+        $notes: String!,
+    ){
+        saveShipmentNotes(
+            id: $id,
+            notes: $notes,
+        )
+    }
+`;
+
+export const getShipmentStatus = gql`
+    query{
+        getShipmentStatus{
+            label
+            value
+        }
+    }
+`;
+
+export const getShipmentAvailableCompany = gql`
+query getShipmentAvailableCompany($shipment_id: Int!){
+    getShipmentAvailableCompany(shipment_id: $shipment_id){
+      value
+      label
+    }
+  }
+`;
+
+export const getShipmentAvailableLocation = gql`
+query getShipmentAvailableLocation(
+    $shipment_id: Int!,
+    $company_id: Int,
+    ){
+    getShipmentAvailableLocation(
+        shipment_id: $shipment_id,
+        company_id: $company_id
+        ){
+      value
+      label
+    }
+  }
+`;
+
+export const getShipmentAvailableLocationSku = gql`
+query getShipmentAvailableLocationSku(
+    $shipment_id: Int!,
+    $company_id: Int,
+    $sku: String
+    ){
+    getShipmentAvailableLocation(
+        shipment_id: $shipment_id,
+        company_id: $company_id
+        sku: $sku
+        ){
+      value
+      label
+    }
+  }
+`;
+
+export const shipmentRellocation = gql`
+mutation shipmentRellocation(
+    $shipment_id: Int!,
+    $loc_code: String!
+    ){
+    shipmentRellocation(
+        shipment_id: $shipment_id,
+        loc_code: $loc_code
+        ){
+      value
+      label
+    }
+  }
+`;
+
 export default {
     getShipmentList,
     getShipmentById,
     confirmShipment,
+    getShipmentStatus,
+    saveShipmentNotes,
+    cantFulfillShipment,
+    getShipmentAvailableCompany,
+    getShipmentAvailableLocationSku,
+    shipmentRellocation,
 };
