@@ -160,7 +160,7 @@ CustomAutocomplete.propTypes = {
 };
 
 CustomAutocomplete.defaultProps = {
-    getOptionsVariables: { variables: { pageSize: 20, currentPage: 1 } },
+    getOptionsVariables: { variables: { pageSize: 35, currentPage: 1 } },
     labelKey: 'name',
     loading: false,
     mode: 'default',
