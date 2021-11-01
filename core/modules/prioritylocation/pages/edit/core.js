@@ -26,7 +26,7 @@ const ContentWrapper = (props) => {
             channel_code: channelCode.channel_code,
             city: city.city,
             loc_code: locationCode.loc_code,
-            priority,
+            priority: Number(priority),
         };
         window.backdropLoader(true);
         updatePriorityLocation({
@@ -60,7 +60,7 @@ const ContentWrapper = (props) => {
             channelCode: Yup.object().nullable(),
             city: Yup.object().nullable(),
             locationCode: Yup.object().nullable(),
-            priority: Yup.string().nullable(),
+            priority: Yup.number().nullable(),
         }),
         onSubmit: (values) => {
             handleSubmit(values);

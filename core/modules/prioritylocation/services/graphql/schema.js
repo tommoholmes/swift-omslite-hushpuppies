@@ -70,7 +70,7 @@ export const createPriorityLocation = gql`
         $channel_code: String,
         $city: String,
         $loc_code: String,
-        $priority: String,
+        $priority: Int,
     ){
         createPriorityLocation(
             input: {
@@ -94,7 +94,7 @@ export const updatePriorityLocation = gql`
         $channel_code: String,
         $city: String,
         $loc_code: String,
-        $priority: String,
+        $priority: Int,
     ){
         updatePriorityLocation(
             id: $id,
