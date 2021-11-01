@@ -7,12 +7,15 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
 import useStyles from '@modules/curbpickup/pages/edit/components/style';
+import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/Check';
 
 const CurbPickupEditContent = (props) => {
     const {
         curbPickup,
         formikConfirm,
         formikCantFullfill,
+        formikPicked,
         formikPacked,
         formikComplete,
     } = props;
@@ -78,19 +81,11 @@ const CurbPickupEditContent = (props) => {
                     <div className={classes.printProgress}>
                         {(curbPickup.statusValue === 'process_for_shipping') && (
                             <>
-                                Print your packlist, Pick your items
-                                <br />
-                                and pack your items
+                                Order for curbside pickup at
+                                {' '}
+                                {curbPickup.location}
                                 <div className={classes.formFieldButton}>
-                                    <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/shipment/curbpickup/print/${curbPickup.id}`)}
-                                        variant="contained"
-                                    >
-                                        Print Pick List
-                                    </Button>
-                                    <br />
-                                    {!(curbPickup.allocation === 'cannot_fulfill') && (
+                                    {!(curbPickup.allocation) ? (
                                         <>
                                             <Button
                                                 className={classes.btn}
@@ -98,16 +93,39 @@ const CurbPickupEditContent = (props) => {
                                                 onClick={formikConfirm.handleSubmit}
                                                 variant="contained"
                                             >
-                                                Confirm Order
+                                                <CheckIcon style={{ marginRight: 10 }} />
+                                                Confirm
                                             </Button>
                                             <Button
                                                 className={classes.btn}
                                                 type="submit"
                                                 onClick={formikCantFullfill.handleSubmit}
                                                 variant="contained"
+                                                buttonType="outlined-rounded"
                                                 style={{ marginLeft: 10 }}
                                             >
+                                                <CloseIcon style={{ marginRight: 10 }} />
                                                 Cannot Fullfill
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                className={clsx(classes.btn, 'print')}
+                                                onClick={() => window.open(`/printoms/pick/${curbPickup.id}`)}
+                                                variant="contained"
+                                            >
+                                                Print Pick List
+                                            </Button>
+                                            <br />
+                                            <Button
+                                                className={classes.btn}
+                                                type="submit"
+                                                onClick={formikPicked.handleSubmit}
+                                                variant="contained"
+                                            >
+                                                <CheckIcon style={{ marginRight: 10 }} />
+                                                Mark Pick Complete
                                             </Button>
                                         </>
                                     )}
@@ -120,7 +138,7 @@ const CurbPickupEditContent = (props) => {
                                 <div className={classes.formFieldButton}>
                                     <Button
                                         className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/shipment/curbpickup/printpack/${curbPickup.id}`)}
+                                        onClick={() => window.open(`/printoms/pack/${curbPickup.id}`)}
                                         variant="contained"
                                     >
                                         Print Pack List

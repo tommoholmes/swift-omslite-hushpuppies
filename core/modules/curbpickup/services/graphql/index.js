@@ -9,19 +9,23 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCurbPickupById = (variables) => useQuery(Schema.getCurbPickupById, {
+export const getStoreShipmentById = (variables) => useQuery(Schema.getStoreShipmentById, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCurbPickupList = (variables) => useLazyQuery(Schema.getCurbPickupList, {
+export const getStoreShipmentList = (variables) => useLazyQuery(Schema.getStoreShipmentList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const confirmPickShipment = (variables) => useMutation(Schema.confirmPickShipment, {
+export const confirmShipment = (variables) => useMutation(Schema.confirmShipment, {
     variables, ...context,
 });
 
 export const cantFulfillShipment = (variables) => useMutation(Schema.cantFulfillShipment, {
+    variables, ...context,
+});
+
+export const pickShipment = (variables) => useMutation(Schema.pickShipment, {
     variables, ...context,
 });
 
@@ -41,13 +45,19 @@ export const getPackList = (variables) => useQuery(Schema.getPackList, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const getShipmentStatusByType = (variables) => useQuery(Schema.getShipmentStatusByType, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
-    getCurbPickupById,
-    getCurbPickupList,
-    confirmPickShipment,
+    getStoreShipmentById,
+    getStoreShipmentList,
+    confirmShipment,
     cantFulfillShipment,
+    pickShipment,
     packShipment,
     pickedupShipment,
     getPickList,
     getPackList,
+    getShipmentStatusByType,
 };

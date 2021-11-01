@@ -150,7 +150,7 @@ const Sidebar = ({
             <List className={clsx(classes.menuList, open ? 'open' : 'close')}>
                 {menuList
                     && menuList.map((menu) => (
-                        <>
+                        <div key={menu.key}>
                             {menu.key === 'dashboard' && (
                                 <div className={classes.divMenu} key={menu.key}>
                                     <ListItem
@@ -169,11 +169,11 @@ const Sidebar = ({
                                     </ListItem>
                                 </div>
                             )}
-                        </>
+                        </div>
                     ))}
                 {menuList
                     && menuList.map((menu) => (
-                        <>
+                        <div key={menu.key}>
                             {aclDetail[0] && aclDetail[0].acl_code.includes(menu.aclCode) && (
                                 <div className={classes.divMenu} key={menu.key}>
                                     <ListItem
@@ -194,7 +194,7 @@ const Sidebar = ({
                                         <Collapse in={activeParentMenu && activeParentMenu.key === menu.key} timeout="auto" unmountOnExit>
                                             <List component="div" disablePadding>
                                                 {menu.children.map((menuChild) => (
-                                                    <>
+                                                    <div key={menuChild.key}>
                                                         {((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode))
                                                             || menu.key === 'vendor') && (
                                                             <>
@@ -267,14 +267,14 @@ const Sidebar = ({
                                                                 )}
                                                             </>
                                                         )}
-                                                    </>
+                                                    </div>
                                                 ))}
                                             </List>
                                         </Collapse>
                                     )}
                                 </div>
                             )}
-                        </>
+                        </div>
                     ))}
             </List>
         </>

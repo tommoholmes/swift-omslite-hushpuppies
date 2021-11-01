@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const getLocationList = gql`
-    query getLocationList($pageSize: Int!, $currentPage: Int!, $filter: LocationFilterInput, $sort: LocationSortInput) {
-        getLocationList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
+    query getLocationList($pageSize: Int!, $currentPage: Int!, $filter: LocationFilterInput, $sort: LocationSortInput, $search: String) {
+        getLocationList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort, search: $search) {
             items {
                 loc_id
                 loc_code

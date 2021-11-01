@@ -13,7 +13,7 @@ const CustomBreadcrumb = ({ data = [] }) => {
                 <div key={index}>
                     <ListItem className={styles.breadcrumbItem}>
                         <Link href={breadcrumb.url}>
-                            <a className={styles.flexContainer}>
+                            <a className={styles.flexContainer} href={breadcrumb.url}>
                                 <span className={styles.breadcrumbActive}>{`${breadcrumb.label}`}</span>
                                 <span className={styles.breadcrumbSeparator}>{`${index === data.length - 1 ? '' : '/'}`}</span>
                             </a>
