@@ -10,6 +10,7 @@ import Sidebar from '@modules/theme/layout/components/sidebar';
 import useStyles from '@modules/theme/layout/style';
 import Header from '@modules/theme/layout/components/header';
 import gqlService from '@modules/theme/services/graphql';
+import Head from 'next/head';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
@@ -610,43 +611,80 @@ const Layout = (props) => {
         return pageConfig && pageConfig.sidebar;
     };
 
+    const [currentLocation, setCurrentLocation] = React.useState('');
+
+    React.useEffect(() => {
+        setCurrentLocation((old) => {
+            if (activeChildMenu?.breadcrumb?.filter((val) => val?.url)?.[0]?.label) {
+                const labelMenu = activeChildMenu?.breadcrumb?.filter((val) => val?.url)?.[0]?.label;
+                if (router.pathname.split('/').length > 3) {
+                    const lengthPath = router.pathname.split('/').length;
+
+                    if (!router.pathname.split('/')[lengthPath - 1].includes('[')) {
+                        const pathRoute = router.pathname.split('/')[lengthPath - 1];
+                        return `${pathRoute?.charAt(0)?.toUpperCase() + pathRoute.slice(1)} ${labelMenu}`;
+                    }
+                    const pathRoute = router.pathname.split('/')[lengthPath - 2];
+                    return `${pathRoute?.charAt(0)?.toUpperCase() + pathRoute.slice(1)} ${labelMenu}`;
+                }
+                return labelMenu;
+            }
+
+            if (activeParentMenu?.breadcrumb?.[0]?.label) {
+                return activeParentMenu?.breadcrumb?.[0]?.label;
+            }
+
+            if (router.pathname.split('/')?.[1] === 'login') {
+                return 'Login';
+            }
+
+            return old;
+        });
+    }, [activeChildMenu, activeParentMenu, router]);
+
     return (
-        <div className={classes.root}>
-            {showHeader() && <Header mappedMenuList={mappedMenuList} breadcrumbData={getBreadcrumbData()} open={open} setOpen={setOpen} />}
-            {showSidebar() && (
-                <>
-                    <Sidebar
-                        activeParentMenu={activeParentMenu}
-                        setActiveParentMenu={setActiveParentMenu}
-                        activeChildMenu={activeChildMenu}
-                        setActiveChildMenu={setActiveChildMenu}
-                        open={open}
-                        setOpen={setOpen}
-                        menuList={menuList}
-                        aclDetail={dataAcl}
-                        storeConfigDetailWave={dataStoreConfigWave}
-                        storeConfigDetailBatch={dataStoreConfigBatch}
-                    >
-                        {varianAcl()}
-                        {varianStoreConfigWave()}
-                        {varianStoreConfigBatch()}
-                    </Sidebar>
-                </>
-            )}
-            <main className={showHeader() ? classes.content : classes.contentNoHeader}>
-                <Loading open={backdropLoader} />
-                <Message open={toastMessage.open} variant={toastMessage.variant} setOpen={handleCloseMessage} message={toastMessage.text} />
-                {/* necessary for content to be below app bar */}
-                <div className={showHeader() ? classes.toolbar : ''} />
-                {showHeader() && useBreadcrumbs && (
-                    <Hidden smUp implementation="css">
-                        {/* <Breadcrumb data={getBreadcrumbData()} /> */}
-                        <div style={{ height: 25 }} />
-                    </Hidden>
+        <>
+            <Head>
+                <title>{currentLocation}</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            <div className={classes.root}>
+                {showHeader() && <Header mappedMenuList={mappedMenuList} breadcrumbData={getBreadcrumbData()} open={open} setOpen={setOpen} />}
+                {showSidebar() && (
+                    <>
+                        <Sidebar
+                            activeParentMenu={activeParentMenu}
+                            setActiveParentMenu={setActiveParentMenu}
+                            activeChildMenu={activeChildMenu}
+                            setActiveChildMenu={setActiveChildMenu}
+                            open={open}
+                            setOpen={setOpen}
+                            menuList={menuList}
+                            aclDetail={dataAcl}
+                            storeConfigDetailWave={dataStoreConfigWave}
+                            storeConfigDetailBatch={dataStoreConfigBatch}
+                        >
+                            {varianAcl()}
+                            {varianStoreConfigWave()}
+                            {varianStoreConfigBatch()}
+                        </Sidebar>
+                    </>
                 )}
-                {children}
-            </main>
-        </div>
+                <main className={showHeader() ? classes.content : classes.contentNoHeader}>
+                    <Loading open={backdropLoader} />
+                    <Message open={toastMessage.open} variant={toastMessage.variant} setOpen={handleCloseMessage} message={toastMessage.text} />
+                    {/* necessary for content to be below app bar */}
+                    <div className={showHeader() ? classes.toolbar : ''} />
+                    {showHeader() && useBreadcrumbs && (
+                        <Hidden smUp implementation="css">
+                            {/* <Breadcrumb data={getBreadcrumbData()} /> */}
+                            <div style={{ height: 25 }} />
+                        </Hidden>
+                    )}
+                    {children}
+                </main>
+            </div>
+        </>
     );
 };
 
