@@ -16,6 +16,7 @@ const ContentWrapper = (props) => {
     const [updatePickByWaveItem] = gqlService.updatePickByWaveItem();
 
     let [count, setCount] = React.useState(picklist.qty_picked);
+    const [visibility, setVisibility] = React.useState(false);
 
     const handleSubmit = () => {
         const variables = {
@@ -60,6 +61,9 @@ const ContentWrapper = (props) => {
     const handleDetect = (code) => {
         if (code === picklist.barcode) {
             incrementCount();
+            setVisibility(true);
+        } else {
+            setVisibility(false);
         }
     };
 
@@ -84,6 +88,7 @@ const ContentWrapper = (props) => {
         count,
         setCount,
         handleSubmit,
+        visibility,
     };
 
     return (
