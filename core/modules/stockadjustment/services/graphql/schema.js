@@ -31,6 +31,7 @@ export const getStockAdjustmentById = gql`
             loc_code
             loc_name
             reason
+            status
             items {
                 entity_id
                 sku

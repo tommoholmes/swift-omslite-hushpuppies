@@ -39,7 +39,7 @@ const ContentWrapper = (props) => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success edit stock adjustment',
+                text: 'Success add stock adjustment',
                 variant: 'success',
             });
             setTimeout(() => router.push('/cataloginventory/stockadjustment'), 250);

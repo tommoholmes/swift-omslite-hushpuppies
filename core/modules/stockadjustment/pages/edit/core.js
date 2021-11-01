@@ -20,6 +20,7 @@ const ContentWrapper = (props) => {
                 stock_adjustment: item.change_qty,
                 stock_available: item.old_qty,
             })) ?? [],
+        status: data?.status ?? '',
     };
 
     const [addStockAdjustment] = gqlService.addStockAdjustment();
@@ -34,6 +35,7 @@ const ContentWrapper = (props) => {
             }
             return { ...temp, sku: typeof temp.sku === 'object' ? temp.sku.sku : temp.sku };
         });
+        delete fixValues.status;
         fixValues.items = [...items];
         delete fixValues.increment_id;
 
