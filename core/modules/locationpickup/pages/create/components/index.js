@@ -62,7 +62,7 @@ const LocationPickupEditContent = (props) => {
                     }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Edit Location Pickup</h2>
+            <h2 className={classes.titleTop}>Create Location Pickup</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>

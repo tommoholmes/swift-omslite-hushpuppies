@@ -136,6 +136,7 @@ const StockAdjustmentEdit = (props) => {
     const editSchemaValidaton = Yup.object().shape({
         loc_code: Yup.object().required('Required!'),
         reason: Yup.string().required('Required!'),
+        status: Yup.mixed().notOneOf([1]),
         items: Yup.array()
             .of(
                 Yup.object().shape({
