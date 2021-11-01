@@ -159,9 +159,42 @@ export const getInvoice = gql`
     }
 `;
 
+export const printShippingLabel = gql`
+query printShippingLabel($id: [Int!]) {
+    printShippingLabel(id: $id) {
+      store_logo_url
+      order_number_barcode_url
+      order_number
+      track_number_barcode_url
+      track_number
+      shipping_address {
+        firstname
+        lastname
+        street
+        region
+        city
+        postcode
+        country_name
+      }
+      shipping_method
+      shipping_method_logo_url
+      store {
+        name
+        street
+        region
+        city
+        post_code
+        country
+      }
+    }
+  }
+  
+`;
+
 export default {
     getPickList,
     getPackList,
     getAddress,
     getInvoice,
+    printShippingLabel,
 };

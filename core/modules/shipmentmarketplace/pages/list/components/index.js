@@ -243,6 +243,15 @@ const ShipmentMarketplaceListContent = (props) => {
             showMessage: false,
         },
         {
+            label: 'Print Shipping Label',
+            message: 'ready for print?',
+            onClick: (checkedRows) => {
+                const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
+                window.open(`/printoms/shippinglabel/${idPrint.toString().replace(/,/g, '/')}`);
+            },
+            showMessage: false,
+        },
+        {
             label: 'Mark Confirm Complete',
             message: 'Are you sure to confirm ?',
             onClick: async (checkedRows) => {
