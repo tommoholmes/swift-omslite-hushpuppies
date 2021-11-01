@@ -250,7 +250,7 @@ const Layout = (props) => {
         {
             aclCode: 'oms_lite_header_oms',
             key: 'oms',
-            label: 'OMS',
+            label: 'Masters',
             children: [
                 {
                     aclCode: 'oms_lite_company',
