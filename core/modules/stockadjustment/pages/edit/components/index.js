@@ -38,7 +38,6 @@ const StockAdjustmentEdit = (props) => {
     const [isDisabled] = React.useState(initialValues.status === 1);
     const firstRenderLocation = React.useRef(true);
     const firstRenderSetLocation = React.useRef(true);
-    console.log(isDisabled);
 
     React.useEffect(() => {
         const onChangeTimeOut = setTimeout(() => {
@@ -288,7 +287,7 @@ Edit Stock Adjustment #
                                                                         />
                                                                     </td>
                                                                     <td
-                                                                        style={isDisabled && { cursor: 'default' }}
+                                                                        style={{ cursor: `${isDisabled && 'default'}` }}
                                                                         className={`${classes.td} ${classes.btnRemove} ${
                                                                             !isDisabled && 'link-button'
                                                                         } `}
