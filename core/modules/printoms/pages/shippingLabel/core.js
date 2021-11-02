@@ -9,9 +9,18 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const shippingLabel = data.printShippingLabel;
+    const smallArray = (arr) => {
+        const newArr = arr.slice();
+        const res = [];
+        while (newArr.length > 0) {
+            const small = newArr.splice(0, 4);
+            res.push(small);
+        }
+        return res;
+    };
 
     const contentProps = {
-        shippingLabel,
+        shippingLabel: smallArray(shippingLabel),
     };
 
     return (
