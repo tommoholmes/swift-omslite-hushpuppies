@@ -66,7 +66,8 @@ const StockAdjustmentEdit = (props) => {
 
     React.useEffect(() => {
         if (getSourceListRes && getSourceListRes.data && getSourceListRes.data.getSourceList && getSourceListRes.data.getSourceList.items) {
-            setBaseSkuOption([...baseSkuOption, ...getSourceListRes.data.getSourceList.items]);
+            const sku = new Set(baseSkuOption.map((d) => d.sku));
+            setBaseSkuOption([...baseSkuOption, ...getSourceListRes.data.getSourceList.items.filter((d) => !sku.has(d.sku))]);
         }
     }, [getSourceListRes.data]);
 
@@ -117,9 +118,11 @@ const StockAdjustmentEdit = (props) => {
         ) {
             if (firstRenderSetLocation.current && getLocationListRes.data.getLocationList.items.length > 0) {
                 setLocID(getLocationListRes.data.getLocationList.items[0].loc_id);
+                firstRenderSetLocation.current = false;
             }
 
-            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items]);
+            const ids = new Set(locationOption.map((d) => d.loc_code));
+            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items.filter((d) => !ids.has(d.loc_code))]);
         }
     }, [getLocationListRes.data]);
 
