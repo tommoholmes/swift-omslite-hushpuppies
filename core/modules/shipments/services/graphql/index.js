@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import * as Schema from '@modules/shipments/services/graphql/schema';
 
 const context = {
@@ -10,10 +10,18 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const createChannel = (variables) => useMutation(Schema.createChannel, {
-    variables, ...context,
+export const getConfigShippingMethod = (variables) => useQuery(Schema.getConfigShippingMethod, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
+export const updateStoreConfig = (variables) => useMutation(Schema.updateStoreConfig, {
+    variables,
+    ...context,
 });
 
 export default {
-    createChannel,
+    getConfigShippingMethod,
+    updateStoreConfig,
 };
