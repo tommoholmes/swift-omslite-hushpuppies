@@ -108,7 +108,15 @@ const StockAdjustmentList = (props) => {
     return (
         <>
             <Header />
-            <Table filters={filters} rows={rows} getRows={getStockAdjustmentList} loading={loading} columns={columns} count={stockAdjustmentTotal} />
+            <Table
+                hideActions
+                filters={filters}
+                rows={rows}
+                getRows={getStockAdjustmentList}
+                loading={loading}
+                columns={columns}
+                count={stockAdjustmentTotal}
+            />
         </>
     );
 };
