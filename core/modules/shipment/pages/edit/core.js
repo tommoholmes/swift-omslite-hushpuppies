@@ -165,6 +165,7 @@ const ContentWrapper = (props) => {
         tracking: shipment.all_track,
         statusHistory: shipment.status_history,
         allocation: shipment.allocation_status,
+        shippingLabel: shipment.channel_shipping_label,
     };
 
     const formikConfirm = useFormik({

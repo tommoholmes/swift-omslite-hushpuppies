@@ -56,6 +56,7 @@ export const getShipmentById = gql`
             increment_id
             is_pickup
             channel_order_increment_id
+            channel_shipping_label
             channel{
                 channel_name
             }

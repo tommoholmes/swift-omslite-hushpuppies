@@ -86,6 +86,12 @@ const shipmentEditContent = (props) => {
                         </h5>
                         <span className="spanHeader">{shipmentDetail.location}</span>
                     </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Shipping Method
+                        </h5>
+                        <span className="spanHeader">{shipmentDetail.shippingLabel}</span>
+                    </div>
                 </div>
                 {shipmentDetail.statusValue === 'process_for_shipping' && !shipmentDetail.allocation
                     && (
@@ -218,25 +224,31 @@ const shipmentEditContent = (props) => {
                             <table className={classes.table}>
                                 <tbody>
                                     <tr className={classes.tr}>
-                                        <th className={classes.th} style={{ paddingLeft: 0, textAlign: 'center' }}>SKU Product</th>
-                                        <th className={classes.th} style={{ textAlign: 'center' }}>Name</th>
+                                        <th className={classes.th} style={{ paddingLeft: 0 }}>SKU Product</th>
+                                        <th className={classes.th}>Name</th>
                                         <th className={classes.th} style={{ textAlign: 'right' }}>Unit Price</th>
                                         <th className={classes.th} style={{ textAlign: 'center' }}>QTY</th>
-                                        <th className={classes.th} style={{ textAlign: 'center' }}>Action</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Subtotal</th>
+                                        {shipmentDetail.statusValue === 'process_for_shipping' && shipmentDetail.allocation === 'cannot_fulfill'
+                                            && <th className={classes.th}>Action</th>}
                                     </tr>
                                     {shipmentDetail.orderItem.map((e) => (
                                         <tr>
-                                            <td className={classes.td} style={{ paddingLeft: 0, textAlign: 'center' }}>{e.sku}</td>
-                                            <td className={classes.td} style={{ textAlign: 'center' }}>{e.name}</td>
+                                            <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
+                                            <td className={classes.td}>{e.name}</td>
                                             <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
                                             <td className={classes.td} style={{ textAlign: 'center' }}>{e.qty_shipped}</td>
-                                            <td
-                                                className={clsx(classes.td, companyId && 'check')}
-                                                style={{ textAlign: 'center' }}
-                                                onClick={() => (companyId ? handleCheckAvailabilty(e.sku) : null)}
-                                            >
-                                                Check Availability
-                                            </td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.row_total)}</td>
+                                            {shipmentDetail.statusValue === 'process_for_shipping'
+                                            && shipmentDetail.allocation === 'cannot_fulfill'
+                                            && (
+                                                <td
+                                                    className={clsx(classes.td, companyId && 'check')}
+                                                    onClick={() => (companyId ? handleCheckAvailabilty(e.sku) : null)}
+                                                >
+                                                    Check Availability
+                                                </td>
+                                            )}
                                         </tr>
                                     ))}
                                 </tbody>
