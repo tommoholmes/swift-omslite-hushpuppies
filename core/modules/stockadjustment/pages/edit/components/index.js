@@ -35,8 +35,10 @@ const StockAdjustmentEdit = (props) => {
     const [customer_loc_code, setCustomerLocCode] = React.useState([]);
     const [baseSkuOption, setBaseSkuOption] = React.useState([]);
     const [locationOption, setLocationOption] = React.useState([]);
+    const [isDisabled] = React.useState(initialValues.status === 1);
     const firstRenderLocation = React.useRef(true);
     const firstRenderSetLocation = React.useRef(true);
+    console.log(isDisabled);
 
     React.useEffect(() => {
         const onChangeTimeOut = setTimeout(() => {
@@ -182,6 +184,7 @@ Edit Stock Adjustment #
                                         <span className={[classes.label, classes.labelRequired].join(' ')}>Location</span>
                                     </div>
                                     <Autocomplete
+                                        disabled={isDisabled}
                                         mode="lazy"
                                         className={classes.autocompleteRoot}
                                         value={values.loc_code}
@@ -245,10 +248,7 @@ Edit Stock Adjustment #
                                                                                 value={values.items[idx].sku}
                                                                                 onChange={(e) => {
                                                                                     setFieldValue(`items.${idx}.stock_available`, e?.qty_total ?? 0);
-                                                                                    setFieldValue(`items.${idx}.sku`, {
-                                                                                        sku: e?.sku ?? '',
-                                                                                        source_id: e?.source_id ?? '',
-                                                                                    });
+                                                                                    setFieldValue(`items.${idx}.sku`, e);
                                                                                 }}
                                                                                 loading={!values.items[idx].sku && getSourceListRes.loading}
                                                                                 options={baseSkuOption}
@@ -284,11 +284,16 @@ Edit Stock Adjustment #
                                                                             className={classes.fieldQty}
                                                                             name={`items.${idx}.stock_adjustment`}
                                                                             type="number"
+                                                                            disabled={isDisabled}
                                                                         />
                                                                     </td>
                                                                     <td
-                                                                        className={`${classes.td} ${classes.btnRemove} link-button`}
-                                                                        onClick={() => remove(idx)}
+                                                                        style={isDisabled && { cursor: 'default' }}
+                                                                        className={`${classes.td} ${classes.btnRemove} ${
+                                                                            !isDisabled && 'link-button'
+                                                                        } `}
+                                                                        onClick={() => !isDisabled && remove(idx)}
+                                                                        disabled={isDisabled}
                                                                     >
                                                                         remove
                                                                     </td>
@@ -299,6 +304,7 @@ Edit Stock Adjustment #
                                                 )}
                                                 <div className={`${classes.formFieldButton} ${classes.formFieldButtonRight}`}>
                                                     <Button
+                                                        disabled={isDisabled}
                                                         className={classes.btn}
                                                         variant="contained"
                                                         onClick={() => push({
@@ -338,6 +344,7 @@ Edit Stock Adjustment #
 
                                 <div className={`${classes.formFieldButton}`}>
                                     <Button
+                                        disabled={isDisabled}
                                         type="button"
                                         onClick={() => {
                                             setFieldValue('is_apply', false);
@@ -349,6 +356,7 @@ Edit Stock Adjustment #
                                         Submit
                                     </Button>
                                     <Button
+                                        disabled={isDisabled}
                                         type="button"
                                         onClick={() => {
                                             setFieldValue('is_apply', true);

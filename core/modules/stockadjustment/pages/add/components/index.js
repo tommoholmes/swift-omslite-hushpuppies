@@ -62,7 +62,8 @@ const StockAdjustmentAdd = (props) => {
 
     React.useEffect(() => {
         if (getSourceListRes && getSourceListRes.data && getSourceListRes.data.getSourceList && getSourceListRes.data.getSourceList.items) {
-            setBaseSkuOption([...baseSkuOption, ...getSourceListRes.data.getSourceList.items]);
+            const sku = new Set(baseSkuOption.map((d) => d.sku));
+            setBaseSkuOption([...baseSkuOption, ...getSourceListRes.data.getSourceList.items.filter((d) => !sku.has(d.sku))]);
         }
     }, [getSourceListRes.data]);
 
@@ -100,8 +101,8 @@ const StockAdjustmentAdd = (props) => {
             if (getLocationListRes.data.getLocationList.items.length > 0) {
                 setLocID(getLocationListRes.data.getLocationList.items[0].loc_id);
             }
-
-            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items]);
+            const ids = new Set(locationOption.map((d) => d.loc_code));
+            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items.filter((d) => !ids.has(d.loc_code))]);
         }
     }, [getLocationListRes.data]);
 
@@ -172,7 +173,7 @@ const StockAdjustmentAdd = (props) => {
                                             setFieldValue('items', []);
                                         }}
                                         defaultValue={{ loc_name: 'select', loc_code: 0 }}
-                                        loading={getLocationListRes.loading}
+                                        loading={!values.loc_code?.loc_code && getLocationListRes.loading}
                                         options={locationOption}
                                         getOptions={getLocationList}
                                         getOptionsVariables={{
@@ -226,12 +227,8 @@ const StockAdjustmentAdd = (props) => {
                                                                                 className={classes.autocomplete}
                                                                                 value={values.items[idx].sku}
                                                                                 onChange={(e) => {
-                                                                                    setBaseSkuOption([...baseSkuOption, e]);
                                                                                     setFieldValue(`items.${idx}.stock_available`, e?.qty_total ?? 0);
-                                                                                    setFieldValue(`items.${idx}.sku`, {
-                                                                                        sku: e?.sku ?? '',
-                                                                                        source_id: e?.source_id ?? '',
-                                                                                    });
+                                                                                    setFieldValue(`items.${idx}.sku`, e);
                                                                                 }}
                                                                                 loading={!values.items[idx].sku && getSourceListRes.loading}
                                                                                 options={baseSkuOption}
