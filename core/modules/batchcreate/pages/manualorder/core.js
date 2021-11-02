@@ -28,7 +28,7 @@ const Core = (props) => {
                 text: 'Success auto generate!',
                 variant: 'success',
             });
-            handleStartPickByBatch(res.data.createPickByBatch.pick_by_batch.entity_id);
+            handleStartPickByBatch(res.data.createPickByBatch.pick_by_batch.picklist[0].entity_id);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({

@@ -57,6 +57,9 @@ export const createPickByBatchManually = gql`
         createPickByBatch(type: $type, shipment_id: $shipment_id){
             pick_by_batch{
                 entity_id
+                picklist{
+                    entity_id
+                }
             }
         }
     }
