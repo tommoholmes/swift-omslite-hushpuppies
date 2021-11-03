@@ -82,8 +82,26 @@ const Layout = (props) => {
                 {
                     aclCode: 'oms_lite_sales_order_queue',
                     key: 'orderqueue',
-                    label: 'All Orders',
+                    label: 'Orders',
                     url: '/sales/orderqueue',
+                },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_allocating', key: 'orderqueue_allocating', label: 'Allocating', url: '/sales/orderqueue/allocating', notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_failed', key: 'orderqueue_failed', label: 'Failed', url: '/sales/orderqueue/failed', notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_order_processing', key: 'orderqueue_order_processing', label: 'Order Processing', url: '/sales/orderqueue/order_processing', notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_shipment_processing', key: 'orderqueue_shipment_processing', label: 'Shipment Processing', url: '/sales/orderqueue/shipment_processing', notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_complete', key: 'orderqueue_complete', label: 'Complete', url: '/sales/orderqueue/complete', notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_canceled', key: 'orderqueue_canceled', label: 'Canceled', url: '/sales/orderqueue/canceled', notInAcl: true,
                 },
                 // { aclCode: 'orderreallocation', label: 'Order Reallocation', url: '/sales/orderreallocation' },
             ],
@@ -569,7 +587,7 @@ const Layout = (props) => {
     };
 
     useEffect(() => {
-        const activeMenuFirstChild = mappedMenuList.find((e) => e.url === (router && router.pathname));
+        const activeMenuFirstChild = mappedMenuList.find((e) => (e.url === (router && router.pathname) || e.url === (router && router.asPath)));
 
         if (activeMenuFirstChild && activeMenuFirstChild.parentKey) {
             if (activeMenuFirstChild && activeMenuFirstChild.parentKey) {
@@ -582,7 +600,8 @@ const Layout = (props) => {
             let activeMenuSecondChild = null;
 
             for (let i = 0; i < mappedMenuList.length; i += 1) {
-                if (mappedMenuList[i].url.includes(removeLastPathOnUrl(router && router.pathname))) {
+                if (mappedMenuList[i].url.includes(removeLastPathOnUrl((router && router.pathname))
+                || removeLastPathOnUrl((router && router.asPath)))) {
                     activeMenuSecondChild = mappedMenuList[i];
                     break;
                 }

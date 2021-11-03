@@ -9,6 +9,7 @@ const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        parent,
     } = props;
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
@@ -101,6 +102,7 @@ const ContentWrapper = (props) => {
         formikAllocation,
         formikNew,
         orderQueue,
+        parent,
     };
 
     return (
@@ -128,7 +130,7 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} />
+            <ContentWrapper data={data} {...props} parent={router && router.query && router.query.tab_status} />
         </Layout>
     );
 };
