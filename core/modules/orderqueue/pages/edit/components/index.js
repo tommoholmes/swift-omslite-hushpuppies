@@ -13,6 +13,7 @@ const OrderQueueEditContent = (props) => {
         formikAllocation,
         formikNew,
         orderQueue,
+        parent,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -36,7 +37,7 @@ const OrderQueueEditContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/sales/orderqueue')}
+                onClick={() => router.push(parent ? `/sales/orderqueue/${parent}` : '/sales/orderqueue')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

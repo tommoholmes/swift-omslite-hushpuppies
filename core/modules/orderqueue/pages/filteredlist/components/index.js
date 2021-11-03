@@ -4,13 +4,14 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
-import Header from '@modules/orderqueue/pages/list/components/Header';
-import useStyles from '@modules/orderqueue/pages/list/components/style';
+import Header from '@modules/orderqueue/pages/filteredlist/components/Header';
+import useStyles from '@modules/orderqueue/pages/filteredlist/components/style';
 import { optionsStatus } from '@modules/orderqueue/helpers';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getOrderQueueList, setReallocation, varExport, handleExport, setVarExport } = props;
+    const { data, loading, getOrderQueueList, setReallocation,
+        varExport, setVarExport, tab_status, exportOrderToCsv } = props;
     const orderQueueList = (data && data.getOrderQueueList && data.getOrderQueueList.items) || [];
     const orderQueueTotal = (data && data.getOrderQueueList && data.getOrderQueueList.total_count) || 0;
 
@@ -72,6 +73,7 @@ const OrderQueueListContent = (props) => {
             ),
         },
         { field: 'error_log', name: 'error_log', type: 'like', label: 'Error Log', initialValue: '' },
+        { field: 'tab_status', name: 'tab_status', type: 'eq', label: 'Tab Status', class: 'fixed', initialValue: tab_status, hidden: true },
     ];
 
     const getClassByStatus = (status) => {
@@ -103,7 +105,7 @@ const OrderQueueListContent = (props) => {
         ...orderQueue,
         id: orderQueue.id,
         actions: () => (
-            <Link href={`/sales/orderqueue/edit/${orderQueue.id}`}>
+            <Link href={`/sales/orderqueue/${tab_status}/edit/${orderQueue.id}`}>
                 <a className="link-button">Edit</a>
             </Link>
         ),
@@ -148,22 +150,62 @@ const OrderQueueListContent = (props) => {
         },
     ];
 
+    const exports = [
+        {
+            label: 'Export No Allocation',
+            message: 'ready for print?',
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => Number(checkedRow.id));
+                const variables = {
+                    id: incrementIds,
+                    filter: {
+                        status: {
+                            eq: 'failed',
+                        },
+                        error_log: {
+                            eq: 'Allocation not found',
+                        },
+                    },
+                };
+                window.backdropLoader(true);
+                await exportOrderToCsv({ variables });
+            },
+        },
+        {
+            label: 'Export All',
+            message: 'ready for print?',
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => Number(checkedRow.id));
+                const variables = {
+                    id: incrementIds,
+                    filter: {
+                        status: {
+                            eq: 'failed',
+                        },
+                    },
+                };
+                window.backdropLoader(true);
+                await exportOrderToCsv({ variables });
+            },
+        },
+    ];
+
     return (
         <>
             <Header />
             <Table
                 filters={filters}
                 actions={actions}
+                hideActions={tab_status !== 'failed'}
                 rows={rows}
                 getRows={getOrderQueueList}
                 loading={loading}
                 columns={columns}
+                showCheckbox={tab_status === 'failed'}
                 count={orderQueueTotal}
-                showCheckbox
-                handleExport={handleExport}
                 varExport={varExport}
                 setVarExport={setVarExport}
-                exportWithId
+                exports={tab_status === 'failed' ? exports : []}
             />
         </>
     );
