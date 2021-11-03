@@ -12,6 +12,9 @@ const Core = (props) => {
     const [firstLoad, setFirstLoad] = React.useState(true);
     const [showProgress, setshowProgress] = React.useState(false);
     const [getActivity] = gqlService.getActivity({
+        variables: {
+            code: 'upload_source',
+        },
         onCompleted: (res) => {
             setActivityState(res.getActivity);
             if (firstLoad) {
@@ -39,10 +42,7 @@ const Core = (props) => {
         const variables = {
             binary,
         };
-        setTimeout(() => {
-            getActivity();
-            setshowProgress(true);
-        }, 1000);
+        window.backdropLoader(true);
         uploadSource({
             variables,
         })

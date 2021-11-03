@@ -59,8 +59,8 @@ export const downloadSource = gql`
 `;
 
 export const getActivity = gql`
-    query {
-        getActivity(code: "upload_source", by_session: true) {
+    query getActivity($code: String!) {
+        getActivity(code: $code, by_session: true) {
             activity_id
             activity_code
             run_status
