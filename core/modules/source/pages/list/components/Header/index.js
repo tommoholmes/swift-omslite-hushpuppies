@@ -11,22 +11,13 @@ const HeaderContent = (props) => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Manage Source</h2>
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/cataloginventory/source/importdata')}
-            >
+            <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/source/importdata')}>
                 Create Source
             </Button>
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/cataloginventory/source/import')}
-            >
-                Import
+            <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/source/import')}>
+                Update Source
             </Button>
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/cataloginventory/source/export')}
-            >
+            <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/source/export')}>
                 Export
             </Button>
         </div>

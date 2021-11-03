@@ -2,12 +2,10 @@
 import { useDropzone } from 'react-dropzone';
 import React from 'react';
 import useStyles from '@common_dropfile/style';
+import Button from '@common_button';
 
 const DropFile = ({
-    title = '',
-    textButton = 'Choose File',
-    formatFile = '.csv',
-    getBase64,
+    title = '', textButton = 'Choose File', formatFile = '.csv', getBase64,
 }) => {
     const classes = useStyles();
     const toBase64 = (file) => new Promise((resolve, reject) => {
@@ -33,7 +31,7 @@ const DropFile = ({
         }
         getBase64(filebase64);
     };
-    const messageError = `${`common:fileUpload:reject${ formatFile}`}`;
+    const messageError = `${`common:fileUpload:reject${formatFile}`}`;
     const {
         getRootProps, getInputProps, acceptedFiles, open,
     } = useDropzone({
@@ -46,7 +44,6 @@ const DropFile = ({
             text: messageError,
             variant: 'error',
         }),
-
     });
     const files = acceptedFiles.map((file) => (
         <li key={file.path}>
@@ -64,9 +61,10 @@ const DropFile = ({
             {title}
             <div {...getRootProps({ className: 'dropzone' })}>
                 <input {...getInputProps()} />
-                <button type="button" onClick={open}>
+                <Button className={classes.btn} type="button" onClick={open}>
                     {textButton}
-                </button>
+                </Button>
+                {files.length === 0 && <span className={classes.textNoFile}>No file chosen</span>}
             </div>
             <aside>
                 <ul>{files}</ul>

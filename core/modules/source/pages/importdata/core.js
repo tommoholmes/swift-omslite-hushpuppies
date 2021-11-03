@@ -2,48 +2,68 @@ import React, { useEffect } from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
 import gqlService from '@modules/source/services/graphql';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
-    const router = useRouter();
+    const { Content } = props;
     const [uploadSource] = gqlService.uploadSource();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
+    const [activityState, setActivityState] = React.useState();
+    const [firstLoad, setFirstLoad] = React.useState(true);
+    const [showProgress, setshowProgress] = React.useState(false);
+    const [getActivity] = gqlService.getActivity({
+        onCompleted: (res) => {
+            setActivityState(res.getActivity);
+            if (firstLoad) {
+                setFirstLoad(false);
+            }
+            if (res.getActivity.run_status === 'running') {
+                setTimeout(() => {
+                    getActivity();
+                }, 100);
+            }
+        },
+        onError: () => {
+            getActivity();
+        },
+    });
 
     useEffect(() => {
         downloadList();
+        getActivity();
     }, []);
 
     const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
 
-    const handleSubmit = ({
-        binary,
-    }) => {
+    const handleSubmit = ({ binary }) => {
         const variables = {
             binary,
         };
-        window.backdropLoader(true);
+        setTimeout(() => {
+            getActivity();
+            setshowProgress(true);
+        }, 1000);
         uploadSource({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Export Source',
-                variant: 'success',
+        })
+            .then(() => {
+                getActivity();
+                setshowProgress(true);
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Export Source',
+                    variant: 'success',
+                });
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/cataloginventory/source'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -69,6 +89,9 @@ const Core = (props) => {
         formik,
         urlDownload,
         handleDropFile,
+        activityState,
+        firstLoad,
+        showProgress,
     };
 
     return (

@@ -40,7 +40,7 @@ const SourceListContent = (props) => {
         { field: 'priority', name: 'priority_from', type: 'from', label: 'Priority From', initialValue: '' },
         { field: 'priority', name: 'priority_to', type: 'to', label: 'Priority To', initialValue: '' },
         { field: 'sku', name: 'sku', type: 'like', label: 'SKU', initialValue: '' },
-
+        { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
     ];
 
     const rows = sourceList.map((source) => ({
@@ -48,23 +48,10 @@ const SourceListContent = (props) => {
         id: source.source_id,
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
-            <Table
-                filters={filters}
-                rows={rows}
-                getRows={getSourceList}
-                loading={loading}
-                columns={columns}
-                count={sourceTotal}
-            />
+            <Table filters={filters} rows={rows} getRows={getSourceList} loading={loading} columns={columns} count={sourceTotal} hideActions />
         </>
     );
 };

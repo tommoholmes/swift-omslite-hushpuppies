@@ -58,10 +58,30 @@ export const downloadSource = gql`
     }
 `;
 
+export const getActivity = gql`
+    query {
+        getActivity(code: "upload_source", by_session: true) {
+            activity_id
+            activity_code
+            run_status
+            data_total
+            data_processed
+            started_at
+            snapshot_at
+            finished_at
+            run_by
+            run_type
+            attachment
+            error_message
+        }
+    }
+`;
+
 export default {
     getSourceList,
     getSourceById,
     uploadSource,
     downloadSampleCsv,
     downloadSource,
+    getActivity,
 };

@@ -10,23 +10,36 @@ const fetchPolicy = {
 };
 
 export const getSourceList = (variables) => useLazyQuery(Schema.getSourceList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getSourceById = (variables) => useQuery(Schema.getSourceById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const uploadSource = (variables) => useMutation(Schema.uploadSource, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const downloadSource = (variables) => useMutation(Schema.downloadSource, {
-    variables, ...context,
+    variables,
+    ...context,
+});
+
+export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
+    ...context,
+    ...options,
+    fetchPolicy: 'no-cache',
 });
 
 export default {
@@ -35,4 +48,5 @@ export default {
     uploadSource,
     downloadSampleCsv,
     downloadSource,
+    getActivity,
 };
