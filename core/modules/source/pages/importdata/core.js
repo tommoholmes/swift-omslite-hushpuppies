@@ -6,24 +6,28 @@ import gqlService from '@modules/source/services/graphql';
 
 const Core = (props) => {
     const { Content } = props;
-    const [uploadSource] = gqlService.uploadSource();
+    const [createSource] = gqlService.createSource();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
     const [showProgress, setshowProgress] = React.useState(false);
     const [getActivity] = gqlService.getActivity({
         variables: {
-            code: 'upload_source',
+            code: 'create_source',
         },
         onCompleted: (res) => {
-            setActivityState(res.getActivity);
+            setActivityState({ ...res.getActivity, loading: false });
             if (firstLoad) {
                 setFirstLoad(false);
             }
             if (res.getActivity.run_status === 'running') {
                 setTimeout(() => {
+                    setActivityState({ ...res.getActivity, loading: true });
                     getActivity();
                 }, 100);
+            }
+            if (!firstLoad && res.getActivity.run_status === 'finished') {
+                setshowProgress(true);
             }
         },
         onError: () => {
@@ -39,20 +43,21 @@ const Core = (props) => {
     const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
 
     const handleSubmit = ({ binary }) => {
+        setshowProgress(false);
         const variables = {
             binary,
         };
         window.backdropLoader(true);
-        uploadSource({
+        createSource({
             variables,
         })
             .then(() => {
+                setActivityState({ ...activityState, loading: true });
                 getActivity();
-                setshowProgress(true);
                 window.backdropLoader(false);
                 window.toastMessage({
                     open: true,
-                    text: 'Success Export Source',
+                    text: 'Success Create Source',
                     variant: 'success',
                 });
             })

@@ -40,9 +40,21 @@ export const getSourceById = gql`
     }
 `;
 
-export const uploadSource = gql`
-    mutation uploadSource($binary: String!) {
-        uploadSource(input: { binary: $binary })
+export const createSource = gql`
+    mutation createSource($binary: String!) {
+        createSource(input: { binary: $binary }) {
+            is_success
+            attachment_url
+        }
+    }
+`;
+
+export const updateSource = gql`
+    mutation updateSource($binary: String!) {
+        updateSource(input: { binary: $binary }) {
+            is_success
+            attachment_url
+        }
     }
 `;
 
@@ -80,8 +92,9 @@ export const getActivity = gql`
 export default {
     getSourceList,
     getSourceById,
-    uploadSource,
+    createSource,
     downloadSampleCsv,
     downloadSource,
     getActivity,
+    updateSource,
 };
