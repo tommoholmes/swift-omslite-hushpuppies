@@ -40,7 +40,7 @@ const PrintPickContent = (props) => {
                         </div>
                     </div> */}
                     {shippingLabel.map((shipping) => (
-                        <Paper className={classes.container}>
+                        <Paper id="print" className={classes.container}>
                             {shipping.map((eParent) => (
                                 <div style={{ marginBottom: 10 }}>
                                     <div className={clsx(classes.content, classes.contentImg)}>
@@ -95,10 +95,22 @@ const PrintPickContent = (props) => {
                                     </div>
                                 </div>
                             ))}
+                            <div className="pagebreak" />
                         </Paper>
                     ))}
                 </>
             )}
+            <style jsx>
+                {`
+                @page {
+                    size: 21cm 29.7cm;
+                    margin: 0 auto;
+                }
+                @media print {
+                    .pagebreak { page-break-before: always; }
+                }
+                `}
+            </style>
         </>
     );
 };

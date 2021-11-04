@@ -1,24 +1,16 @@
-/* eslint-disable no-unused-vars */
 import { makeStyles } from '@material-ui/core/styles';
 
-const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
-const colorText = '#536777';
-const colorGray = '#B1BCDB';
-const colorBold = '#435179';
-const borderColor = '#DDE1EC';
 const borderGray = '#E5E9F1';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     container: {
         padding: '0 16px',
         borderRadius: 16,
         backgroundColor: 'unset',
         boxShadow: 'none',
-        width: '21cm',
-        height: '29.7cm',
+        maxWidth: 768,
         margin: '0 auto',
-        pageBreakAfter: 'always',
     },
     containerBtn: {
         padding: '0 16px',
