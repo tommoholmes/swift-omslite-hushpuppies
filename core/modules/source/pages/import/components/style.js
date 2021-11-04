@@ -79,6 +79,27 @@ const useStyles = makeStyles((theme) => ({
     progressContainer: {
         padding: '0px 29px 0px 22px',
     },
+    leftColumn: {
+        backgroundColor: colorPurple,
+        color: 'white !important',
+        fontWeight: 'bold !important',
+        maxWidth: 200,
+        width: 200,
+    },
+    rightColumn: {
+        '&.capitalize': { textTransform: 'capitalize !important' },
+    },
+    status: {
+        '&.error': {
+            color: 'red !important',
+        },
+        '&.success': {
+            color: 'green !important',
+        },
+        fontWeight: 'bold !important',
+        marginBottom: 20,
+        fontSize: 18,
+    },
 }));
 
 export default useStyles;

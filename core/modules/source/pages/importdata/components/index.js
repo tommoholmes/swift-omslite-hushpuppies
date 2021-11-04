@@ -70,7 +70,7 @@ const SourceImportData = (props) => {
                         className={classes.btn}
                         onClick={formik.handleSubmit}
                         variant="contained"
-                        disabled={!formik.values.binary || (activityState && activityState.run_status === 'running') || firstLoad}
+                        // disabled={!formik.values.binary || (activityState && activityState.run_status === 'running') || firstLoad}
                     >
                         Submit
                     </Button>
@@ -80,7 +80,7 @@ const SourceImportData = (props) => {
                         <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />
                     </div>
                 ) : null}
-                {firstLoad ? (
+                {firstLoad || activityState?.loading ? (
                     <div className={classes.formFieldButton}>
                         <div className={clsx(classes.status)}>Loading...</div>
                     </div>

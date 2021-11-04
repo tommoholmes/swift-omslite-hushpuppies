@@ -21,7 +21,12 @@ export const getSourceById = (variables) => useQuery(Schema.getSourceById, {
     ...fetchPolicy,
 });
 
-export const uploadSource = (variables) => useMutation(Schema.uploadSource, {
+export const createSource = (variables) => useMutation(Schema.createSource, {
+    variables,
+    ...context,
+});
+
+export const updateSource = (variables) => useMutation(Schema.updateSource, {
     variables,
     ...context,
 });
@@ -45,8 +50,9 @@ export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
 export default {
     getSourceList,
     getSourceById,
-    uploadSource,
+    createSource,
     downloadSampleCsv,
     downloadSource,
     getActivity,
+    updateSource,
 };
