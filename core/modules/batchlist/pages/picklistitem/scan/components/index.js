@@ -22,7 +22,7 @@ const ScanItemContent = (props) => {
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <Scan
-                        barcode={pickList.barcode}
+                        barcode={pickList.sku}
                         handleDetect={handleDetect}
                         handleClose={() => Router.push(`/pickpack/batchlist/picklistitem/${pickList.id}`)}
                     />

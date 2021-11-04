@@ -13,7 +13,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import clsx from 'clsx';
 
 const App = ({
-    readers, barcode, handleDetect = () => { }, handleClose = () => { },
+    barcode, handleDetect = () => { }, handleClose = () => { },
 }) => {
     const classes = useStyles();
     const [isMatch, setIsMatch] = useState(null);
@@ -71,7 +71,7 @@ const App = ({
                     },
                 },
                 decoder: {
-                    readers,
+                    readers: ['ean_reader', 'ean_8_reader', 'upc_reader', 'code_128_reader'],
                 },
             },
             (err) => {
