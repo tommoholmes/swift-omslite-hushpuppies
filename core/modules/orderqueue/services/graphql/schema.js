@@ -19,6 +19,7 @@ export const getOrderQueueList = gql`
                 created_at
                 channel_order_status
                 last_updated
+                acceptance_deadline
                 channel_code
                 status
                 oms_order_status
@@ -44,6 +45,7 @@ export const getOrderQueueById = gql`
             id
             last_updated
             status
+            acceptance_deadline
             channel_order_increment_id
             channel_code
             email
@@ -57,6 +59,7 @@ export const getOrderQueueById = gql`
                 region
                 postcode
                 country_id
+                country_name
                 telephone
             }
             shipping_address {
@@ -67,6 +70,7 @@ export const getOrderQueueById = gql`
                 region
                 postcode
                 country_id
+                country_name
                 telephone
             }
             channel_payment_method

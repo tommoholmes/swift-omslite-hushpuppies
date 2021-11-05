@@ -5,7 +5,7 @@ import Button from '@common_button';
 import { useRouter } from 'next/router';
 import useStyles from '@modules/orderqueue/pages/filteredlist/components/Header/style';
 
-const HeaderContent = (props) => {
+const HeaderContent = ({ showBulkButton = false }) => {
     const classes = useStyles();
     const router = useRouter();
     return (
@@ -17,12 +17,15 @@ const HeaderContent = (props) => {
             >
                 Create Sales Channel
             </Button> */}
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/sales/orderqueue/import')}
-            >
-                Bulk Reallocation
-            </Button>
+            {showBulkButton
+            && (
+                <Button
+                    className={classes.buttonAdd}
+                    onClick={() => router.push('/sales/orderqueue/import')}
+                >
+                    Bulk Reallocation
+                </Button>
+            )}
         </div>
     );
 };
