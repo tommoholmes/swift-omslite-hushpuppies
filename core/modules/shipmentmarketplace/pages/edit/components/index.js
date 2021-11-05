@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable max-len */
@@ -30,9 +32,39 @@ const ShipmentMarketplaceEditContent = (props) => {
     const [getShipmentCancelReason, getShipmentCancelReasonRes] = gqlService.getShipmentCancelReason();
     const [getCourierOption, getCourierOptionRes] = gqlService.getCourierOption();
     const iconFilter = (channel_code) => {
-        const codeExploded = channel_code.split('_');
-        const code = codeExploded[1].toLowerCase();
-        return code;
+        if (channel_code) {
+            const codeExploded = channel_code.split('_');
+            const code = codeExploded[1];
+            if (code.toLowerCase().includes('swi')) {
+                return '/assets/img/print_icon/swi.png';
+            }
+            if (code.toLowerCase().includes('bklp')) {
+                return '/assets/img/print_icon/bklp.png';
+            }
+            if (code.toLowerCase().includes('blib')) {
+                return '/assets/img/print_icon/blib.png';
+            }
+            if (code.toLowerCase().includes('jdid')) {
+                return '/assets/img/print_icon/jdid.png';
+            }
+            if (code.toLowerCase().includes('lzda')) {
+                return '/assets/img/print_icon/lzda.png';
+            }
+            if (code.toLowerCase().includes('shpe')) {
+                return '/assets/img/print_icon/shpe.png';
+            }
+            if (code.toLowerCase().includes('srcl')) {
+                return '/assets/img/print_icon/srcl.png';
+            }
+            if (code.toLowerCase().includes('tkpd')) {
+                return '/assets/img/print_icon/tkpd.png';
+            }
+            if (code.toLowerCase().includes('zlra')) {
+                return '/assets/img/print_icon/zlra.png';
+            }
+            return `/assets/img/print_icon/${code}.png`;
+        }
+        return null;
     };
 
     return (
@@ -56,7 +88,12 @@ const ShipmentMarketplaceEditContent = (props) => {
                 {`Marketplace #${shipmentMarketplace.shipmentNumber}`}
             </h2>
             <div style={{ position: 'relative' }}>
-                <img className={classes.headerImg} alt="" src={`/assets/img/print_icon/${iconFilter(shipmentMarketplace.channelCode)}.png`} />
+                <img
+                    className={classes.headerImg}
+                    alt=""
+                    src={iconFilter(shipmentMarketplace.channelCode)}
+                    onError={(event) => event.target.style.display = 'none'}
+                />
             </div>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>

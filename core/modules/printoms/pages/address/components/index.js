@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import Button from '@common_button';
@@ -11,6 +13,42 @@ const PrintAdressContent = (props) => {
     } = props;
     const classes = useStyles();
     const [show, setShow] = useState('non-hide');
+
+    const iconFilter = (channel_code) => {
+        if (channel_code) {
+            const codeExploded = channel_code.split('_');
+            const code = codeExploded[1];
+            if (code.toLowerCase().includes('swi')) {
+                return '/assets/img/print_icon/swi.png';
+            }
+            if (code.toLowerCase().includes('bklp')) {
+                return '/assets/img/print_icon/bklp.png';
+            }
+            if (code.toLowerCase().includes('blib')) {
+                return '/assets/img/print_icon/blib.png';
+            }
+            if (code.toLowerCase().includes('jdid')) {
+                return '/assets/img/print_icon/jdid.png';
+            }
+            if (code.toLowerCase().includes('lzda')) {
+                return '/assets/img/print_icon/lzda.png';
+            }
+            if (code.toLowerCase().includes('shpe')) {
+                return '/assets/img/print_icon/shpe.png';
+            }
+            if (code.toLowerCase().includes('srcl')) {
+                return '/assets/img/print_icon/srcl.png';
+            }
+            if (code.toLowerCase().includes('tkpd')) {
+                return '/assets/img/print_icon/tkpd.png';
+            }
+            if (code.toLowerCase().includes('zlra')) {
+                return '/assets/img/print_icon/zlra.png';
+            }
+            return `/assets/img/print_icon/${code}.png`;
+        }
+        return null;
+    };
 
     return (
         <>
@@ -37,7 +75,12 @@ const PrintAdressContent = (props) => {
                     {addressList.dataAddress.map((eParent) => (
                         <Paper className={classes.container}>
                             <div className={clsx(classes.content, classes.headerImage)}>
-                                <img className="imgIcon" alt="" src={`/assets/img/print_icon/${eParent.channel.channel_name}.png`} />
+                                <img
+                                    className="imgIcon"
+                                    alt=""
+                                    src={iconFilter(eParent.channel.channel_code)}
+                                    onError={(event) => event.target.style.display = 'none'}
+                                />
                                 <h5 className={clsx(classes.titleSmall, 'headerTitle')}>
                                     {`Print Date: ${addressList.date}`}
                                 </h5>

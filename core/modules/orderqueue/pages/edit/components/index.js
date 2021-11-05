@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -31,32 +33,35 @@ const OrderQueueEditContent = (props) => {
     };
 
     const iconFilter = (channel_code) => {
-        if (channel_code.toLowerCase().includes('swi')) {
-            return '/assets/img/dashboard/channel_official.png';
-        }
-        if (channel_code.toLowerCase().includes('bklp')) {
-            return '/assets/img/dashboard/channel_bukalapak.svg';
-        }
-        if (channel_code.toLowerCase().includes('blib')) {
-            return '/assets/img/dashboard/channel_blibli.png';
-        }
-        if (channel_code.toLowerCase().includes('jdid')) {
-            return '/assets/img/dashboard/channel_jd.png';
-        }
-        if (channel_code.toLowerCase().includes('lzda')) {
-            return '/assets/img/dashboard/channel_lazada.png';
-        }
-        if (channel_code.toLowerCase().includes('shpe')) {
-            return '/assets/img/dashboard/channel_shopee.png';
-        }
-        if (channel_code.toLowerCase().includes('srcl')) {
-            return '/assets/img/dashboard/channel_sirclo.png';
-        }
-        if (channel_code.toLowerCase().includes('tkpd')) {
-            return '/assets/img/dashboard/channel_tokopedia.png';
-        }
-        if (channel_code.toLowerCase().includes('zlra')) {
-            return '/assets/img/dashboard/channel_zalora.png';
+        if (channel_code) {
+            if (channel_code.toLowerCase().includes('swi')) {
+                return '/assets/img/dashboard/channel_official.png';
+            }
+            if (channel_code.toLowerCase().includes('bklp')) {
+                return '/assets/img/dashboard/channel_bukalapak.svg';
+            }
+            if (channel_code.toLowerCase().includes('blib')) {
+                return '/assets/img/dashboard/channel_blibli.png';
+            }
+            if (channel_code.toLowerCase().includes('jdid')) {
+                return '/assets/img/dashboard/channel_jd.png';
+            }
+            if (channel_code.toLowerCase().includes('lzda')) {
+                return '/assets/img/dashboard/channel_lazada.png';
+            }
+            if (channel_code.toLowerCase().includes('shpe')) {
+                return '/assets/img/dashboard/channel_shopee.png';
+            }
+            if (channel_code.toLowerCase().includes('srcl')) {
+                return '/assets/img/dashboard/channel_sirclo.png';
+            }
+            if (channel_code.toLowerCase().includes('tkpd')) {
+                return '/assets/img/dashboard/channel_tokopedia.png';
+            }
+            if (channel_code.toLowerCase().includes('zlra')) {
+                return '/assets/img/dashboard/channel_zalora.png';
+            }
+            return `/assets/img/dashboard/${channel_code}.png`;
         }
         return null;
     };
@@ -90,7 +95,12 @@ const OrderQueueEditContent = (props) => {
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeaderWithIcon">
-                            <img src={iconFilter(orderQueue.channelCode)} alt="" className="iconHeader" />
+                            <img
+                                src={iconFilter(orderQueue.channelCode)}
+                                alt=""
+                                className="iconHeader"
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
                             {orderQueue.channelName}
                         </h5>
                     </div>

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable arrow-body-style */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint max-len: ["error", { "code": 250 }] */
@@ -77,32 +79,35 @@ const DashboardContent = (props) => {
     };
 
     const iconFilter = (framework, channel_code) => {
-        if (framework === 'M1' || framework === 'M2') {
-            return '/assets/img/dashboard/channel_official.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
-            return '/assets/img/dashboard/channel_bukalapak.svg';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
-            return '/assets/img/dashboard/channel_blibli.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
-            return '/assets/img/dashboard/channel_jd.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
-            return '/assets/img/dashboard/channel_lazada.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
-            return '/assets/img/dashboard/channel_shopee.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
-            return '/assets/img/dashboard/channel_sirclo.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
-            return '/assets/img/dashboard/channel_tokopedia.png';
-        }
-        if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
-            return '/assets/img/dashboard/channel_zalora.png';
+        if (channel_code) {
+            if (framework === 'M1' || framework === 'M2') {
+                return '/assets/img/dashboard/channel_official.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('bklp')) {
+                return '/assets/img/dashboard/channel_bukalapak.svg';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('blib')) {
+                return '/assets/img/dashboard/channel_blibli.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('jdid')) {
+                return '/assets/img/dashboard/channel_jd.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('lzda')) {
+                return '/assets/img/dashboard/channel_lazada.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('shpe')) {
+                return '/assets/img/dashboard/channel_shopee.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('srcl')) {
+                return '/assets/img/dashboard/channel_sirclo.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('tkpd')) {
+                return '/assets/img/dashboard/channel_tokopedia.png';
+            }
+            if (framework === 'Marketplace' && channel_code.toLowerCase().includes('zlra')) {
+                return '/assets/img/dashboard/channel_zalora.png';
+            }
+            return `/assets/img/dashboard/${channel_code}.png`;
         }
         return null;
     };
@@ -289,7 +294,12 @@ const DashboardContent = (props) => {
                                 {channelListData.map((e, idx) => (
                                     <tr key={idx}>
                                         <td className={clsx(borderColorFilter(e.framework, e.channel_code), 'channelIcon')}>
-                                            <img className={styles.imageIcon} alt="" src={iconFilter(e.framework, e.channel_code)} />
+                                            <img
+                                                className={styles.imageIcon}
+                                                alt=""
+                                                src={iconFilter(e.framework, e.channel_code)}
+                                                onError={(event) => event.target.style.display = 'none'}
+                                            />
                                         </td>
                                         <td>{e.channel_name}</td>
                                         <td>{e.channel_name}</td>
