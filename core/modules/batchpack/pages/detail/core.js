@@ -13,7 +13,6 @@ const ContentWrapper = (props) => {
     const [showModal, setShowModal] = React.useState(false);
     const [nextShipment, setNextShipment] = React.useState(null);
     const packlist = data.getPackList.data[0];
-    const [packShipment] = gqlService.packShipment();
 
     const packList = {
         entityId: packlist.entity_id,
@@ -36,30 +35,11 @@ const ContentWrapper = (props) => {
         shipping: packlist.channel_shipping_label,
     };
 
-    const handleDone = () => {
-        const variables = {
-            id: packList.entityId,
-        };
-        window.backdropLoader(true);
-        packShipment({
-            variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Shipment was packed',
-                variant: 'success',
-            });
-            nextStoreShipmentList();
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
-    };
+    const [packShipment] = gqlService.packShipment({
+        variables: {
+            id: [Number(packList.entityId)],
+        },
+    });
 
     const [nextStoreShipmentList] = gqlService.nextStoreShipmentList({
         variables: {
@@ -73,11 +53,9 @@ const ContentWrapper = (props) => {
         },
         onCompleted: (res) => {
             window.backdropLoader(false);
-            if (res && res.getStoreShipmentList && res.getStoreShipmentList.items) {
+            if (res && res.getStoreShipmentList && res.getStoreShipmentList.items[0] && res.getStoreShipmentList.items[0].entity_id) {
                 setNextShipment(res.getStoreShipmentList.items[0].entity_id);
-                console.log(res.getStoreShipmentList.items[0].entity_id, 9);
             }
-            console.log(res);
             setShowModal(true);
         },
         onError: (e) => {
@@ -89,6 +67,12 @@ const ContentWrapper = (props) => {
             });
         },
     });
+
+    const handleDone = async () => {
+        window.backdropLoader(true);
+        await packShipment();
+        nextStoreShipmentList();
+    };
 
     const contentProps = {
         packList,
