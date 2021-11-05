@@ -21,6 +21,7 @@ const OrderQueueListContent = (props) => {
         { field: 'created_at', headerName: 'Channel Order Date', sortable: true, hideable: true },
         { field: 'channel_order_status', headerName: 'Channel Order Status', sortable: true, hideable: true },
         { field: 'last_updated', headerName: 'Last Updated', sortable: true, hideable: true },
+        { field: 'acceptance_deadline', headerName: 'Acceptance Deadline', sortable: true, hideable: true },
         { field: 'channel_code', headerName: 'Channel Code', sortable: true, hideable: true },
         { field: 'status', headerName: 'Queue Status', sortable: true, hideable: true },
         { field: 'error_log', headerName: 'Error Log', sortable: true, hideable: true },
@@ -105,7 +106,7 @@ const OrderQueueListContent = (props) => {
         ...orderQueue,
         id: orderQueue.id,
         actions: () => (
-            <Link href={`/sales/orderqueue/${tab_status}/edit/${orderQueue.id}`}>
+            <Link href={`/sales/${tab_status}/edit/${orderQueue.id}`}>
                 <a className="link-button">Edit</a>
             </Link>
         ),
@@ -192,7 +193,7 @@ const OrderQueueListContent = (props) => {
 
     return (
         <>
-            <Header />
+            <Header showBulkButton={tab_status === 'failed'} />
             <Table
                 filters={filters}
                 actions={actions}
