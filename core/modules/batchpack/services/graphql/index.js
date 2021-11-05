@@ -21,8 +21,8 @@ export const updatePickByBatchQtyPacked = (options) => useMutation(Schema.update
     ...options, ...context,
 });
 
-export const packShipment = (variables) => useMutation(Schema.packShipment, {
-    variables, ...context,
+export const packShipment = (options) => useMutation(Schema.packShipment, {
+    ...options, ...context,
 });
 
 export const nextStoreShipmentList = (options) => useLazyQuery(Schema.nextStoreShipmentList, {

@@ -80,7 +80,7 @@ const SourceImportData = (props) => {
                         <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />
                     </div>
                 ) : null}
-                {firstLoad ? (
+                {firstLoad || activityState?.loading ? (
                     <div className={classes.formFieldButton}>
                         <div className={clsx(classes.status)}>Loading...</div>
                     </div>
