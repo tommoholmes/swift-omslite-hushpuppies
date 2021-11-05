@@ -1,12 +1,12 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import clsx from 'clsx';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
-import gqlService from '@modules/orderqueue/services/graphql';
+import { formatPriceNumber } from '@helper_currency';
 
 const OrderQueueEditContent = (props) => {
     const {
@@ -14,30 +14,63 @@ const OrderQueueEditContent = (props) => {
         formikNew,
         orderQueue,
         parent,
+        aclCheckData,
     } = props;
     const classes = useStyles();
     const router = useRouter();
 
-    const convertToRupiah = (number) => {
-        const currencyFractionDigits = new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-        }).resolvedOptions().maximumFractionDigits;
-
-        const value = (number).toLocaleString('id-ID', { maximumFractionDigits: currencyFractionDigits });
-
-        return value;
+    const getClassByStatus = (status) => {
+        if (status === 'failed') {
+            return classes.statusFailed;
+        }
+        if (status === 'new') {
+            return classes.statusProcessing;
+        }
+        if (status === 'allocating') {
+            return classes.statusAllocating;
+        }
+        return classes.statusSuccess;
     };
 
-    const { loading: aclCheckLoading, data: aclCheckData } = gqlService.isAccessAllowed({
-        acl_code: 'sales_order_queue_edit_replacement',
-    });
+    const iconFilter = (channel_code) => {
+        if (channel_code) {
+            if (channel_code.toLowerCase().includes('swi')) {
+                return '/assets/img/dashboard/channel_official.png';
+            }
+            if (channel_code.toLowerCase().includes('bklp')) {
+                return '/assets/img/dashboard/channel_bukalapak.svg';
+            }
+            if (channel_code.toLowerCase().includes('blib')) {
+                return '/assets/img/dashboard/channel_blibli.png';
+            }
+            if (channel_code.toLowerCase().includes('jdid')) {
+                return '/assets/img/dashboard/channel_jd.png';
+            }
+            if (channel_code.toLowerCase().includes('lzda')) {
+                return '/assets/img/dashboard/channel_lazada.png';
+            }
+            if (channel_code.toLowerCase().includes('shpe')) {
+                return '/assets/img/dashboard/channel_shopee.png';
+            }
+            if (channel_code.toLowerCase().includes('srcl')) {
+                return '/assets/img/dashboard/channel_sirclo.png';
+            }
+            if (channel_code.toLowerCase().includes('tkpd')) {
+                return '/assets/img/dashboard/channel_tokopedia.png';
+            }
+            if (channel_code.toLowerCase().includes('zlra')) {
+                return '/assets/img/dashboard/channel_zalora.png';
+            }
+            return `/assets/img/dashboard/${channel_code}.png`;
+        }
+        return null;
+    };
 
     return (
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(parent ? `/sales/orderqueue/${parent}` : '/sales/orderqueue')}
+                onClick={() => router.push(parent ? `/sales/${parent}` : '/sales/orderqueue')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -50,175 +83,213 @@ const OrderQueueEditContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Detail Order Queue</h2>
+            <h2 className={classes.titleTop}>
+                {`Detail Shipment #${orderQueue.id}`}
+            </h2>
             <Paper className={classes.container}>
+                <div className={classes.contentHeader}>
+                    <div className="divHeader">
+                        <div className={getClassByStatus(orderQueue.status)}>
+                            {orderQueue.status}
+                        </div>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeaderWithIcon">
+                            <img
+                                src={iconFilter(orderQueue.channelCode)}
+                                alt=""
+                                className="iconHeader"
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
+                            {orderQueue.channelName}
+                        </h5>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Channel Order Number
+                        </h5>
+                        <span className="spanHeader">{orderQueue.channelOrderId}</span>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Channel Order Date
+                        </h5>
+                        <span className="spanHeader">{orderQueue.createdAt}</span>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Last Update
+                        </h5>
+                        <span className="spanHeader">{orderQueue.lastUpdated}</span>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Acceptance Deadline
+                        </h5>
+                        <span className="spanHeader">{orderQueue.acceptanceDeadline}</span>
+                    </div>
+                </div>
+
+                {orderQueue.isAllowReallocate
+                && (
+                    <div className={classes.content}>
+                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                            <div className={classes.orderLabel}>
+                                Order status is
+                                {' '}
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                            </div>
+                            <Button
+                                className={classes.btn}
+                                type="submit"
+                                onClick={formikAllocation.handleSubmit}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                Set as Allocating
+                            </Button>
+                        </div>
+                    </div>
+                )}
+
+                {orderQueue.isAllowRecreate
+                && (
+                    <div className={classes.content}>
+                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                            <div>
+                                Order status is
+                                {' '}
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                            </div>
+                            <Button
+                                className={classes.btn}
+                                type="submit"
+                                onClick={formikNew.handleSubmit}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                Set as New
+                            </Button>
+                        </div>
+                    </div>
+                ) }
+
                 <div className={classes.content}>
-                    <h5 className={classes.title}>Order & Account Information</h5>
-                    <div className={clsx(classes.contentLeft, classes.contentRight)}>
-                        <table className={classes.table}>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Order Date</td>
-                                    <td className={classes.td}>{orderQueue.lastUpdated}</td>
-                                    <td />
-                                    <td className={classes.td}>Customer Name</td>
-                                    <td className={classes.td}>
-                                        {orderQueue.firstnameShip}
-                                        {' '}
-                                        {orderQueue.lastnameShip}
-                                    </td>
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Order Status</td>
-                                    {(orderQueue.status === 'failed') ? (
-                                        <>
-                                            {(orderQueue.errorLog === 'Allocation not found') ? (
-                                                <td className={classes.td}>
-                                                    <Button
-                                                        className={clsx(classes.btn, 'set-as-button')}
-                                                        onClick={formikAllocation.handleSubmit}
-                                                        variant="contained"
-                                                    >
-                                                        Set As Reallocation
-                                                    </Button>
-                                                </td>
-                                            ) : (
-                                                <td className={classes.td}>
-                                                    <Button
-                                                        className={clsx(classes.btn, 'set-as-button')}
-                                                        onClick={formikNew.handleSubmit}
-                                                        variant="contained"
-                                                    >
-                                                        set as new
-                                                    </Button>
-                                                </td>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <td className={classes.td}>{orderQueue.status}</td>
-                                    )}
-                                    <td />
-                                    <td className={classes.td}>Email</td>
-                                    <td className={classes.td}>{orderQueue.email}</td>
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Channel Order ID</td>
-                                    <td className={classes.td}>{orderQueue.channelOrderId}</td>
-                                    <td />
-                                    <td className={classes.td} />
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Channel Name</td>
-                                    <td className={classes.td}>{orderQueue.channelCode}</td>
-                                    <td />
-                                    <td className={classes.td}>Customer Group</td>
-                                    <td className={classes.td}>{orderQueue.customerGroup}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div className={classes.grid}>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Customer Info</h5>
+                            <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_user.png" />
+                                {`${orderQueue.billing.firstname} ${orderQueue.billing.lastname}`}
+                            </span>
+                            <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_email.png" />
+                                {orderQueue.email}
+                            </span>
+                            <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_phone.png" />
+                                {orderQueue.billing.telephone}
+                            </span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Billing Address</h5>
+                            <span className={classes.orderLabel}>{orderQueue.billing.street}</span>
+                            <span className={classes.orderLabel}>{orderQueue.billing.city}</span>
+                            <span className={classes.orderLabel}>
+                                {`${orderQueue.billing.region}, 
+                                ${orderQueue.billing.postcode}, ${orderQueue.billing.country_name}`}
+                            </span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Shipping Address</h5>
+                            <span className={classes.orderLabel}>{orderQueue.shipping.street}</span>
+                            <span className={classes.orderLabel}>{orderQueue.shipping.city}</span>
+                            <span className={classes.orderLabel}>
+                                {`${orderQueue.shipping.region},
+                                ${orderQueue.shipping.postcode}, ${orderQueue.shipping.country_name}`}
+                            </span>
+                        </div>
+                    </div>
+                    <br />
+                    <div className={classes.grid}>
+                        <div className="grid-child" />
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Payment Method</h5>
+                            <span className={classes.orderLabel}>{orderQueue.channelPaymentMethod}</span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Shipping Method</h5>
+                            <span className={classes.orderLabel}>{orderQueue.channelShippingMethod}</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <h5 className={classes.titleSmall}>Items Ordered</h5>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table className={classes.table}>
+                                <tbody>
+                                    <tr className={classes.tr}>
+                                        <th className={classes.th} style={{ paddingLeft: 0 }}>SKU Product</th>
+                                        <th className={classes.th}>Name</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Price</th>
+                                        <th className={classes.th} style={{ textAlign: 'right' }}>Discount Amount</th>
+                                        <th className={classes.th}>Location Code</th>
+                                        <th className={classes.th}>Pickup At</th>
+                                        {(aclCheckData && aclCheckData.isAccessAllowed) === true
+                                            && <th className={classes.th}>Replacement For</th>}
+                                    </tr>
+                                    {orderQueue.orderItem.map((e) => (
+                                        <tr>
+                                            <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
+                                            <td className={classes.td}>{e.name}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
+                                            <td className={classes.td} style={{ textAlign: 'right' }}>{e.discount_amount}</td>
+                                            <td className={classes.td}>{e.loc_code || '-'}</td>
+                                            <td className={classes.td}>{e.pickup_name || '-'}</td>
+                                            {(aclCheckData && aclCheckData.isAccessAllowed) === true
+                                                && <td className={classes.td}>{e.replacement_for || '-'}</td>}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div className={classes.content}>
-                    <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Billing Address</h5>
-                        <span className={classes.orderLabel}>
-                            {orderQueue.firstname}
-                            {' '}
-                            {orderQueue.lastname}
-                        </span>
-                        <span className={classes.orderLabel}>{orderQueue.street}</span>
-                        <span className={classes.orderLabel}>
-                            {orderQueue.city}
-                            ,
-                            {' '}
-                            {orderQueue.region}
-                            ,
-                            {' '}
-                            {orderQueue.postcode}
-                        </span>
-                        <span className={classes.orderLabel}>{orderQueue.countryId}</span>
-                        <span className={classes.orderLabel}>{orderQueue.telephone}</span>
+                    <div className={classes.gridTotal}>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmallBlack}>Shipping Cost</h5>
+                            <span className={classes.dataSmallBlack}>{formatPriceNumber(orderQueue.shippingCost)}</span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmallBlack}>Order Totals</h5>
+                            <span className={classes.dataSmallBlack}>
+                                Grand Total
+                                {' '}
+                                {formatPriceNumber(orderQueue.grandTotal)}
+                            </span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmallBlack}>Notes for This Order</h5>
+                            <span className={classes.dataSmallBlack}>{orderQueue.notes || '-'}</span>
+                        </div>
                     </div>
-                    <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Shipping Adress</h5>
-                        <span className={classes.orderLabel}>{orderQueue.firstnameShip}</span>
-                        <span className={classes.orderLabel}>{orderQueue.streetShip}</span>
-                        <span className={classes.orderLabel}>
-                            {orderQueue.cityShip}
-                            ,
-                            {' '}
-                            {orderQueue.regionShip}
-                            ,
-                            {' '}
-                            {orderQueue.postcodeShip}
-                        </span>
-                        <span className={classes.orderLabel}>{orderQueue.countryIdShip}</span>
-                        <span className={classes.orderLabel}>{orderQueue.telephoneShip}</span>
-                    </div>
+                    {/* <div className={classes.gridTotal}>
+                        <div className="grid-child" />
+                        <div className="grid-child" />
+                        <div className="grid-child" style={{ textAlign: 'right' }}>
+                            <Button
+                                className={classes.btn}
+                                type="submit"
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                Edit Order
+                            </Button>
+                        </div>
+                    </div> */}
                 </div>
-                <div className={classes.content}>
-                    <div className={classes.contentLeft}>
-                        <h5 className={clsx(classes.title, 'title-information')}>Payment Information</h5>
-                        <span className={classes.orderLabel}>{orderQueue.channelPaymentMethod}</span>
-                    </div>
-                    <div className={classes.contentLeft}>
-                        <h5 className={clsx(classes.title, 'title-information')}>Shipping & Handling Information</h5>
-                        <span className={classes.orderLabel}>{orderQueue.channelShippingMethod}</span>
-                    </div>
-                </div>
-                <div className={classes.content}>
-                    <h5 className={classes.title}>Items Ordered</h5>
-                    <table className={classes.table}>
-                        <tbody>
-                            <tr className={classes.tr}>
-                                <th className={classes.th}>SKU Product</th>
-                                <th className={classes.th}>Base Price</th>
-                                <th className={classes.th}>Sell Price</th>
-                                <th className={classes.th}>QTY</th>
-                                <th className={classes.th}>Discount Amount</th>
-                                <th className={classes.th}>Location Code</th>
-                                <th className={classes.th}>Pickup At</th>
-                                {(aclCheckData && aclCheckData.isAccessAllowed) === true
-                                    && <th className={classes.th}>Replacement For</th>}
-                            </tr>
-                            {orderQueue.orderItem.map((e) => (
-                                <tr>
-                                    <td className={classes.td}>{e.sku}</td>
-                                    <td className={clsx(classes.td, 'price')}><span>{convertToRupiah(e.base_price)}</span></td>
-                                    <td className={clsx(classes.td, 'price')}><span>{convertToRupiah(e.sell_price)}</span></td>
-                                    <td className={classes.td}>{e.qty}</td>
-                                    <td className={classes.td}>{e.discount_amount}</td>
-                                    <td className={classes.td}>{e.loc_code}</td>
-                                    <td className={classes.td}>{e.pickup_name}</td>
-                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true
-                                        && <td className={classes.td}>{e.replacement_for}</td>}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <div className={classes.content}>
-                    <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Notes for this Order</h5>
-                        <span className={classes.orderLabel}>{orderQueue.custom_order_attributes.remark}</span>
-                        <br />
-                    </div>
-                    <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Order Totals</h5>
-                        <table className={classes.table}>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <th className={classes.th}>Shipping Cost</th>
-                                    <td className={classes.td}>{convertToRupiah(orderQueue.shippingCost)}</td>
-                                </tr>
-                                <tr>
-                                    <th className={classes.th}>Grand Total</th>
-                                    <td className={classes.td}>{convertToRupiah(orderQueue.grandTotal)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
             </Paper>
         </>
     );

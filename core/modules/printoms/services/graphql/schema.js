@@ -78,6 +78,7 @@ export const getAddress = gql`
                 entity_id
                 channel{
                     channel_name
+                    channel_code
                 }
                 ref_barcode
                 marketplace_order_number
