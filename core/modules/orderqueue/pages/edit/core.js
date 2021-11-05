@@ -10,6 +10,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
         parent,
+        aclCheckData,
     } = props;
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
@@ -43,35 +44,28 @@ const ContentWrapper = (props) => {
     };
 
     const orderQueue = {
+        id: orderqueue.id,
         lastUpdated: orderqueue.last_updated,
+        createdAt: orderqueue.created_at,
         status: orderqueue.status,
         channelOrderId: orderqueue.channel_order_increment_id,
         channelCode: orderqueue.channel_code,
+        acceptanceDeadline: orderqueue.acceptance_deadline,
         email: orderqueue.email,
         customerGroup: orderqueue.customer_group,
         custom_order_attributes: JSON.parse(orderqueue.custom_order_attributes),
-        firstname: orderqueue.billing_address.firstname,
-        lastname: orderqueue.billing_address.lastname,
-        street: orderqueue.billing_address.street,
-        city: orderqueue.billing_address.city,
-        region: orderqueue.billing_address.region,
-        postcode: orderqueue.billing_address.postcode,
-        countryId: orderqueue.billing_address.country_id,
-        telephone: orderqueue.billing_address.telephone,
-        firstnameShip: orderqueue.shipping_address.firstname,
-        lastnameShip: orderqueue.shipping_address.lastname,
-        streetShip: orderqueue.shipping_address.street,
-        cityShip: orderqueue.shipping_address.city,
-        regionShip: orderqueue.shipping_address.region,
-        postcodeShip: orderqueue.shipping_address.postcode,
-        countryIdShip: orderqueue.shipping_address.country_id,
-        telephoneShip: orderqueue.shipping_address.telephone,
+        billing: orderqueue.billing_address,
+        shipping: orderqueue.shipping_address,
         channelPaymentMethod: orderqueue.channel_payment_method,
         channelShippingMethod: orderqueue.channel_shipping_method,
+        channelName: orderqueue.channel_name,
         orderItem: orderqueue.order_item,
         errorLog: orderqueue.error_log,
         shippingCost: orderqueue.channel_shipping_cost,
         grandTotal: orderqueue.channel_grand_total,
+        isAllowReallocate: orderqueue.is_allow_to_reallocate_order,
+        isAllowRecreate: orderqueue.is_allow_to_recreate_order,
+        notes: orderqueue.notes,
     };
 
     const formikAllocation = useFormik({
@@ -103,6 +97,7 @@ const ContentWrapper = (props) => {
         formikNew,
         orderQueue,
         parent,
+        aclCheckData,
     };
 
     return (
@@ -116,7 +111,11 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = gqlService.isAccessAllowed({
+        acl_code: 'sales_order_queue_edit_replacement',
+    });
+
+    if (loading || aclCheckLoading) {
         return (
             <Layout>Loading...</Layout>
         );
@@ -130,7 +129,12 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} parent={router && router.query && router.query.tab_status} />
+            <ContentWrapper
+                data={data}
+                aclCheckData={aclCheckData}
+                parent={router && router.query && router.query.tab_status}
+                {...props}
+            />
         </Layout>
     );
 };

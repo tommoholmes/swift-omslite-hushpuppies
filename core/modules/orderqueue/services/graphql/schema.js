@@ -43,6 +43,8 @@ export const getOrderQueueById = gql`
             id: $id
         ){
             id
+            is_allow_to_reallocate_order
+            is_allow_to_recreate_order
             last_updated
             status
             acceptance_deadline
@@ -89,7 +91,9 @@ export const getOrderQueueById = gql`
                 loc_code
                 pickup_name
                 replacement_for
+                name
             }
+            notes
             oms_order_status
             channel_grand_total
         }
