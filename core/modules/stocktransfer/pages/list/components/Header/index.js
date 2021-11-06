@@ -11,10 +11,10 @@ const HeaderContent = (props) => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Manage Stock Transfer</h2>
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/cataloginventory/stocktransfer/import')}
-            >
+            <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/stocktransfer/add')}>
+                Add Stock Transfer
+            </Button>
+            <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/stocktransfer/import')}>
                 Upload Stock Transfer
             </Button>
         </div>
