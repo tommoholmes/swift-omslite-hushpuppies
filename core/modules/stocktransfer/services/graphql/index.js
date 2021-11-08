@@ -41,6 +41,18 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
     ...context,
 });
 
+export const getUploadStockTransferList = (variables) => useLazyQuery(Schema.getUploadStockTransferList, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
+export const getUploadStockTransferItems = (variables) => useQuery(Schema.getUploadStockTransferItems, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
 export default {
     getStockTransferList,
     getStockTransferById,
@@ -48,4 +60,6 @@ export default {
     downloadSampleCsv,
     createStockTransfer,
     updateStockTransfer,
+    getUploadStockTransferList,
+    getUploadStockTransferItems,
 };

@@ -6,9 +6,7 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/stocktransfer/services/graphql';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
     const router = useRouter();
     const [uploadStockTransfer] = gqlService.uploadStockTransfer();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'stock_transfer' });
@@ -19,31 +17,31 @@ const Core = (props) => {
 
     const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
 
-    const handleSubmit = ({
-        binary,
-    }) => {
+    const handleSubmit = ({ binary }) => {
         const variables = {
             binary,
         };
         window.backdropLoader(true);
         uploadStockTransfer({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Export Source',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Export Source',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/cataloginventory/stocktransfer'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/cataloginventory/stocktransfer'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({

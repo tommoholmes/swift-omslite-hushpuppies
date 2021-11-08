@@ -151,7 +151,7 @@ const StockTransferAdd = (props) => {
             </Head>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/cataloginventory/stocktrasnfer')}
+                onClick={() => router.push('/cataloginventory/stocktransfer')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

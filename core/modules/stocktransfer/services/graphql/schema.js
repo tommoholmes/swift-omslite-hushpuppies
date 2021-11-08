@@ -83,10 +83,49 @@ export const downloadSampleCsv = gql`
     }
 `;
 
+export const getUploadStockTransferList = gql`
+    query getUploadStockTransferList(
+        $pageSize: Int!
+        $currentPage: Int!
+        $filter: UploadStockTransferFilterInput
+        $sort: UploadStockTransferSortInput
+    ) {
+        getUploadStockTransferList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
+            items {
+                entity_id
+                created_at
+                created_by
+                filename
+                url
+            }
+            page_info {
+                current_page
+            }
+            total_count
+        }
+    }
+`;
+
+export const getUploadStockTransferItems = gql`
+    query getUploadStockTransferItems($id: Int!) {
+        getUploadStockTransferItems(id: $id) {
+            entity_id
+            error_messages
+            quantity
+            sku
+            source_location_code
+            stock_transfer_increment_id
+            target_location_code
+            upload_id
+        }
+    }
+`;
+
 export default {
     getStockTransferList,
     getStockTransferById,
     uploadStockTransfer,
     downloadSampleCsv,
     createStockTransfer,
+    getUploadStockTransferItems,
 };

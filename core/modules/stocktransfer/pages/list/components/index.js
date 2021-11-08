@@ -42,7 +42,7 @@ const StockTransferListContent = (props) => {
         ...stockTransfer,
         id: stockTransfer.entity_id,
         actions: () => (
-            <Link href={`/cataloginventory/stocktransfer/edit/${stockTransfer.entity_id}`}>
+            <Link href={`/cataloginventory/stocktransfer/${stockTransfer.entity_id}/edit`}>
                 <a className="link-button">View</a>
             </Link>
         ),
