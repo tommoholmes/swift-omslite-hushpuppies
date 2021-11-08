@@ -9,13 +9,14 @@ const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        allowManualConfirm,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByBatchItemById.pick_by_batch_item;
     const [updatePickByBatchItem] = gqlService.updatePickByBatchItem();
 
     let [count, setCount] = React.useState(picklist.qty_picked);
-    const [visibility, setVisibility] = React.useState(false);
+    const [visibility, setVisibility] = React.useState(!!allowManualConfirm);
 
     const handleSubmit = () => {
         const variables = {
@@ -61,7 +62,7 @@ const ContentWrapper = (props) => {
         if (code === picklist.sku) {
             incrementCount();
             setVisibility(true);
-        } else {
+        } else if (!allowManualConfirm) {
             setVisibility(false);
         }
     };
@@ -95,11 +96,12 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig();
     const { loading, data } = gqlService.getPickByBatchItemById({
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    if (loading || loadingConfig) {
         return (
             <Layout>Loading...</Layout>
         );
@@ -113,7 +115,7 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} />
+            <ContentWrapper data={data} allowManualConfirm={dataConfig.getStoreConfig === '1'} {...props} />
         </Layout>
     );
 };
