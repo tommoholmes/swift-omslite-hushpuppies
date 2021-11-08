@@ -9,12 +9,18 @@ const PrintPickContent = (props) => {
         pickList,
     } = props;
     const classes = useStyles();
-    const [show, setShow] = useState('non-hide');
+    // const [show, setShow] = useState('non-hide');
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            window.print();
+        }, 2000);
+    }, [pickList]);
 
     return (
         <>
             <Paper className={classes.container}>
-                <div className={classes.content}>
+                {/* <div className={classes.content}>
                     <img className="imgIcon" alt="" src="/assets/img/swiftoms_logo_expanded.png" />
                     <h2 className={classes.titleTop}>Pick List</h2>
                     <h5 className={classes.title}>
@@ -35,7 +41,7 @@ const PrintPickContent = (props) => {
                     >
                         Print
                     </Button>
-                </div>
+                </div> */}
                 <div className={classes.content}>
                     <table className={classes.table}>
                         <tbody>
