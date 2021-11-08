@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -7,7 +7,7 @@ import gqlService from '@modules/source/services/graphql';
 const Core = (props) => {
     const { Content } = props;
     const [updateSource] = gqlService.updateSource();
-    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
+    const [downloadList] = gqlService.downloadSampleCsv();
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
     const [showProgress, setshowProgress] = React.useState(false);
@@ -35,12 +35,26 @@ const Core = (props) => {
         },
     });
 
-    useEffect(() => {
-        downloadList();
+    const [urlDownload, setUrlDownload] = useState([]);
+
+    useEffect(async () => {
         getActivity();
+        try {
+            const [resSource, resSourceSaleable] = await Promise.all([
+                downloadList({ variables: { type: 'source' } }),
+                downloadList({ variables: { type: 'source_upload_saleable' } }),
+            ]);
+
+            setUrlDownload([resSource.data.downloadSampleCsv, resSourceSaleable.data.downloadSampleCsv]);
+            // eslint-disable-next-line no-empty
+        } catch (error) {}
     }, []);
 
-    const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
+    // useEffect(() => {
+    //     if (downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv) {
+    //         setUrlDownload(downloadListRes.data.downloadSampleCsv);
+    //     }
+    // }, [downloadListRes.data]);
 
     const handleSubmit = ({ binary }) => {
         setshowProgress(false);

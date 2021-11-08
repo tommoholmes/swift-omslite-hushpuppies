@@ -11,9 +11,9 @@ const StockTransferListContent = (props) => {
     const stockTransferTotal = (data && data.getStockTransferList && data.getStockTransferList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'ID', hideable: 'true', sortable: true, initialSort: 'ASC' },
-        { field: 'source_loc_code', headerName: 'Source Location Code', hideable: 'true', sortable: true },
-        { field: 'target_loc_code', headerName: 'Target Location Code', hideable: 'true', sortable: true },
+        { field: 'increment_id', headerName: 'ID', hideable: 'true', sortable: true, initialSort: 'DESC' },
+        { field: 'source_loc_name', headerName: 'Source Location Name', hideable: 'true', sortable: true },
+        { field: 'target_loc_name', headerName: 'Target Location Name', hideable: 'true', sortable: true },
         { field: 'status', headerName: 'Status', hideable: 'true', sortable: true },
         { field: 'created_by', headerName: 'Created By', hideable: 'true', sortable: true },
         { field: 'created_at', headerName: 'Created At', hideable: 'true', sortable: true },
@@ -24,8 +24,8 @@ const StockTransferListContent = (props) => {
 
     const filters = [
         { field: 'increment_id', name: 'increment_id', type: 'like', label: 'ID', initialValue: '' },
-        { field: 'source_loc_code', name: 'source_loc_code', type: 'like', label: 'Source Location Code', initialValue: '' },
-        { field: 'target_loc_code', name: 'target_loc_code', type: 'like', label: 'Target Location Code', initialValue: '' },
+        { field: 'source_loc_name', name: 'source_loc_name', type: 'like', label: 'Source Location Name', initialValue: '' },
+        { field: 'target_loc_name', name: 'target_loc_name', type: 'like', label: 'Target Location Name', initialValue: '' },
         { field: 'created_by', name: 'created_by', type: 'like', label: 'Created By', initialValue: '' },
         { field: 'confirmed_by', name: 'confirmed_by', type: 'like', label: 'Confirmed By', initialValue: '' },
     ];
@@ -42,20 +42,12 @@ const StockTransferListContent = (props) => {
         ...stockTransfer,
         id: stockTransfer.entity_id,
         actions: () => (
-            <Link href={`/cataloginventory/stocktransfer/edit/${stockTransfer.entity_id}`}>
+            <Link href={`/cataloginventory/stocktransfer/${stockTransfer.entity_id}/edit`}>
                 <a className="link-button">View</a>
             </Link>
         ),
-        status: () => (
-            <>{getStatus(stockTransfer.status)}</>
-        ),
+        status: () => <>{getStatus(stockTransfer.status)}</>,
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>
@@ -67,6 +59,7 @@ const StockTransferListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={stockTransferTotal}
+                hideActions
             />
         </>
     );

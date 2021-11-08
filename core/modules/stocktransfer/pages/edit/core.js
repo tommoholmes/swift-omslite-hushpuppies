@@ -4,24 +4,69 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/stocktransfer/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const stockTransfer = data.getStockTransferById;
+    const router = useRouter();
 
-    const stockTransferDetail = {
-        incrementID: stockTransfer.increment_id,
-        items: stockTransfer.items,
+    const initialValues = {
+        entity_id: stockTransfer.entity_id,
+        increment_id: stockTransfer.increment_id,
+        source_location: stockTransfer.source_loc_code ? { loc_name: stockTransfer.source_loc_name, loc_code: stockTransfer.source_loc_code } : null,
+        target_location: stockTransfer.target_loc_code ? { loc_name: stockTransfer.target_loc_name, loc_code: stockTransfer.target_loc_code } : null,
+        reason: stockTransfer.reason,
+        apply: false,
+        data: stockTransfer.items.map((item) => ({
+            ...item,
+            sku: { sku: item.sku, source_id: item.source_id },
+            transfer: item.transfer_qty,
+            qty: item.source_qty,
+        })),
+    };
+
+    const [updateStockTransfer] = gqlService.updateStockTransfer();
+
+    const submitHandler = async (values) => {
+        window.backdropLoader(true);
+        const fixValues = {
+            ...values,
+            data: values.data.map((item) => ({ sku: item.sku.sku, qty: item.qty, transfer: item.transfer })),
+            source_location: values.source_location.loc_code,
+            target_location: values.target_location.loc_code,
+        };
+        const id = fixValues.entity_id;
+        delete fixValues.increment_id;
+        delete fixValues.entity_id;
+        try {
+            await updateStockTransfer({
+                variables: {
+                    id,
+                    input: fixValues,
+                },
+            });
+
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success edit stock adjustment',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/cataloginventory/stocktransfer'), 250);
+        } catch (error) {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: error.message,
+                variant: 'error',
+            });
+        }
     };
 
     const contentProps = {
-        stockTransferDetail,
+        initialValues,
+        submitHandler,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -31,15 +76,11 @@ const Core = (props) => {
     });
 
     if (loading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        return <Layout>Data not found!</Layout>;
     }
 
     return (

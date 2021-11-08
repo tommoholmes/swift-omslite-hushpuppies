@@ -23,6 +23,7 @@ const SourceImportData = (props) => {
     const {
         formik, urlDownload, handleDropFile, activityState, firstLoad, showProgress,
     } = props;
+
     const classes = useStyles();
     const router = useRouter();
     return (
@@ -51,11 +52,19 @@ const SourceImportData = (props) => {
                 <span className={clsx(classes.textAttach, classes.label)}>ATTACH FILE</span>
                 <div className={classes.content}>
                     <div className={classes.formField}>
-                        <span className={classes.label}>
-                            <a href={urlDownload} className={classes.linkDownload}>
-                                Download Total Quantity Sample CSV
-                            </a>
-                        </span>
+                        {urlDownload?.length === 2 && (
+                            <>
+                                <span className={classes.label}>
+                                    <a href={urlDownload[0]} className={classes.linkDownload}>
+                                        Download Total Quantity Sample CSV
+                                    </a>
+                                    <br />
+                                    <a href={urlDownload[1]} className={classes.linkDownload}>
+                                        Download Saleable Quantity Sample CSV
+                                    </a>
+                                </span>
+                            </>
+                        )}
                     </div>
                     <div className={clsx(classes.formField, classes.textLeft)}>
                         <DropFile

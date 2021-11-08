@@ -9,20 +9,48 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
+export const createStockTransfer = (variables) => useMutation(Schema.createStockTransfer, {
+    variables,
+    ...context,
+});
+
+export const updateStockTransfer = (variables) => useMutation(Schema.updateStockTransfer, {
+    variables,
+    ...context,
+});
+
 export const getStockTransferList = (variables) => useLazyQuery(Schema.getStockTransferList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getStockTransferById = (variables) => useQuery(Schema.getStockTransferById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const uploadStockTransfer = (variables) => useMutation(Schema.uploadStockTransfer, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
-    variables, ...context,
+    variables,
+    ...context,
+});
+
+export const getUploadStockTransferList = (variables) => useLazyQuery(Schema.getUploadStockTransferList, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
+export const getUploadStockTransferItems = (variables) => useQuery(Schema.getUploadStockTransferItems, {
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export default {
@@ -30,4 +58,8 @@ export default {
     getStockTransferById,
     uploadStockTransfer,
     downloadSampleCsv,
+    createStockTransfer,
+    updateStockTransfer,
+    getUploadStockTransferList,
+    getUploadStockTransferItems,
 };
