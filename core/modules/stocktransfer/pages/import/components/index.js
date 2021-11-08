@@ -28,16 +28,29 @@ const StockTransferImport = (props) => {
 
     const columns = [
         {
-            field: 'entity_id', headerName: 'ID', hideable: 'true', sortable: true, initialSort: 'DESC',
+            field: 'entity_id',
+            headerName: 'ID',
+            hideable: 'true',
+            sortable: true,
+            initialSort: 'DESC',
         },
         {
-            field: 'filename', headerName: 'FileName', hideable: 'true', sortable: false,
+            field: 'filename',
+            headerName: 'FileName',
+            hideable: 'true',
+            sortable: false,
         },
         {
-            field: 'created_by', headerName: 'Created By', hideable: 'true', sortable: true,
+            field: 'created_by',
+            headerName: 'Created By',
+            hideable: 'true',
+            sortable: true,
         },
         {
-            field: 'created_at', headerName: 'Created At', hideable: 'true', sortable: true,
+            field: 'created_at',
+            headerName: 'Created At',
+            hideable: 'true',
+            sortable: true,
         },
         { field: 'file', headerName: 'File' },
         { field: 'actions', headerName: 'Action' },
@@ -45,10 +58,18 @@ const StockTransferImport = (props) => {
 
     const filters = [
         {
-            field: 'entity_id', name: 'entity_id', type: 'like', label: 'ID', initialValue: '',
+            field: 'entity_id',
+            name: 'entity_id',
+            type: 'like',
+            label: 'ID',
+            initialValue: '',
         },
         {
-            field: 'created_by', name: 'created_by', type: 'like', label: 'Created By', initialValue: '',
+            field: 'created_by',
+            name: 'created_by',
+            type: 'like',
+            label: 'Created By',
+            initialValue: '',
         },
     ];
 
@@ -90,6 +111,7 @@ const StockTransferImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Upload Stock Transfer</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <span className={classes.label}>
@@ -97,9 +119,8 @@ const StockTransferImport = (props) => {
                                 Download the Sample CSV
                             </a>
                         </span>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                     </div>
-                    <div className={classes.formField}>
+                    <div className={clsx(classes.formField, classes.textLeft)}>
                         <DropFile
                             title="Please select the file : "
                             error={formik.errors.binary && formik.touched.binary}
