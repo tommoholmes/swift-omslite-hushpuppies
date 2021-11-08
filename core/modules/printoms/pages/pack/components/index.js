@@ -10,13 +10,19 @@ const PrintPickContent = (props) => {
         packList,
     } = props;
     const classes = useStyles();
-    const [show, setShow] = useState('non-hide');
+    // const [show, setShow] = useState('non-hide');
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            window.print();
+        }, 2000);
+    }, [packList]);
 
     return (
         <>
             {(packList.dataPack) && (
                 <>
-                    <div className={classes.containerBtn}>
+                    {/* <div className={classes.containerBtn}>
                         <div className={classes.content}>
                             <Button
                                 onClick={() => {
@@ -33,7 +39,7 @@ const PrintPickContent = (props) => {
                                 Print
                             </Button>
                         </div>
-                    </div>
+                    </div> */}
                     {packList.dataPack.map((eParent) => (
                         <Paper className={classes.container}>
                             <div className={classes.content}>
