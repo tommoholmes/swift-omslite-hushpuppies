@@ -19,13 +19,11 @@ import gqlLocation from '@modules/location/services/graphql';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import clsx from 'clsx';
 import gqlSource from '@modules/source/services/graphql';
-import Cookies from 'js-cookie';
-import { custDataNameCookie } from '@config';
 import * as Yup from 'yup';
 import Head from 'next/head';
 
 const StockTransferEdit = (props) => {
-    const [getLocationList, getLocationListRes] = gqlLocation.getLocationList();
+    const [getStoreLocationList, getStoreLocationListRes] = gqlLocation.getStoreLocationList();
     const [getSourceList, getSourceListRes] = gqlSource.getSourceList();
     const { initialValues, submitHandler } = props;
     const classes = useStyles();
@@ -33,7 +31,6 @@ const StockTransferEdit = (props) => {
     const [locID, setLocID] = React.useState(0);
     const [searchSku, setSearchSku] = React.useState('');
     const [searchLocation, setSearchLocation] = React.useState('');
-    const [customer_loc_code, setCustomerLocCode] = React.useState([]);
     const [locationOption, setLocationOption] = React.useState([]);
     const [baseSkuOption, setBaseSkuOption] = React.useState([]);
     const [focusedForm, setFocusedForm] = React.useState({});
@@ -75,28 +72,13 @@ const StockTransferEdit = (props) => {
     React.useEffect(() => {
         const onChangeTimeOut = setTimeout(
             () => {
-                let filter = {};
-                if (firstRender.current) {
-                    filter = {
-                        loc_code: {
-                            in: [initialValues.source_location.loc_code, initialValues.target_location.loc_code],
-                        },
-                    };
-                } else {
-                    filter = {
-                        loc_code: {
-                            in: customer_loc_code,
-                        },
-                    };
-                }
                 const isExist = searchLocation && locationOption.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchLocation?.toLowerCase()));
                 if (firstRender.current || (searchLocation && isExist.length === 0)) {
-                    getLocationList({
+                    getStoreLocationList({
                         variables: {
                             search: searchLocation,
                             pageSize: 20,
                             currentPage: 1,
-                            filter,
                         },
                     });
                     firstRender.current = false;
@@ -112,33 +94,24 @@ const StockTransferEdit = (props) => {
 
     React.useEffect(() => {
         if (
-            getLocationListRes
-            && getLocationListRes.data
-            && getLocationListRes.data.getLocationList
-            && getLocationListRes.data.getLocationList.items
+            getStoreLocationListRes
+            && getStoreLocationListRes.data
+            && getStoreLocationListRes.data.getStoreLocationList
+            && getStoreLocationListRes.data.getStoreLocationList.items
         ) {
-            if (firstRenderSetLocation.current && getLocationListRes.data.getLocationList.items.length > 0) {
-                const loc = getLocationListRes.data.getLocationList.items.filter((item) => item.loc_code === initialValues.source_location.loc_code);
+            if (firstRenderSetLocation.current && getStoreLocationListRes.data.getStoreLocationList.items.length > 0) {
+                const loc = getStoreLocationListRes.data.getStoreLocationList.items.filter(
+                    (item) => item.loc_code === initialValues.source_location.loc_code,
+                );
 
                 setLocID(loc[0].loc_id);
                 firstRenderSetLocation.current = false;
             }
 
             const ids = new Set(locationOption.map((d) => d.loc_code));
-            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items.filter((d) => !ids.has(d.loc_code))]);
+            setLocationOption([...locationOption, ...getStoreLocationListRes.data.getStoreLocationList.items.filter((d) => !ids.has(d.loc_code))]);
         }
-    }, [getLocationListRes.data]);
-
-    const handleSetUserInfo = (customer) => {
-        const customerLocCodeTemp = customer && customer.customer_loc_code;
-        setCustomerLocCode(customerLocCodeTemp.split(','));
-    };
-
-    React.useEffect(() => {
-        if (Cookies.getJSON(custDataNameCookie)) {
-            handleSetUserInfo(Cookies.getJSON(custDataNameCookie));
-        }
-    }, []);
+    }, [getStoreLocationListRes.data]);
 
     const editSchemaValidaton = Yup.object().shape({
         source_location: Yup.object().required('Required!'),
@@ -173,7 +146,7 @@ const StockTransferEdit = (props) => {
             <Head>
                 <title>
 Edit Stock Transfer #
-{initialValues.incrementID}
+{initialValues.increment_id}
 </title>
             </Head>
             <Button
@@ -195,12 +168,11 @@ Edit Stock Transfer #
 
             <h2 className={classes.titleTop}>
 Edit Stock Transfer #
-{initialValues.incrementID}
+{initialValues.increment_id}
 </h2>
 
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <h2 className={classes.title}>Stock Transfer Information</h2>
                     <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={editSchemaValidaton}>
                         {({
  values, setFieldValue, submitForm, errors, touched,
@@ -213,7 +185,7 @@ Edit Stock Transfer #
                                     <Autocomplete
                                         onFocus={() => setFocusedForm({ ...focusedForm, source_location: true })}
                                         onBlur={() => setFocusedForm({ ...focusedForm, source_location: false })}
-                                        mode="lazy"
+                                        mode={locationOption.length > 0 ? 'default' : 'lazy'}
                                         value={values.source_location}
                                         className={classes.autocompleteRoot}
                                         onChange={(e) => {
@@ -223,19 +195,14 @@ Edit Stock Transfer #
                                             setFocusedForm({ ...focusedForm, source_location: false });
                                         }}
                                         defaultValue={{ loc_name: 'select', loc_code: 0 }}
-                                        loading={focusedForm?.source_location && getLocationListRes.loading}
+                                        loading={focusedForm?.source_location && getStoreLocationListRes.loading}
                                         options={locationOption}
-                                        getOptions={getLocationList}
+                                        getOptions={getStoreLocationList}
                                         getOptionsVariables={{
                                             variables: {
                                                 search: searchLocation,
                                                 pageSize: 20,
                                                 currentPage: 1,
-                                                filter: {
-                                                    loc_code: {
-                                                        in: customer_loc_code,
-                                                    },
-                                                },
                                             },
                                         }}
                                         primaryKey="loc_code"
@@ -252,7 +219,7 @@ Edit Stock Transfer #
                                     <Autocomplete
                                         onFocus={() => setFocusedForm({ ...focusedForm, target_location: true })}
                                         onBlur={() => setFocusedForm({ ...focusedForm, target_location: false })}
-                                        mode="lazy"
+                                        mode={locationOption.length > 0 ? 'default' : 'lazy'}
                                         value={values.target_location}
                                         className={classes.autocompleteRoot}
                                         onChange={(e) => {
@@ -260,19 +227,14 @@ Edit Stock Transfer #
                                             setFieldValue('data', []);
                                         }}
                                         defaultValue={{ loc_name: 'select', loc_code: 0 }}
-                                        loading={focusedForm?.target_location && getLocationListRes.loading}
+                                        loading={focusedForm?.target_location && getStoreLocationListRes.loading}
                                         options={locationOption}
-                                        getOptions={getLocationList}
+                                        getOptions={getStoreLocationList}
                                         getOptionsVariables={{
                                             variables: {
                                                 search: searchLocation,
                                                 pageSize: 20,
                                                 currentPage: 1,
-                                                filter: {
-                                                    loc_code: {
-                                                        in: customer_loc_code,
-                                                    },
-                                                },
                                             },
                                         }}
                                         primaryKey="loc_code"
@@ -310,7 +272,7 @@ Edit Stock Transfer #
                                                                         {!item?.target_id ? (
                                                                             <Autocomplete
                                                                                 name={`data.${idx}.sku`}
-                                                                                mode="lazy"
+                                                                                mode={baseSkuOption.length > 0 ? 'default' : 'lazy'}
                                                                                 className={classes.autocomplete}
                                                                                 value={values.data[idx].sku}
                                                                                 onChange={(e) => {
@@ -379,6 +341,7 @@ Edit Stock Transfer #
                                                 )}
                                                 <div className={`${classes.formFieldButton} ${classes.formFieldButtonRight}`}>
                                                     <Button
+                                                        disabled={values.source_location === null}
                                                         className={classes.btn}
                                                         variant="contained"
                                                         onClick={() => push({
