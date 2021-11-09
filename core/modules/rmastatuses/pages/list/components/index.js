@@ -27,16 +27,13 @@ const RmaStatusesListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
             <Table
+                hideActions
+                hideFilters
+                hideColumns
                 rows={rows}
                 getRows={getRmaStatusList}
                 loading={loading}
