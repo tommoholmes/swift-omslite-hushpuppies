@@ -1,19 +1,54 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import TextField from '@common_textfield';
+import React, { useEffect, useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
-import { optionsHistory } from '@modules/updatestockbyfilehistory/helpers';
 import useStyles from '@modules/updatestockbyfilehistory/pages/create/components/style';
+import gqlService from '@modules/updatestockbyfilehistory/services/graphql';
 
 const UpdateStockHistoryContent = (props) => {
-    const {
-        formik,
-    } = props;
+    const { formik, getUpdateStockByFileHistoryListRes } = props;
     const classes = useStyles();
-    const router = useRouter();
+    const [getFileHistoryTypes, getFileHistoryTypesRes] = gqlService.getFileHistoryTypes();
+    const [listFiles, setListFiles] = useState({
+        message: '',
+        files: [],
+    });
+
+    useEffect(() => {
+        if (
+            getUpdateStockByFileHistoryListRes
+            && getUpdateStockByFileHistoryListRes.data
+            && getUpdateStockByFileHistoryListRes.data.getUpdateStockByFileHistoryList
+        ) {
+            if (getUpdateStockByFileHistoryListRes.data.getUpdateStockByFileHistoryList?.length === 0) {
+                setListFiles({
+                    ...listFiles,
+                    message: 'empty file history',
+                    files: getUpdateStockByFileHistoryListRes.data.getUpdateStockByFileHistoryList,
+                });
+            } else {
+                setListFiles({
+                    ...listFiles,
+                    files: getUpdateStockByFileHistoryListRes.data.getUpdateStockByFileHistoryList?.map((file) => {
+                        const url = new URL(file);
+                        const path = url.pathname.split('/');
+                        const filename = path[path.length - 1];
+                        return {
+                            url,
+                            filename,
+                        };
+                    }),
+                });
+            }
+        }
+        if (typeof window !== 'undefined' && window.backdropLoader && getUpdateStockByFileHistoryListRes.loading) {
+            window.backdropLoader(true);
+        } else if (typeof window !== 'undefined' && window.backdropLoader) {
+            window.backdropLoader(false);
+        }
+    }, [getUpdateStockByFileHistoryListRes]);
 
     return (
         <>
@@ -25,21 +60,39 @@ const UpdateStockHistoryContent = (props) => {
                             <span className={classes.label}>Type History</span>
                         </div>
                         <Autocomplete
+                            mode="lazy"
                             className={classes.autocompleteRoot}
-                            value={formik.values.code}
-                            onChange={(e) => formik.setFieldValue('code', e)}
-                            options={optionsHistory}
-                            error={!!(formik.touched.history && formik.errors.history)}
-                            helperText={(formik.touched.history && formik.errors.history) || ''}
+                            value={formik.values.type}
+                            onChange={(e) => formik.setFieldValue('type', e)}
+                            options={getFileHistoryTypesRes && getFileHistoryTypesRes.data && getFileHistoryTypesRes.data.getFileHistoryTypes}
+                            loading={getFileHistoryTypesRes.loading}
+                            getOptions={getFileHistoryTypes}
+                            error={!!(formik.touched.type && formik.errors.type)}
+                            helperText={(formik.touched.type && formik.errors.type) || ''}
+                            primaryKey="type"
+                            labelKey="title"
                         />
+                    </div>
+                    <div className={classes.formField}>
+                        {listFiles?.message ? (
+                            <div style={{ fontWeight: 'bold' }}>{listFiles?.message}</div>
+                        ) : (
+                            <div>
+                                <ul>
+                                    {listFiles?.files?.map((file, key) => (
+                                        <li key={key}>
+                                            <Link href={file?.url}>
+                                                <a className="link-button">{file?.filename}</a>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        // onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained">
                         Load File
                     </Button>
                 </div>
