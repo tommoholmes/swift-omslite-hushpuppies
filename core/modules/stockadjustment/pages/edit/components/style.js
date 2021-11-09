@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     },
     btnBack: {
         display: 'inline-block',
-        borderRadius: '10px 0px 0px 10px',
-        minWidth: 'unset',
+        borderRadius: '10px 0px 0px 10px !important',
+        minWidth: 'unset !important',
         height: 36,
-        width: 42,
+        width: '36px !important',
         marginBottom: 6,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 18,
@@ -109,9 +109,7 @@ const useStyles = makeStyles((theme) => ({
     td: {
         padding: '5px 0',
         fontFamily: font,
-        [theme.breakpoints.down('xs')]: {
-            textAlign: 'center',
-        },
+        textAlign: 'center',
     },
     fieldQty: {
         '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
@@ -130,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     },
     autocomplete: {
         '& .MuiTextField-root': {
-            width: '50%',
+            width: '80%',
         },
         [theme.breakpoints.down('md')]: {
             '& .MuiTextField-root': {

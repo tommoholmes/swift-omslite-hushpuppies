@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px 0px 0px 10px',
         minWidth: 'unset',
         height: 36,
-        width: 42,
+        width: 36,
         marginBottom: 6,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 18,
