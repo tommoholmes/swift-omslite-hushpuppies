@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     formField: {
         padding: 0,
         paddingBottom: 16,
+        display: 'flex',
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',

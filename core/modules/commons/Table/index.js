@@ -92,6 +92,7 @@ const CustomTable = (props) => {
         actions,
         hideActions = false,
         hideFilters = false,
+        hideColumns = false,
         hideFooter = false,
         handleClickRow = null,
         handleReset,
@@ -276,11 +277,17 @@ const CustomTable = (props) => {
                             />
                         </div>
                     )}
-                    <div className="top-item">
-                        <Button className={classes.btn} onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}>
-                            columns
-                        </Button>
-                    </div>
+                    {!hideColumns && (
+                        <div className="top-item">
+                            <Button
+                                className={classes.btn}
+                                onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
+                            >
+                                columns
+                            </Button>
+                        </div>
+                    )}
+
                     {!hideFilters && (
                         <div className="top-item">
                             <Button
