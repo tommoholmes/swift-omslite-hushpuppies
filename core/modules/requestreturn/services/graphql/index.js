@@ -29,7 +29,7 @@ export const getShipmentItemToReturn = (variables) => useQuery(Schema.getShipmen
     variables, ...context, ...fetchPolicy,
 });
 
-export const getStoreConfig = (variables) => useLazyQuery(Schema.getStoreConfig, {
+export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
     variables, ...context, ...fetchPolicy,
 });
 

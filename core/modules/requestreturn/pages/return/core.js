@@ -14,6 +14,9 @@ const Message = dynamic(() => import('@common_toast'), { ssr: false });
 const ContentWrapper = (props) => {
     const { data, Content } = props;
     const router = useRouter();
+    const queryEmail = router && router.query && router.query.email;
+    const queryOrder = router && router.query && router.query.order;
+    const queryChannel = router && router.query && router.query.channel;
 
     const [backdropLoader, setBackdropLoader] = React.useState(false);
     const [toastMessage, setToastMessage] = React.useState({
@@ -32,33 +35,6 @@ const ContentWrapper = (props) => {
     }, []);
 
     const requestreturn = data.getShipmentItemToReturn;
-    // const [getStoreConfig, getStoreConfigRes] = gqlService.getStoreConfig();
-
-    // React.useEffect(() => {
-    //     getStoreConfig({ variables: { path: 'swiftoms_rma/rma_request/return_type' } });
-    // }, []);
-    // const tampPath = getStoreConfigRes?.data?.getStoreConfig;
-    // console.log(tampPath);
-
-    // if(tampPath){
-    //     const xx = JSON.parse(tampPath);
-    //     console.log(xx);
-    // };
-
-    const [getStoreConfig] = gqlService.getStoreConfig();
-    const [tamp, setTamp] = useState([]);
-    useEffect(async () => {
-        try {
-            const [resA, resB] = await Promise.all([
-                getStoreConfig({ variables: { path: 'swiftoms_rma/rma_request/return_type' } }),
-                getStoreConfig({ variables: { path: 'swiftoms_rma/rma_request/package_condition' } }),
-            ]);
-
-            setTamp([resA?.data?.getStoreConfig, resB?.data?.getStoreConfig]);
-        } catch (error) {}
-    }, []);
-    console.log(tamp[0]);
-    console.log(tamp[1]);
 
     const handleSubmit = ({
         channel_order_increment_id,
@@ -78,13 +54,13 @@ const ContentWrapper = (props) => {
             channel_order_increment_id,
             channel_code,
             customer_email,
-            return_type,
+            return_type: return_type.code,
             message,
             shipment_id,
             shipment_item_id,
             qty,
-            reason,
-            package_condition,
+            reason: reason.code,
+            package_condition: package_condition.code,
             binary_data: binary,
             filename,
         };
@@ -113,9 +89,9 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            channel_order_increment_id: '',
-            channel_code: '',
-            customer_email: '',
+            channel_order_increment_id: queryOrder,
+            channel_code: queryChannel,
+            customer_email: queryEmail,
             return_type: '',
             message: '',
             shipment_id: '',
@@ -126,10 +102,11 @@ const ContentWrapper = (props) => {
             binary_data: '',
             filename: '',
         },
-        // validationSchema: Yup.object().shape({
-        //     code: Yup.string().nullable().required('Required!'),
-        //     name: Yup.string().nullable().required('Required!'),
-        // }),
+        validationSchema: Yup.object().shape({
+            return_type: Yup.string().required('Required!'),
+            package_condition: Yup.string().required('Required!'),
+            reason: Yup.string().required('Required!'),
+        }),
         onSubmit: (values) => {
             handleSubmit(values);
         },
@@ -144,6 +121,9 @@ const ContentWrapper = (props) => {
     };
 
     const contentProps = {
+        queryEmail,
+        queryOrder,
+        queryChannel,
         formik,
         requestreturn,
         handleDropFile,
@@ -165,8 +145,20 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+    const [searchShipmentToReturn, searchShipmentToReturnRes] = gqlService.searchShipmentToReturn();
+    React.useEffect(() => {
+        searchShipmentToReturn({
+            variables: {
+                customer_email: router && router.query && router.query.email,
+                channel_order_increment_id: router && router.query && router.query.order,
+                channel_code: router && router.query && router.query.channel,
+            },
+        });
+    }, []);
+    const tampId = searchShipmentToReturnRes.data?.searchShipmentToReturn[0].entity_id;
+
     const { loading, data } = gqlService.getShipmentItemToReturn({
-        shipment_id: router && router.query && Number(router.query.id),
+        shipment_id: tampId,
     });
 
     if (loading) {

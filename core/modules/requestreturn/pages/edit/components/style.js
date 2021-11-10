@@ -45,7 +45,19 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'uppercase',
         margin: 0,
         padding: '17px 0',
-        borderBottom: '1px solid #DDE1EC',
+        position: 'relative',
+        display: 'inline-block',
+    },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: 9,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
     },
     btn: {
         borderRadius: 20,

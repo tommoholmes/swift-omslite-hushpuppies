@@ -45,7 +45,19 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'uppercase',
         margin: 0,
         padding: '17px 0',
-        borderBottom: '1px solid #DDE1EC',
+        position: 'relative',
+        display: 'inline-block',
+    },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: 9,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
     },
     btn: {
         borderRadius: 20,
@@ -58,15 +70,26 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 15,
     },
     content: {
-        borderBottom: '3px solid #F5F7FB',
         padding: '10px 29px 12px 22px',
         background: '#ffffff',
         borderRadius: 16,
         marginBottom: 8,
     },
-    orderLabel: {
+    spanLabel: {
         fontFamily: font,
-        display: 'block',
+        display: 'inline-block',
+        position: 'relative',
+    },
+    labelRequired2: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: -4,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
     },
     grid: {
         display: 'grid',
@@ -127,7 +150,7 @@ const useStyles = makeStyles((theme) => ({
         width: '50%',
     },
     autocompleteRoot: {
-        width: '50%',
+        width: '75%',
         margin: '0 auto',
     },
     spanInfo: {

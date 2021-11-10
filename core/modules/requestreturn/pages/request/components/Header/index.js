@@ -31,7 +31,7 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Request Return</h2>
             <Button
                 className={classes.buttonAdd}
-                // onClick={() => router.push(`/requestreturn/return/${customer_email}/${channel_order_increment_id}/${channel_code}`)}
+                onClick={() => router.push(`/requestreturn/return/${customer_email}/${channel_order_increment_id}/${channel_code}`)}
             >
                 Request Return
             </Button>

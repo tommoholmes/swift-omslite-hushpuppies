@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -9,13 +9,15 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import DropFile from '@common_dropfile';
-import { optionsCondition, optionsReason } from '@modules/requestreturn/helpers';
 import clsx from 'clsx';
 import useStyles from '@modules/requestreturn/pages/return/components/style';
 import gqlService from '@modules/requestreturn/services/graphql';
 
 const OrderQueueEditContent = (props) => {
     const {
+        queryEmail,
+        queryOrder,
+        queryChannel,
         formik,
         requestreturn,
         handleDropFile,
@@ -34,6 +36,18 @@ const OrderQueueEditContent = (props) => {
         return value;
     };
 
+    const { loading: loadingReturnType, data: dataReturnType } = gqlService.getStoreConfig({
+        path: 'swiftoms_rma/rma_request/return_type',
+    });
+    const { loading: loadingPackageCondition, data: dataPackageCondition } = gqlService.getStoreConfig({
+        path: 'swiftoms_rma/rma_request/package_condition',
+    });
+    const { loading: loadingReason, data: dataReason } = gqlService.getStoreConfig({
+        path: 'swiftoms_rma/rma_request/reason',
+    });
+
+    const [checkedRows, setCheckedRows] = React.useState([]);
+
     return (
         <div className={classes.body}>
             <Button
@@ -51,17 +65,27 @@ const OrderQueueEditContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>New Return for Order #</h2>
+            <h2 className={classes.titleTop}>
+                New Return for Order #
+                {queryOrder}
+            </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <h5 className={classes.title}>Return Type</h5>
+                    <h5 className={clsx(classes.title, classes.labelRequired)}>Return Type</h5>
                     <Autocomplete
                         className={classes.autocompleteRootTop}
-                        // value={formik.values.framework}
-                        // onChange={(e) => formik.setFieldValue('framework', e)}
-                        // options={optionsFramework}
-                        // error={!!(formik.touched.framework && formik.errors.framework)}
-                        // helperText={(formik.touched.framework && formik.errors.framework) || ''}
+                        value={formik.values.return_type}
+                        onChange={(e) => formik.setFieldValue('return_type', e)}
+                        // loading={loadingReturnType}
+                        options={
+                            dataReturnType
+                            && dataReturnType.getStoreConfig
+                            && Object.values(JSON.parse(dataReturnType.getStoreConfig))
+                        }
+                        error={!!(formik.touched.return_type && formik.errors.return_type)}
+                        helperText={(formik.touched.return_type && formik.errors.return_type) || 'Please Select'}
+                        primaryKey="code"
+                        labelKey="title"
                     />
                 </div>
                 <div className={classes.content}>
@@ -74,31 +98,56 @@ const OrderQueueEditContent = (props) => {
                                 <th className={classes.th}>Price</th>
                                 <th className={clsx(classes.th, classes.center)}>Actions</th>
                             </tr>
-                            {requestreturn.map((e) => (
+                            {requestreturn.map((eMap) => (
                                 <tr>
                                     <td className={classes.td}>
-                                        <img src={`${e.image_url}`} />
+                                        <input
+                                            // checked={checkboxValue}
+                                            // onChange={() => setCheckboxValue(!checkboxValue)}
+                                            type="checkbox"
+                                            name={eMap.entity_id}
+                                        />
+                                        <img src={`${eMap.image_url}`} />
                                     </td>
-                                    <td className={classes.td}>{e.name}</td>
-                                    <td className={classes.td}>{convertToRupiah(e.price)}</td>
+                                    <td className={classes.td}>{eMap.name}</td>
+                                    <td className={classes.td}>{convertToRupiah(eMap.price)}</td>
                                     <td className={clsx(classes.td, classes.center)}>
-                                        <span className={classes.orderLabel}><strong>Quantity</strong></span>
-                                        {e.qty}
+                                        <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Quantity</strong></span>
                                         <br />
-                                        <span className={classes.orderLabel}><strong>Package Condition</strong></span>
+                                        {eMap.qty}
+                                        <br />
+                                        <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Package Condition</strong></span>
                                         <Autocomplete
                                             className={classes.autocompleteRoot}
-                                            // value={formik.values.framework}
-                                            // onChange={(e) => formik.setFieldValue('framework', e)}
-                                            options={optionsCondition}
+                                            value={formik.values.package_condition}
+                                            onChange={(e) => formik.setFieldValue('package_condition', e)}
+                                            // loading={loadingPackageCondition}
+                                            options={
+                                                dataPackageCondition
+                                                && dataPackageCondition.getStoreConfig
+                                                && Object.values(JSON.parse(dataPackageCondition.getStoreConfig))
+                                            }
+                                            error={!!(formik.touched.package_condition && formik.errors.package_condition)}
+                                            helperText={(formik.touched.package_condition && formik.errors.package_condition) || 'Please Select'}
+                                            primaryKey="code"
+                                            labelKey="title"
                                         />
                                         <br />
-                                        <span className={classes.orderLabel}><strong>Reason</strong></span>
+                                        <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Reason</strong></span>
                                         <Autocomplete
                                             className={classes.autocompleteRoot}
-                                            // value={formik.values.framework}
-                                            // onChange={(e) => formik.setFieldValue('framework', e)}
-                                            options={optionsReason}
+                                            value={formik.values.reason}
+                                            onChange={(e) => formik.setFieldValue('reason', e)}
+                                            // loading={loadingReason}
+                                            options={
+                                                dataReason
+                                                && dataReason.getStoreConfig
+                                                && Object.values(JSON.parse(dataReason.getStoreConfig))
+                                            }
+                                            error={!!(formik.touched.reason && formik.errors.reason)}
+                                            helperText={(formik.touched.reason && formik.errors.reason) || 'Please Select'}
+                                            primaryKey="code"
+                                            labelKey="title"
                                         />
                                         <br />
                                         <DropFile
@@ -114,7 +163,7 @@ const OrderQueueEditContent = (props) => {
                     </table>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.titleSmall}>Messages</h5>
+                    <h5 className={classes.title}>Messages</h5>
                     <TextField
                         className={clsx(classes.fieldRoot, 'fieldNotes')}
                         variant="outlined"

@@ -55,22 +55,38 @@ const ContentWrapper = (props) => {
         },
     });
 
-    const handleReturn = () => {
+    const handleReturn = (values) => {
         window.backdropLoader(true);
-        searchShipmentToReturn();
+        searchShipmentToReturn({
+            variables: {
+                customer_email: values.email,
+                channel_order_increment_id: values.orderNumber,
+                channel_code: values.channel.value,
+            },
+        });
     };
 
-    const handleSearch = () => {
+    const handleSearch = (values) => {
         window.backdropLoader(true);
-        getRequestReturnList();
+        getRequestReturnList({
+            variables: {
+                filter: {
+                    customer_email: {
+                        eq: values.email,
+                    },
+                    channel_order_increment_id: {
+                        eq: values.orderNumber,
+                    },
+                    channel_code: {
+                        eq: values.channel.value,
+                    },
+                },
+                currentPage: 1,
+            },
+        });
     };
 
     const [searchShipmentToReturn] = gqlService.searchShipmentToReturn({
-        variables: {
-            customer_email: formik.values.email,
-            channel_order_increment_id: formik.values.orderNumber,
-            channel_code: formik.values.channel.value,
-        },
         onCompleted: (res) => {
             if (res && res.searchShipmentToReturn && res.searchShipmentToReturn[0] && res.searchShipmentToReturn[0].entity_id) {
                 const id = res && res.searchShipmentToReturn && res.searchShipmentToReturn[0] && res.searchShipmentToReturn[0].entity_id;
@@ -80,7 +96,7 @@ const ContentWrapper = (props) => {
                     text: 'Order Found',
                     variant: 'success',
                 });
-                router.push(`/requestreturn/return/edit/${id}`);
+                router.push(`/requestreturn/return/${formik.values.email}/${formik.values.orderNumber}/${formik.values.channel.value}`);
             }
             if (!(res && res.searchShipmentToReturn && res.searchShipmentToReturn[0] && res.searchShipmentToReturn[0].entity_id)) {
                 window.backdropLoader(false);
@@ -102,20 +118,6 @@ const ContentWrapper = (props) => {
     });
 
     const [getRequestReturnList] = gqlService.getRequestReturnList({
-        variables: {
-            filter: {
-                customer_email: {
-                    eq: formik.values.email,
-                },
-                channel_order_increment_id: {
-                    eq: formik.values.orderNumber,
-                },
-                channel_code: {
-                    eq: formik.values.channel.value,
-                },
-            },
-            currentPage: 1,
-        },
         onCompleted: (res) => {
             if (res && res.getRequestReturnList && res.getRequestReturnList.items && res.getRequestReturnList.items[0]) {
                 window.backdropLoader(false);

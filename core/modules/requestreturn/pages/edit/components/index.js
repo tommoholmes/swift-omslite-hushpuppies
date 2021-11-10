@@ -128,7 +128,7 @@ const OrderQueueEditContent = (props) => {
                     </div>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.titleSmall}>Messages</h5>
+                    <h5 className={clsx(classes.title, classes.labelRequired)}>Messages</h5>
                     <TextField
                         className={clsx(classes.fieldRoot, 'fieldNotes')}
                         variant="outlined"
