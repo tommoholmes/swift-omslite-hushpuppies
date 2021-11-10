@@ -10,27 +10,41 @@ const fetchPolicy = {
 };
 
 export const getVirtualStockQuantityList = (variables) => useLazyQuery(Schema.getVirtualStockQuantityList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getVirtualStockQuantityById = (variables) => useQuery(Schema.getVirtualStockQuantityById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const createVirtualStockQuantity = (variables) => useMutation(Schema.createVirtualStockQuantity, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const updateVirtualStockQuantity = (variables) => useMutation(Schema.updateVirtualStockQuantity, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
-export const uploadSource = (variables) => useMutation(Schema.uploadSource, {
-    variables, ...context,
+export const uploadVirtualStockQuantity = (variables) => useMutation(Schema.uploadVirtualStockQuantity, {
+    variables,
+    ...context,
 });
 
 export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
-    variables, ...context,
+    variables,
+    ...context,
+});
+
+export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
+    ...context,
+    ...options,
+    fetchPolicy: 'no-cache',
 });
 
 export default {
@@ -38,6 +52,7 @@ export default {
     getVirtualStockQuantityById,
     createVirtualStockQuantity,
     updateVirtualStockQuantity,
-    uploadSource,
+    uploadVirtualStockQuantity,
     downloadSampleCsv,
+    getActivity,
 };
