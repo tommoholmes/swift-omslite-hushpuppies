@@ -60,7 +60,6 @@ const Core = (props) => {
                     text: 'Success Import Override Stock',
                     variant: 'success',
                 });
-                // setTimeout(() => router.push('/cataloginventory/overridestock'), 250);
             })
             .catch((e) => {
                 window.backdropLoader(false);
@@ -85,7 +84,6 @@ const Core = (props) => {
     });
 
     const handleDropFile = (files) => {
-        console.log(files);
         const fileName = files[0].file.name;
         const { baseCode } = files[0];
         formik.setFieldValue('filename', fileName);
