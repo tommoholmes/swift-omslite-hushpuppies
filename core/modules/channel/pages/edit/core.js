@@ -103,8 +103,8 @@ const ContentWrapper = (props) => {
         validationSchema: Yup.object().shape({
             code: Yup.string().nullable().required('Required!'),
             name: Yup.string().nullable().required('Required!'),
-            framework: Yup.object().nullable().required('Required!'),
-            type: Yup.object().nullable().required('Required!'),
+            framework: Yup.object().typeError('Required!').required('Required!'),
+            type: Yup.object().typeError('Required!').required('Required!'),
             virtualStock: Yup.array().nullable(),
             notes: Yup.string().nullable(),
             url: Yup.string().nullable(),
