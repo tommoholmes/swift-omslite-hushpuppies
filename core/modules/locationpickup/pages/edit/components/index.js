@@ -105,7 +105,7 @@ const LocationPickupEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Pickup Type</span>
+                            <span className={clsx(classes.label)}>Pickup Type</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -122,7 +122,7 @@ const LocationPickupEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Pickup Description</span>
+                            <span className={clsx(classes.label)}>Pickup Description</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -139,7 +139,7 @@ const LocationPickupEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Pickup Phone</span>
+                            <span className={clsx(classes.label)}>Pickup Phone</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -156,7 +156,7 @@ const LocationPickupEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Pickup Charge</span>
+                            <span className={clsx(classes.label)}>Pickup Charge</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
