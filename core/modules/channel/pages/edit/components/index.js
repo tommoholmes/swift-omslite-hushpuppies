@@ -257,7 +257,7 @@ const ChannelEditContent = (props) => {
                                 && getChannelRuleTypeOptionsRes.data.getChannelRuleTypeOptions
                             }
                             getOptions={getChannelRuleTypeOptions}
-                            error={!!(formik.touched.stype && formik.errors.type)}
+                            error={!!(formik.touched.type && formik.errors.type)}
                             helperText={(formik.touched.type && formik.errors.type) || ''}
                             primaryKey="value"
                             labelKey="label"
