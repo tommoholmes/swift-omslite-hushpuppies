@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable indent */
-/* eslint-disable max-len */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-closing-tag-location */
 
 import React from 'react';
 import { useRouter } from 'node_modules/next/router';
-import useStyles from '@modules/stockadjustment/pages/edit/components/style';
+import useStyles from '@modules/stocktransfer/pages/add/components/style';
 import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
@@ -20,8 +19,9 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import clsx from 'clsx';
 import gqlSource from '@modules/source/services/graphql';
 import * as Yup from 'yup';
+import Head from 'next/head';
 
-const StockAdjustmentEdit = (props) => {
+const StockTransferAdd = (props) => {
     const [getStoreLocationList, getStoreLocationListRes] = gqlLocation.getStoreLocationList();
     const [getSourceList, getSourceListRes] = gqlSource.getSourceList();
     const { initialValues, submitHandler } = props;
@@ -30,11 +30,9 @@ const StockAdjustmentEdit = (props) => {
     const [locID, setLocID] = React.useState(0);
     const [searchSku, setSearchSku] = React.useState('');
     const [searchLocation, setSearchLocation] = React.useState('');
-    const [baseSkuOption, setBaseSkuOption] = React.useState([]);
     const [locationOption, setLocationOption] = React.useState([]);
-    const [isDisabled] = React.useState(initialValues.status === 1);
-    const firstRenderLocation = React.useRef(true);
-    const firstRenderSetLocation = React.useRef(true);
+    const [baseSkuOption, setBaseSkuOption] = React.useState([]);
+    const [focusedForm, setFocusedForm] = React.useState({});
 
     React.useEffect(() => {
         const onChangeTimeOut = setTimeout(() => {
@@ -69,24 +67,20 @@ const StockAdjustmentEdit = (props) => {
     }, [getSourceListRes.data]);
 
     React.useEffect(() => {
-        const onChangeTimeOut = setTimeout(
-            () => {
-                const isExist = searchLocation && locationOption.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchLocation?.toLowerCase()));
-                if (firstRenderLocation.current || (searchLocation && isExist.length === 0)) {
-                    getStoreLocationList({
-                        variables: {
-                            search: searchLocation,
-                            pageSize: 20,
-                            currentPage: 1,
-                        },
-                    });
-                    firstRenderLocation.current = false;
-                }
+        const onChangeTimeOut = setTimeout(() => {
+            const isExist = searchLocation && locationOption.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchLocation?.toLowerCase()));
+            if (searchLocation && isExist.length === 0) {
+                getStoreLocationList({
+                    variables: {
+                        search: searchLocation,
+                        pageSize: 20,
+                        currentPage: 1,
+                    },
+                });
+            }
 
-                return null;
-            },
-            firstRenderLocation.current ? 0 : 500,
-        );
+            return null;
+        }, 500);
 
         return () => clearTimeout(onChangeTimeOut);
     }, [searchLocation]);
@@ -98,24 +92,33 @@ const StockAdjustmentEdit = (props) => {
             && getStoreLocationListRes.data.getStoreLocationList
             && getStoreLocationListRes.data.getStoreLocationList.items
         ) {
-            if (firstRenderSetLocation.current && getStoreLocationListRes.data.getStoreLocationList.items.length > 0) {
-                setLocID(getStoreLocationListRes.data.getStoreLocationList.items[0].loc_id);
-                firstRenderSetLocation.current = false;
-            }
-
             const ids = new Set(locationOption.map((d) => d.loc_code));
             setLocationOption([...locationOption, ...getStoreLocationListRes.data.getStoreLocationList.items.filter((d) => !ids.has(d.loc_code))]);
         }
     }, [getStoreLocationListRes.data]);
 
-    const editSchemaValidaton = Yup.object().shape({
-        loc_code: Yup.object().required('Required!'),
+    const addSchemaValidaton = Yup.object().shape({
+        source_location: Yup.object().required('Required!'),
+        target_location: Yup.object().required('Required!'),
         reason: Yup.string().required('Required!'),
-        status: Yup.mixed().notOneOf([1]),
-        items: Yup.array()
+        data: Yup.array()
             .of(
                 Yup.object().shape({
-                    sku: Yup.string().required('required!'),
+                    sku: Yup.object().required('Required!'),
+                    transfer: Yup.number()
+                        .min(1)
+                        .test({
+                            name: 'max',
+                            exclusive: false,
+                            params: {},
+                            message: 'qty transfer must be less than qty available',
+                            test(value) {
+                                // You can access the price field with `this.parent`.
+                                // eslint-disable-next-line react/no-this-in-sfc
+                                return value <= parseFloat(this.parent.qty);
+                            },
+                        })
+                        .required('Required!'),
                 }),
             )
             .min(1)
@@ -124,11 +127,14 @@ const StockAdjustmentEdit = (props) => {
 
     return (
         <>
+            <Head>
+                <title>Add New Stock Transfer</title>
+            </Head>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/cataloginventory/stockadjustment')}
+                onClick={() => router.push('/cataloginventory/stocktransfer')}
                 variant="contained"
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 16 }}
             >
                 <ChevronLeftIcon
                     style={{
@@ -140,32 +146,34 @@ const StockAdjustmentEdit = (props) => {
                     }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>
-Edit Stock Adjustment #
-{initialValues.increment_id}
-</h2>
+
+            <h2 className={classes.titleTop}>Add New Stock Transfer</h2>
+
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={editSchemaValidaton}>
+                    <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={addSchemaValidaton}>
                         {({
  values, setFieldValue, submitForm, errors, touched,
 }) => (
                             <Form>
                                 <div className={classes.formField}>
                                     <div className={classes.divLabel}>
-                                        <span className={[classes.label, classes.labelRequired].join(' ')}>Location</span>
+                                        <span className={[classes.label, classes.labelRequired].join(' ')}>Source Location</span>
                                     </div>
                                     <Autocomplete
-                                        disabled={isDisabled}
+                                        onFocus={() => setFocusedForm({ ...focusedForm, source_location: true })}
+                                        onBlur={() => setFocusedForm({ ...focusedForm, source_location: false })}
                                         mode={locationOption.length > 0 ? 'default' : 'lazy'}
+                                        value={values.source_location}
                                         className={classes.autocompleteRoot}
-                                        value={values.loc_code}
                                         onChange={(e) => {
-                                            setFieldValue('loc_code', e);
-                                            setLocID(e?.loc_id);
-                                            setFieldValue('items', []);
+                                            setFieldValue('source_location', e);
+                                            setLocID(e?.loc_id ?? 0);
+                                            setFieldValue('data', []);
+                                            setFocusedForm({ ...focusedForm, source_location: false });
                                         }}
-                                        loading={!firstRenderSetLocation.current && getStoreLocationListRes.loading}
+                                        defaultValue={{ loc_name: 'select', loc_code: 0 }}
+                                        loading={focusedForm?.source_location && getStoreLocationListRes.loading}
                                         options={locationOption}
                                         getOptions={getStoreLocationList}
                                         getOptionsVariables={{
@@ -178,89 +186,123 @@ Edit Stock Adjustment #
                                         primaryKey="loc_code"
                                         labelKey="loc_name"
                                         onInputChange={(e) => setSearchLocation(e && e.target && e.target.value)}
-                                        error={!!(touched.loc_code && errors.loc_code)}
-                                        helperText={(touched.loc_code && errors.loc_code) || ''}
+                                        error={!!(touched.source_location && errors.source_location)}
+                                        helperText={(touched.source_location && errors.source_location) || ''}
+                                    />
+                                </div>
+                                <div className={classes.formField}>
+                                    <div className={classes.divLabel}>
+                                        <span className={[classes.label, classes.labelRequired].join(' ')}>Target Location</span>
+                                    </div>
+                                    <Autocomplete
+                                        onFocus={() => setFocusedForm({ ...focusedForm, target_location: true })}
+                                        onBlur={() => setFocusedForm({ ...focusedForm, target_location: false })}
+                                        mode={locationOption.length > 0 ? 'default' : 'lazy'}
+                                        value={values.target_location}
+                                        className={classes.autocompleteRoot}
+                                        onChange={(e) => {
+                                            setFieldValue('target_location', e);
+                                            setFieldValue('data', []);
+                                        }}
+                                        defaultValue={{ loc_name: 'select', loc_code: 0 }}
+                                        loading={focusedForm?.target_location && getStoreLocationListRes.loading}
+                                        options={locationOption}
+                                        getOptions={getStoreLocationList}
+                                        getOptionsVariables={{
+                                            variables: {
+                                                search: searchLocation,
+                                                pageSize: 20,
+                                                currentPage: 1,
+                                            },
+                                        }}
+                                        primaryKey="loc_code"
+                                        labelKey="loc_name"
+                                        onInputChange={(e) => setSearchLocation(e && e.target && e.target.value)}
+                                        error={!!(touched.target_location && errors.target_location)}
+                                        helperText={(touched.target_location && errors.target_location) || ''}
                                     />
                                 </div>
                                 <div className={classes.formField}>
                                     <div className={classes.divLabel}>
                                         <span className={[classes.label, classes.labelRequired].join(' ')}>Product</span>
                                     </div>
-                                    {errors?.items && touched?.items && typeof errors?.items === 'string' && (
-                                        <p style={{ margin: 0, color: 'red', fontSize: 12 }}>{errors?.items}</p>
+                                    {errors?.data && touched?.data && typeof errors?.data === 'string' && (
+                                        <p style={{ margin: 0, color: 'red', fontSize: 12 }}>{errors?.data}</p>
                                     )}
 
-                                    <FieldArray name="items">
+                                    <FieldArray name="data">
                                         {({ remove, push }) => (
                                             <>
-                                                {values.items.length > 0 && (
+                                                {values.data.length > 0 && (
                                                     <table className={classes.table}>
                                                         <thead className={classes.th}>
                                                             <tr className={classes.tr}>
                                                                 <td className={classes.td}>SKU Product</td>
                                                                 <td className={classes.td}>Qty Available</td>
-                                                                <td className={classes.td}>Qty Adjustment</td>
+                                                                <td className={classes.td}>Qty Transfer</td>
                                                                 <td className={classes.td}>Action</td>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {values.items.map((item, idx) => (
+                                                            {values.data.map((item, idx) => (
                                                                 <tr key={idx}>
                                                                     <td className={classes.td}>
-                                                                        {!item.entity_id ? (
-                                                                            <Autocomplete
-                                                                                name={`items.${idx}.sku`}
-                                                                                mode={baseSkuOption.length > 0 ? 'default' : 'lazy'}
-                                                                                className={`${classes.autocomplete}`}
-                                                                                value={values.items[idx].sku}
-                                                                                onChange={(e) => {
-                                                                                    setFieldValue(`items.${idx}.stock_available`, e?.qty_total ?? 0);
-                                                                                    setFieldValue(`items.${idx}.sku`, e);
-                                                                                }}
-                                                                                loading={!values.items[idx].sku && getSourceListRes.loading}
-                                                                                options={baseSkuOption}
-                                                                                getOptionsVariables={{
-                                                                                    variables: {
-                                                                                        search: searchSku,
-                                                                                        pageSize: 20,
-                                                                                        currentPage: 1,
-                                                                                        filter: {
-                                                                                            loc_id: {
-                                                                                                from: locID?.toString(),
-                                                                                                to: locID?.toString(),
-                                                                                            },
+                                                                        <Autocomplete
+                                                                            name={`data.${idx}.sku`}
+                                                                            mode={baseSkuOption.length > 0 ? 'default' : 'lazy'}
+                                                                            className={classes.autocomplete}
+                                                                            value={values.data[idx].sku}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue(`data.${idx}.qty`, e?.qty_total ?? 0);
+                                                                                setFieldValue(`data.${idx}.sku`, e);
+                                                                            }}
+                                                                            loading={!values.data[idx].sku && getSourceListRes.loading}
+                                                                            options={baseSkuOption}
+                                                                            getOptionsVariables={{
+                                                                                variables: {
+                                                                                    search: searchSku,
+                                                                                    pageSize: 20,
+                                                                                    currentPage: 1,
+                                                                                    filter: {
+                                                                                        loc_id: {
+                                                                                            from: locID.toString(),
+                                                                                            to: locID.toString(),
                                                                                         },
                                                                                     },
-                                                                                }}
-                                                                                getOptions={getSourceList}
-                                                                                primaryKey="source_id"
-                                                                                labelKey="sku"
-                                                                                onInputChange={(e) => setSearchSku(e && e.target && e.target.value)}
-                                                                                error={!!(errors?.items?.[idx]?.sku && touched?.items?.[idx]?.sku)}
-                                                                                helperText={
-                                                                                    (errors?.items?.[idx]?.sku && touched?.items?.[idx]?.sku) || ''
-                                                                                }
-                                                                            />
-                                                                        ) : (
-                                                                            item.sku
-                                                                        )}
-                                                                    </td>
-                                                                    <td className={classes.td}>{item.stock_available}</td>
-                                                                    <td className={classes.td}>
-                                                                        <Field
-                                                                            className={classes.fieldQty}
-                                                                            name={`items.${idx}.stock_adjustment`}
-                                                                            type="number"
-                                                                            disabled={isDisabled}
+                                                                                },
+                                                                            }}
+                                                                            getOptions={getSourceList}
+                                                                            primaryKey="source_id"
+                                                                            labelKey="sku"
+                                                                            onInputChange={(e) => setSearchSku(e && e.target && e.target.value)}
+                                                                            error={!!(errors?.data?.[idx]?.sku && touched?.data?.[idx]?.sku)}
+                                                                            helperText={(touched?.data?.[idx]?.sku && errors?.data?.[idx]?.sku) || ''}
                                                                         />
                                                                     </td>
+                                                                    <td className={classes.td}>{item.qty}</td>
+                                                                    <td className={classes.td}>
+                                                                        <Field
+                                                                            max={values.data[idx].qty}
+                                                                            className={classes.fieldQty}
+                                                                            name={`data.${idx}.transfer`}
+                                                                            type="number"
+                                                                            style={{
+                                                                                borderColor: `${
+                                                                                    errors?.data?.[idx]?.transfer && touched?.data?.[idx]?.transfer
+                                                                                        ? 'red'
+                                                                                        : 'none'
+                                                                                }`,
+                                                                            }}
+                                                                        />
+                                                                        {errors?.data?.[idx]?.transfer && touched?.data?.[idx]?.transfer && (
+                                                                            <p style={{ margin: 0, color: 'red', fontSize: 12 }}>
+                                                                                {errors?.data?.[idx]?.transfer}
+                                                                            </p>
+                                                                        )}
+                                                                    </td>
                                                                     <td
-                                                                        style={{ cursor: `${isDisabled && 'default'}` }}
-                                                                        className={`${classes.td} ${classes.btnRemove} ${
-                                                                            !isDisabled && 'link-button'
-                                                                        } `}
-                                                                        onClick={() => !isDisabled && remove(idx)}
-                                                                        disabled={isDisabled}
+                                                                        className={`${classes.td} ${classes.btnRemove} link-button`}
+                                                                        onClick={() => remove(idx)}
                                                                     >
                                                                         remove
                                                                     </td>
@@ -271,14 +313,13 @@ Edit Stock Adjustment #
                                                 )}
                                                 <div className={`${classes.formFieldButton} ${classes.formFieldButtonRight}`}>
                                                     <Button
-                                                        disabled={isDisabled || values.loc_code === null}
+                                                        disabled={values.source_location === null}
                                                         className={classes.btn}
                                                         variant="contained"
                                                         onClick={() => push({
                                                                 sku: null,
-                                                                entity_id: null,
-                                                                stock_adjustment: 0,
-                                                                stock_available: 0,
+                                                                qty: 0,
+                                                                transfer: 0,
                                                             })}
                                                     >
                                                         Add Product
@@ -288,6 +329,7 @@ Edit Stock Adjustment #
                                         )}
                                     </FieldArray>
                                 </div>
+
                                 <div className={classes.formField}>
                                     <div className={classes.divLabel}>
                                         <span className={[classes.label, classes.labelRequired].join(' ')}>Reason</span>
@@ -311,10 +353,9 @@ Edit Stock Adjustment #
 
                                 <div className={`${classes.formFieldButton}`}>
                                     <Button
-                                        disabled={isDisabled}
                                         type="button"
                                         onClick={() => {
-                                            setFieldValue('is_apply', false);
+                                            setFieldValue('apply', false);
                                             submitForm();
                                         }}
                                         className={classes.btn}
@@ -323,10 +364,9 @@ Edit Stock Adjustment #
                                         Submit
                                     </Button>
                                     <Button
-                                        disabled={isDisabled}
                                         type="button"
                                         onClick={() => {
-                                            setFieldValue('is_apply', true);
+                                            setFieldValue('apply', true);
                                             submitForm();
                                         }}
                                         className={clsx(classes.btnSecondary)}
@@ -344,4 +384,4 @@ Edit Stock Adjustment #
     );
 };
 
-export default StockAdjustmentEdit;
+export default StockTransferAdd;

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useState } from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -7,7 +8,7 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
-import { optionsFramework, optionsRuleType, optionsYesNo } from '@modules/channel/helpers';
+import { optionsYesNo } from '@modules/channel/helpers';
 import clsx from 'clsx';
 import useStyles from '@modules/channel/pages/create/components/style';
 
@@ -17,6 +18,49 @@ const ChannelCreateContent = (props) => {
     const router = useRouter();
     const [getVirtualStockList, getVirtualStockListRes] = channelGqlService.getVirtualStockList();
     const [getShipmentStatus, getShipmentStatusRes] = channelGqlService.getShipmentStatus();
+    const [getChannelFrameworkOptions, getChannelFrameworkOptionsRes] = channelGqlService.getChannelFrameworkOptions();
+    const [getChannelRuleTypeOptions, getChannelRuleTypeOptionsRes] = channelGqlService.getChannelRuleTypeOptions();
+
+    const [virtualStockOptions, setVirtualStockOptions] = useState([]);
+    const [searchVirtualStock, setSearchVirtualStock] = useState('');
+
+    React.useEffect(() => {
+        const onChangeTimeOut = setTimeout(() => {
+            const isExist = searchVirtualStock && virtualStockOptions.filter((elm) => elm?.vs_name?.toLowerCase().includes(searchVirtualStock?.toLowerCase()));
+            if (searchVirtualStock && isExist.length === 0) {
+                getVirtualStockList({
+                    variables: {
+                        filter: {
+                            vs_name: {
+                                like: searchVirtualStock,
+                            },
+                        },
+                        pageSize: 20,
+                        currentPage: 1,
+                    },
+                });
+            }
+
+            return null;
+        }, 500);
+
+        return () => clearTimeout(onChangeTimeOut);
+    }, [searchVirtualStock]);
+
+    React.useEffect(() => {
+        if (
+            getVirtualStockListRes
+            && getVirtualStockListRes.data
+            && getVirtualStockListRes.data.getVirtualStockList
+            && getVirtualStockListRes.data.getVirtualStockList.items
+        ) {
+            const names = new Set(virtualStockOptions.map((d) => d.vs_name));
+            setVirtualStockOptions([
+                ...virtualStockOptions,
+                ...getVirtualStockListRes.data.getVirtualStockList.items.filter((d) => !names.has(d.vs_name)),
+            ]);
+        }
+    }, [getVirtualStockListRes.data]);
 
     return (
         <>
@@ -159,12 +203,21 @@ const ChannelCreateContent = (props) => {
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Framework</span>
                         </div>
                         <Autocomplete
+                            mode="lazy"
                             className={classes.autocompleteRoot}
                             value={formik.values.framework}
                             onChange={(e) => formik.setFieldValue('framework', e)}
-                            options={optionsFramework}
+                            loading={getChannelFrameworkOptionsRes.loading}
+                            options={
+                                getChannelFrameworkOptionsRes
+                                && getChannelFrameworkOptionsRes.data
+                                && getChannelFrameworkOptionsRes.data.getChannelFrameworkOptions
+                            }
+                            getOptions={getChannelFrameworkOptions}
                             error={!!(formik.touched.framework && formik.errors.framework)}
                             helperText={(formik.touched.framework && formik.errors.framework) || ''}
+                            primaryKey="value"
+                            labelKey="label"
                         />
                     </div>
                     <div className={classes.formField}>
@@ -172,12 +225,21 @@ const ChannelCreateContent = (props) => {
                             <span className={[classes.label, classes.labelRequired].join(' ')}>Rule Type</span>
                         </div>
                         <Autocomplete
+                            mode="lazy"
                             className={classes.autocompleteRoot}
                             value={formik.values.type}
                             onChange={(e) => formik.setFieldValue('type', e)}
-                            options={optionsRuleType}
-                            error={!!(formik.touched.stype && formik.errors.type)}
+                            loading={getChannelRuleTypeOptionsRes.loading}
+                            options={
+                                getChannelRuleTypeOptionsRes
+                                && getChannelRuleTypeOptionsRes.data
+                                && getChannelRuleTypeOptionsRes.data.getChannelRuleTypeOptions
+                            }
+                            getOptions={getChannelRuleTypeOptions}
+                            error={!!(formik.touched.type && formik.errors.type)}
                             helperText={(formik.touched.type && formik.errors.type) || ''}
+                            primaryKey="value"
+                            labelKey="label"
                         />
                     </div>
                     <div className={classes.formField}>
@@ -191,15 +253,11 @@ const ChannelCreateContent = (props) => {
                             value={formik.values.virtualStock}
                             onChange={(e) => formik.setFieldValue('virtualStock', e)}
                             loading={getVirtualStockListRes.loading}
-                            options={
-                                getVirtualStockListRes
-                                && getVirtualStockListRes.data
-                                && getVirtualStockListRes.data.getVirtualStockList
-                                && getVirtualStockListRes.data.getVirtualStockList.items
-                            }
+                            options={virtualStockOptions}
                             getOptions={getVirtualStockList}
                             primaryKey="vs_id"
                             labelKey="vs_name"
+                            onInputChange={(e) => setSearchVirtualStock(e && e.target && e.target.value)}
                         />
                     </div>
                     <div className={classes.formField}>

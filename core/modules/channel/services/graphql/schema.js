@@ -204,8 +204,8 @@ export const updateChannel = gql`
 `;
 
 export const getVirtualStockList = gql`
-    query getVirtualStockList($pageSize: Int!, $currentPage: Int!) {
-        getVirtualStockList(pageSize: $pageSize, currentPage: $currentPage) {
+    query getVirtualStockList($filter: VirtualStockFilterInput, $pageSize: Int!, $currentPage: Int!) {
+        getVirtualStockList(filter: $filter, pageSize: $pageSize, currentPage: $currentPage) {
             items {
                 vs_id
                 vs_name
@@ -241,6 +241,23 @@ export const multideleteChannel = gql`
     }
 `;
 
+export const getChannelFrameworkOptions = gql`
+    query {
+        getChannelFrameworkOptions {
+            value
+            label
+        }
+    }
+`;
+export const getChannelRuleTypeOptions = gql`
+    query {
+        getChannelRuleTypeOptions {
+            value
+            label
+        }
+    }
+`;
+
 export default {
     getChannelList,
     getChannelById,
@@ -250,4 +267,6 @@ export default {
     getShipmentStatus,
     deleteChannel,
     multideleteChannel,
+    getChannelFrameworkOptions,
+    getChannelRuleTypeOptions,
 };

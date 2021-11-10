@@ -2,48 +2,101 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import Table from '@common_table';
-import Link from 'next/link';
 import Header from '@modules/history/pages/list/components/Header';
+import useStyles from '@modules/history/pages/list/components/style';
+import TextField from '@common_textfield';
 
-const CompanyListContent = (props) => {
-    const { data, loading, getCompanyList, multideleteCompany } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+const UpdateStockHistoryListContent = (props) => {
+    const classes = useStyles();
+    const { data, loading, getHistoryUpdateStockList } = props;
+    const historyUpdateStockList = (data && data.getHistoryUpdateStockList && data.getHistoryUpdateStockList.items) || [];
+    const historyUpdateStockTotal = (data && data.getHistoryUpdateStockList && data.getHistoryUpdateStockList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'Id' },
-        { field: 'company_code', headerName: 'Type' },
-        { field: 'company_code', headerName: 'Message', hideable: true },
-        { field: 'company_code', headerName: 'Status', hideable: true },
-        { field: 'company_code', headerName: 'Created at', hideable: true },
-        { field: 'company_code', headerName: 'Last Trigered by', hideable: true },
+        { field: 'entity_id', headerName: 'ID' },
+        { field: 'type', headerName: 'Type' },
+        { field: 'message', headerName: 'Message', hideable: true, sortable: true },
+        { field: 'status', headerName: 'Status', hideable: true, sortable: true },
+        { field: 'created_at', headerName: 'Created At', hideable: true, sortable: true },
+        { field: 'last_trigered_by', headerName: 'Last Trigered By', hideable: true, sortable: true },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
-    }));
+    const filters = [
+        { field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID From' },
+        { field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID To' },
+        { field: 'type', name: 'type', type: 'like', label: 'Type' },
+        { field: 'message', name: 'message', type: 'like', label: 'Message' },
+        { field: 'status', name: 'status', type: 'like', label: 'Status' },
+        {
+            field: 'created_at',
+            name: 'created_at_from',
+            type: 'from',
+            label: 'Created At From',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue.target.value);
+                    }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+        },
+        {
+            field: 'created_at',
+            name: 'created_at_to',
+            type: 'to',
+            label: 'Created At To',
+            component: ({ filterValue, setFilterValue }) => (
+                <TextField
+                    variant="outlined"
+                    id="date"
+                    type="date"
+                    value={filterValue}
+                    className={classes.textField}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue.target.value);
+                    }}
+                    InputProps={{
+                        className: classes.fieldInput,
+                    }}
+                />
+            ),
+        },
+        { field: 'last_trigered_by', name: 'last_trigered_by', type: 'like', label: 'Last Trigered By' },
+    ];
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
+    const rows = historyUpdateStockList.map((history) => ({
+        ...history,
+        id: history.entity_id,
+    }));
 
     return (
         <>
             <Header />
             <Table
+                hideActions
                 rows={rows}
-                getRows={getCompanyList}
-                deleteRows={multideleteCompany}
+                filters={filters}
+                getRows={getHistoryUpdateStockList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
-                showCheckbox
+                count={historyUpdateStockTotal}
             />
         </>
     );
 };
 
-export default CompanyListContent;
+export default UpdateStockHistoryListContent;

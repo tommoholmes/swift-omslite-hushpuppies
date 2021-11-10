@@ -2,61 +2,31 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
 import gqlService from '@modules/updatestockbyfilehistory/services/graphql';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
-    const router = useRouter();
-    const [createCompany] = gqlService.createCompany();
-
-    const handleSubmit = ({
-        code,
-        name,
-    }) => {
-        const variables = {
-            company_code: code,
-            company_name: name,
-        };
-        window.backdropLoader(true);
-        createCompany({
-            variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success create new company!',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/oms/company'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
-    };
+    const { Content } = props;
+    const [getUpdateStockByFileHistoryList, getUpdateStockByFileHistoryListRes] = gqlService.getUpdateStockByFileHistoryList();
 
     const formik = useFormik({
         initialValues: {
-            code: '',
-            name: '',
+            type: null,
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            type: Yup.object().required('Required!'),
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            getUpdateStockByFileHistoryList({
+                variables: {
+                    type: values.type.type,
+                },
+            });
         },
     });
 
     const contentProps = {
         formik,
+        getUpdateStockByFileHistoryListRes,
     };
 
     return (

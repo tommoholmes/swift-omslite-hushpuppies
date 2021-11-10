@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useRouter } from 'node_modules/next/router';
-import useStyles from '@modules/stockadjustment/pages/edit/components/style';
+import useStyles from '@modules/stockadjustment/pages/add/components/style';
 import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
@@ -18,12 +18,11 @@ import gqlLocation from '@modules/location/services/graphql';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import clsx from 'clsx';
 import gqlSource from '@modules/source/services/graphql';
-import Cookies from 'js-cookie';
-import { custDataNameCookie } from '@config';
 import * as Yup from 'yup';
+import Head from 'next/head';
 
 const StockAdjustmentAdd = (props) => {
-    const [getLocationList, getLocationListRes] = gqlLocation.getLocationList();
+    const [getStoreLocationList, getStoreLocationListRes] = gqlLocation.getStoreLocationList();
     const [getSourceList, getSourceListRes] = gqlSource.getSourceList();
     const { initialValues, submitHandler } = props;
     const classes = useStyles();
@@ -31,7 +30,6 @@ const StockAdjustmentAdd = (props) => {
     const [locID, setLocID] = React.useState(0);
     const [searchSku, setSearchSku] = React.useState('');
     const [searchLocation, setSearchLocation] = React.useState('');
-    const [customer_loc_code, setCustomerLocCode] = React.useState([]);
     const [locationOption, setLocationOption] = React.useState([]);
     const [baseSkuOption, setBaseSkuOption] = React.useState([]);
 
@@ -71,16 +69,11 @@ const StockAdjustmentAdd = (props) => {
         const onChangeTimeOut = setTimeout(() => {
             const isExist = searchLocation && locationOption.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchLocation?.toLowerCase()));
             if (searchLocation && isExist.length === 0) {
-                getLocationList({
+                getStoreLocationList({
                     variables: {
                         search: searchLocation,
                         pageSize: 20,
                         currentPage: 1,
-                        filter: {
-                            loc_code: {
-                                in: customer_loc_code,
-                            },
-                        },
                     },
                 });
             }
@@ -93,29 +86,18 @@ const StockAdjustmentAdd = (props) => {
 
     React.useEffect(() => {
         if (
-            getLocationListRes
-            && getLocationListRes.data
-            && getLocationListRes.data.getLocationList
-            && getLocationListRes.data.getLocationList.items
+            getStoreLocationListRes
+            && getStoreLocationListRes.data
+            && getStoreLocationListRes.data.getStoreLocationList
+            && getStoreLocationListRes.data.getStoreLocationList.items
         ) {
-            if (getLocationListRes.data.getLocationList.items.length > 0) {
-                setLocID(getLocationListRes.data.getLocationList.items[0].loc_id);
+            if (getStoreLocationListRes.data.getStoreLocationList.items.length > 0) {
+                setLocID(getStoreLocationListRes.data.getStoreLocationList.items[0].loc_id);
             }
             const ids = new Set(locationOption.map((d) => d.loc_code));
-            setLocationOption([...locationOption, ...getLocationListRes.data.getLocationList.items.filter((d) => !ids.has(d.loc_code))]);
+            setLocationOption([...locationOption, ...getStoreLocationListRes.data.getStoreLocationList.items.filter((d) => !ids.has(d.loc_code))]);
         }
-    }, [getLocationListRes.data]);
-
-    const handleSetUserInfo = (customer) => {
-        const customerLocCodeTemp = customer && customer.customer_loc_code;
-        setCustomerLocCode(customerLocCodeTemp.split(','));
-    };
-
-    React.useEffect(() => {
-        if (Cookies.getJSON(custDataNameCookie)) {
-            handleSetUserInfo(Cookies.getJSON(custDataNameCookie));
-        }
-    }, []);
+    }, [getStoreLocationListRes.data]);
 
     const addSchemaValidaton = Yup.object().shape({
         loc_code: Yup.object().required('Required!'),
@@ -132,11 +114,14 @@ const StockAdjustmentAdd = (props) => {
 
     return (
         <>
+            <Head>
+                <title>Add New Stock Adjustment</title>
+            </Head>
             <Button
                 className={classes.btnBack}
                 onClick={() => router.push('/cataloginventory/stockadjustment')}
                 variant="contained"
-                style={{ marginRight: 16 }}
+                style={{ marginRight: 10 }}
             >
                 <ChevronLeftIcon
                     style={{
@@ -153,7 +138,6 @@ const StockAdjustmentAdd = (props) => {
 
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <h2 className={classes.title}>Stock Adjustment Information</h2>
                     <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={addSchemaValidaton}>
                         {({
  values, setFieldValue, submitForm, errors, touched,
@@ -164,7 +148,7 @@ const StockAdjustmentAdd = (props) => {
                                         <span className={[classes.label, classes.labelRequired].join(' ')}>Location</span>
                                     </div>
                                     <Autocomplete
-                                        mode="lazy"
+                                        mode={locationOption.length > 0 ? 'default' : 'lazy'}
                                         value={values.loc_code}
                                         className={classes.autocompleteRoot}
                                         onChange={(e) => {
@@ -173,19 +157,14 @@ const StockAdjustmentAdd = (props) => {
                                             setFieldValue('items', []);
                                         }}
                                         defaultValue={{ loc_name: 'select', loc_code: 0 }}
-                                        loading={!values.loc_code?.loc_code && getLocationListRes.loading}
+                                        loading={!values.loc_code?.loc_code && getStoreLocationListRes.loading}
                                         options={locationOption}
-                                        getOptions={getLocationList}
+                                        getOptions={getStoreLocationList}
                                         getOptionsVariables={{
                                             variables: {
                                                 search: searchLocation,
                                                 pageSize: 20,
                                                 currentPage: 1,
-                                                filter: {
-                                                    loc_code: {
-                                                        in: customer_loc_code,
-                                                    },
-                                                },
                                             },
                                         }}
                                         primaryKey="loc_code"
@@ -223,7 +202,7 @@ const StockAdjustmentAdd = (props) => {
                                                                         {!item.entity_id ? (
                                                                             <Autocomplete
                                                                                 name={`items.${idx}.sku`}
-                                                                                mode="lazy"
+                                                                                mode={baseSkuOption.length > 0 ? 'default' : 'lazy'}
                                                                                 className={classes.autocomplete}
                                                                                 value={values.items[idx].sku}
                                                                                 onChange={(e) => {
@@ -279,6 +258,7 @@ const StockAdjustmentAdd = (props) => {
                                                 )}
                                                 <div className={`${classes.formFieldButton} ${classes.formFieldButtonRight}`}>
                                                     <Button
+                                                        disabled={values.loc_code === null}
                                                         className={classes.btn}
                                                         variant="contained"
                                                         onClick={() => push({

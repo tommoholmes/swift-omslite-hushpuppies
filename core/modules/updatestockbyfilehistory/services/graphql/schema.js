@@ -1,24 +1,21 @@
 import { gql } from '@apollo/client';
 
-export const createCompany = gql`
-    mutation createCompany(
-        $company_code: String!,
-        $company_name: String!,
-    ){
-        createCompany(
-            input: {
-                company_code: $company_code,
-                company_name: $company_name
-            }
-        ){
-            company_code
-            company_id
-            company_name
-            is_new_product
+export const getFileHistoryTypes = gql`
+    query {
+        getFileHistoryTypes {
+            type
+            title
         }
     }
 `;
 
+export const getUpdateStockByFileHistoryList = gql`
+    query getUpdateStockByFileHistoryList($type: String!) {
+        getUpdateStockByFileHistoryList(type: $type)
+    }
+`;
+
 export default {
-    createCompany,
+    getFileHistoryTypes,
+    getUpdateStockByFileHistoryList,
 };

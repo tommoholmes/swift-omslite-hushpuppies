@@ -146,6 +146,12 @@ mutation packShipment($id: [Int!]){
 }
 `;
 
+export const getStoreConfig = gql`
+  query{
+    getStoreConfig(path: "swiftoms_pickpack/batch/allow_manual_confirm_pick")
+  }
+`;
+
 export default {
     getPickByWaveList,
     getPickByWavePacklist,
@@ -153,4 +159,5 @@ export default {
     packShipment,
     donePickByWavePacking,
     updatePickByWaveQtyPacked,
+    getStoreConfig,
 };

@@ -15,6 +15,12 @@ export const getLocationList = (variables) => useLazyQuery(Schema.getLocationLis
     ...fetchPolicy,
 });
 
+export const getStoreLocationList = (variables) => useLazyQuery(Schema.getStoreLocationList, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
 export const getLocationById = (variables) => useQuery(Schema.getLocationById, {
     variables,
     ...context,
@@ -76,4 +82,5 @@ export default {
     getCityList,
     multideleteLocation,
     getCityKecByRegionCode,
+    getStoreLocationList,
 };

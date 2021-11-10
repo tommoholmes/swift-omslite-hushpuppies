@@ -23,6 +23,29 @@ export const getLocationList = gql`
     }
 `;
 
+export const getStoreLocationList = gql`
+    query getStoreLocationList($pageSize: Int!, $currentPage: Int!, $filter: LocationFilterInput, $sort: LocationSortInput, $search: String) {
+        getStoreLocationList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort, search: $search) {
+            items {
+                loc_id
+                loc_code
+                loc_name
+                loc_city {
+                    id
+                    label
+                }
+                loc_street
+            }
+            total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
+            }
+        }
+    }
+`;
+
 export const getLocationById = gql`
     query getLocationById($id: Int!) {
         getLocationById(id: $id) {
@@ -305,4 +328,5 @@ export default {
     getCityList,
     multideleteLocation,
     getCityKecByRegionCode,
+    getStoreLocationList,
 };

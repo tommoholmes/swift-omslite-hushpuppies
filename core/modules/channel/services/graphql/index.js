@@ -48,6 +48,10 @@ export const multideleteChannel = (variables) => useMutation(Schema.multideleteC
     ...context,
 });
 
+export const getChannelFrameworkOptions = (variables) => useLazyQuery(Schema.getChannelFrameworkOptions, { variables, ...context, ...fetchPolicy });
+
+export const getChannelRuleTypeOptions = (variables) => useLazyQuery(Schema.getChannelRuleTypeOptions, { variables, ...context, ...fetchPolicy });
+
 export default {
     getChannelList,
     getChannelById,
@@ -57,4 +61,6 @@ export default {
     deleteChannel,
     multideleteChannel,
     getShipmentStatus,
+    getChannelFrameworkOptions,
+    getChannelRuleTypeOptions,
 };

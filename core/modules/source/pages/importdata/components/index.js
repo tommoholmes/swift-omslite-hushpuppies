@@ -70,7 +70,7 @@ const SourceImportData = (props) => {
                         className={classes.btn}
                         onClick={formik.handleSubmit}
                         variant="contained"
-                        // disabled={!formik.values.binary || (activityState && activityState.run_status === 'running') || firstLoad}
+                        disabled={!formik.values.binary || (activityState && activityState.run_status === 'running') || firstLoad}
                     >
                         Submit
                     </Button>

@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     },
     btnBack: {
         display: 'inline-block',
-        borderRadius: '10px 0px 0px 10px',
-        minWidth: 'unset',
+        borderRadius: '10px 0px 0px 10px !important',
+        minWidth: 'unset !important',
         height: 36,
-        width: 42,
+        width: '36px !important',
         marginBottom: 6,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 18,
@@ -33,9 +33,25 @@ const useStyles = makeStyles((theme) => ({
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',
+        [theme.breakpoints.down('xs')]: {
+            padding: '20px 0px',
+        },
+    },
+    formFieldButtonRight: {
+        display: 'flex',
+        justifyContent: 'end',
     },
     btn: {
-        borderRadius: 20,
+        borderRadius: '20px !important',
+    },
+    btnSecondary: {
+        margin: '0px 10px !important',
+        borderRadius: '20px !important',
+        backgroundColor: `${borderColor} !important`,
+        color: `${colorPurple} !important`,
+        '&:hover': {
+            backgroundColor: `${borderColor} !important`,
+        },
     },
     divLabel: {
         width: 300,
@@ -93,6 +109,53 @@ const useStyles = makeStyles((theme) => ({
     td: {
         padding: '5px 0',
         fontFamily: font,
+        textAlign: 'center',
+    },
+    fieldQty: {
+        '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            display: 'none',
+        },
+        '&[type=number]': {
+            '-moz-appearance': 'textfield',
+        },
+        width: 40,
+        height: 30,
+        textAlign: 'center',
+    },
+    btnRemove: {
+        cursor: 'pointer',
+    },
+    autocomplete: {
+        '& .MuiTextField-root': {
+            width: '80%',
+        },
+        [theme.breakpoints.down('md')]: {
+            '& .MuiTextField-root': {
+                width: '100%',
+            },
+            '& .MuiInputBase-root': {
+                padding: '0px !important',
+            },
+            '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
+                padding: 10,
+            },
+        },
+    },
+    autocompleteRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            borderRadius: 20,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
     },
 }));
 

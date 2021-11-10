@@ -32,9 +32,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PublishIcon from '@material-ui/icons/Publish';
 
 // helpers
-const getComponentOrString = (param) => (
-    typeof param === 'function' ? param() : param
-);
+const getComponentOrString = (param) => (typeof param === 'function' ? param() : param);
 
 // custom hooks
 const useColumns = (initialColumns) => {
@@ -55,10 +53,12 @@ const useColumns = (initialColumns) => {
     };
 
     const applyHiddenColumns = () => {
-        setColumns(columns.map((column, i) => ({
-            ...column,
-            hidden: hiddenColumns[i].hidden,
-        })));
+        setColumns(
+            columns.map((column, i) => ({
+                ...column,
+                hidden: hiddenColumns[i].hidden,
+            })),
+        );
     };
 
     const resetHiddenColumn = () => {
@@ -68,7 +68,11 @@ const useColumns = (initialColumns) => {
     };
 
     return {
-        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
+        columns,
+        hiddenColumns,
+        setHiddenColumn,
+        applyHiddenColumns,
+        resetHiddenColumn,
     };
 };
 
@@ -87,6 +91,9 @@ const CustomTable = (props) => {
         count,
         actions,
         hideActions = false,
+        hideFilters = false,
+        hideColumns = false,
+        hideFooter = false,
         handleClickRow = null,
         handleReset,
         handleExport,
@@ -106,16 +113,10 @@ const CustomTable = (props) => {
     const [showMessageActions, setShowMessageActions] = React.useState(true);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const {
-        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
-    } = useColumns(props.columns);
-    const [filters, setFilters] = React.useState(
-        initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })),
-    );
+    const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn } = useColumns(props.columns);
+    const [filters, setFilters] = React.useState(initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })));
     const [sorts, setSorts] = React.useState(
-        props.columns
-            .filter((column) => column.sortable)
-            .map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
+        props.columns.filter((column) => column.sortable).map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
     );
     const [activeAction, setActiveAction] = React.useState();
 
@@ -136,26 +137,32 @@ const CustomTable = (props) => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
-            filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
-                accumulator[currentValue.field] = {
-                    ...accumulator[currentValue.field],
-                    [typeof currentValue.type === 'object' ? currentValue.type[indexType[currentValue.name]] : currentValue.type]: currentValue.value,
-                };
-                return accumulator;
-            }, {}),
+            filter: filters
+                .filter((e) => !isEmpty(e.value))
+                .reduce((accumulator, currentValue) => {
+                    accumulator[currentValue.field] = {
+                        ...accumulator[currentValue.field],
+                        [typeof currentValue.type === 'object'
+                            ? currentValue.type[indexType[currentValue.name]]
+                            : currentValue.type]: currentValue.value,
+                    };
+                    return accumulator;
+                }, {}),
             sort: sorts.reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = currentValue.value || undefined;
                 return accumulator;
             }, {}),
         };
         const variablesExport = {
-            filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
-                accumulator[currentValue.field] = {
-                    ...accumulator[currentValue.field],
-                    [currentValue.type]: currentValue.value,
-                };
-                return accumulator;
-            }, {}),
+            filter: filters
+                .filter((e) => !isEmpty(e.value))
+                .reduce((accumulator, currentValue) => {
+                    accumulator[currentValue.field] = {
+                        ...accumulator[currentValue.field],
+                        [currentValue.type]: currentValue.value,
+                    };
+                    return accumulator;
+                }, {}),
             sort: sorts.reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = currentValue.value || undefined;
                 return accumulator;
@@ -270,93 +277,86 @@ const CustomTable = (props) => {
                             />
                         </div>
                     )}
-                    <div className="top-item">
-                        <Button
-                            className={classes.btn}
-                            onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
-                        >
-                            columns
-                        </Button>
-                    </div>
-                    <div className="top-item">
-                        <Button
-                            className={clsx(classes.btn, 'filter')}
-                            onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
-                            variant="contained"
-                            buttonType="primary-rounded"
-                        >
-                            <FilterListIcon style={{ marginRight: 10 }} />
-                            filters
-                        </Button>
-                    </div>
-                    {handleExport
-                        && (
+                    {!hideColumns && (
+                        <div className="top-item">
+                            <Button
+                                className={classes.btn}
+                                onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
+                            >
+                                columns
+                            </Button>
+                        </div>
+                    )}
+
+                    {!hideFilters && (
+                        <div className="top-item">
+                            <Button
+                                className={clsx(classes.btn, 'filter')}
+                                onClick={() => setExpandedToolbar(expandedToolbar != 'filters' ? 'filters' : '')}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                <FilterListIcon style={{ marginRight: 10 }} />
+                                filters
+                            </Button>
+                        </div>
+                    )}
+
+                    {handleExport && (
+                        <div className="top-item">
+                            <Button className={clsx(classes.btn, 'filter')} onClick={handleExport} variant="contained" buttonType="primary-rounded">
+                                <PublishIcon style={{ marginRight: 10 }} />
+                                export
+                            </Button>
+                        </div>
+                    )}
+                    {exports.length ? (
+                        <>
+                            <button
+                                id="clickConfirmExport"
+                                className="hide"
+                                type="submit"
+                                onClick={() => {
+                                    activeAction.onClick(checkedRows);
+                                }}
+                            >
+                                Auto Confirm
+                            </button>
                             <div className="top-item">
-                                <Button
-                                    className={clsx(classes.btn, 'filter')}
-                                    onClick={handleExport}
-                                    variant="contained"
-                                    buttonType="primary-rounded"
-                                >
-                                    <PublishIcon style={{ marginRight: 10 }} />
-                                    export
-                                </Button>
+                                <MenuPopover
+                                    openButton={{ label: 'Exports' }}
+                                    color="purple"
+                                    iconPosition="end"
+                                    icon={<PublishIcon />}
+                                    menuItems={exports.map((action) => ({
+                                        label: action.label,
+                                        onClick: () => {
+                                            setActiveAction(action);
+                                            setTimeout(() => {
+                                                document.getElementById('clickConfirmExport').click();
+                                            }, 100);
+                                        },
+                                    }))}
+                                />
                             </div>
-                        )}
-                    {exports.length
-                        ? (
-                            <>
-                                <button
-                                    id="clickConfirmExport"
-                                    className="hide"
-                                    type="submit"
-                                    onClick={() => {
-                                        activeAction.onClick(checkedRows);
-                                    }}
-                                >
-                                    Auto Confirm
-                                </button>
-                                <div className="top-item">
-                                    <MenuPopover
-                                        openButton={{ label: 'Exports' }}
-                                        color="purple"
-                                        iconPosition="end"
-                                        icon={<PublishIcon />}
-                                        menuItems={exports.map((action) => ({
-                                            label: action.label,
-                                            onClick: () => {
-                                                setActiveAction(action);
-                                                setTimeout(() => {
-                                                    document.getElementById('clickConfirmExport').click();
-                                                }, 100);
-                                            },
-                                        }))}
-                                    />
-                                </div>
-                            </>
-                        )
-                        : null}
+                        </>
+                    ) : null}
                 </div>
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
                         <div style={{ padding: 12 }}>
-                            {(hiddenColumns.find((c) => c.hideable)) && (
-                                <div style={{ padding: 12 }}>
-                                    {`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}
-                                </div>
+                            {hiddenColumns.find((c) => c.hideable) && (
+                                <div style={{ padding: 12 }}>{`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}</div>
                             )}
-                            {!(hiddenColumns.find((c) => c.hideable)) && (
-                                <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
-                            )}
-                            {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
-                                <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
-                                    <Checkbox
-                                        checked={!column.hidden}
-                                        onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
-                                    />
-                                    {column.headerName}
-                                </div>
-                            ))}
+                            {!hiddenColumns.find((c) => c.hideable) && <div style={{ padding: 12 }}>Toggle show fields is empty.</div>}
+                            {hiddenColumns
+                                .filter((c) => c.hideable)
+                                .map((column, index) => (
+                                    <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
+                                        <Checkbox checked={!column.hidden} onChange={(e) => setHiddenColumn(column.field, !e.target.checked)} />
+                                        {column.headerName}
+                                    </div>
+                                ))}
                             <div style={{ padding: 12 }}>
                                 <Button buttonType="primary-rounded" onClick={applyHiddenColumns}>
                                     Apply
@@ -401,34 +401,29 @@ const CustomTable = (props) => {
         };
 
         const setSortByField = (field) => {
-            setSorts(sorts.map((sort) => ({
-                ...sort,
-                ...((sort.field === field) && { value: sort.value === 'ASC' ? 'DESC' : 'ASC' }),
-                ...((sort.field != field) && { value: undefined }),
-            })));
+            setSorts(
+                sorts.map((sort) => ({
+                    ...sort,
+                    ...(sort.field === field && { value: sort.value === 'ASC' ? 'DESC' : 'ASC' }),
+                    ...(sort.field != field && { value: undefined }),
+                })),
+            );
         };
         const getSortValue = (field) => {
             const sort = sorts.find((e) => e.field === field);
             return sort && sort.value;
         };
-        const getArrowClass = (field) => getSortValue(field) === 'ASC' ? classes.arrowDown : classes.arrowUp;
+        const getArrowClass = (field) => (getSortValue(field) === 'ASC' ? classes.arrowDown : classes.arrowUp);
         return (
             <TableHead>
                 <TableRow>
                     {showCheckbox && (
                         <TableCell>
-                            <Checkbox
-                                checked={isCheckedAllRows}
-                                onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)}
-                            />
+                            <Checkbox checked={isCheckedAllRows} onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)} />
                         </TableCell>
                     )}
                     {columns.map((column, columnIndex) => (
-                        <TableCell
-                            key={columnIndex}
-                            className={clsx(column.hidden && 'hide')}
-                            style={{ whiteSpace: 'nowrap' }}
-                        >
+                        <TableCell key={columnIndex} className={clsx(column.hidden && 'hide')} style={{ whiteSpace: 'nowrap' }}>
                             {!column.sortable && getComponentOrString(column.headerName)}
                             {column.sortable && (
                                 <Button
@@ -436,9 +431,11 @@ const CustomTable = (props) => {
                                     style={{ marginLeft: -16 }}
                                     buttonType="link"
                                     endIcon={
-                                        getSortValue(column.field)
-                                            ? <ArrowRightAltIcon className={getArrowClass(column.field)} />
-                                            : <ImportExportIcon style={{ opacity: 0.3 }} />
+                                        getSortValue(column.field) ? (
+                                            <ArrowRightAltIcon className={getArrowClass(column.field)} />
+                                        ) : (
+                                            <ImportExportIcon style={{ opacity: 0.3 }} />
+                                        )
                                     }
                                 >
                                     {column.headerName}
@@ -465,7 +462,7 @@ const CustomTable = (props) => {
                 {rows.map((row, rowIndex) => (
                     <TableRow
                         key={rowIndex}
-                        onClick={() => handleClickRow ? handleClickRow(row) : null}
+                        onClick={() => (handleClickRow ? handleClickRow(row) : null)}
                         style={{
                             cursor: handleClickRow ? 'pointer' : 'default',
                         }}
@@ -479,10 +476,7 @@ const CustomTable = (props) => {
                             </TableCell>
                         )}
                         {columns.map((column, columnIndex) => (
-                            <TableCell
-                                key={columnIndex}
-                                className={clsx(column.hidden && 'hide')}
-                            >
+                            <TableCell key={columnIndex} className={clsx(column.hidden && 'hide')}>
                                 {getComponentOrString(row[column.field]) || '-'}
                             </TableCell>
                         ))}
@@ -521,16 +515,18 @@ const CustomTable = (props) => {
         <TableContainer component={Paper} className={classes.tableContainer}>
             {renderTableToolbar()}
             <div className={classes.mainTable}>
-                {loading ? <div className={classes.loading}>Loading . . .</div>
-                    : rows.length ? (
-                        <Table size="small">
-                            {renderTableHeader()}
-                            {renderTableBody()}
-                        </Table>
-                    )
-                        : <div className={classes.loading}>No records to display</div>}
+                {loading ? (
+                    <div className={classes.loading}>Loading . . .</div>
+                ) : rows.length ? (
+                    <Table size="small">
+                        {renderTableHeader()}
+                        {renderTableBody()}
+                    </Table>
+                ) : (
+                    <div className={classes.loading}>No records to display</div>
+                )}
             </div>
-            {renderTableFooter()}
+            {!hideFooter && renderTableFooter()}
         </TableContainer>
     );
 };
