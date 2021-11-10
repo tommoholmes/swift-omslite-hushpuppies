@@ -2,16 +2,12 @@ import Layout from '@layout';
 import gqlService from '@modules/history/services/graphql';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
 
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
-    const [multideleteCompany] = gqlService.multideleteCompany();
+    const [getHistoryUpdateStockList, { data, loading }] = gqlService.getHistoryUpdateStockList();
 
     const contentProps = {
-        getCompanyList,
-        multideleteCompany,
+        getHistoryUpdateStockList,
         data,
         loading,
     };
