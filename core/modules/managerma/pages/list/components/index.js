@@ -8,19 +8,32 @@ import Autocomplete from '@common_autocomplete';
 import statusGqlService from '@modules/rmastatuses/services/graphql';
 import useStyles from '@modules/managerma/pages/list/components/style';
 import Header from '@modules/managerma/pages/list/components/Header';
+import Tabs from '@common_tabs';
 
 const ManageRmaListContent = (props) => {
     const classes = useStyles();
     const { data, loading, getRmaList } = props;
+
+    const dataTab = [
+        { label: 'Pending Approval', value: 'pending_approval' },
+        { label: 'Approved', value: 'approved' },
+        { label: 'Package Received', value: 'package_received' },
+        { label: 'Processing', value: 'processing' },
+        { label: 'Complete', value: 'complete' },
+        { label: 'All', value: 0 },
+    ];
+    const [tab, setTab] = React.useState('pending_approval');
+    const [load, setLoad] = React.useState(false);
+
     const rmaList = (data && data.getRmaList && data.getRmaList.items) || [];
     const rmaTotal = (data && data.getRmaList && data.getRmaList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'Request #', hideable: true, sortable: true },
+        { field: 'increment_id', headerName: 'Request #', hideable: true, sortable: true, initialSort: 'DESC' },
         { field: 'channel_order_increment_id', headerName: 'Channel Order #', hideable: true, sortable: true },
-        { field: 'status_code', headerName: 'Status', hideable: true, sortable: true },
+        { field: 'status_label', headerName: 'Status', hideable: true, sortable: true },
         { field: 'loc_name', headerName: 'Origin Location(s)', hideable: true },
-        { field: 'customer_email', headerName: 'Customer', hideable: true },
+        { field: 'customer', headerName: 'Customer', hideable: true },
         { field: 'created_at', headerName: 'Created At', hideable: true, sortable: true },
         { field: 'actions', headerName: 'Actions' },
     ];
@@ -34,6 +47,7 @@ const ManageRmaListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -56,6 +70,7 @@ const ManageRmaListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -77,7 +92,7 @@ const ManageRmaListContent = (props) => {
             name: 'status_code',
             type: 'eq',
             label: 'Status',
-            initialValue: '',
+            initialValue: tab !== 0 ? tab : '',
             component: ({ filterValue, setFilterValue }) => {
                 const [getRmaStatusList, getRmaStatusListRes] = statusGqlService.getRmaStatusList();
                 const channelOptions = (getRmaStatusListRes
@@ -110,25 +125,35 @@ const ManageRmaListContent = (props) => {
                 <a className="link-button">Edit</a>
             </Link>
         ),
+        customer: `${rma.customer_name}, ${rma.customer_email}`,
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
+    const onChangeTab = async (e, v) => {
+        setLoad(true);
+        await setTab(v);
+        setLoad(false);
+    };
+
+    const handleReset = () => {
+        setTab(0);
+    };
 
     return (
         <>
             <Header />
-            <Table
-                filters={filters}
-                rows={rows}
-                getRows={getRmaList}
-                loading={loading}
-                columns={columns}
-                count={rmaTotal}
-            />
+            <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
+            {!load && (
+                <Table
+                    filters={filters}
+                    rows={rows}
+                    getRows={getRmaList}
+                    loading={loading}
+                    columns={columns}
+                    count={rmaTotal}
+                    handleReset={() => handleReset()}
+                    hideActions
+                />
+            )}
         </>
     );
 };

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const colorPurple = '#BE1F93';
-const colorBlue = '#321fdb';
+const colorBlue = '#007bdb';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
 const borderColor = '#DDE1EC';
@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         display: 'inline-block',
     },
+    capitalize: {
+        textTransform: 'capitalize',
+    },
     title: {
         fontFamily: font,
         color: colorText,
@@ -46,7 +49,9 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'uppercase',
         margin: 0,
         padding: '17px 0',
-        borderBottom: '1px solid #DDE1EC',
+        '&.border': {
+            borderBottom: '1px solid #DDE1EC',
+        },
     },
     btn: {
         borderRadius: 20,
@@ -63,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
             width: 50,
             marginRight: 18,
         },
+        '&.reverse': {
+            background: '#FFFFFF',
+            color: colorPurple,
+        },
     },
     content: {
         borderBottom: '3px solid #F5F7FB',
@@ -78,6 +87,10 @@ const useStyles = makeStyles((theme) => ({
     spanLabel: {
         display: 'block',
         fontWeight: 700,
+    },
+    gridHeader: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
     },
     contentLeft: {
         display: 'inline-block',
@@ -114,6 +127,7 @@ const useStyles = makeStyles((theme) => ({
     td: {
         padding: '5px 0',
         fontFamily: font,
+        verticalAlign: 'top',
     },
     grandTotal: {
         fontFamily: font,
@@ -121,10 +135,52 @@ const useStyles = makeStyles((theme) => ({
     },
     link: {
         color: colorBlue,
-        fontWeight: 700,
+        fontWeight: 500,
         '&:hover': {
             textDecorationLine: 'underline',
         },
+    },
+    list: {
+        marginBottom: 15,
+        paddingBottom: 10,
+        borderBottom: `1px solid ${borderColor}`,
+    },
+    fieldRoot: {
+        maxWidth: 200,
+        verticalAlign: 'middle',
+        marginBottom: 30,
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
+        '&.fieldCenter': {
+            marginLeft: 10,
+            marginRight: 10,
+        },
+        '& .MuiInputLabel-outlined': {
+            transform: 'translate(10px, 10px)',
+        },
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6px) scale(0.75)',
+        },
+        '&.marginTop': {
+            marginTop: '20px !important',
+        },
+        '&.full': {
+            maxWidth: '100%',
+            width: '100%',
+        },
+    },
+    formgroup: {
+        marginBottom: 20,
+    },
+    controlLabel: {
+        '& .MuiFormControlLabel-label': {
+            fontFamily: font,
+            fontSize: 14,
+        },
+    },
+    rootLabel: {
+        marginBottom: 3,
     },
 }));
 
