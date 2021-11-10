@@ -52,9 +52,9 @@ const ContentWrapper = (props) => {
             status: optionsActive.find((elm) => data.status === elm.name) ?? optionsActive[1],
         },
         validationSchema: Yup.object().shape({
-            loc: Yup.object().required('required!'),
+            loc: Yup.object().typeError('required!').required('required!'),
             pickup_name: Yup.string().required('required!'),
-            status: Yup.object().required('required!'),
+            status: Yup.object().typeError('required!').required('required!'),
         }),
         onSubmit: async (values) => {
             await handleSubmit(values);
