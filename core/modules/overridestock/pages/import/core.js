@@ -13,7 +13,8 @@ const Core = (props) => {
     const [showProgress, setshowProgress] = React.useState(false);
     const [getActivity] = gqlService.getActivity({
         variables: {
-            code: 'update_source',
+            code: 'import_vs_qty',
+            by_session: true,
         },
         onCompleted: (res) => {
             setActivityState({ ...res.getActivity, loading: false });

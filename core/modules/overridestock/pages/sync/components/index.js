@@ -3,14 +3,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from '@common_button';
-import Paper from '@material-ui/core/Paper';
-import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import DropFile from '@common_dropfile';
+import Paper from '@material-ui/core/Paper';
 import clsx from 'clsx';
-import useStyles from '@modules/overridestock/pages/import/components/style';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import useStyles from '@modules/overridestock/pages/sync/components/style';
+import Autocomplete from '@common_autocomplete';
+import gqlStore from '@modules/store/services/graphql';
 import Progressbar from '@common_progressbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,15 +20,55 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
-const SourceImport = (props) => {
+const SyncToMPContent = (props) => {
     const {
-        formik, urlDownload, handleDropFile, activityState, firstLoad, showProgress,
+        formik, activityState, firstLoad, showProgress,
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const firstRender = useRef(true);
+    const [getStoreList, { data, loading }] = gqlStore.getStoreList();
+    const [storeListOptions, setStoreListOptions] = useState([]);
+
+    useEffect(() => {
+        getStoreList({
+            variables: {
+                pageSize: 100,
+                currentPage: 1,
+                filter: {
+                    partner_id: {
+                        notnull: 'true',
+                        neq: '',
+                    },
+                    hash_key: {
+                        notnull: 'true',
+                        neq: '',
+                    },
+                },
+            },
+        });
+    }, []);
+
+    useEffect(() => {
+        if (data && data.getStoreList && data.getStoreList.items) {
+            if (data.getStoreList.total_count === 1) {
+                formik.setFieldValue('channel_store_id', data.getStoreList.items[0]);
+                formik.submitForm();
+            }
+            setStoreListOptions(data.getStoreList.items);
+            firstRender.current = false;
+        }
+    }, [data]);
+
+    if (firstRender.current && loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <>
+            <Head>
+                <title>Sync Stock to MP</title>
+            </Head>
             <Button
                 className={classes.btnBack}
                 onClick={() => router.push('/cataloginventory/overridestock')}
@@ -43,35 +85,33 @@ const SourceImport = (props) => {
                     }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Import Override Stock</h2>
+            <h2 className={classes.titleTop}>Sync Stock to MP</h2>
             <Paper className={classes.container}>
-                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
-                <div className={classes.content}>
-                    <div className={classes.formField}>
-                        <span className={classes.label}>
-                            <a href={urlDownload} className={classes.linkDownload}>
-                                Download the Sample CSV
-                            </a>
-                        </span>
+                {data && data.getStoreList && (data.getStoreList.items.length > 1 || data.getStoreList.items.length === 0) && (
+                    <div className={classes.content}>
+                        <div className={classes.formField}>
+                            <div className={classes.divLabel}>
+                                <span className={clsx(classes.label, classes.labelRequired)}>Store</span>
+                            </div>
+                            <Autocomplete
+                                className={clsx(classes.autocompleteRoot, classes.autocompleteMulti)}
+                                value={formik.values.channel_store_id}
+                                onChange={(e) => formik.setFieldValue('channel_store_id', e)}
+                                options={storeListOptions}
+                                primaryKey="channel_store_id"
+                                labelKey="name"
+                            />
+                        </div>
+                        <Button
+                            className={classes.btn}
+                            onClick={formik.handleSubmit}
+                            variant="contained"
+                            disabled={!formik.values.channel_store_id || (activityState && activityState.run_status === 'running') || firstLoad}
+                        >
+                            Sync
+                        </Button>
                     </div>
-                    <div className={clsx(classes.formField, classes.textLeft)}>
-                        <DropFile
-                            title="Please select the file : "
-                            error={formik.errors.binary && formik.touched.binary}
-                            getBase64={handleDropFile}
-                        />
-                    </div>
-                </div>
-                <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                        disabled={!formik.values.binary || (activityState && activityState.run_status === 'running') || firstLoad}
-                    >
-                        Submit
-                    </Button>
-                </div>
+                )}
                 {activityState && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress) ? (
                     <div className={classes.progressContainer}>
                         <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />
@@ -149,4 +189,4 @@ const SourceImport = (props) => {
     );
 };
 
-export default SourceImport;
+export default SyncToMPContent;

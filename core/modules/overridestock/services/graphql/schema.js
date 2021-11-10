@@ -103,8 +103,8 @@ export const uploadVirtualStockQuantity = gql`
 `;
 
 export const getActivity = gql`
-    query {
-        getActivity(code: "import_vs_qty", by_session: true) {
+    query getActivity($code: String!, $by_session: Boolean!) {
+        getActivity(code: $code, by_session: $by_session) {
             activity_id
             activity_code
             run_status
@@ -126,6 +126,11 @@ export const downloadSampleCsv = gql`
         downloadSampleCsv(type: $type)
     }
 `;
+export const syncOverrideStockToMarketplace = gql`
+    mutation syncOverrideStockToMarketplace($store_id: String!) {
+        syncOverrideStockToMarketplace(store_id: $store_id)
+    }
+`;
 
 export default {
     getVirtualStockQuantityList,
@@ -135,4 +140,5 @@ export default {
     downloadSampleCsv,
     uploadVirtualStockQuantity,
     getActivity,
+    syncOverrideStockToMarketplace,
 };

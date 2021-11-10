@@ -47,6 +47,11 @@ export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
     fetchPolicy: 'no-cache',
 });
 
+export const syncOverrideStockToMarketplace = (variables) => useMutation(Schema.syncOverrideStockToMarketplace, {
+    variables,
+    ...context,
+});
+
 export default {
     getVirtualStockQuantityList,
     getVirtualStockQuantityById,
@@ -55,4 +60,5 @@ export default {
     uploadVirtualStockQuantity,
     downloadSampleCsv,
     getActivity,
+    syncOverrideStockToMarketplace,
 };
