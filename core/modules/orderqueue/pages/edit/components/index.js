@@ -84,7 +84,7 @@ const OrderQueueEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                {`Detail Shipment #${orderQueue.id}`}
+                {`Detail Order #${orderQueue.id}`}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>
@@ -131,48 +131,48 @@ const OrderQueueEditContent = (props) => {
                 </div>
 
                 {orderQueue.isAllowReallocate
-                && (
-                    <div className={classes.content}>
-                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
-                            <div className={classes.orderLabel}>
-                                Order status is
-                                {' '}
-                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                    && (
+                        <div className={classes.content}>
+                            <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                                <div className={classes.orderLabel}>
+                                    Order status is
+                                    {' '}
+                                    <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                                </div>
+                                <Button
+                                    className={classes.btn}
+                                    type="submit"
+                                    onClick={formikAllocation.handleSubmit}
+                                    variant="contained"
+                                    buttonType="primary-rounded"
+                                >
+                                    Set as Allocating
+                                </Button>
                             </div>
-                            <Button
-                                className={classes.btn}
-                                type="submit"
-                                onClick={formikAllocation.handleSubmit}
-                                variant="contained"
-                                buttonType="primary-rounded"
-                            >
-                                Set as Allocating
-                            </Button>
                         </div>
-                    </div>
-                )}
+                    )}
 
                 {orderQueue.isAllowRecreate
-                && (
-                    <div className={classes.content}>
-                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
-                            <div>
-                                Order status is
-                                {' '}
-                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                    && (
+                        <div className={classes.content}>
+                            <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                                <div>
+                                    Order status is
+                                    {' '}
+                                    <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                                </div>
+                                <Button
+                                    className={classes.btn}
+                                    type="submit"
+                                    onClick={formikNew.handleSubmit}
+                                    variant="contained"
+                                    buttonType="primary-rounded"
+                                >
+                                    Set as New
+                                </Button>
                             </div>
-                            <Button
-                                className={classes.btn}
-                                type="submit"
-                                onClick={formikNew.handleSubmit}
-                                variant="contained"
-                                buttonType="primary-rounded"
-                            >
-                                Set as New
-                            </Button>
                         </div>
-                    </div>
-                ) }
+                    )}
 
                 <div className={classes.content}>
                     <div className={classes.grid}>
@@ -258,16 +258,19 @@ const OrderQueueEditContent = (props) => {
                 <div className={classes.content}>
                     <div className={classes.gridTotal}>
                         <div className="grid-child">
-                            <h5 className={classes.titleSmallBlack}>Shipping Cost</h5>
-                            <span className={classes.dataSmallBlack}>{formatPriceNumber(orderQueue.shippingCost)}</span>
-                        </div>
-                        <div className="grid-child">
                             <h5 className={classes.titleSmallBlack}>Order Totals</h5>
-                            <span className={classes.dataSmallBlack}>
-                                Grand Total
-                                {' '}
-                                {formatPriceNumber(orderQueue.grandTotal)}
-                            </span>
+                            <tbody>
+                                <tr className={classes.tr}>
+                                    <td className={classes.td}>Shipping Cost</td>
+                                    <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(orderQueue.shippingCost)}</td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr className={classes.tr}>
+                                    <td className={classes.td}>Grand Total</td>
+                                    <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(orderQueue.grandTotal)}</td>
+                                </tr>
+                            </tbody>
                         </div>
                         <div className="grid-child">
                             <h5 className={classes.titleSmallBlack}>Notes for This Order</h5>
