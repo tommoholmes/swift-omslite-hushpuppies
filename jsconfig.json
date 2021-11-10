@@ -82,6 +82,7 @@
             "@common_formdialog": ["src/modules/commons/FormDialog","core/modules/commons/FormDialog"],
             "@common_customlist": ["src/modules/commons/CustomList","core/modules/commons/CustomList"],
             "@common_barcodescanner": ["src/modules/commons/BarcodeScanner","core/modules/commons/BarcodeScanner"],
+            "@common_select": ["src/modules/commons/Select","core/modules/commons/Select"],
 
             "@common_autocomplete/*": ["src/modules/commons/Autocomplete/*","core/modules/commons/Autocomplete/*"],
             "@common_textfield/*": ["src/modules/commons/TextField/*","core/modules/commons/TextField/*"],
@@ -98,6 +99,7 @@
             "@common_formdialog/*": ["src/modules/commons/FormDialog/*","core/modules/commons/FormDialog/*"],
             "@common_customlist/*": ["src/modules/commons/CustomList/*","core/modules/commons/CustomList/*"],
             "@common_barcodescanner/*": ["src/modules/commons/BarcodeScanner/*","core/modules/commons/BarcodeScanner/*"],
+            "@common_select/*": ["src/modules/commons/Select/*","core/modules/commons/Select/*"],
 
             // for example
             "@common_buttonqty": ["swift-pwa-core/core/modules/commons/ButtonQty"],
