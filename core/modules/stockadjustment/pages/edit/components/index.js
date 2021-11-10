@@ -146,7 +146,6 @@ Edit Stock Adjustment #
 </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <h2 className={classes.title}>Stock Adjustment Information</h2>
                     <Formik initialValues={initialValues} onSubmit={submitHandler} validationSchema={editSchemaValidaton}>
                         {({
  values, setFieldValue, submitForm, errors, touched,
