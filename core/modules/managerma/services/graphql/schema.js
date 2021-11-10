@@ -17,9 +17,10 @@ export const getRmaList = gql`
                 id
                 increment_id
                 channel_order_increment_id
+                status_label
                 status_code
                 loc_name
-                customer_email
+                customer_name
                 created_at
                 channel_order_increment_id
                 created_at
@@ -43,7 +44,9 @@ export const getRmaById = gql`
             id: $id
         ){
             id
+            increment_id
             status_code
+            status_label
             customer_name
             created_at
             customer_email
@@ -56,12 +59,14 @@ export const getRmaById = gql`
                 region
                 postcode
                 country_id
+                country_name
                 telephone
             }
             channel_order_increment_id
             return_type
             refund_type
-            package_received
+            package_received_by_loc
+            package_received_by_loc_name
             creditmemo
             rma_item {
                 id
@@ -72,7 +77,12 @@ export const getRmaById = gql`
                 package_condition
                 reason
                 status_code
+                status_label
                 return_stock
+                attachment {
+                    filename
+                    filepath
+                }
             }
             message {
                 id
@@ -94,8 +104,40 @@ export const refundRma = gql`
     }
 `;
 
+export const getRmaItemStatusOptions = gql`
+    query{
+        getRmaItemStatusOptions{
+            value
+            label
+        }
+    }
+`;
+
+export const getStoreConfig = gql`
+    query getStoreConfig(
+        $path: String!,
+    ){
+        getStoreConfig(
+            path: $path,
+        )
+    }
+`;
+
+export const saveRma = gql`
+    mutation saveRma(
+        $input: RmaInput!,
+    ){
+        saveRma(
+            input: $input,
+        )
+    }
+`;
+
 export default {
     getRmaList,
     getRmaById,
     refundRma,
+    getRmaItemStatusOptions,
+    getStoreConfig,
+    saveRma,
 };
