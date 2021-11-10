@@ -199,6 +199,8 @@ const LocationPickupEditContent = (props) => {
                             options={optionsActive}
                             primaryKey="id"
                             labelKey="name"
+                            error={!!(formik.touched.status && formik.errors.status)}
+                            helperText={(formik.touched.status && formik.errors.status) || ''}
                         />
                     </div>
                 </div>
