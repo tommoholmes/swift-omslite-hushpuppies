@@ -14,9 +14,9 @@ const Message = dynamic(() => import('@common_toast'), { ssr: false });
 const ContentWrapper = (props) => {
     const { data, Content } = props;
     const router = useRouter();
-    const queryEmail = router && router.query && router.query.email;
-    const queryOrder = router && router.query && router.query.order;
-    const queryChannel = router && router.query && router.query.channel;
+    const queryEmail = router.query.email;
+    const queryOrder = router.query.order_number;
+    const queryChannel = router.query.channel_code;
 
     const [backdropLoader, setBackdropLoader] = React.useState(false);
     const [toastMessage, setToastMessage] = React.useState({
@@ -99,7 +99,7 @@ const ContentWrapper = (props) => {
             qty: '',
             reason: '',
             package_condition: '',
-            binary_data: '',
+            binary: '',
             filename: '',
         },
         validationSchema: Yup.object().shape({
@@ -121,9 +121,7 @@ const ContentWrapper = (props) => {
     };
 
     const contentProps = {
-        queryEmail,
         queryOrder,
-        queryChannel,
         formik,
         requestreturn,
         handleDropFile,
@@ -145,13 +143,14 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+    const { email, order_number, channel_code } = router.query;
     const [searchShipmentToReturn, searchShipmentToReturnRes] = gqlService.searchShipmentToReturn();
     React.useEffect(() => {
         searchShipmentToReturn({
             variables: {
-                customer_email: router && router.query && router.query.email,
-                channel_order_increment_id: router && router.query && router.query.order,
-                channel_code: router && router.query && router.query.channel,
+                customer_email: email,
+                channel_order_increment_id: order_number,
+                channel_code,
             },
         });
     }, []);

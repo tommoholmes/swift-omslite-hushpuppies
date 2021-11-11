@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable prefer-const */
-import React from 'react';
-import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import gqlService from '@modules/requestreturn/services/graphql';
 
 const Core = (props) => {
@@ -9,19 +8,33 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const router = useRouter();
-    const customer_email = router && router.query && router.query.email;
-    const channel_order_increment_id = router && router.query && router.query.order;
-    const channel_code = router && router.query && router.query.channel;
     const [getRequestReturnList, { data, loading }] = gqlService.getRequestReturnList();
+    const [emailParam, setEmailParam] = React.useState('');
+    const [oderNumberParam, setOrderNumberParam] = React.useState('');
+    const [channelCodeParam, setChannelCodeParam] = React.useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            setEmailParam(urlParams.get('email'));
+            setOrderNumberParam(urlParams.get('order_number'));
+            setChannelCodeParam(urlParams.get('channel_code'));
+        }
+    }, []);
+
+    if (!emailParam || !oderNumberParam || !channelCodeParam) {
+        return (
+            <span>Loading...</span>
+        );
+    }
 
     const contentProps = {
         getRequestReturnList,
         data,
         loading,
-        customer_email,
-        channel_order_increment_id,
-        channel_code,
+        emailParam,
+        oderNumberParam,
+        channelCodeParam,
     };
 
     return (

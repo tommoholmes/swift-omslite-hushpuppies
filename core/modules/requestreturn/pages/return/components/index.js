@@ -15,9 +15,7 @@ import gqlService from '@modules/requestreturn/services/graphql';
 
 const OrderQueueEditContent = (props) => {
     const {
-        queryEmail,
         queryOrder,
-        queryChannel,
         formik,
         requestreturn,
         handleDropFile,
