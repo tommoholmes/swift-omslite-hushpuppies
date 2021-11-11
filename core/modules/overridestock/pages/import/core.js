@@ -87,8 +87,9 @@ const Core = (props) => {
     const handleDropFile = (files) => {
         const fileName = files[0].file.name;
         const { baseCode } = files[0];
+        const idx = baseCode.indexOf('base64,');
         formik.setFieldValue('filename', fileName);
-        formik.setFieldValue('binary', baseCode);
+        formik.setFieldValue('binary', baseCode.slice(idx + 7));
     };
 
     const contentProps = {
