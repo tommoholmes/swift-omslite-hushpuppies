@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
+/* eslint-disable max-len */
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -96,7 +97,7 @@ const ContentWrapper = (props) => {
                     text: 'Order Found',
                     variant: 'success',
                 });
-                router.push(`/requestreturn/return/${formik.values.email}/${formik.values.orderNumber}/${formik.values.channel.value}`);
+                router.push(`/requestreturn/return/return?email=${formik.values.email}&order_number=${formik.values.orderNumber}&channel_code=${formik.values.channel.value}`);
             }
             if (!(res && res.searchShipmentToReturn && res.searchShipmentToReturn[0] && res.searchShipmentToReturn[0].entity_id)) {
                 window.backdropLoader(false);
@@ -126,7 +127,7 @@ const ContentWrapper = (props) => {
                     text: 'Order Found',
                     variant: 'success',
                 });
-                router.push(`/requestreturn/request/${formik.values.email}/${formik.values.orderNumber}/${formik.values.channel.value}`);
+                router.push(`/requestreturn/request/request?email=${formik.values.email}&order_number=${formik.values.orderNumber}&channel_code=${formik.values.channel.value}`);
             }
             if (!(res && res.getRequestReturnList && res.getRequestReturnList.items && res.getRequestReturnList.items[0])) {
                 window.backdropLoader(false);
@@ -166,14 +167,10 @@ const ContentWrapper = (props) => {
     );
 };
 
-const Core = (props) => {
-    const router = useRouter();
-
-    return (
-        <>
-            <ContentWrapper {...props} />
-        </>
-    );
-};
+const Core = (props) => (
+    <>
+        <ContentWrapper {...props} />
+    </>
+);
 
 export default Core;

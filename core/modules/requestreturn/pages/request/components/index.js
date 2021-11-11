@@ -10,9 +10,9 @@ const RequestReturnContent = (props) => {
         data,
         loading,
         getRequestReturnList,
-        customer_email,
-        channel_order_increment_id,
-        channel_code,
+        emailParam,
+        oderNumberParam,
+        channelCodeParam,
     } = props;
     const classes = useStyles();
 
@@ -22,18 +22,18 @@ const RequestReturnContent = (props) => {
     const columns = [
         { field: 'increment_id', headerName: 'Increment ID #' },
         { field: 'status_label', headerName: 'Status' },
-        { field: 'actions', headerName: 'Actions' },
+        { field: 'actions', headerName: 'Action' },
     ];
 
     const filters = [
         {
-            field: 'customer_email', name: 'customer_email', type: 'eq', label: '', initialValue: customer_email,
+            field: 'customer_email', name: 'customer_email', type: 'eq', label: '', initialValue: emailParam,
         },
         {
-            field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'eq', label: '', initialValue: channel_order_increment_id,
+            field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'eq', label: '', initialValue: oderNumberParam,
         },
         {
-            field: 'channel_code', name: 'channel_code', type: 'eq', label: '', initialValue: channel_code,
+            field: 'channel_code', name: 'channel_code', type: 'eq', label: '', initialValue: channelCodeParam,
         },
     ];
 

@@ -5,15 +5,12 @@ import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { useRouter } from 'next/router';
 import useStyles from '@modules/requestreturn/pages/request/components/Header/style';
-import gqlService from '@modules/requestreturn/services/graphql';
 
 const HeaderContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
 
-    const customer_email = router && router.query && router.query.email;
-    const channel_order_increment_id = router && router.query && router.query.order;
-    const channel_code = router && router.query && router.query.channel;
+    const { email, order_number, channel_code } = router.query;
 
     return (
         <div className={classes.headerContainer}>
@@ -31,7 +28,7 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Request Return</h2>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push(`/requestreturn/return/${customer_email}/${channel_order_increment_id}/${channel_code}`)}
+                onClick={() => router.push(`/requestreturn/return/return?email=${email}&order_number=${order_number}&channel_code=${channel_code}`)}
             >
                 Request Return
             </Button>
