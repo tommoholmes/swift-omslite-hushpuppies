@@ -13,17 +13,12 @@ const overrideStock = `
 
 export const getVirtualStockQuantityList = gql`
     query getVirtualStockQuantityList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-        $filter: VirtualStockQuantityFilterInput,
-        $sort: VirtualStockQuantitySortInput,
-    ){
-        getVirtualStockQuantityList(
-            pageSize: $pageSize,
-            currentPage: $currentPage
-            filter: $filter,
-            sort: $sort,
-        ){
+        $pageSize: Int!
+        $currentPage: Int!
+        $filter: VirtualStockQuantityFilterInput
+        $sort: VirtualStockQuantitySortInput
+    ) {
+        getVirtualStockQuantityList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 entity_id
                 vs_id {
@@ -98,25 +93,42 @@ export const updateVirtualStockQuantity = gql`
     }
 `;
 
-export const uploadSource = gql`
-    mutation uploadSource(
-        $binary: String!,
-    ){
-        uploadSource(
-            input: {
-                binary: $binary,
-            }
-        )
+export const uploadVirtualStockQuantity = gql`
+    mutation uploadVirtualStockQuantity($binary: String!) {
+        uploadVirtualStockQuantity(input: { binary: $binary }) {
+            is_success
+            attachment_url
+        }
+    }
+`;
+
+export const getActivity = gql`
+    query getActivity($code: String!, $by_session: Boolean!) {
+        getActivity(code: $code, by_session: $by_session) {
+            activity_id
+            activity_code
+            run_status
+            data_total
+            data_processed
+            started_at
+            snapshot_at
+            finished_at
+            run_by
+            run_type
+            attachment
+            error_message
+        }
     }
 `;
 
 export const downloadSampleCsv = gql`
-    mutation downloadSampleCsv(
-        $type: String!,
-    ){
-        downloadSampleCsv(
-            type: $type,
-        )
+    mutation downloadSampleCsv($type: String!) {
+        downloadSampleCsv(type: $type)
+    }
+`;
+export const syncOverrideStockToMarketplace = gql`
+    mutation syncOverrideStockToMarketplace($store_id: String!) {
+        syncOverrideStockToMarketplace(store_id: $store_id)
     }
 `;
 
@@ -125,6 +137,8 @@ export default {
     getVirtualStockQuantityById,
     createVirtualStockQuantity,
     updateVirtualStockQuantity,
-    uploadSource,
     downloadSampleCsv,
+    uploadVirtualStockQuantity,
+    getActivity,
+    syncOverrideStockToMarketplace,
 };

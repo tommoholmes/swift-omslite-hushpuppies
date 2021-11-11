@@ -50,12 +50,6 @@ const Core = (props) => {
         } catch (error) {}
     }, []);
 
-    // useEffect(() => {
-    //     if (downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv) {
-    //         setUrlDownload(downloadListRes.data.downloadSampleCsv);
-    //     }
-    // }, [downloadListRes.data]);
-
     const handleSubmit = ({ binary }) => {
         setshowProgress(false);
         const variables = {

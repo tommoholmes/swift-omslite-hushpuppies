@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
-const colorBlue = '#321fdb';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -30,12 +29,6 @@ const useStyles = makeStyles((theme) => ({
     formField: {
         padding: 0,
         paddingBottom: 16,
-        width: '50%',
-        textAlign: 'center',
-        [theme.breakpoints.down('xs')]: {
-            width: '100%',
-            textAlign: 'left ',
-        },
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',
@@ -43,35 +36,60 @@ const useStyles = makeStyles((theme) => ({
     btn: {
         borderRadius: 20,
     },
+    divLabel: {
+        width: 300,
+        display: 'inline-block',
+        [theme.breakpoints.down('xs')]: {
+            width: 140,
+        },
+    },
     label: {
         color: colorText,
         fontFamily: font,
         position: 'relative',
     },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: -9,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
+    },
     content: {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-        justifyContent: 'space-between',
         borderBottom: '3px solid #F5F7FB',
         padding: '10px 29px 12px 22px',
+    },
+    fieldRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
         [theme.breakpoints.down('xs')]: {
-            flexDirection: 'column',
+            width: 'calc(100% - 140px)',
         },
     },
-    linkDownload: {
-        color: colorBlue,
-        fontWeight: 700,
-        '&:hover': {
-            textDecorationLine: 'underline',
+    fieldInput: {
+        border: '1px solid',
+        borderColor: colorText,
+        borderRadius: 20,
+        height: 36,
+    },
+    autocompleteRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
         },
-    },
-    textAttach: {
-        fontWeight: 'bold',
-        display: 'block',
-        padding: '10px 29px 12px 22px',
-    },
-    inputCsv: {
-        marginLeft: 5,
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            borderRadius: 20,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
     },
     textLeft: {
         textAlign: 'left !important',
