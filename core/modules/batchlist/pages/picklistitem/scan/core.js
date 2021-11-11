@@ -59,7 +59,7 @@ const ContentWrapper = (props) => {
     };
 
     const handleDetect = (code) => {
-        if (code === picklist.sku) {
+        if (code === picklist.barcode) {
             incrementCount();
             setVisibility(true);
         } else if (!allowManualConfirm) {
