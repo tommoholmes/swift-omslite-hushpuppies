@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-
 import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
@@ -12,32 +9,30 @@ const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        parentId,
     } = props;
     const router = useRouter();
-    const creditmemo = data.getCreditMemoById;
-    const [createCreditmemo] = gqlService.createCreditmemo();
+    const { creditmemo, order } = data.prepareNewMemo;
+    const [grandTotal, setGrandTotal] = React.useState(creditmemo.grand_total);
 
-    const handleSubmit = ({
-        refundShip,
-        adjustRefund,
-        adjustFee,
-    }) => {
-        const variables = {
-            shipping_amount: Number(refundShip),
-            adjustment_positive: Number(adjustRefund),
-            adjustment_negative: Number(adjustFee),
-        };
+    const [createCreditmemo] = gqlService.createCreditmemo();
+    const [calculate] = gqlService.calculateCreditMemoTotals();
+
+    const handleCalculate = (values) => {
         window.backdropLoader(true);
-        createCreditmemo({
+        const { comment_customer_notify, send_email, ...restValues } = values;
+        const variables = {
+            request_id: parentId,
+            input: restValues,
+        };
+        variables.input.comment_customer_notify = comment_customer_notify ? 1 : 0;
+        variables.input.send_email = send_email ? 1 : 0;
+        calculate({
             variables,
-        }).then(() => {
+        }).then(({ data: res }) => {
+            const { calculateCreditMemoTotals } = res;
+            setGrandTotal(calculateCreditMemoTotals.grand_total);
             window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Create New Memo!',
-                variant: 'success',
-            });
-            // setTimeout(() => router.push('/oms/company'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -48,11 +43,33 @@ const ContentWrapper = (props) => {
         });
     };
 
+    const handleSubmit = (variables) => {
+        window.backdropLoader(true);
+        createCreditmemo({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            router.push(`/sales/managerma/edit/${parentId}`);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    // eslint-disable-next-line no-useless-escape
+    const numberFormat = (value) => Number(value.replace(/[^0-9\.-]+/g, ''));
     const formik = useFormik({
         initialValues: {
-            refundShip: 0,
-            adjustRefund: 0,
-            adjustFee: 0,
+            shipping_amount: numberFormat(creditmemo.shipping_amount),
+            adjustment_positive: numberFormat(creditmemo.adjustment_refund),
+            adjustment_negative: numberFormat(creditmemo.adjustment_fee),
+            comment_text: '',
+            comment_customer_notify: false,
+            send_email: false,
         },
         validationSchema: Yup.object().shape({
             refundShip: Yup.number(),
@@ -60,37 +77,46 @@ const ContentWrapper = (props) => {
             adjustFee: Yup.number(),
         }),
         onSubmit: (values) => {
-            // handleSubmit(values);
-            console.log(values);
+            const { comment_customer_notify, send_email, ...restValues } = values;
+            const variables = {
+                request_id: parentId,
+                input: restValues,
+            };
+            variables.input.comment_customer_notify = comment_customer_notify ? 1 : 0;
+            variables.input.send_email = send_email ? 1 : 0;
+            handleSubmit(variables);
         },
     });
 
     const creditmemoDetail = {
-        // id: creditmemo.order_increment_id,
-        id: 14,
-        orderDate: creditmemo.order_created_at,
-        name: creditmemo.customer_name,
-        status: creditmemo.order_status,
-        email: creditmemo.email,
-        channelOrder: creditmemo.channel_order_increment_id,
-        group: creditmemo.customer_group,
-        channelName: creditmemo.channel_name,
-        billing: creditmemo.billing_address,
-        shipping: creditmemo.shipping_address,
-        paymentMethod: creditmemo.payment_method,
-        shippingMethod: creditmemo.shipping_method,
-        shippingAmount: creditmemo.shipping_amount,
-        item: creditmemo.creditmemo_items,
-        subtotal: creditmemo.base_subtotal,
-        discount: creditmemo.discount_amount,
-        adjustRefund: creditmemo.base_adjustment_positive || 0,
-        adjustFee: creditmemo.base_adjustment_negative || 0,
-        grandTotal: creditmemo.base_grand_total,
+        entityId: order.entity_id,
+        status: order.status,
+        statusLabel: order.statusLabel,
+        channelName: order.channel_name,
+        channelCode: order.channel_code,
+        orderNumber: order.channel_order_increment_id,
+        orderDate: order.channel_order_date,
+        customerName: order.customer_name,
+        customerEmail: order.customer_email,
+        customerGroup: order.customer_group,
+        billing: order.billing_address,
+        shipping: order.shipping_address,
+        paymentMethod: order.channel_payment_method,
+        shippingMethod: order.channel_payment_method,
+        items: creditmemo.items,
+        subtotal: creditmemo.subtotal,
+        discount: creditmemo.discount,
+        refundShipping: creditmemo.shipping_amount,
+        adjustRefund: creditmemo.adjustment_refund,
+        adjustFee: creditmemo.adjustment_fee,
     };
 
     const contentProps = {
         formik,
         creditmemoDetail,
+        handleCalculate,
+        parentId,
+        grandTotal,
     };
 
     return (
@@ -100,9 +126,8 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCreditMemoById({
-        // id: router && router.query && Number(router.query.id),
-        id: 14,
+    const { loading, data } = gqlService.prepareNewMemo({
+        request_id: router && router.query && Number(router.query.request_id),
     });
 
     if (loading) {
@@ -119,7 +144,11 @@ const Core = (props) => {
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} />
+            <ContentWrapper
+                parentId={router && router.query && Number(router.query.request_id)}
+                data={data}
+                {...props}
+            />
         </Layout>
     );
 };
