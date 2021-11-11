@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import React from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
@@ -7,20 +8,75 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
 import useStyles from '@modules/creditmemos/pages/create/components/style';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const creditmemosCreateContent = (props) => {
     const {
         formik,
         creditmemoDetail,
+        parentId,
+        grandTotal,
+        handleCalculate,
     } = props;
     const classes = useStyles();
     const router = useRouter();
+
+    const getClassByStatus = (status) => {
+        if (status === 'failed') {
+            return classes.statusFailed;
+        }
+        if (status === 'new') {
+            return classes.statusProcessing;
+        }
+        if (status === 'allocating') {
+            return classes.statusAllocating;
+        }
+        return classes.statusSuccess;
+    };
+
+    const iconFilter = (channel_code) => {
+        if (channel_code) {
+            if (channel_code.toLowerCase().includes('swi')) {
+                return '/assets/img/dashboard/channel_official.png';
+            }
+            if (channel_code.toLowerCase().includes('bklp')) {
+                return '/assets/img/dashboard/channel_bukalapak.svg';
+            }
+            if (channel_code.toLowerCase().includes('blib')) {
+                return '/assets/img/dashboard/channel_blibli.png';
+            }
+            if (channel_code.toLowerCase().includes('jdid')) {
+                return '/assets/img/dashboard/channel_jd.png';
+            }
+            if (channel_code.toLowerCase().includes('lzda')) {
+                return '/assets/img/dashboard/channel_lazada.png';
+            }
+            if (channel_code.toLowerCase().includes('shpe')) {
+                return '/assets/img/dashboard/channel_shopee.png';
+            }
+            if (channel_code.toLowerCase().includes('srcl')) {
+                return '/assets/img/dashboard/channel_sirclo.png';
+            }
+            if (channel_code.toLowerCase().includes('tkpd')) {
+                return '/assets/img/dashboard/channel_tokopedia.png';
+            }
+            if (channel_code.toLowerCase().includes('zlra')) {
+                return '/assets/img/dashboard/channel_zalora.png';
+            }
+            return `/assets/img/dashboard/${channel_code}.png`;
+        }
+        return null;
+    };
 
     return (
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(`/sales/managerma/edit/${creditmemoDetail.id}`)}
+                onClick={() => router.push(`/sales/managerma/edit/${parentId}`)}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -36,260 +92,291 @@ const creditmemosCreateContent = (props) => {
             <h2 className={classes.titleTop}>
                 New Memo
                 {' '}
-                {creditmemoDetail.id}
+                #
+                {creditmemoDetail.entityId}
             </h2>
             <Paper className={classes.container}>
-                <div className={classes.content}>
-                    <h5 className={classes.title}>Shipment & Order Information</h5>
-                    <div className={clsx(classes.contentLeft, classes.contentRight)}>
-                        <table className={classes.table}>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Order Date</td>
-                                    <td className={classes.td}>{creditmemoDetail.orderDate}</td>
-                                    <td />
-                                    <td className={classes.td}>Customer Name</td>
-                                    <td className={classes.td}>{creditmemoDetail.name}</td>
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Order Status</td>
-                                    <td className={classes.td}>{creditmemoDetail.status}</td>
-                                    <td />
-                                    <td className={classes.td}>Email</td>
-                                    <td className={classes.td}>{creditmemoDetail.email}</td>
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Channel Order</td>
-                                    <td className={classes.td}>{creditmemoDetail.channelOrder}</td>
-                                    <td />
-                                    <td className={classes.td}>Customer Group</td>
-                                    <td className={classes.td}>{creditmemoDetail.group}</td>
-                                </tr>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Channel Name</td>
-                                    <td className={classes.td}>{creditmemoDetail.channelName}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div className={classes.contentHeader}>
+                    <div className="divHeader">
+                        <div className={getClassByStatus(creditmemoDetail.status)}>
+                            {creditmemoDetail.status}
+                        </div>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeaderWithIcon">
+                            <img
+                                src={iconFilter(creditmemoDetail.channelCode)}
+                                alt=""
+                                className="iconHeader"
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
+                            {creditmemoDetail.channelName}
+                        </h5>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Channel Order Number
+                        </h5>
+                        <span className="spanHeader">{creditmemoDetail.orderNumber}</span>
+                    </div>
+                    <div className="divHeader">
+                        <h5 className="titleHeader">
+                            Channel Order Date
+                        </h5>
+                        <span className="spanHeader">{creditmemoDetail.orderDate}</span>
                     </div>
                 </div>
+
                 <div className={classes.content}>
-                    <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Billing Address</h5>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.billing.firstname}
-                            {' '}
-                            {creditmemoDetail.billing.lastname}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.billing.street}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.billing.city}
-                            ,
-                            {creditmemoDetail.billing.region}
-                            ,
-                            {creditmemoDetail.billing.postcode}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.billing.country_id}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.billing.telephone}
-                        </span>
+                    <div className={classes.grid}>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Customer Info</h5>
+                            <span className={classes.orderLabel}>
+                                {creditmemoDetail.customerName}
+                            </span>
+                            <span className={classes.orderLabel}>
+                                {creditmemoDetail.customerEmail}
+                            </span>
+                            <span className={classes.orderLabel}>
+                                {creditmemoDetail.customerGroup}
+                            </span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Billing Address</h5>
+                            <span className={classes.orderLabel}>{creditmemoDetail.billing.street}</span>
+                            <span className={classes.orderLabel}>{creditmemoDetail.billing.city}</span>
+                            <span className={classes.orderLabel}>
+                                {`${creditmemoDetail.billing.region}, 
+                                ${creditmemoDetail.billing.postcode}, ${creditmemoDetail.billing.country_name}`}
+                            </span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Shipping Address</h5>
+                            <span className={classes.orderLabel}>{creditmemoDetail.shipping.street}</span>
+                            <span className={classes.orderLabel}>{creditmemoDetail.shipping.city}</span>
+                            <span className={classes.orderLabel}>
+                                {`${creditmemoDetail.shipping.region},
+                                ${creditmemoDetail.shipping.postcode}, ${creditmemoDetail.shipping.country_name}`}
+                            </span>
+                        </div>
                     </div>
-                    <div className={classes.contentLeft}>
-                        <h5 className={classes.title}>Shipping Adress</h5>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.shipping.firstname}
-                            {' '}
-                            {creditmemoDetail.shipping.lastname}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.shipping.street}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.shipping.city}
-                            ,
-                            {creditmemoDetail.shipping.region}
-                            ,
-                            {creditmemoDetail.shipping.postcode}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.shipping.country_id}
-                        </span>
-                        <span className={classes.orderLabel}>
-                            {creditmemoDetail.shipping.telephone}
-                        </span>
+                    <br />
+                    <div className={classes.grid}>
+                        <div className="grid-child" />
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Payment Method</h5>
+                            <span className={classes.orderLabel}>{creditmemoDetail.paymentMethod}</span>
+                        </div>
+                        <div className="grid-child">
+                            <h5 className={classes.titleSmall}>Shipping Method</h5>
+                            <span className={classes.orderLabel}>{creditmemoDetail.shippingMethod}</span>
+                        </div>
                     </div>
+                    <br />
                 </div>
                 <div className={classes.content}>
-                    <div className={classes.contentLeft}>
-                        <h5 className={clsx(classes.title, 'title-information')}>Payment Information</h5>
-                        <span className={classes.orderLabel}>{creditmemoDetail.paymentMethod}</span>
-                        <span className={classes.orderLabel}>The order was placed using IDR.</span>
-                    </div>
-                    <div className={classes.contentLeft}>
-                        <h5 className={clsx(classes.title, 'title-information')}>Shipping Information</h5>
-                        <span className={classes.orderLabel}>{creditmemoDetail.shippingMethod}</span>
-                        <span className={classes.orderLabel}>
-                            Total Shipping Charges: IDR
-                            {creditmemoDetail.shippingAmount}
-                        </span>
-                    </div>
-                </div>
-                <div className={classes.content}>
-                    <h5 className={classes.title}>Items Refunded</h5>
+                    <h5 className={classes.titleSmall}>Items To Refund</h5>
                     <table className={classes.table}>
                         <tbody>
                             <tr className={classes.tr}>
                                 <th className={classes.th}>Product</th>
                                 <th className={classes.th}>Price</th>
                                 <th className={classes.th}>Qty</th>
-                                <th className={classes.th}>Qty to Refund</th>
+                                <th className={classes.th}>Qty Refund</th>
                                 <th className={classes.th}>Subtotal</th>
                                 <th className={classes.th}>Tax Amount</th>
                                 <th className={classes.th}>Discount Amount</th>
                                 <th className={classes.th}>Row Total</th>
                             </tr>
-                            {creditmemoDetail.item.map((e) => (
+                            {creditmemoDetail.items.map((e) => (
                                 <tr>
                                     <td className={classes.td}>
-                                        {e.name}
-                                        {' '}
-                                        <br />
-                                        SKU:
-                                        {' '}
                                         {e.sku}
                                     </td>
                                     <td className={classes.td}>{e.price}</td>
                                     <td className={classes.td}>
                                         Ordered:
                                         {' '}
-                                        {e.qty_detail.qty_ordered}
+                                        {e.order_item.qty_ordered}
                                         <br />
                                         Invoiced:
                                         {' '}
-                                        {e.qty_detail.qty_invoiced}
+                                        {e.order_item.qty_invoiced}
                                         <br />
                                         Shipped:
                                         {' '}
-                                        {e.qty_detail.qty_shipped}
+                                        {e.order_item.qty_shipped}
                                         <br />
                                         Refunded:
                                         {' '}
-                                        {e.qty_detail.qty_refunded}
+                                        {e.order_item.qty_refunded}
                                         <br />
                                         Canceled:
                                         {' '}
-                                        {e.qty_detail.qty_canceled}
+                                        {e.order_item.qty_canceled}
                                     </td>
-                                    <td className={classes.td}>{e.qty}</td>
-                                    <td className={classes.td}>{e.base_row_total}</td>
-                                    <td className={classes.td}>{e.base_tax_amount || 0}</td>
-                                    <td className={classes.td}>{e.base_discount_amount || 0}</td>
+                                    <td className={classes.td}>{e.qty_to_refund}</td>
                                     <td className={classes.td}>{e.row_total}</td>
+                                    <td className={classes.td}>{e.tax_amount || 0}</td>
+                                    <td className={classes.td}>{e.discount_amount || 0}</td>
+                                    <td className={classes.td}>{e.total_amount}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.title}>Order Total</h5>
-                    <table className={classes.table}>
-                        <tbody>
-                            <tr className={classes.tr}>
-                                <th className={classes.th}>Refund Totals</th>
-                            </tr>
-                            <tr>
-                                <td className={classes.td}>Subtotal</td>
-                                <td className={classes.td}>
-                                    IDR
-                                    {''}
-                                    {creditmemoDetail.subtotal}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className={classes.td}>Discount</td>
-                                <td className={classes.td}>
-                                    IDR
-                                    {''}
-                                    {creditmemoDetail.discount}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className={classes.td}>Refund Shipping</td>
-                                <td className={classes.td}>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        variant="outlined"
-                                        name="refundShip"
-                                        value={formik.values.refundShip}
-                                        onChange={formik.handleChange}
-                                        error={!!(formik.touched.refundShip && formik.errors.refundShip)}
-                                        helperText={(formik.touched.refundShip && formik.errors.refundShip) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className={classes.td}>Adjusment Refund</td>
-                                <td className={classes.td}>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        variant="outlined"
-                                        name="adjustRefund"
-                                        value={formik.values.adjustRefund}
-                                        onChange={formik.handleChange}
-                                        error={!!(formik.touched.adjustRefund && formik.errors.adjustRefund)}
-                                        helperText={(formik.touched.adjustRefund && formik.errors.adjustRefund) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className={classes.td}>Adjusment Fee</td>
-                                <td className={classes.td}>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        variant="outlined"
-                                        name="adjustFee"
-                                        value={formik.values.adjustFee}
-                                        onChange={formik.handleChange}
-                                        error={!!(formik.touched.adjustFee && formik.errors.adjustFee)}
-                                        helperText={(formik.touched.adjustFee && formik.errors.adjustFee) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className={clsx(classes.td, classes.th)}>Grand Total</td>
-                                <td className={clsx(classes.td, classes.th)}>
-                                    IDR
-                                    {''}
-                                    {creditmemoDetail.grandTotal}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div className={classes.content}>
-                    <div className={classes.formFieldButton}>
-                        <Button
-                            className={classes.btn}
-                            onClick={formik.handleSubmit}
-                            variant="contained"
-                        >
-                            Submit
-                        </Button>
+                    <div className={classes.gridTotal}>
+                        <div style={{ paddingRight: 20 }}>
+                            <table className={classes.table}>
+                                <tbody>
+                                    <tr className={classes.tr}>
+                                        <th className={classes.th}>Refund Totals</th>
+                                    </tr>
+                                    <tr>
+                                        <td className={classes.td}>Subtotal</td>
+                                        <td className={classes.td} style={{ textAlign: 'right' }}>
+                                            {creditmemoDetail.subtotal}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={classes.td}>Discount</td>
+                                        <td className={classes.td} style={{ textAlign: 'right' }}>
+                                            {creditmemoDetail.discount}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={classes.td}>Refund Shipping</td>
+                                        <td className={classes.td}>
+                                            <OutlinedInput
+                                                name="shipping_amount"
+                                                type="number"
+                                                value={formik.values.shipping_amount}
+                                                onChange={formik.handleChange}
+                                                classes={{
+                                                    input: classes.fieldInput,
+                                                    root: classes.fieldRoot,
+                                                }}
+                                                startAdornment={(
+                                                    <InputAdornment position="start">
+                                                        <span style={{ fontSize: 14 }}>IDR</span>
+                                                    </InputAdornment>
+                                                )}
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={classes.td}>Adjusment Refund</td>
+                                        <td className={classes.td}>
+                                            <OutlinedInput
+                                                name="adjustment_positive"
+                                                type="number"
+                                                value={formik.values.adjustment_positive}
+                                                onChange={formik.handleChange}
+                                                classes={{
+                                                    input: classes.fieldInput,
+                                                    root: classes.fieldRoot,
+                                                }}
+                                                startAdornment={(
+                                                    <InputAdornment position="start">
+                                                        <span style={{ fontSize: 14 }}>IDR</span>
+                                                    </InputAdornment>
+                                                )}
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={classes.td}>Adjusment Fee</td>
+                                        <td className={classes.td}>
+                                            <OutlinedInput
+                                                name="adjustment_negative"
+                                                type="number"
+                                                value={formik.values.adjustment_negative}
+                                                onChange={formik.handleChange}
+                                                classes={{
+                                                    input: classes.fieldInput,
+                                                    root: classes.fieldRoot,
+                                                }}
+                                                startAdornment={(
+                                                    <InputAdornment position="start">
+                                                        <span style={{ fontSize: 14 }}>IDR</span>
+                                                    </InputAdornment>
+                                                )}
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={clsx(classes.td, classes.th)}>Grand Total</td>
+                                        <td className={clsx(classes.td, classes.th)} style={{ textAlign: 'right' }}>
+                                            {grandTotal}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style={{ paddingLeft: 20 }}>
+                            <span className={classes.th} style={{ fontWeight: 600, paddingLeft: 0 }}>Credit Memo Comments</span>
+                            <td className={classes.td} style={{ paddingLeft: 0 }}>
+                                Comment Text
+                            </td>
+
+                            <TextField
+                                className={clsx(classes.fieldRootNote, 'full')}
+                                variant="outlined"
+                                name="comment_text"
+                                value={formik.values.comment_text}
+                                onChange={formik.handleChange}
+                                fullWidth
+                                multiline
+                                rows={3}
+                            />
+                            <FormGroup className={classes.formgroup}>
+                                <FormControlLabel
+                                    control={(
+                                        <Checkbox
+                                            name="comment_customer_notify"
+                                            checked={formik.values.comment_customer_notify}
+                                            onChange={formik.handleChange}
+                                        />
+                                    )}
+                                    className={classes.controlLabel}
+                                    classes={{ root: classes.rootLabel }}
+                                    label="Append Comments"
+                                />
+                                <FormControlLabel
+                                    control={(
+                                        <Checkbox
+                                            name="send_email"
+                                            checked={formik.values.send_email}
+                                            onChange={formik.handleChange}
+                                        />
+                                    )}
+                                    className={classes.controlLabel}
+                                    classes={{ root: classes.rootLabel }}
+                                    label="Email Copy of Credit Memo"
+                                />
+                            </FormGroup>
+                        </div>
                     </div>
                 </div>
+                <div className={classes.formFieldButton}>
+                    <Button
+                        className={classes.btn}
+                        onClick={formik.handleSubmit}
+                        variant="contained"
+                        style={{ marginRight: 10 }}
+                    >
+                        Submit
+                    </Button>
+                    <Button
+                        className={clsx(classes.btn, 'reverse')}
+                        onClick={() => handleCalculate(formik.values)}
+                        variant="contained"
+                    >
+                        Calculate Totals
+                    </Button>
+                </div>
+
             </Paper>
         </>
     );

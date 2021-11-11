@@ -174,7 +174,7 @@ const ManageRmaEditContent = (props) => {
             {(rmaDetail.status === 'package_received') && (
                 <Button
                     className={classes.btn}
-                    onClick={() => router.push('/sales/creditmemos/create')}
+                    onClick={() => router.push(`/sales/creditmemos/create/${rmaDetail.id}`)}
                 >
                     Credit Memo
                 </Button>

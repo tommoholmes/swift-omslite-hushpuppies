@@ -104,20 +104,94 @@ export const getCreditMemoById = gql`
 export const createCreditmemo = gql`
     mutation createCreditmemo(
         $request_id: Int!,
-        $shipping_amount: Int,
-        $shipping_amount: Int,
-        $adjustment_negative: Int,
+        $input: CreditmemoInput!,
     ){
         createCreditmemo(
-            input:{
-                request_id: $request_id,
-                creditmemo:{
-                    shipping_amount: $shipping_amount,
-                    adjustment_positive: $adjustment_positive,
-                    adjustment_negative: $adjustment_negative,
-                }
-            }
+            request_id: $request_id,
+            input: $input
         )
+    }
+`;
+
+export const prepareNewMemo = gql`
+    query prepareNewMemo($request_id: Int!) {
+        prepareNewMemo(request_id: $request_id) {
+        order {
+            entity_id
+            channel_order_date
+            status
+            status_label
+            channel_order_increment_id
+            channel_code
+            channel_name
+            customer_name
+            customer_email
+            customer_group
+            billing_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                country_name
+                telephone
+            }
+            shipping_address {
+                firstname
+                lastname
+                street
+                city
+                region
+                postcode
+                country_id
+                country_name
+                telephone
+            }
+            channel_payment_method
+            channel_shipping_method
+            shipping_amount
+        }
+        creditmemo {
+            items {
+                sku
+                price
+                order_item{
+                  qty_ordered
+                  qty_invoiced
+                  qty_shipped
+                  qty_refunded
+                  qty_canceled
+                }
+                qty_to_refund
+                row_total
+                tax_amount
+                discount_amount
+                total_amount
+            }
+            subtotal
+            discount
+            shipping_amount
+            adjustment_refund
+            adjustment_fee
+            grand_total
+        }
+        }
+    }  
+`;
+
+export const calculateCreditMemoTotals = gql`
+    mutation calculateCreditMemoTotals(
+        $request_id: Int!,
+        $input: CreditmemoInput!,
+    ){
+        calculateCreditMemoTotals(
+            request_id: $request_id,
+            input: $input
+        ) {
+            grand_total
+        }
     }
 `;
 
@@ -125,4 +199,6 @@ export default {
     getCreditMemoList,
     getCreditMemoById,
     createCreditmemo,
+    prepareNewMemo,
+    calculateCreditMemoTotals,
 };
