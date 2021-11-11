@@ -16,9 +16,7 @@ const Core = (props) => {
         },
         onCompleted: (res) => {
             setActivityState({ ...res.getActivity, loading: false });
-            if (firstLoad) {
-                setFirstLoad(false);
-            }
+
             if (res.getActivity.run_status === 'running') {
                 setTimeout(() => {
                     setActivityState({ ...res.getActivity, loading: true });
@@ -30,11 +28,13 @@ const Core = (props) => {
             }
         },
         onError: () => {
+            setActivityState({ ...activityState, loading: true });
             getActivity();
         },
     });
 
     useEffect(() => {
+        setActivityState({ ...activityState, loading: true });
         getActivity();
     }, []);
 
@@ -56,6 +56,9 @@ const Core = (props) => {
                 },
             })
                 .then(() => {
+                    if (firstLoad) {
+                        setFirstLoad(false);
+                    }
                     setActivityState({ ...activityState, loading: true });
                     getActivity();
                     window.backdropLoader(false);
@@ -66,6 +69,11 @@ const Core = (props) => {
                     });
                 })
                 .catch((e) => {
+                    if (firstLoad) {
+                        setFirstLoad(false);
+                    }
+                    setActivityState({ ...activityState, loading: true });
+                    getActivity();
                     window.backdropLoader(false);
                     window.toastMessage({
                         open: true,

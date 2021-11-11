@@ -52,13 +52,18 @@ const SyncToMPContent = (props) => {
     useEffect(() => {
         if (data && data.getStoreList && data.getStoreList.items) {
             if (data.getStoreList.total_count === 1) {
-                formik.setFieldValue('channel_store_id', data.getStoreList.items[0]);
-                formik.submitForm();
+                formik.setFieldValue('channel_store_id', data.getStoreList.items[0], false);
             }
             setStoreListOptions(data.getStoreList.items);
             firstRender.current = false;
         }
     }, [data]);
+
+    useEffect(() => {
+        if (data && data.getStoreList && data.getStoreList.items && data.getStoreList.total_count === 1 && formik.values.channel_store_id) {
+            formik.submitForm();
+        }
+    }, [formik.values]);
 
     if (firstRender.current && loading) {
         return <div>Loading...</div>;
@@ -87,7 +92,9 @@ const SyncToMPContent = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Sync Stock to MP</h2>
             <Paper className={classes.container}>
-                {data && data.getStoreList && (data.getStoreList.items.length > 1 || data.getStoreList.items.length === 0) && (
+                {data
+                    && data.getStoreList
+                    && (data.getStoreList.items.length > 1 || data.getStoreList.items.length === 0 || data.getStoreList.items === null) && (
                     <div className={classes.content}>
                         <div className={classes.formField}>
                             <div className={classes.divLabel}>
@@ -106,25 +113,26 @@ const SyncToMPContent = (props) => {
                             className={classes.btn}
                             onClick={formik.handleSubmit}
                             variant="contained"
-                            disabled={!formik.values.channel_store_id || (activityState && activityState.run_status === 'running') || firstLoad}
+                            disabled={!formik.values.channel_store_id || (activityState && activityState.run_status === 'running')}
                         >
                             Sync
                         </Button>
                     </div>
                 )}
-                {activityState && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress) ? (
+                {activityState && (activityState.run_status === 'running' || showProgress) ? (
                     <div className={classes.progressContainer}>
                         <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />
                     </div>
                 ) : null}
-                {firstLoad || activityState?.loading ? (
+                {activityState?.loading ? (
                     <div className={classes.formFieldButton}>
                         <div className={clsx(classes.status)}>Loading...</div>
                     </div>
                 ) : (
-                    activityState
+                    !firstLoad
+                    && activityState
                     && activityState.run_status
-                    && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress) && (
+                    && showProgress && (
                         <div className={classes.formFieldButton}>
                             {activityState.run_status !== 'running' && showProgress ? (
                                 activityState.error_message ? (
