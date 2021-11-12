@@ -32,6 +32,12 @@ const creditmemosCreateContent = (props) => {
         if (status === 'new') {
             return classes.statusProcessing;
         }
+        if (status === 'success') {
+            return classes.statusSuccess;
+        }
+        if (status === 'closed') {
+            return classes.statusClosed;
+        }
         if (status === 'allocating') {
             return classes.statusAllocating;
         }
@@ -306,8 +312,8 @@ const creditmemosCreateContent = (props) => {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className={clsx(classes.td, classes.th)}>Grand Total</td>
-                                        <td className={clsx(classes.td, classes.th)} style={{ textAlign: 'right' }}>
+                                        <td className={clsx(classes.td, classes.th)} style={{ fontWeight: 600 }}>Grand Total</td>
+                                        <td className={clsx(classes.td, classes.th)} style={{ textAlign: 'right', fontWeight: 600 }}>
                                             {grandTotal}
                                         </td>
                                     </tr>

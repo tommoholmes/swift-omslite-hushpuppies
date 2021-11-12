@@ -8,6 +8,7 @@ import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/creditmemos/helpers';
 import useStyles from '@modules/creditmemos/pages/list/components/style';
 import Header from '@modules/creditmemos/pages/list/components/Header';
+import { formatPrice } from '@helper_currency';
 
 const CreditmemoListContent = (props) => {
     const classes = useStyles();
@@ -16,14 +17,13 @@ const CreditmemoListContent = (props) => {
     const creditmemoTotal = (data && data.getCreditMemoList && data.getCreditMemoList.total_count) || 0;
 
     const columns = [
-        { field: 'increment_id', headerName: 'Credit Memo', hideable: true, sortable: true, initialSort: 'ASC' },
-        { field: 'created_at', headerName: 'Created', hideable: true, sortable: true },
-        { field: 'order_increment_id', headerName: 'Order', hideable: true, sortable: true },
-        { field: 'channel_order_increment_id', headerName: 'Channel Order', hideable: true, sortable: true },
-        { field: 'order_created_at', headerName: 'Order Date', hideable: true, sortable: true },
+        { field: 'increment_id', headerName: 'Credit Memo', hideable: true, sortable: true },
+        { field: 'created_at', headerName: 'Created', hideable: true, sortable: true, initialSort: 'DESC' },
+        { field: 'channel_order_increment_id', headerName: 'Channel Order Number', hideable: true, sortable: true },
+        { field: 'channel_order_date', headerName: 'Channel Order Date', hideable: true, sortable: true },
         { field: 'billing_name', headerName: 'Bill-to Name', hideable: true, sortable: true },
         { field: 'state', headerName: 'Status', hideable: true, sortable: true },
-        { field: 'base_grand_total', headerName: 'Refunded', hideable: true, sortable: true },
+        { field: 'grand_total', headerName: 'Refunded', hideable: true, sortable: true },
         { field: 'actions', headerName: 'Actions' },
     ];
 
@@ -139,13 +139,15 @@ const CreditmemoListContent = (props) => {
         },
     ];
 
-    const rows = creditmemoList.map((creditmemo) => ({
-        ...creditmemo,
-        id: creditmemo.increment_id,
-        state: creditmemo.state.label,
+    const rows = creditmemoList.map((item) => ({
+        ...item.creditmemo,
+        ...item.order,
+        id: item.creditmemo.increment_id,
+        state: item.creditmemo.state_name,
+        grand_total: formatPrice(item.creditmemo.grand_total, 'USD'),
         actions: () => (
-            <Link href={`/sales/creditmemos/edit/${creditmemo.increment_id}`}>
-                <a className="link-button">view</a>
+            <Link href={`/sales/creditmemos/edit/${item.creditmemo.entity_id}`}>
+                <a className="link-button">View</a>
             </Link>
         ),
     }));
