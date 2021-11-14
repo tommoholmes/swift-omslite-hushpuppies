@@ -37,7 +37,7 @@ export const saveRequestReturn = (variables) => useMutation(Schema.saveRequestRe
     variables, ...context,
 });
 
-export const saveRequestReturnSubmit = (variables) => useMutation(Schema.saveRequestReturn, {
+export const saveRequestReturnSubmit = (variables) => useMutation(Schema.saveRequestReturnSubmit, {
     variables, ...context,
 });
 

@@ -35,6 +35,11 @@ const ContentWrapper = (props) => {
     }, []);
 
     const requestreturn = data.getShipmentItemToReturn;
+    const [saveRequestReturnSubmit] = gqlService.saveRequestReturnSubmit();
+
+    const [checkedState, setCheckedState] = useState(
+        new Array(requestreturn.length).fill(false),
+    );
 
     const handleSubmit = ({
         channel_order_increment_id,
@@ -42,13 +47,7 @@ const ContentWrapper = (props) => {
         customer_email,
         return_type,
         message,
-        shipment_id,
-        shipment_item_id,
-        qty,
-        reason,
-        package_condition,
-        binary,
-        filename,
+        items,
     }) => {
         const variables = {
             channel_order_increment_id,
@@ -56,35 +55,42 @@ const ContentWrapper = (props) => {
             customer_email,
             return_type: return_type.code,
             message,
-            shipment_id,
-            shipment_item_id,
-            qty,
-            reason: reason.code,
-            package_condition: package_condition.code,
-            binary_data: binary,
-            filename,
+            items: items.map((e) => (
+                {
+                    shipment_id: e.shipment_id,
+                    shipment_item_id: e.shipment_item_id,
+                    qty: Number(e.qty),
+                    package_condition: e.package_condition,
+                    reason: e.reason,
+                    attachment: {
+                        binary_data: e.attachment.binary_data || '',
+                        filename: e.attachment.filename || '',
+                    },
+                }
+            )),
         };
-        console.log(variables);
-        // window.backdropLoader(true);
-        // updateChannel({
-        //     variables,
-        // }).then(() => {
-        //     window.backdropLoader(false);
-        //     window.toastMessage({
-        //         open: true,
-        //         text: 'Success edit channel!',
-        //         variant: 'success',
-        //     });
-        //     setTimeout(() => router.push('/oms/channel'), 250);
-        // })
-        // .catch((e) => {
-        //     window.backdropLoader(false);
-        //     window.toastMessage({
-        //         open: true,
-        //         text: e.message,
-        //         variant: 'error',
-        //     });
-        // });
+        window.backdropLoader(true);
+        saveRequestReturnSubmit({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success Return Order!',
+                variant: 'success',
+            });
+            console.log(variables);
+            // window.location.reload();
+        })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+                console.log(variables);
+            });
     };
 
     const formik = useFormik({
@@ -94,30 +100,44 @@ const ContentWrapper = (props) => {
             customer_email: queryEmail,
             return_type: '',
             message: '',
-            shipment_id: '',
-            shipment_item_id: '',
-            qty: '',
-            reason: '',
-            package_condition: '',
-            binary: '',
-            filename: '',
+            items: requestreturn.map((e) => (
+                {
+                    shipment_id: e.shipment_id,
+                    shipment_item_id: e.entity_id,
+                    qty: e.qty,
+                    package_condition: '',
+                    reason: '',
+                    attachment: {
+                        binary_data: e.binary,
+                        filename: e.filename,
+                    },
+                }
+            )),
         },
         validationSchema: Yup.object().shape({
             return_type: Yup.string().required('Required!'),
-            package_condition: Yup.string().required('Required!'),
-            reason: Yup.string().required('Required!'),
+            // package_condition: Yup.string().required('Required!'),
+            // reason: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            const { items, ...valueToSubmit } = values;
+            valueToSubmit.items = items.filter((x, i) => checkedState[i]);
+            handleSubmit(valueToSubmit);
+            console.log(valueToSubmit, 0);
         },
     });
 
-    const handleDropFile = (files) => {
+    const handleDropFile = (files, eMap) => {
         const fileName = files[0].file.name;
         const { baseCode } = files[0];
         const idx = baseCode.indexOf('base64,');
-        formik.setFieldValue('filename', fileName);
-        formik.setFieldValue('binary', baseCode.slice(idx + 7));
+        formik.setFieldValue(`items[${eMap}].attachment.filename`, fileName);
+        formik.setFieldValue(`items[${eMap}].attachment.binary_data`, baseCode.slice(idx + 7));
+    };
+
+    const handleOnChange = (eMap) => {
+        const updateCheckedState = checkedState.map((item, index) => (index === eMap ? !item : item));
+        setCheckedState(updateCheckedState);
     };
 
     const contentProps = {
@@ -125,6 +145,8 @@ const ContentWrapper = (props) => {
         formik,
         requestreturn,
         handleDropFile,
+        checkedState,
+        handleOnChange,
     };
 
     return (
