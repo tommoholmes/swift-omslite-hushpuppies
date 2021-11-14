@@ -102,7 +102,7 @@ const ContentWrapper = (props) => {
         billing: order.billing_address,
         shipping: order.shipping_address,
         paymentMethod: order.channel_payment_method,
-        shippingMethod: order.channel_payment_method,
+        shippingMethod: order.channel_shipping_method,
         items: creditmemo.items,
         subtotal: creditmemo.subtotal,
         discount: creditmemo.discount,

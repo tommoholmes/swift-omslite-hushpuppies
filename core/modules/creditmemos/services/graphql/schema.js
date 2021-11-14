@@ -13,18 +13,20 @@ export const getCreditMemoList = gql`
             filter: $filter,
             sort: $sort,
         ){
-            items {
-                increment_id
-                created_at
-                order_increment_id
-                channel_order_increment_id
-                order_created_at
-                billing_name
-                state {
-                    id
-                    label
+            items{
+                creditmemo{
+                    entity_id
+                    increment_id
+                    created_at
+                    billing_name
+                    state
+                    state_name
+                    grand_total
                 }
-                base_grand_total
+                order{
+                    channel_order_increment_id
+                    channel_order_date
+                }
             }
             total_count
             page_info {
@@ -43,60 +45,67 @@ export const getCreditMemoById = gql`
         getCreditMemoById(
             id: $id
         ){
-            increment_id
-            order_increment_id
-            order_created_at
-            customer_name
-            order_status
-            email
-            channel_order_increment_id
-            customer_group
-            channel_name
-            billing_address {
-                firstname
-                lastname
-                street
-                city
-                region
-                postcode
-                country_id
-                telephone
-            }   
-            shipping_address {
-                firstname
-                lastname
-                street
-                city
-                region
-                postcode
-                country_id
-                telephone
-            }
-            payment_method
-            shipping_method
-            shipping_amount
-            creditmemo_items {
-                name
-                sku
-                price
-                qty_detail {
+            order{
+                entity_id
+                channel_order_date
+                status
+                status_label
+                channel_order_increment_id
+                channel_code
+                channel_name
+                customer_name
+                customer_email
+                customer_group
+                billing_address{
+                  firstname
+                  lastname
+                  street
+                  city
+                  region
+                  postcode
+                  country_id
+                  country_name
+                  telephone
+                }
+                shipping_address{
+                  firstname
+                  lastname
+                  street
+                  city
+                  region
+                  postcode
+                  country_id
+                  country_name
+                  telephone
+                }
+                channel_payment_method
+                channel_shipping_method
+                shipping_amount
+              }
+              creditmemo{
+                items{
+                  discount_amount
+                  order_item{
                     qty_ordered
                     qty_invoiced
                     qty_shipped
                     qty_refunded
                     qty_canceled
+                  }
+                  price
+                  qty_to_refund
+                  row_total
+                  sku
+                  tax_amount
+                  total_amount
                 }
-                qty
-                base_row_total
-                tax_amount
-                discount_amount
-                row_total 
-            }
-            base_subtotal
-            discount_amount
-            base_adjustment_positive
-            base_adjustment_negative
-            base_grand_total
+                subtotal
+                discount
+                shipping_amount
+                adjustment_refund
+                adjustment_fee
+                grand_total
+              }
         }
     }
 `;
