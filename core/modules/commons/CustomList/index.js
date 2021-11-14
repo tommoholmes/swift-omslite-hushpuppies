@@ -22,9 +22,7 @@ import Collapse from '@material-ui/core/Collapse';
 import clsx from 'clsx';
 
 // helpers
-const getComponentOrString = (param) => (
-    typeof param === 'function' ? param() : param
-);
+const getComponentOrString = (param) => (typeof param === 'function' ? param() : param);
 
 const useColumns = (initialColumns) => {
     const _initialColumns = initialColumns.map((column) => ({
@@ -44,10 +42,12 @@ const useColumns = (initialColumns) => {
     };
 
     const applyHiddenColumns = () => {
-        setColumns(columns.map((column, i) => ({
-            ...column,
-            hidden: hiddenColumns[i].hidden,
-        })));
+        setColumns(
+            columns.map((column, i) => ({
+                ...column,
+                hidden: hiddenColumns[i].hidden,
+            })),
+        );
     };
 
     const resetHiddenColumn = () => {
@@ -57,7 +57,11 @@ const useColumns = (initialColumns) => {
     };
 
     return {
-        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
+        columns,
+        hiddenColumns,
+        setHiddenColumn,
+        applyHiddenColumns,
+        resetHiddenColumn,
     };
 };
 
@@ -93,16 +97,10 @@ const CustomList = (props) => {
     const [isCheckedAllRows, setIsCheckedAllRows] = React.useState(false);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const {
-        columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn,
-    } = useColumns(props.columns);
-    const [filters, setFilters] = React.useState(
-        initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })),
-    );
+    const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn } = useColumns(props.columns);
+    const [filters, setFilters] = React.useState(initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })));
     const [sorts] = React.useState(
-        props.columns
-            .filter((column) => column.sortable)
-            .map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
+        props.columns.filter((column) => column.sortable).map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
     );
     const [activeAction, setActiveAction] = React.useState();
 
@@ -115,13 +113,15 @@ const CustomList = (props) => {
         const variables = {
             pageSize: rowsPerPage,
             currentPage: page + 1,
-            filter: filters.filter((e) => !isEmpty(e.value)).reduce((accumulator, currentValue) => {
-                accumulator[currentValue.field] = {
-                    ...accumulator[currentValue.field],
-                    [currentValue.type]: currentValue.value,
-                };
-                return accumulator;
-            }, {}),
+            filter: filters
+                .filter((e) => !isEmpty(e.value))
+                .reduce((accumulator, currentValue) => {
+                    accumulator[currentValue.field] = {
+                        ...accumulator[currentValue.field],
+                        [currentValue.type]: currentValue.value,
+                    };
+                    return accumulator;
+                }, {}),
             sort: sorts.reduce((accumulator, currentValue) => {
                 accumulator[currentValue.field] = currentValue.value || undefined;
                 return accumulator;
@@ -160,10 +160,7 @@ const CustomList = (props) => {
         ];
         return (
             <div className={classes.tableToolbar}>
-                <div
-                    className={header ? 'top-header' : 'top'}
-                    style={actions && { display: 'block' }}
-                >
+                <div className={header ? 'top-header' : 'top'} style={actions && { display: 'block' }}>
                     {header && header()}
                     <div className="top-buttons-wrapper">
                         {!hideActions && actions.length && (
@@ -217,17 +214,16 @@ const CustomList = (props) => {
                                 />
                             </div>
                         )}
-                        {!hideColumn
-                && (
-                    <div className="top-item">
-                        <Button
-                            className={classes.btn}
-                            onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
-                        >
-                            columns
-                        </Button>
-                    </div>
-                )}
+                        {!hideColumn && (
+                            <div className="top-item">
+                                <Button
+                                    className={classes.btn}
+                                    onClick={() => setExpandedToolbar(expandedToolbar != 'toggleColums' ? 'toggleColums' : '')}
+                                >
+                                    columns
+                                </Button>
+                            </div>
+                        )}
                         <div className="top-item">
                             <Button
                                 className={clsx(classes.btn, 'filter')}
@@ -244,23 +240,18 @@ const CustomList = (props) => {
                 <div style={{ background: '#EBEFF6' }}>
                     <Collapse in={expandedToolbar === 'toggleColums'}>
                         <div style={{ padding: 12 }}>
-                            {(hiddenColumns.find((c) => c.hideable)) && (
-                                <div style={{ padding: 12 }}>
-                                    {`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}
-                                </div>
+                            {hiddenColumns.find((c) => c.hideable) && (
+                                <div style={{ padding: 12 }}>{`${columns.filter((c) => !c.hidden).length} out of ${columns.length} visible`}</div>
                             )}
-                            {!(hiddenColumns.find((c) => c.hideable)) && (
-                                <div style={{ padding: 12 }}>Toggle show fields is empty.</div>
-                            )}
-                            {hiddenColumns.filter((c) => c.hideable).map((column, index) => (
-                                <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
-                                    <Checkbox
-                                        checked={!column.hidden}
-                                        onChange={(e) => setHiddenColumn(column.field, !e.target.checked)}
-                                    />
-                                    {column.headerName}
-                                </div>
-                            ))}
+                            {!hiddenColumns.find((c) => c.hideable) && <div style={{ padding: 12 }}>Toggle show fields is empty.</div>}
+                            {hiddenColumns
+                                .filter((c) => c.hideable)
+                                .map((column, index) => (
+                                    <div key={index} style={{ maxHeight: 'inherit', paddingRight: 24 }} className="boxColumn">
+                                        <Checkbox checked={!column.hidden} onChange={(e) => setHiddenColumn(column.field, !e.target.checked)} />
+                                        {column.headerName}
+                                    </div>
+                                ))}
                             <div style={{ padding: 12 }}>
                                 <Button buttonType="primary-rounded" onClick={applyHiddenColumns}>
                                     Apply
@@ -272,7 +263,12 @@ const CustomList = (props) => {
                         </div>
                     </Collapse>
                     <Collapse in={expandedToolbar === 'filters'}>
-                        <ListFilters initialFilters={initialFilters} parentFilters={filters} setParentFilters={setFilters} handleReset={handleReset} />
+                        <ListFilters
+                            initialFilters={initialFilters}
+                            parentFilters={filters}
+                            setParentFilters={setFilters}
+                            handleReset={handleReset}
+                        />
                     </Collapse>
                 </div>
             </div>
@@ -309,67 +305,65 @@ const CustomList = (props) => {
                     className={clsx(classes.gridList, classes.content, classes.boxAll)}
                     style={{ gridTemplateColumns: `1fr repeat(${columns.length}, 2fr)` }}
                 >
-                    <Checkbox
-                        checked={isCheckedAllRows}
-                        onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)}
-                    />
+                    <Checkbox checked={isCheckedAllRows} onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)} />
                     <span className={classes.title}>Select All</span>
                 </div>
             )}
-            {loading ? <div className={classes.loading}>Loading . . .</div>
-                : rows.length ? rows.map((row, i) => (
-                    <>
-                        <div
-                            key={i}
-                            className={clsx(classes.gridList, classes.content)}
-                            style={
-                                twoColumns ? { gridTemplateColumns: showCheckbox ? `1fr repeat(2, ${columns.length}fr)` : 'repeat(2, 1fr)' }
-                                    : { gridTemplateColumns: showCheckbox ? `1fr repeat(${columns.length}, 2fr)` : `repeat(${columns.length}, 1fr)` }
-
-                            }
-                        >
-                            {showCheckbox && (
-                                <Checkbox
-                                    checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
-                                    onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
-                                    style={twoColumns ? { gridRow: `1 / span ${columns.length}`, alignSelf: 'start' } : { gridRow: 1 }}
-                                />
-                            )}
-                            {columns.map((column, columnIndex) => {
-                                return (
-                                    !column.hidden && (
-                                        <div
-                                            key={columnIndex}
-                                            style={{ paddingLeft: 10,
-                                                cursor: handleClickRow ? 'pointer' : 'unset',
-                                                textOverflow: 'ellipsis',
-                                                overflow: 'hidden',
-                                                overflowWrap: 'break-word',
-                                                marginBottom: 10,
-                                            }}
-                                            onClick={() => handleClickRow ? handleClickRow(row.id) : null}
-                                        >
-                                            <h5
-                                                className={classes.titleList}
-                                            >
-                                                {column.headerName}
-                                            </h5>
-                                            <h5
-                                                className={classes.bodyList}
-                                            >
-                                                {getComponentOrString(row[column.field])}
-                                            </h5>
-                                        </div>
-                                    )
-                                );
-                            })}
-                        </div>
-                    </>
+            {loading ? (
+                <div className={classes.loading}>Loading . . .</div>
+            ) : rows.length ? (
+                rows.map((row, i) => (
+                    <div
+                        key={i}
+                        className={clsx(classes.gridList, classes.content)}
+                        style={
+                            twoColumns
+                                ? { gridTemplateColumns: showCheckbox ? `1fr repeat(2, ${columns.length}fr)` : 'repeat(2, 1fr)' }
+                                : { gridTemplateColumns: showCheckbox ? `1fr repeat(${columns.length}, 2fr)` : `repeat(${columns.length}, 1fr)` }
+                        }
+                    >
+                        {showCheckbox && (
+                            <Checkbox
+                                checked={!!checkedRows.find((checkedRow) => checkedRow[primaryKey] === row[primaryKey])}
+                                onChange={(e) => handleChangeCheckboxRow(e.target.checked, row)}
+                                style={twoColumns ? { gridRow: `1 / span ${columns.length}`, alignSelf: 'start' } : { gridRow: 1 }}
+                            />
+                        )}
+                        {columns.map((column, columnIndex) => {
+                            return (
+                                !column.hidden && (
+                                    <div
+                                        key={columnIndex}
+                                        style={{
+                                            paddingLeft: 10,
+                                            cursor: handleClickRow ? 'pointer' : 'unset',
+                                            textOverflow: 'ellipsis',
+                                            overflow: 'hidden',
+                                            overflowWrap: 'break-word',
+                                            marginBottom: 10,
+                                        }}
+                                        onClick={() => (handleClickRow ? handleClickRow(row.id) : null)}
+                                    >
+                                        <h5 className={classes.titleList}>{column.headerName}</h5>
+                                        <h5 className={classes.bodyList}>{getComponentOrString(row[column.field])}</h5>
+                                    </div>
+                                )
+                            );
+                        })}
+                    </div>
                 ))
-                    : <div className={classes.loading}>No records to display</div>}
-            {usePagination && count > rowsPerPage
-                ? <Pagination count={count / rowsPerPage} page={page} onChange={() => { setPage(page + 1); }} />
-                : null}
+            ) : (
+                <div className={classes.loading}>No records to display</div>
+            )}
+            {usePagination && count > rowsPerPage ? (
+                <Pagination
+                    count={count / rowsPerPage}
+                    page={page}
+                    onChange={() => {
+                        setPage(page + 1);
+                    }}
+                />
+            ) : null}
         </div>
     );
 };
