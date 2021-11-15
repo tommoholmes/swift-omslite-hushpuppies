@@ -49,7 +49,7 @@ const ContentWrapper = (props) => {
         message,
         items,
     }) => {
-        const variables = {
+        const input = {
             channel_order_increment_id,
             channel_code,
             customer_email,
@@ -71,7 +71,7 @@ const ContentWrapper = (props) => {
         };
         window.backdropLoader(true);
         saveRequestReturnSubmit({
-            variables,
+            variables: { input },
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -79,8 +79,7 @@ const ContentWrapper = (props) => {
                 text: 'Success Return Order!',
                 variant: 'success',
             });
-            console.log(variables);
-            // window.location.reload();
+            setTimeout(() => window.location.reload(true), 250);
         })
             .catch((e) => {
                 window.backdropLoader(false);
@@ -89,7 +88,6 @@ const ContentWrapper = (props) => {
                     text: e.message,
                     variant: 'error',
                 });
-                console.log(variables);
             });
     };
 
@@ -116,14 +114,11 @@ const ContentWrapper = (props) => {
         },
         validationSchema: Yup.object().shape({
             return_type: Yup.string().required('Required!'),
-            // package_condition: Yup.string().required('Required!'),
-            // reason: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
             const { items, ...valueToSubmit } = values;
             valueToSubmit.items = items.filter((x, i) => checkedState[i]);
             handleSubmit(valueToSubmit);
-            console.log(valueToSubmit, 0);
         },
     });
 

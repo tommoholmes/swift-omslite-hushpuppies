@@ -172,42 +172,10 @@ export const saveRequestReturn = gql`
 
 export const saveRequestReturnSubmit = gql`
     mutation saveRequestReturn(
-        $channel_order_increment_id: String
-        $channel_code: String
-        $customer_email: String
-        $return_type: String
-        $message: String
-        $shipment_id: Int
-        $shipment_item_id: Int
-        $qty: Int
-        $reason: String
-        $package_condition: String
-        $binary_data: String
-        $filename: String
+        $input: RequestReturnInput!
     ){
         saveRequestReturn(
-            input:{
-                channel_order_increment_id: $channel_order_increment_id
-                channel_code: $channel_code
-                customer_email: $customer_email
-                return_type: $return_type
-                message: $message
-                items:[
-                    {
-                        shipment_id: $shipment_id
-                        shipment_item_id: $shipment_item_id
-                        qty: $qty
-                        reason: $reason
-                        package_condition: $package_condition
-                        attachment:[
-                            {
-                                binary_data: $binary_data
-                                filename: $filename
-                            }
-                        ]
-                    }
-                ]
-            }
+            input: $input
         ){
             id
             increment_id
