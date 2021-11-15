@@ -127,6 +127,13 @@ const Layout = (props) => {
                     url: '/sales/canceled',
                     notInAcl: true,
                 },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_bulk_import',
+                    key: 'orderqueue_bulk_import',
+                    label: 'Bulk Import',
+                    url: '/sales/orderqueue/bulkimport',
+                    notInAcl: true,
+                },
                 // { aclCode: 'orderreallocation', label: 'Order Reallocation', url: '/sales/orderreallocation' },
             ],
         },
