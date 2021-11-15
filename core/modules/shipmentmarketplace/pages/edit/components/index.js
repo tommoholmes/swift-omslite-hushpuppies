@@ -447,7 +447,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                                         <th className={classes.th} style={{ textAlign: 'center' }}>QTY</th>
                                         <th className={classes.th} style={{ textAlign: 'right' }}>Subtotal</th>
                                     </tr>
-                                    {shipmentMarketplace.order.map((e) => (
+                                    {shipmentMarketplace.order?.map((e) => (
                                         <tr>
                                             <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
                                             <td className={classes.td}>{e.name}</td>
@@ -470,7 +470,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Notes</th>
                             </tr>
-                            {shipmentMarketplace.history.length ? shipmentMarketplace.history.map((e) => {
+                            {shipmentMarketplace.history && shipmentMarketplace.history.length ? shipmentMarketplace.history.map((e) => {
                                 const date = new Date(e.created_at);
                                 return (
                                     <tr>

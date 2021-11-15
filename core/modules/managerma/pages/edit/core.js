@@ -105,7 +105,7 @@ const ContentWrapper = (props) => {
                 is_visible_on_front: false,
                 text: '',
             },
-            items: rma.rma_item.map((item) => (
+            items: rma.rma_item?.map((item) => (
                 {
                     item_id: item.id,
                     package_condition: item.package_condition,
