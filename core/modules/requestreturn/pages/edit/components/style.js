@@ -68,6 +68,12 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'capitalize',
         padding: '5px 25px',
         marginTop: 15,
+        '&.btn-package': {
+            fontSize: 13,
+            [theme.breakpoints.up('sm')]: {
+                width: '80%',
+            },
+        },
     },
     content: {
         borderBottom: '3px solid #F5F7FB',
@@ -88,11 +94,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline-block',
         width: '50%',
         verticalAlign: 'top',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
     },
     contentRight: {
         display: 'inline-block',
         width: '50%',
         verticalAlign: 'top',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
     },
     table: {
         borderCollapse: 'collapse',
