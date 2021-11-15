@@ -6,36 +6,20 @@ import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
-import useStyles from '@modules/orderqueue/pages/import/components/style';
+import useStyles from '@modules/orderqueue/pages/bulkimport/components/style';
 
 const ProductListImport = (props) => {
     const {
         formik,
         urlDownload,
         handleDropFile,
-        tab_status,
     } = props;
     const classes = useStyles();
     const router = useRouter();
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push(`/sales/${tab_status}`)}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
-                />
-            </Button>
-            <h2 className={classes.titleTop}>Bulk Order Reallocation</h2>
+            <h2 className={classes.titleTop}>Bulk Import</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>

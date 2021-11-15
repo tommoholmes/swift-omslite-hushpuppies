@@ -21,7 +21,7 @@ const HeaderContent = ({ showBulkButton = false }) => {
             && (
                 <Button
                     className={classes.buttonAdd}
-                    onClick={() => router.push('/sales/orderqueue/import')}
+                    onClick={() => router.push('/sales/failed/import')}
                 >
                     Bulk Reallocation
                 </Button>

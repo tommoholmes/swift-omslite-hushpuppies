@@ -37,6 +37,10 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
     variables, ...context,
 });
 
+export const orderImport = (variables) => useMutation(Schema.orderImport, {
+    variables, ...context,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -45,4 +49,5 @@ export default {
     exportOrderToCsv,
     bulkOrderReallocation,
     downloadSampleCsv,
+    orderImport,
 };
