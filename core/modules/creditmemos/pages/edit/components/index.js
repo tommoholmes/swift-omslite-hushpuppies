@@ -185,7 +185,7 @@ const creditmemosCreateContent = (props) => {
                                 <th className={classes.th}>Discount Amount</th>
                                 <th className={classes.th}>Row Total</th>
                             </tr>
-                            {creditmemoDetail.items.map((e) => (
+                            {creditmemoDetail.items?.map((e) => (
                                 <tr>
                                     <td className={classes.td}>
                                         {e.sku}

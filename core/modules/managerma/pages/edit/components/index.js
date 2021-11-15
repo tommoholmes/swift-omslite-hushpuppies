@@ -70,7 +70,7 @@ const ManageRmaEditContent = (props) => {
         switch (rmaDetail.status) {
         case 'pending_approval':
             arrStatus = [
-                { value: 'approved ', label: 'Approved' },
+                { value: 'approved', label: 'Approved' },
                 { value: 'package_received', label: 'Package Received' },
             ];
             break;
@@ -205,7 +205,6 @@ const ManageRmaEditContent = (props) => {
                                                     value={formik.values.status_code}
                                                     onChange={formik.handleChange}
                                                     dataOptions={dataStatus()}
-                                                    enableEmpty={false}
                                                 />
                                             )
                                             : <td className={classes.td}>{rmaDetail.statusLabel || '-'}</td>}
@@ -308,7 +307,7 @@ const ManageRmaEditContent = (props) => {
                                 <th className={classes.th}>Status</th>
                                 <th className={classes.th}>Return Stock</th>
                             </tr>
-                            {rmaDetail.item.map((e, i) => (
+                            {rmaDetail.item?.map((e, i) => (
                                 <tr>
                                     <td className={classes.td}>
                                         {e.name}
@@ -350,7 +349,7 @@ const ManageRmaEditContent = (props) => {
                                                 <br />
                                                 <br />
                                                 <span className={classes.spanLabel}>Attachment:</span>
-                                                {e.attachment.map((attach, idx) => (
+                                                {e.attachment?.map((attach, idx) => (
                                                     <div key={idx}>
                                                         <a href={attach.filepath} download className={classes.link}>{attach.filename}</a>
                                                     </div>
@@ -421,7 +420,7 @@ const ManageRmaEditContent = (props) => {
                         multiline
                         rows={3}
                     />
-                    {rmaDetail.message.map((e) => (
+                    {rmaDetail.message?.map((e) => (
                         <div className={classes.list}>
                             <span className={classes.spanLabel}>
                                 {e.customer_name || 'Unknown'}

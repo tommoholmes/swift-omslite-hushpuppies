@@ -241,7 +241,7 @@ const shipmentEditContent = (props) => {
                                             <th className={classes.th}>Action</th>
                                         )}
                                     </tr>
-                                    {shipmentDetail.orderItem.map((e) => (
+                                    {shipmentDetail.orderItem?.map((e) => (
                                         <tr>
                                             <td className={classes.td} style={{ paddingLeft: 0 }}>
                                                 {e.sku}
