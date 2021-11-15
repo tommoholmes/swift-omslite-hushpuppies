@@ -189,9 +189,7 @@ export const sendPackage = gql`
         $id: Int!
     ){
         sendPackage(
-            input:{
-                id: $id
-            }
+            id: $id
         ){
             id
             increment_id

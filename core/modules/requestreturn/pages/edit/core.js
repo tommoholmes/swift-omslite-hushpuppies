@@ -30,6 +30,7 @@ const ContentWrapper = (props) => {
 
     const requestreturn = data.getRequestReturnById;
     const [saveRequestReturn] = gqlService.saveRequestReturn();
+    const [sendPackage] = gqlService.sendPackage();
 
     const handleSubmit = ({
         id,
@@ -67,6 +68,31 @@ const ContentWrapper = (props) => {
             });
     };
 
+    const handleSendPackage = () => {
+        const variables = {
+            id: requestreturn.id,
+        };
+        window.backdropLoader(true);
+        sendPackage({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order was packaged',
+                variant: 'success',
+            });
+            setTimeout(window.location.reload(), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
     const formik = useFormik({
         initialValues: {
             id: requestreturn.id,
@@ -101,10 +127,20 @@ const ContentWrapper = (props) => {
         formik.setFieldValue('binary', baseCode.slice(idx + 7));
     };
 
+    const formikSendPackage = useFormik({
+        initialValues: {
+            id: requestreturn.id,
+        },
+        onSubmit: (values) => {
+            handleSendPackage(values);
+        },
+    });
+
     const contentProps = {
         formik,
         detailReturn,
         handleDropFile,
+        formikSendPackage,
     };
 
     return (

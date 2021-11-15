@@ -18,6 +18,7 @@ const OrderQueueEditContent = (props) => {
         formik,
         detailReturn,
         handleDropFile,
+        formikSendPackage,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -61,6 +62,19 @@ const OrderQueueEditContent = (props) => {
                             <span>{detailReturn.type}</span>
                             <span>Channel Order</span>
                             <span>{detailReturn.order}</span>
+                            {(detailReturn.status === 'approved') && (
+                                <>
+                                    <span>Send Package</span>
+                                    <Button
+                                        className={clsx(classes.btn, 'btn-package')}
+                                        type="submit"
+                                        onClick={formikSendPackage.handleSubmit}
+                                        variant="contained"
+                                    >
+                                        Send Package
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className={classes.contentRight}>
