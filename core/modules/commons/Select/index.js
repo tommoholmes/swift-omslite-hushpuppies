@@ -1,6 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -31,11 +32,13 @@ const CustomTextField = ({
     rootClasses = null,
     valueToMap = 'value',
     labelToMap = 'label',
+    error = false,
+    errorMessage = 'This is a Required field.',
     ...other
 }) => {
     const classes = useStyles();
     return (
-        <FormControl variant={variant} className={formControlClasses || classes.formControl}>
+        <FormControl variant={variant} className={formControlClasses || classes.formControl} error={error}>
             <Select
                 native
                 className={selectClasses || classes.select}
@@ -55,6 +58,8 @@ const CustomTextField = ({
 
                 ))}
             </Select>
+            {error
+            && <FormHelperText>{errorMessage}</FormHelperText>}
         </FormControl>
     );
 };

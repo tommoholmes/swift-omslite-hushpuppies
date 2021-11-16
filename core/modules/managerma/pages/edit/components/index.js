@@ -139,7 +139,6 @@ const ManageRmaEditContent = (props) => {
                                 <Button
                                     className={clsx(classes.btn, 'reverse')}
                                     onClick={() => {
-                                        window.backdropLoader(true);
                                         formik.setFieldValue('action', 'cancel');
                                         setTimeout(() => { formik.handleSubmit(); }, 500);
                                     }}
@@ -152,7 +151,6 @@ const ManageRmaEditContent = (props) => {
                                 <Button
                                     className={classes.btn}
                                     onClick={() => {
-                                        window.backdropLoader(true);
                                         formik.setFieldValue('action', 'save');
                                         setTimeout(() => { formik.handleSubmit(); }, 500);
                                     }}
@@ -187,7 +185,7 @@ const ManageRmaEditContent = (props) => {
                 <div className={classes.content}>
                     <div className={classes.gridHeader}>
                         <div style={{ paddingRight: '10%' }}>
-                            <h5 className={clsx(clsx(classes.title, 'border'), 'border')}>General Information</h5>
+                            <h5 className={clsx(classes.titleSmall, 'border')}>General Information</h5>
                             <table className={classes.table}>
                                 <tbody>
                                     <tr className={classes.tr}>
@@ -205,6 +203,7 @@ const ManageRmaEditContent = (props) => {
                                                     value={formik.values.status_code}
                                                     onChange={formik.handleChange}
                                                     dataOptions={dataStatus()}
+                                                    error={!!(formik.touched.status_code && formik.errors.status_code)}
                                                 />
                                             )
                                             : <td className={classes.td}>{rmaDetail.statusLabel || '-'}</td>}
@@ -227,6 +226,8 @@ const ManageRmaEditContent = (props) => {
                                             valueToMap="code"
                                             labelToMap="title"
                                             disabled={!isFieldEnabled('return_type')}
+                                            error={!!(formik.touched.request?.return_type
+                                                && formik.errors.request?.return_type)}
                                         />
                                     </tr>
                                     <tr className={classes.tr}>
@@ -237,9 +238,11 @@ const ManageRmaEditContent = (props) => {
                                             onChange={formik.handleChange}
                                             dataOptions={dataRefundType}
                                             disabled={!isFieldEnabled('refund_type')}
+                                            error={!!(formik.touched.request?.refund_type
+                                                && formik.errors.request?.refund_type)}
                                         />
                                     </tr>
-                                    <tr className={classes.tr}>
+                                    <tr className={classes.tr} style={{ borderBottom: '0px' }}>
                                         <td className={classes.td}>Package Received</td>
                                         <td className={classes.td}>{rmaDetail.packageName || '-'}</td>
                                     </tr>
@@ -253,7 +256,7 @@ const ManageRmaEditContent = (props) => {
                             </table>
                         </div>
                         <div>
-                            <h5 className={clsx(classes.title, 'border')}>Account Information</h5>
+                            <h5 className={clsx(classes.titleSmall, 'border')}>Account Information</h5>
                             <table className={classes.table}>
                                 <tbody>
                                     <tr className={classes.tr}>
@@ -297,7 +300,7 @@ const ManageRmaEditContent = (props) => {
                     </div>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.title}>Products</h5>
+                    <h5 className={classes.titleSmall}>Products</h5>
                     <table className={classes.table}>
                         <tbody>
                             <tr className={classes.tr}>
@@ -381,7 +384,7 @@ const ManageRmaEditContent = (props) => {
                     </table>
                 </div>
                 <div className={classes.content}>
-                    <h5 className={classes.title} style={{ paddingBottom: 10 }}>Messages</h5>
+                    <h5 className={classes.titleSmall} style={{ paddingBottom: 10 }}>Messages</h5>
                     <FormGroup className={classes.formgroup}>
                         <FormControlLabel
                             control={(
@@ -421,7 +424,7 @@ const ManageRmaEditContent = (props) => {
                         rows={3}
                     />
                     {rmaDetail.message?.map((e) => (
-                        <div className={classes.list}>
+                        <div className={clsx(classes.list, e.owner_type === 'admin' && 'right')}>
                             <span className={classes.spanLabel}>
                                 {e.customer_name || 'Unknown'}
                                 {', '}
