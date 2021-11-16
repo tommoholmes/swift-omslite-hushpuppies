@@ -8,7 +8,7 @@ import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/creditmemos/helpers';
 import useStyles from '@modules/creditmemos/pages/list/components/style';
 import Header from '@modules/creditmemos/pages/list/components/Header';
-import { formatPrice } from '@helper_currency';
+// import { formatPrice } from '@helper_currency';
 
 const CreditmemoListContent = (props) => {
     const classes = useStyles();
@@ -36,6 +36,7 @@ const CreditmemoListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -58,6 +59,7 @@ const CreditmemoListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -81,6 +83,7 @@ const CreditmemoListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -103,6 +106,7 @@ const CreditmemoListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -144,7 +148,7 @@ const CreditmemoListContent = (props) => {
         ...item.order,
         id: item.creditmemo.increment_id,
         state: item.creditmemo.state_name,
-        grand_total: formatPrice(item.creditmemo.grand_total, 'USD'),
+        // grand_total: formatPrice(item.creditmemo.grand_total, 'USD'),
         actions: () => (
             <Link href={`/sales/creditmemos/edit/${item.creditmemo.entity_id}`}>
                 <a className="link-button">View</a>
@@ -168,6 +172,7 @@ const CreditmemoListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={creditmemoTotal}
+                hideActions
             />
         </>
     );
