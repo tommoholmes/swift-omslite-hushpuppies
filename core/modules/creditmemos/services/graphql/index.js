@@ -17,7 +17,7 @@ export const getCreditMemoById = (variables) => useQuery(Schema.getCreditMemoByI
     variables, ...context, ...fetchPolicy,
 });
 
-export const createCreditmemo = (variables) => useMutation(Schema.createCreditmemo, {
+export const createCreditMemo = (variables) => useMutation(Schema.createCreditMemo, {
     variables, ...context,
 });
 
@@ -32,7 +32,7 @@ export const calculateCreditMemoTotals = (variables) => useMutation(Schema.calcu
 export default {
     getCreditMemoList,
     getCreditMemoById,
-    createCreditmemo,
+    createCreditMemo,
     prepareNewMemo,
     calculateCreditMemoTotals,
 };

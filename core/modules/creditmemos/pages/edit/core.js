@@ -12,12 +12,13 @@ const ContentWrapper = (props) => {
 
     const creditmemoDetail = {
         entityId: order.entity_id,
+        incrementId: creditmemo.increment_id,
         status: order.status,
         statusLabel: order.statusLabel,
         channelName: order.channel_name,
         channelCode: order.channel_code,
-        orderNumber: order.channel_order_increment_id,
-        orderDate: order.channel_order_date,
+        channelOrderNumber: order.channel_order_increment_id,
+        channelOrderDate: order.channel_order_date,
         customerName: order.customer_name,
         customerEmail: order.customer_email,
         customerGroup: order.customer_group,

@@ -20,7 +20,6 @@ const creditmemosCreateContent = (props) => {
         creditmemoDetail,
         parentId,
         grandTotal,
-        handleCalculate,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -138,13 +137,16 @@ const creditmemosCreateContent = (props) => {
                         <div className="grid-child">
                             <h5 className={classes.titleSmall}>Customer Info</h5>
                             <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_user.png" />
                                 {creditmemoDetail.customerName}
                             </span>
                             <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_email.png" />
                                 {creditmemoDetail.customerEmail}
                             </span>
                             <span className={classes.orderLabel}>
-                                {creditmemoDetail.customerGroup}
+                                <img className="imgIcon" alt="" src="/assets/img/icon_phone.png" />
+                                {creditmemoDetail.billing.telephone}
                             </span>
                         </div>
                         <div className="grid-child">
@@ -188,7 +190,7 @@ const creditmemosCreateContent = (props) => {
                                 <th className={classes.th}>Product</th>
                                 <th className={classes.th}>Price</th>
                                 <th className={classes.th}>Qty</th>
-                                <th className={classes.th}>Qty Refund</th>
+                                <th className={classes.th}>Qty to Refund</th>
                                 <th className={classes.th}>Subtotal</th>
                                 <th className={classes.th}>Tax Amount</th>
                                 <th className={classes.th}>Discount Amount</th>
@@ -197,29 +199,58 @@ const creditmemosCreateContent = (props) => {
                             {creditmemoDetail.items?.map((e) => (
                                 <tr>
                                     <td className={classes.td}>
+                                        {e.name}
+                                        <br />
+                                        SKU:
+                                        {' '}
                                         {e.sku}
                                     </td>
                                     <td className={classes.td}>{e.price}</td>
                                     <td className={classes.td}>
-                                        Ordered:
-                                        {' '}
-                                        {e.order_item.qty_ordered}
-                                        <br />
-                                        Invoiced:
-                                        {' '}
-                                        {e.order_item.qty_invoiced}
-                                        <br />
-                                        Shipped:
-                                        {' '}
-                                        {e.order_item.qty_shipped}
-                                        <br />
-                                        Refunded:
-                                        {' '}
-                                        {e.order_item.qty_refunded}
-                                        <br />
-                                        Canceled:
-                                        {' '}
-                                        {e.order_item.qty_canceled}
+                                        {e.order_item.qty_ordered > 0
+                                            && (
+                                                <>
+                                                    Ordered:
+                                                    {' '}
+                                                    {e.order_item.qty_ordered}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_invoiced > 0
+                                            && (
+                                                <>
+                                                    Invoiced:
+                                                    {' '}
+                                                    {e.order_item.qty_invoiced}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_shipped > 0
+                                            && (
+                                                <>
+                                                    Shipped:
+                                                    {' '}
+                                                    {e.order_item.qty_shipped}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_refunded > 0
+                                            && (
+                                                <>
+                                                    Refunded:
+                                                    {' '}
+                                                    {e.order_item.qty_refunded}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_canceled > 0
+                                            && (
+                                                <>
+                                                    Canceled:
+                                                    {' '}
+                                                    {e.order_item.qty_canceled}
+                                                </>
+                                            )}
                                     </td>
                                     <td className={classes.td}>{e.qty_to_refund}</td>
                                     <td className={classes.td}>{e.row_total}</td>
@@ -256,7 +287,6 @@ const creditmemosCreateContent = (props) => {
                                         <td className={classes.td}>
                                             <OutlinedInput
                                                 name="shipping_amount"
-                                                type="number"
                                                 value={formik.values.shipping_amount}
                                                 onChange={formik.handleChange}
                                                 classes={{
@@ -268,6 +298,7 @@ const creditmemosCreateContent = (props) => {
                                                         <span style={{ fontSize: 14 }}>IDR</span>
                                                     </InputAdornment>
                                                 )}
+                                                error={!!(formik.touched.shipping_amount && formik.errors.shipping_amount)}
                                             />
                                         </td>
                                     </tr>
@@ -276,7 +307,6 @@ const creditmemosCreateContent = (props) => {
                                         <td className={classes.td}>
                                             <OutlinedInput
                                                 name="adjustment_positive"
-                                                type="number"
                                                 value={formik.values.adjustment_positive}
                                                 onChange={formik.handleChange}
                                                 classes={{
@@ -288,6 +318,7 @@ const creditmemosCreateContent = (props) => {
                                                         <span style={{ fontSize: 14 }}>IDR</span>
                                                     </InputAdornment>
                                                 )}
+                                                error={!!(formik.touched.adjustment_positive && formik.errors.adjustment_positive)}
                                             />
                                         </td>
                                     </tr>
@@ -296,7 +327,6 @@ const creditmemosCreateContent = (props) => {
                                         <td className={classes.td}>
                                             <OutlinedInput
                                                 name="adjustment_negative"
-                                                type="number"
                                                 value={formik.values.adjustment_negative}
                                                 onChange={formik.handleChange}
                                                 classes={{
@@ -308,6 +338,7 @@ const creditmemosCreateContent = (props) => {
                                                         <span style={{ fontSize: 14 }}>IDR</span>
                                                     </InputAdornment>
                                                 )}
+                                                error={!!(formik.touched.adjustment_negative && formik.errors.adjustment_negative)}
                                             />
                                         </td>
                                     </tr>
@@ -368,7 +399,11 @@ const creditmemosCreateContent = (props) => {
                 <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
-                        onClick={formik.handleSubmit}
+                        // onClick={formik.handleSubmit}
+                        onClick={() => {
+                            formik.setFieldValue('action', 'submit');
+                            setTimeout(() => { formik.handleSubmit(); }, 500);
+                        }}
                         variant="contained"
                         style={{ marginRight: 10 }}
                     >
@@ -376,7 +411,11 @@ const creditmemosCreateContent = (props) => {
                     </Button>
                     <Button
                         className={clsx(classes.btn, 'reverse')}
-                        onClick={() => handleCalculate(formik.values)}
+                        // onClick={() => handleCalculate(formik.values)}
+                        onClick={() => {
+                            formik.setFieldValue('action', 'calculate');
+                            setTimeout(() => { formik.handleSubmit(); }, 500);
+                        }}
                         variant="contained"
                     >
                         Calculate Totals

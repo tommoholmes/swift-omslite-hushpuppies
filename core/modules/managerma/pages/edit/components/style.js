@@ -5,11 +5,15 @@ const colorBlue = '#007bdb';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
 const borderColor = '#DDE1EC';
+const borderGray = '#E5E9F1';
+const colorGray = '#B1BCDB';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: '16px 0',
+        padding: '0 16px',
         borderRadius: 16,
+        backgroundColor: 'unset',
+        boxShadow: 'none',
         '& .title-information': {
             [theme.breakpoints.down('xs')]: {
                 height: 75,
@@ -53,6 +57,15 @@ const useStyles = makeStyles((theme) => ({
             borderBottom: '1px solid #DDE1EC',
         },
     },
+    titleSmall: {
+        fontFamily: font,
+        color: colorGray,
+        fontSize: 12,
+        textTransform: 'uppercase',
+        margin: 0,
+        marginBottom: 8,
+        marginTop: 18,
+    },
     btn: {
         borderRadius: 20,
         boxShadow: 'none',
@@ -75,10 +88,16 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         borderBottom: '3px solid #F5F7FB',
-        padding: '10px 29px 12px 22px',
+        padding: '10px 15px',
         background: '#ffffff',
         borderRadius: 16,
-        marginBottom: 8,
+        marginBottom: 18,
+        '& hr': {
+            margin: '12px -15px',
+            background: borderGray,
+            border: 0,
+            height: 1,
+        },
     },
     orderLabel: {
         fontFamily: font,
@@ -144,6 +163,9 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 15,
         paddingBottom: 10,
         borderBottom: `1px solid ${borderColor}`,
+        '&.right': {
+            textAlign: 'end',
+        },
     },
     fieldRoot: {
         maxWidth: 200,

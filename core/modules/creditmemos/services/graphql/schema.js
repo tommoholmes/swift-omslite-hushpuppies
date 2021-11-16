@@ -16,16 +16,16 @@ export const getCreditMemoList = gql`
             items{
                 creditmemo{
                     entity_id
-                    increment_id
                     created_at
+                    increment_id
                     billing_name
                     state
                     state_name
                     grand_total
                 }
                 order{
-                    channel_order_increment_id
                     channel_order_date
+                    channel_order_increment_id
                 }
             }
             total_count
@@ -50,8 +50,8 @@ export const getCreditMemoById = gql`
                 channel_order_date
                 status
                 status_label
-                channel_order_increment_id
                 channel_code
+                channel_order_increment_id
                 channel_name
                 customer_name
                 customer_email
@@ -92,6 +92,7 @@ export const getCreditMemoById = gql`
                     qty_refunded
                     qty_canceled
                   }
+                  name
                   price
                   qty_to_refund
                   row_total
@@ -99,6 +100,8 @@ export const getCreditMemoById = gql`
                   tax_amount
                   total_amount
                 }
+                increment_id
+                entity_id
                 subtotal
                 discount
                 shipping_amount
@@ -110,12 +113,12 @@ export const getCreditMemoById = gql`
     }
 `;
 
-export const createCreditmemo = gql`
-    mutation createCreditmemo(
+export const createCreditMemo = gql`
+    mutation createCreditMemo(
         $request_id: Int!,
         $input: CreditmemoInput!,
     ){
-        createCreditmemo(
+        createCreditMemo(
             request_id: $request_id,
             input: $input
         )
@@ -130,8 +133,8 @@ export const prepareNewMemo = gql`
             channel_order_date
             status
             status_label
-            channel_order_increment_id
             channel_code
+            channel_order_increment_id
             channel_name
             customer_name
             customer_email
@@ -173,6 +176,7 @@ export const prepareNewMemo = gql`
                   qty_refunded
                   qty_canceled
                 }
+                name
                 qty_to_refund
                 row_total
                 tax_amount
@@ -207,7 +211,7 @@ export const calculateCreditMemoTotals = gql`
 export default {
     getCreditMemoList,
     getCreditMemoById,
-    createCreditmemo,
+    createCreditMemo,
     prepareNewMemo,
     calculateCreditMemoTotals,
 };

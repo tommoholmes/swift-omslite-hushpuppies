@@ -17,6 +17,7 @@ const ManageRmaListContent = (props) => {
     const dataTab = [
         { label: 'Pending Approval', value: 'pending_approval' },
         { label: 'Approved', value: 'approved' },
+        { label: 'Package Sent', value: 'package_sent' },
         { label: 'Package Received', value: 'package_received' },
         { label: 'Processing', value: 'processing' },
         { label: 'Complete', value: 'complete' },
@@ -126,6 +127,7 @@ const ManageRmaListContent = (props) => {
             </Link>
         ),
         customer: `${rma.customer_name}, ${rma.customer_email}`,
+        loc_name: rma.loc_name?.join(', ') || '-',
     }));
 
     const onChangeTab = async (e, v) => {

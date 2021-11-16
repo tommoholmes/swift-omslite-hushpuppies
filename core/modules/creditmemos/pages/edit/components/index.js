@@ -11,7 +11,6 @@ import useStyles from '@modules/creditmemos/pages/edit/components/style';
 const creditmemosCreateContent = (props) => {
     const {
         creditmemoDetail,
-        parentId,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -73,7 +72,7 @@ const creditmemosCreateContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(`/sales/managerma/edit/${parentId}`)}
+                onClick={() => router.push('/sales/creditmemos')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -90,7 +89,7 @@ const creditmemosCreateContent = (props) => {
                 View Memo
                 {' '}
                 #
-                {creditmemoDetail.entityId}
+                {creditmemoDetail.incrementId}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>
@@ -114,13 +113,13 @@ const creditmemosCreateContent = (props) => {
                         <h5 className="titleHeader">
                             Channel Order Number
                         </h5>
-                        <span className="spanHeader">{creditmemoDetail.orderNumber}</span>
+                        <span className="spanHeader">{creditmemoDetail.channelOrderNumber}</span>
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
                             Channel Order Date
                         </h5>
-                        <span className="spanHeader">{creditmemoDetail.orderDate}</span>
+                        <span className="spanHeader">{creditmemoDetail.channelOrderDate}</span>
                     </div>
                 </div>
 
@@ -129,13 +128,16 @@ const creditmemosCreateContent = (props) => {
                         <div className="grid-child">
                             <h5 className={classes.titleSmall}>Customer Info</h5>
                             <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_user.png" />
                                 {creditmemoDetail.customerName}
                             </span>
                             <span className={classes.orderLabel}>
+                                <img className="imgIcon" alt="" src="/assets/img/icon_email.png" />
                                 {creditmemoDetail.customerEmail}
                             </span>
                             <span className={classes.orderLabel}>
-                                {creditmemoDetail.customerGroup}
+                                <img className="imgIcon" alt="" src="/assets/img/icon_phone.png" />
+                                {creditmemoDetail.billing.telephone}
                             </span>
                         </div>
                         <div className="grid-child">
@@ -188,29 +190,58 @@ const creditmemosCreateContent = (props) => {
                             {creditmemoDetail.items?.map((e) => (
                                 <tr>
                                     <td className={classes.td}>
+                                        {e.name}
+                                        <br />
+                                        SKU:
+                                        {' '}
                                         {e.sku}
                                     </td>
                                     <td className={classes.td}>{e.price}</td>
                                     <td className={classes.td}>
-                                        Ordered:
-                                        {' '}
-                                        {e.order_item.qty_ordered}
-                                        <br />
-                                        Invoiced:
-                                        {' '}
-                                        {e.order_item.qty_invoiced}
-                                        <br />
-                                        Shipped:
-                                        {' '}
-                                        {e.order_item.qty_shipped}
-                                        <br />
-                                        Refunded:
-                                        {' '}
-                                        {e.order_item.qty_refunded}
-                                        <br />
-                                        Canceled:
-                                        {' '}
-                                        {e.order_item.qty_canceled}
+                                        {e.order_item.qty_ordered > 0
+                                            && (
+                                                <>
+                                                    Ordered:
+                                                    {' '}
+                                                    {e.order_item.qty_ordered}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_invoiced > 0
+                                            && (
+                                                <>
+                                                    Invoiced:
+                                                    {' '}
+                                                    {e.order_item.qty_invoiced}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_shipped > 0
+                                            && (
+                                                <>
+                                                    Shipped:
+                                                    {' '}
+                                                    {e.order_item.qty_shipped}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_refunded > 0
+                                            && (
+                                                <>
+                                                    Refunded:
+                                                    {' '}
+                                                    {e.order_item.qty_refunded}
+                                                    <br />
+                                                </>
+                                            )}
+                                        {e.order_item.qty_canceled > 0
+                                            && (
+                                                <>
+                                                    Canceled:
+                                                    {' '}
+                                                    {e.order_item.qty_canceled}
+                                                </>
+                                            )}
                                     </td>
                                     <td className={classes.td}>{e.qty_to_refund}</td>
                                     <td className={classes.td}>{e.row_total}</td>

@@ -89,6 +89,7 @@ export const getRmaById = gql`
                 customer_name
                 created_at
                 text
+                owner_type
             }
         }
     }

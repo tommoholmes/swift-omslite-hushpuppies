@@ -3,6 +3,7 @@ import Layout from '@layout';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/managerma/services/graphql';
+import * as Yup from 'yup';
 
 const ContentWrapper = (props) => {
     const {
@@ -72,6 +73,7 @@ const ContentWrapper = (props) => {
     };
 
     const handleSubmit = (input) => {
+        window.backdropLoader(true);
         saveRma({
             variables: { input },
         }).then(() => {
@@ -95,7 +97,7 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: {
             id: rma.id,
-            status_code: rma.status_code,
+            status_code: '',
             request: {
                 return_type: rma.return_type,
                 refund_type: rma.refund_type,
@@ -115,6 +117,13 @@ const ContentWrapper = (props) => {
                 }
             )),
         },
+        validationSchema: Yup.object().shape({
+            status_code: Yup.string().required('Required!'),
+            request: Yup.object().shape({
+                return_type: Yup.string().required('Required!'),
+                refund_type: Yup.string().required('Required!'),
+            }),
+        }),
         onSubmit: (values) => {
             const { items, message, ...valueToSubmit } = values;
             valueToSubmit.items = items.map((item) => (
