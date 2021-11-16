@@ -15,18 +15,25 @@ const ContentWrapper = (props) => {
     const { creditmemo, order } = data.prepareNewMemo;
     const [grandTotal, setGrandTotal] = React.useState(creditmemo.grand_total);
 
-    const [createCreditmemo] = gqlService.createCreditmemo();
+    const [createCreditMemo] = gqlService.createCreditMemo();
     const [calculate] = gqlService.calculateCreditMemoTotals();
 
     const handleCalculate = (values) => {
         window.backdropLoader(true);
-        const { comment_customer_notify, send_email, ...restValues } = values;
+        const {
+            action, comment_customer_notify, send_email, ...restValues
+        } = values;
         const variables = {
             request_id: parentId,
-            input: restValues,
+            input: {
+                ...restValues,
+                shipping_amount: Number(restValues.shipping_amount),
+                adjustment_positive: Number(restValues.adjustment_positive),
+                adjustment_negative: Number(restValues.adjustment_negative),
+                comment_customer_notify: comment_customer_notify ? 1 : 0,
+                send_email: send_email ? 1 : 0,
+            },
         };
-        variables.input.comment_customer_notify = comment_customer_notify ? 1 : 0;
-        variables.input.send_email = send_email ? 1 : 0;
         calculate({
             variables,
         }).then(({ data: res }) => {
@@ -45,10 +52,15 @@ const ContentWrapper = (props) => {
 
     const handleSubmit = (variables) => {
         window.backdropLoader(true);
-        createCreditmemo({
+        createCreditMemo({
             variables,
         }).then(() => {
             window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Creditmemo created',
+                variant: 'success',
+            });
             router.push(`/sales/managerma/edit/${parentId}`);
         }).catch((e) => {
             window.backdropLoader(false);
@@ -72,19 +84,30 @@ const ContentWrapper = (props) => {
             send_email: false,
         },
         validationSchema: Yup.object().shape({
-            refundShip: Yup.number(),
-            adjustRefund: Yup.number(),
-            adjustFee: Yup.number(),
+            shipping_amount: Yup.number().required(),
+            adjustment_positive: Yup.number().required(),
+            adjustment_negative: Yup.number().required(),
         }),
         onSubmit: (values) => {
-            const { comment_customer_notify, send_email, ...restValues } = values;
+            const {
+                action, comment_customer_notify, send_email, ...restValues
+            } = values;
             const variables = {
                 request_id: parentId,
-                input: restValues,
+                input: {
+                    ...restValues,
+                    shipping_amount: Number(restValues.shipping_amount),
+                    adjustment_positive: Number(restValues.adjustment_positive),
+                    adjustment_negative: Number(restValues.adjustment_negative),
+                    comment_customer_notify: comment_customer_notify ? 1 : 0,
+                    send_email: send_email ? 1 : 0,
+                },
             };
-            variables.input.comment_customer_notify = comment_customer_notify ? 1 : 0;
-            variables.input.send_email = send_email ? 1 : 0;
-            handleSubmit(variables);
+            if (action === 'submit') {
+                handleSubmit(variables);
+            } else if (action === 'calculate') {
+                handleCalculate(values);
+            }
         },
     });
 

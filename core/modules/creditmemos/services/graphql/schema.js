@@ -110,12 +110,12 @@ export const getCreditMemoById = gql`
     }
 `;
 
-export const createCreditmemo = gql`
-    mutation createCreditmemo(
+export const createCreditMemo = gql`
+    mutation createCreditMemo(
         $request_id: Int!,
         $input: CreditmemoInput!,
     ){
-        createCreditmemo(
+        createCreditMemo(
             request_id: $request_id,
             input: $input
         )
@@ -173,6 +173,7 @@ export const prepareNewMemo = gql`
                   qty_refunded
                   qty_canceled
                 }
+                name
                 qty_to_refund
                 row_total
                 tax_amount
@@ -207,7 +208,7 @@ export const calculateCreditMemoTotals = gql`
 export default {
     getCreditMemoList,
     getCreditMemoById,
-    createCreditmemo,
+    createCreditMemo,
     prepareNewMemo,
     calculateCreditMemoTotals,
 };
