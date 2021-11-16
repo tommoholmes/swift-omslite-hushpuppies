@@ -10,29 +10,29 @@ const Core = (props) => {
     const {
         Content,
     } = props;
-    // const router = useRouter();
-    // const [saveLogistixProvider] = gqlService.saveLogistixProvider();
+    const router = useRouter();
+    const [saveLogistixProvider] = gqlService.saveLogistixProvider();
 
     const handleSubmit = (input) => {
-        // window.backdropLoader(true);
-        // saveLogistixProvider({
-        //     variables: { input },
-        // }).then(() => {
-        //     window.backdropLoader(false);
-        //     window.toastMessage({
-        //         open: true,
-        //         text: 'Success create Logistix Provider!',
-        //         variant: 'success',
-        //     });
-        //     setTimeout(() => router.push('/configurations/logistixprovider'), 250);
-        // }).catch((e) => {
-        //     window.backdropLoader(false);
-        //     window.toastMessage({
-        //         open: true,
-        //         text: e.message,
-        //         variant: 'error',
-        //     });
-        // });
+        window.backdropLoader(true);
+        saveLogistixProvider({
+            variables: { input },
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success create Logistix Provider!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/configurations/logistixprovider'), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
     };
 
     const formik = useFormik({

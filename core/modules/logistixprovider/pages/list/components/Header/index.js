@@ -11,12 +11,12 @@ const HeaderContent = () => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Logistix Provider</h2>
-            {/* <Button
+            <Button
                 className={classes.buttonAdd}
                 onClick={() => router.push('/configurations/logistixprovider/addnew')}
             >
                 Add Logistix Provider
-            </Button> */}
+            </Button>
         </div>
     );
 };
