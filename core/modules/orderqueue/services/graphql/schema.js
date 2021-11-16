@@ -158,6 +158,18 @@ export const downloadSampleCsv = gql`
     }
 `;
 
+export const orderImport = gql`
+    mutation orderImport(
+        $binary: String!,
+    ){
+        orderImport(
+            input: {
+                binary: $binary,
+            }
+        )
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -166,4 +178,5 @@ export default {
     exportOrderToCsv,
     bulkOrderReallocation,
     downloadSampleCsv,
+    orderImport,
 };

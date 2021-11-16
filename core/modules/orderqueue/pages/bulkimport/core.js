@@ -2,17 +2,14 @@ import React, { useEffect } from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
 import gqlService from '@modules/orderqueue/services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
-    const router = useRouter();
-    const [bulkOrderReallocation] = gqlService.bulkOrderReallocation();
-    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'bulk_order_reallocation' });
-    const tab_status = router && router.query && router.query.tab_status;
+    const [orderImport] = gqlService.orderImport();
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'order_import' });
 
     useEffect(() => {
         downloadList();
@@ -27,16 +24,15 @@ const Core = (props) => {
             binary,
         };
         window.backdropLoader(true);
-        bulkOrderReallocation({
+        orderImport({
             variables,
-        }).then((res) => {
+        }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: res.data.bulkOrderReallocation,
+                text: 'Order Import Success',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/sales/orderqueue'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -72,7 +68,6 @@ const Core = (props) => {
         formik,
         urlDownload,
         handleDropFile,
-        tab_status,
     };
 
     return (
