@@ -60,7 +60,7 @@ const OrderQueueEditContent = (props) => {
         <div className={classes.body}>
             <Button
                 className={classes.btnBack}
-                // onClick={() => router.push.history.goBack}
+                onClick={() => router.back()}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -110,7 +110,7 @@ const OrderQueueEditContent = (props) => {
                                 entity_id, image_url, name, price, qty,
                             }, eMap) => (
                                 <tr>
-                                    <td className={classes.td}>
+                                    <td className={classes.td} style={{ width: '15%' }}>
                                         <input
                                             checked={checkedState[eMap]}
                                             onChange={() => handleOnChange(eMap)}
@@ -119,9 +119,9 @@ const OrderQueueEditContent = (props) => {
                                         />
                                         <img src={`${image_url}`} />
                                     </td>
-                                    <td className={classes.td}>{name}</td>
-                                    <td className={classes.td}>{convertToRupiah(price)}</td>
-                                    <td className={clsx(classes.td, classes.center)}>
+                                    <td className={classes.td} style={{ width: '35%' }}>{name}</td>
+                                    <td className={classes.td} style={{ width: '15%' }}>{convertToRupiah(price)}</td>
+                                    <td className={clsx(classes.td)}>
                                         {(checkedState[eMap])
                                             && (
                                                 <>
@@ -142,6 +142,8 @@ const OrderQueueEditContent = (props) => {
                                                         value={formik.values.items[eMap]?.package_condition}
                                                         onChange={formik.handleChange}
                                                         dataOptions={Object.values(JSON.parse(dataPackageCondition.getStoreConfig))}
+                                                        error={!!(formik.touched.items?.[eMap]?.package_condition
+                                                            && formik.errors.items?.[eMap]?.package_condition)}
                                                         valueToMap="code"
                                                         labelToMap="title"
                                                     />
@@ -155,6 +157,8 @@ const OrderQueueEditContent = (props) => {
                                                         valueToMap="code"
                                                         labelToMap="title"
                                                     />
+                                                    <br />
+                                                    {' '}
                                                     <br />
                                                     <DropFile
                                                         formatFile=".zip, .rar, .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx"

@@ -70,9 +70,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 15,
         '&.btn-package': {
             fontSize: 13,
-            [theme.breakpoints.up('sm')]: {
-                width: '80%',
-            },
+            margin: 0,
         },
     },
     content: {
@@ -88,7 +86,13 @@ const useStyles = makeStyles((theme) => ({
     },
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(2, 35%)',
+        rowGap: 10,
+        '& span': {
+            borderBottom: '1px solid',
+            borderColor,
+            paddingBottom: 10,
+        },
     },
     contentLeft: {
         display: 'inline-block',
@@ -122,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
         verticalAlign: 'middle',
     },
     td: {
-        padding: '5px 0',
+        padding: 8,
         fontFamily: font,
         verticalAlign: 'top',
         '& aside': {
@@ -160,6 +164,25 @@ const useStyles = makeStyles((theme) => ({
         '&.admin': {
             textAlign: 'right',
         },
+    },
+    dropFile: {
+        margin: '50px 0 20px -18px',
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 0,
+        },
+    },
+    tableTop: {
+        width: '80%',
+        borderSpacing: 0,
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
+    },
+    tdTop: {
+        borderBottom: '2px solid',
+        borderBottomColor: borderColor,
+        verticalAlign: 'top',
+        padding: '8px 8px 8px 0',
     },
 }));
 
