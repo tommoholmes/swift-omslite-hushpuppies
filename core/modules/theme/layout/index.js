@@ -12,6 +12,7 @@ import Header from '@modules/theme/layout/components/header';
 import gqlService from '@modules/theme/services/graphql';
 import gqlNotification from '@modules/notification/services/graphql';
 import Head from 'next/head';
+import Cookies from 'js-cookie';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
@@ -626,10 +627,15 @@ const Layout = (props) => {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            getNotificationList();
             window.backdropLoader = setBackdropLoader;
             window.toastMessage = setToastMessage;
             if (window.innerWidth >= 768) setOpen(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (router.pathname.split('/')?.[1] !== 'login' && Cookies.get('isLogin') === '1') {
+            getNotificationList();
         }
     }, []);
 
