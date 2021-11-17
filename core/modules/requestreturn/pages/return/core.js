@@ -80,15 +80,14 @@ const ContentWrapper = (props) => {
                 variant: 'success',
             });
             setTimeout(() => router.push('/requestreturn'), 250);
-        })
-            .catch((e) => {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    text: e.message,
-                    variant: 'error',
-                });
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
             });
+        });
     };
 
     const formik = useFormik({
@@ -100,6 +99,7 @@ const ContentWrapper = (props) => {
             message: '',
             items: requestreturn.map((e) => (
                 {
+                    checked: false,
                     shipment_id: e.shipment_id,
                     shipment_item_id: e.entity_id,
                     qty: e.qty,
@@ -114,11 +114,26 @@ const ContentWrapper = (props) => {
         },
         validationSchema: Yup.object().shape({
             return_type: Yup.string().required('Required!'),
-            // items: Yup.array().of(
-            //     Yup.object().shape({
-            //         package_condition: Yup.string().required('required!'),
-            //     }),
-            // ),
+            items: Yup.array().of(
+                Yup.object().shape({
+                    checked: Yup.boolean().required('required!'),
+                    qty: Yup.string().when('checked', {
+                        is: true,
+                        then: Yup.string().required('required!'),
+                        otherwise: Yup.string(),
+                    }),
+                    package_condition: Yup.string().when('checked', {
+                        is: true,
+                        then: Yup.string().required('required!'),
+                        otherwise: Yup.string(),
+                    }),
+                    reason: Yup.string().when('checked', {
+                        is: true,
+                        then: Yup.string().required('required!'),
+                        otherwise: Yup.string(),
+                    }),
+                }),
+            ),
 
         }),
         onSubmit: (values) => {
@@ -139,6 +154,7 @@ const ContentWrapper = (props) => {
     const handleOnChange = (eMap) => {
         const updateCheckedState = checkedState.map((item, index) => (index === eMap ? !item : item));
         setCheckedState(updateCheckedState);
+        formik.setFieldValue(`items[${eMap}].checked`, !checkedState[eMap]);
     };
 
     const contentProps = {
