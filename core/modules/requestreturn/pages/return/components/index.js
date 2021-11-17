@@ -132,6 +132,8 @@ const OrderQueueEditContent = (props) => {
                                                         value={formik.values.items[eMap]?.qty}
                                                         onChange={formik.handleChange}
                                                         dataOptions={tampQty(qty)}
+                                                        error={!!(formik.touched.items?.[eMap]?.qty
+                                                            && formik.errors.items?.[eMap]?.qty)}
                                                         valueToMap="value"
                                                         labelToMap="label"
                                                     />
@@ -154,6 +156,8 @@ const OrderQueueEditContent = (props) => {
                                                         value={formik.values.items[eMap]?.reason}
                                                         onChange={formik.handleChange}
                                                         dataOptions={Object.values(JSON.parse(dataReason.getStoreConfig))}
+                                                        error={!!(formik.touched.items?.[eMap]?.reason
+                                                            && formik.errors.items?.[eMap]?.reason)}
                                                         valueToMap="code"
                                                         labelToMap="title"
                                                     />
