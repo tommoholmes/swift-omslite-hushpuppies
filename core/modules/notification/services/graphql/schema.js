@@ -20,6 +20,7 @@ export const getNotificationList = gql`
                 status
                 message
                 attachment
+                is_read
             }
             total_count
             page_info {
