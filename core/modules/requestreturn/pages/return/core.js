@@ -79,7 +79,7 @@ const ContentWrapper = (props) => {
                 text: 'Success Return Order!',
                 variant: 'success',
             });
-            setTimeout(() => window.location.reload(true), 250);
+            setTimeout(() => router.push('/requestreturn'), 250);
         })
             .catch((e) => {
                 window.backdropLoader(false);
@@ -114,6 +114,12 @@ const ContentWrapper = (props) => {
         },
         validationSchema: Yup.object().shape({
             return_type: Yup.string().required('Required!'),
+            // items: Yup.array().of(
+            //     Yup.object().shape({
+            //         package_condition: Yup.string().required('required!'),
+            //     }),
+            // ),
+
         }),
         onSubmit: (values) => {
             const { items, ...valueToSubmit } = values;
