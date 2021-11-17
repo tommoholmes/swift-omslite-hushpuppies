@@ -38,7 +38,7 @@ const OrderQueueEditContent = (props) => {
         <div className={classes.body}>
             <Button
                 className={classes.btnBack}
-                // onClick={() => router.push.history.goBack}
+                onClick={() => router.back()}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -55,30 +55,38 @@ const OrderQueueEditContent = (props) => {
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.contentLeft}>
-                        <div className={classes.grid}>
-                            <span>Status</span>
-                            <span>{detailReturn.status}</span>
-                            <span>Return Type</span>
-                            <span>{detailReturn.type}</span>
-                            <span>Channel Order</span>
-                            <span>{detailReturn.order}</span>
-                            {(detailReturn.status === 'approved') && (
-                                <>
-                                    <span>Send Package</span>
-                                    <Button
-                                        className={clsx(classes.btn, 'btn-package')}
-                                        type="submit"
-                                        onClick={formikSendPackage.handleSubmit}
-                                        variant="contained"
-                                    >
-                                        Send Package
-                                    </Button>
-                                </>
+                        <table className={classes.tableTop}>
+                            <tr>
+                                <td className={classes.tdTop}>Status</td>
+                                <td className={classes.tdTop}>{detailReturn.status}</td>
+                            </tr>
+                            <tr>
+                                <td className={classes.tdTop}>Return Type</td>
+                                <td className={classes.tdTop}>{detailReturn.type}</td>
+                            </tr>
+                            <tr>
+                                <td className={classes.tdTop}>Channel Order</td>
+                                <td className={classes.tdTop}>{detailReturn.order}</td>
+                            </tr>
+                            {(detailReturn.statusCode === 'approved') && (
+                                <tr>
+                                    <td className={classes.tdTop}>Send Package</td>
+                                    <td className={classes.tdTop}>
+                                        <Button
+                                            className={clsx(classes.btn, 'btn-package')}
+                                            type="submit"
+                                            onClick={formikSendPackage.handleSubmit}
+                                            variant="contained"
+                                        >
+                                            Send Package
+                                        </Button>
+                                    </td>
+                                </tr>
                             )}
-                        </div>
+                        </table>
                     </div>
                     <div className={classes.contentRight}>
-                        <h5 className={classes.title} style={{ paddingTop: 0 }}>My Adress</h5>
+                        <h5 className={classes.title} style={{ paddingTop: 0, textTransform: 'capitalize' }}>My Address</h5>
                         <span className={classes.orderLabel}>{`${detailReturn.shipping.firstname} ${detailReturn.shipping.lastname}`}</span>
                         <span className={classes.orderLabel}>{detailReturn.shipping.street}</span>
                         <span className={classes.orderLabel}>{`${detailReturn.shipping.city}, ${detailReturn.shipping.region}, ${detailReturn.shipping.postcode}`}</span>
@@ -95,11 +103,11 @@ const OrderQueueEditContent = (props) => {
                                     <th className={classes.th}>Image</th>
                                     <th className={classes.th}>Name</th>
                                     <th className={classes.th}>Price</th>
-                                    <th className={clsx(classes.th, classes.center)}>Return QTY</th>
+                                    <th className={classes.th}>Return Qty</th>
                                     <th className={classes.th}>Return Details</th>
                                     <th className={classes.th}>Status</th>
                                 </tr>
-                                {detailReturn.items.map((e) => (
+                                {detailReturn.itemsx.map((e, i) => (
                                     <tr>
                                         <td className={classes.td}>
                                             <img src={`${e.image_url}`} />
@@ -127,14 +135,16 @@ const OrderQueueEditContent = (props) => {
                                                     ))}
                                                 </>
                                             )}
-                                            <DropFile
-                                                formatFile=".zip, .rar, .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx"
-                                                error={formik.errors.binary && formik.touched.binary}
-                                                getBase64={handleDropFile}
-                                            />
+                                            <div className={classes.dropFile}>
+                                                <DropFile
+                                                    formatFile=".zip, .rar, .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx"
+                                                    error={formik.errors.binary && formik.touched.binary}
+                                                    getBase64={(files) => handleDropFile(files, i)}
+                                                />
+                                            </div>
                                             <span>The following file types are allowed: zip, rar, jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx</span>
                                         </td>
-                                        <span>{e.status_label}</span>
+                                        <td className={classes.td}>{e.status_label}</td>
                                     </tr>
                                 ))}
                             </tbody>

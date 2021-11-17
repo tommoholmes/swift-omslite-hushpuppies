@@ -140,28 +140,10 @@ export const getStoreConfig = gql`
 
 export const saveRequestReturn = gql`
     mutation saveRequestReturn(
-        $id: Int!
-        $message: String
-        $item_id: Int
-        $binary_data: String
-        $filename: String
+        $input: RequestReturnInput!
     ){
         saveRequestReturn(
-            input:{
-                id: $id
-                message: $message
-                items:[
-                    {
-                        item_id: $item_id
-                        attachment:[
-                            {
-                                binary_data: $binary_data
-                                filename: $filename
-                            }
-                        ]
-                    }
-                ]
-            }
+            input: $input
         ){
             id
             increment_id

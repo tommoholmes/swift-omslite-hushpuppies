@@ -34,21 +34,25 @@ const ContentWrapper = (props) => {
 
     const handleSubmit = ({
         id,
-        item_id,
         message,
-        binary,
-        filename,
+        items,
     }) => {
-        const variables = {
+        const input = {
             id,
-            item_id,
             message,
-            binary_data: binary,
-            filename,
+            items: items.map((e) => (
+                {
+                    item_id: e.id,
+                    attachment: {
+                        binary_data: e.attachment.binary_data,
+                        filename: e.attachment.filename,
+                    },
+                }
+            )),
         };
         window.backdropLoader(true);
         saveRequestReturn({
-            variables,
+            variables: { input },
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -57,15 +61,14 @@ const ContentWrapper = (props) => {
                 variant: 'success',
             });
             setTimeout(window.location.reload(), 250);
-        })
-            .catch((e) => {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    text: e.message,
-                    variant: 'error',
-                });
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
             });
+        });
     };
 
     const handleSendPackage = () => {
@@ -96,35 +99,52 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: {
             id: requestreturn.id,
-            item_id: requestreturn.items[0].id,
             message: '',
-            binary_data: '',
-            filename: '',
+            items: requestreturn.items?.map((e) => (
+                {
+                    id: e.id,
+                    attachment: {
+                        binary_data: e.binary_data,
+                        filename: e.filename,
+                    },
+                }
+            )),
         },
         validationSchema: Yup.object().shape({
             message: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            const { items, ...valueToSubmit } = values;
+            valueToSubmit.items = items.map((e) => (
+                {
+                    id: e.id,
+                    attachment: {
+                        binary_data: e.binary_data || '',
+                        filename: e.filename || '',
+                    },
+                }
+            ));
+            handleSubmit(valueToSubmit);
         },
     });
+
+    const handleDropFile = (files, i) => {
+        const fileName = files[0].file.name;
+        const { baseCode } = files[0];
+        const idx = baseCode.indexOf('base64,');
+        formik.setFieldValue(`items[${i}].filename`, fileName);
+        formik.setFieldValue(`items[${i}].binary_data`, baseCode.slice(idx + 7));
+    };
 
     const detailReturn = {
         incrementId: requestreturn.increment_id,
         status: requestreturn.status_label,
+        statusCode: requestreturn.status_code,
         type: requestreturn.return_type,
         order: requestreturn.channel_order_increment_id,
         shipping: requestreturn.shipping_address,
-        items: requestreturn.items,
+        itemsx: requestreturn.items,
         message: requestreturn.message,
-    };
-
-    const handleDropFile = (files) => {
-        const fileName = files[0].file.name;
-        const { baseCode } = files[0];
-        const idx = baseCode.indexOf('base64,');
-        formik.setFieldValue('filename', fileName);
-        formik.setFieldValue('binary', baseCode.slice(idx + 7));
     };
 
     const formikSendPackage = useFormik({
