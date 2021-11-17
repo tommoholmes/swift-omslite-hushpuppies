@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         backgroundImage: 'linear-gradient(184deg, #D49AEB 50%, #F9C8C1 100%)',
-        opacity: '0.8',
+        // opacity: '0.8',
         color: '#FFFFFF',
         boxShadow: 'none',
         marginLeft: miniDrawerWidth,
@@ -71,6 +71,7 @@ const Header = ({
     breadcrumbData,
     open,
     setOpen,
+    notificationRes,
 }) => {
     const classes = useStyles();
 
@@ -92,7 +93,7 @@ const Header = ({
                 >
                     <ChevronRightIcon className={classes.togleMenuIcon} />
                 </IconButton>
-                <RightToolbar />
+                <RightToolbar notificationRes={notificationRes} />
             </Toolbar>
         </AppBar>
     );
@@ -120,7 +121,7 @@ const Header = ({
                 </IconButton>
 
                 <Breadcrumb data={breadcrumbData} />
-                <RightToolbar />
+                <RightToolbar notificationRes={notificationRes} />
             </Toolbar>
         </AppBar>
     );

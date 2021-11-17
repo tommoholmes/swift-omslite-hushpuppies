@@ -11,6 +11,7 @@ import { custDataNameCookie } from '@config';
 import { useRouter } from 'next/router';
 import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const StyledBadge = withStyles(() => ({
     badge: {
@@ -21,7 +22,7 @@ const StyledBadge = withStyles(() => ({
     },
 }))(Badge);
 
-const RightToolbar = () => {
+const RightToolbar = ({ notificationRes }) => {
     const router = useRouter();
     const [removeCustomerToken] = loginGqlService.removeToken();
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
@@ -59,6 +60,7 @@ const RightToolbar = () => {
 
         });
     };
+    const { loading, data } = notificationRes;
 
     return (
         <ul>
@@ -81,11 +83,50 @@ const RightToolbar = () => {
                 </ul>
             </li>
             <li>
-                <IconButton style={{ padding: 0 }} aria-label="show 17 new notifications" color="inherit">
-                    <StyledBadge badgeContent={17} color="secondary">
+                <IconButton style={{ padding: 0 }} color="inherit">
+                    <StyledBadge badgeContent={data?.getNotificationList.total_count} color="secondary">
                         <img style={{ filter: 'brightness(0%) invert(100%)' }} alt="" src="/assets/img/layout/notification.svg" />
                     </StyledBadge>
                 </IconButton>
+                <ul style={{ width: 270 }}>
+                    {loading ? <CircularProgress size={20} />
+                        : (
+                            <div>
+                                <a className="viewMessage" href="/oms/notification">
+                                    <li style={{ textAlign: 'left', margin: '5px 0' }}>
+                                        You have
+                                        {' '}
+                                        {data?.getNotificationList.total_count || 0}
+                                        {' '}
+                                        unread
+                                        notifications
+                                    </li>
+                                </a>
+                                {data?.getNotificationList?.items?.map((notif) => (
+                                    <li style={{
+                                        color: 'black', borderTop: '1px solid #B1BCDB', margin: 0, width: 250, textOverflow: 'ellipsis',
+                                    }}
+                                    >
+                                        <span style={{ color: '#B1BCDB', fontSize: 12 }}>{notif.created_at}</span>
+                                        <br />
+                                        <span style={{ color: '#435179', fontSize: 14, fontWeight: 'bold' }}>
+                                            {notif.entity_type}
+                                        </span>
+                                        <br />
+                                        <span style={{
+                                            color: '#435179',
+                                            fontSize: 12,
+                                            overflow: 'hidden',
+                                        }}
+                                        >
+                                            {notif.message.slice(0, 30)}
+                                            ...
+                                        </span>
+                                    </li>
+                                ))}
+                            </div>
+                        )}
+                </ul>
             </li>
 
             <style jsx>
@@ -96,7 +137,6 @@ const RightToolbar = () => {
                         padding: 0;
                         float: right;
                         font-size: 10px;
-                        text-transform: uppercase;
                         font-family: Montserrat !important;
                         position: fixed;
                         right: 12px;
@@ -133,7 +173,6 @@ const RightToolbar = () => {
                         text-decoration: none;
                         white-space: nowrap;
                         font-size: 14px;
-                        text-transform: capitalize;
                     }
                     a:hover {
                         border-bottom: 1px dashed #fff;
@@ -141,6 +180,10 @@ const RightToolbar = () => {
                     }
                     .linkOut {
                         color: #BE1F93;
+                    }
+                    .viewMessage {
+                        color: #BE1F93;
+                        font-size: 10px;
                     }
                 `}
             </style>

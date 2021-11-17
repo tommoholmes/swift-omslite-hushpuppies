@@ -34,6 +34,7 @@ const NotificationListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -56,6 +57,7 @@ const NotificationListContent = (props) => {
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <TextField
+                    variant="outlined"
                     id="date"
                     type="date"
                     value={filterValue}
@@ -124,6 +126,7 @@ const NotificationListContent = (props) => {
                 columns={columns}
                 count={notificationTotal}
                 showCheckbox
+                hideColumns
             />
         </>
     );

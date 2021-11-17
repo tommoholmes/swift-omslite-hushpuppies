@@ -10,6 +10,7 @@ import Sidebar from '@modules/theme/layout/components/sidebar';
 import useStyles from '@modules/theme/layout/style';
 import Header from '@modules/theme/layout/components/header';
 import gqlService from '@modules/theme/services/graphql';
+import gqlNotification from '@modules/notification/services/graphql';
 import Head from 'next/head';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
@@ -71,6 +72,19 @@ const Layout = (props) => {
         }
         dataStoreConfigBatch.push(data.getStoreConfig);
     };
+
+    const [getNotificationList, notificationRes] = gqlNotification.getNotificationList({
+        pageSize: 4,
+        currentPage: 1,
+        filter: {
+            is_read: {
+                eq: '0',
+            },
+        },
+        sort: {
+            id: 'ASC',
+        },
+    });
 
     const menuList = [
         { key: 'dashboard', label: 'Dashboard', url: '/' },
@@ -555,12 +569,12 @@ const Layout = (props) => {
                     label: 'CLI Tools',
                     url: '/tools/clitools',
                 },
-                {
-                    aclCode: 'oms_lite_notification',
-                    key: 'notification',
-                    label: 'Notification',
-                    url: '/oms/notification',
-                },
+                // {
+                //     aclCode: 'oms_lite_notification',
+                //     key: 'notification',
+                //     label: 'Notification',
+                //     url: '/oms/notification',
+                // },
             ],
         },
         {
@@ -612,6 +626,7 @@ const Layout = (props) => {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
+            getNotificationList();
             window.backdropLoader = setBackdropLoader;
             window.toastMessage = setToastMessage;
             if (window.innerWidth >= 768) setOpen(true);
@@ -704,7 +719,10 @@ const Layout = (props) => {
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={classes.root}>
-                {showHeader() && <Header mappedMenuList={mappedMenuList} breadcrumbData={getBreadcrumbData()} open={open} setOpen={setOpen} />}
+                {showHeader()
+                    && (
+                        <Header notificationRes={notificationRes} mappedMenuList={mappedMenuList} breadcrumbData={getBreadcrumbData()} open={open} setOpen={setOpen} />
+                    )}
                 {showSidebar() && (
                     <>
                         <Sidebar
