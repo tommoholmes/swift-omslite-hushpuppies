@@ -51,7 +51,7 @@ export const getRequestReturnById = gql`
             increment_id
             status_code
             status_label
-            return_type
+            return_type_label
             channel_order_increment_id
             shipping_address{
                 firstname
