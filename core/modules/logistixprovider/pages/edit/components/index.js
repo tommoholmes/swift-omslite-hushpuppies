@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/logistixprovider/pages/edit/components/style';
+import clsx from 'clsx';
 
 const LogistixProviderContent = (props) => {
     const {
@@ -39,71 +40,61 @@ const LogistixProviderContent = (props) => {
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <table className={classes.table}>
-                        <tbody>
-                            <tr className={classes.tr}>
-                                <th className={classes.th} style={{ paddingLeft: 0 }}>Channel Shipping Method</th>
-                                <th className={classes.th} />
-                                <th className={classes.th}>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        variant="outlined"
-                                        name="channel_shipping_method"
-                                        value={formik.values.channel_shipping_method}
-                                        onChange={formik.handleChange}
-                                        error={!!(formik.touched.channel_shipping_method && formik.errors.channel_shipping_method)}
-                                        helperText={(formik.touched.channel_shipping_method && formik.errors.channel_shipping_method) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                </th>
-                            </tr>
-
-                            <tr className={classes.tr}>
-                                <th className={classes.th} style={{ paddingLeft: 0 }}>Provider</th>
-                                <th className={classes.th} />
-                                <th className={classes.th}>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        variant="outlined"
-                                        name="provider"
-                                        value={formik.values.provider}
-                                        onChange={formik.handleChange}
-                                        error={!!(formik.touched.provider && formik.errors.provider)}
-                                        helperText={(formik.touched.provider && formik.errors.provider) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                </th>
-                            </tr>
-
-                            <tr className={classes.tr}>
-                                <th className={classes.th} style={{ paddingLeft: 0 }}>Service</th>
-                                <th className={classes.th} />
-                                <th className={classes.th}>
-                                    <TextField
-                                        className={classes.fieldRoot}
-                                        variant="outlined"
-                                        name="service"
-                                        value={formik.values.service}
-                                        onChange={formik.handleChange}
-                                        error={!!(formik.touched.service && formik.errors.service)}
-                                        helperText={(formik.touched.service && formik.errors.service) || ''}
-                                        InputProps={{
-                                            className: classes.fieldInput,
-                                        }}
-                                    />
-                                </th>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Channel Shipping Method</span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="channel_shipping_method"
+                            value={formik.values.channel_shipping_method}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.channel_shipping_method && formik.errors.channel_shipping_method)}
+                            helperText={(formik.touched.channel_shipping_method && formik.errors.channel_shipping_method) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Provider</span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="provider"
+                            value={formik.values.provider}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.provider && formik.errors.provider)}
+                            helperText={(formik.touched.provider && formik.errors.provider) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Service</span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="service"
+                            value={formik.values.service}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.service && formik.errors.service)}
+                            helperText={(formik.touched.service && formik.errors.service) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
-                        type="submit"
                         onClick={formik.handleSubmit}
                         variant="contained"
                     >

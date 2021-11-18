@@ -26,6 +26,7 @@ const LogistixProviderListContent = (props) => {
 
     const rows = logistixProviderList.map((logistix) => ({
         ...logistix,
+        id: logistix.entity_id,
         action: () => (
             <Link href={`/configurations/logistixprovider/edit/${logistix.entity_id}`}>
                 <a className="link-button">View</a>
