@@ -1,27 +1,34 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
-import { useRouter } from 'next/router';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
 import useStyles from '@modules/orderqueue/pages/bulkimport/components/style';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const ProductListImport = (props) => {
     const {
         formik,
         urlDownload,
         handleDropFile,
+        errorHtml,
     } = props;
     const classes = useStyles();
-    const router = useRouter();
 
     return (
         <>
             <h2 className={classes.titleTop}>Bulk Import</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
+                    {errorHtml
+                        && (
+                            <div className={classes.errorHtml}>
+                                <CancelIcon />
+                                <div style={{ paddingLeft: 5 }} dangerouslySetInnerHTML={{ __html: errorHtml }} />
+                            </div>
+                        )}
                     <div className={classes.formField}>
                         <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                     </div>

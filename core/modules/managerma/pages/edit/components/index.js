@@ -193,7 +193,7 @@ const ManageRmaEditContent = (props) => {
                                         <td className={classes.td}>{rmaDetail.channelOrder || '-'}</td>
                                     </tr>
                                     <tr className={classes.tr}>
-                                        <td className={classes.td}>Status</td>
+                                        <td className={clsx(classes.td, classes.labelRequired)}>Status</td>
                                         {rmaDetail.status === 'pending_approval'
                                             || rmaDetail.status === 'approved'
                                             || rmaDetail.status === 'package_sent'
@@ -217,7 +217,7 @@ const ManageRmaEditContent = (props) => {
                                         <td className={classes.td}>{rmaDetail.updatedAt || '-'}</td>
                                     </tr>
                                     <tr className={classes.tr}>
-                                        <td className={classes.td}>Return Type</td>
+                                        <td className={clsx(classes.td, classes.labelRequired)}>Return Type</td>
                                         <Select
                                             name="request.return_type"
                                             value={formik.values.request.return_type}
@@ -231,7 +231,7 @@ const ManageRmaEditContent = (props) => {
                                         />
                                     </tr>
                                     <tr className={classes.tr}>
-                                        <td className={classes.td}>Refund Type</td>
+                                        <td className={clsx(classes.td, classes.labelRequired)}>Refund Type</td>
                                         <Select
                                             name="request.refund_type"
                                             value={formik.values.request.refund_type}
@@ -325,7 +325,7 @@ const ManageRmaEditContent = (props) => {
                                     </td>
                                     <td className={classes.td}>{e.qty}</td>
                                     <td className={classes.td}>
-                                        <span className={classes.spanLabel}>Package Condition:</span>
+                                        <span className={clsx(classes.spanLabel, classes.labelRequired)}>Package Condition</span>
                                         <Select
                                             name={`items[${i}].package_condition`}
                                             value={formik.values.items[i].package_condition}
@@ -337,7 +337,7 @@ const ManageRmaEditContent = (props) => {
                                         />
                                         <br />
                                         <br />
-                                        <span className={classes.spanLabel}>Reason:</span>
+                                        <span className={clsx(classes.spanLabel, classes.labelRequired)}>Reason</span>
                                         <Select
                                             name={`items[${i}].reason`}
                                             value={formik.values.items[i].reason}

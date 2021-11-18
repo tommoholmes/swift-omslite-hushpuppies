@@ -174,7 +174,7 @@ const Sidebar = ({
                 {menuList
                     && menuList.map((menu) => (
                         <div key={menu.key}>
-                            {aclDetail[0] && aclDetail[0].acl_code.includes(menu.aclCode) && (
+                            {aclDetail[0] && aclDetail[0].acl_code.includes(menu.aclCode) && (!menu.hide) && (
                                 <div className={classes.divMenu} key={menu.key}>
                                     <ListItem
                                         button
@@ -196,7 +196,7 @@ const Sidebar = ({
                                                 {menu.children.map((menuChild) => (
                                                     <div key={menuChild.key}>
                                                         {(((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode)) || menuChild.notInAcl)
-                                                            || menu.key === 'vendor') && (
+                                                            || menu.key === 'vendor') && (!menuChild.hide) && (
                                                             <>
                                                                 {(menu.key === 'pickpack') && (
                                                                     <>

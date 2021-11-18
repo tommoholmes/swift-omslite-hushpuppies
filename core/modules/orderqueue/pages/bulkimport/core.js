@@ -10,6 +10,7 @@ const Core = (props) => {
     } = props;
     const [orderImport] = gqlService.orderImport();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'order_import' });
+    const [errorHtml, setErrorHtml] = React.useState('');
 
     useEffect(() => {
         downloadList();
@@ -35,11 +36,21 @@ const Core = (props) => {
             });
         }).catch((e) => {
             window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
+            const regex = /(<([^>]+)>)/ig;
+            if (regex.test(e.message)) {
+                setErrorHtml(e.message);
+                window.toastMessage({
+                    open: true,
+                    text: 'Error',
+                    variant: 'error',
+                });
+            } else {
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            }
         });
     };
 
@@ -51,11 +62,13 @@ const Core = (props) => {
             binary: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
+            setErrorHtml('');
             handleSubmit(values);
         },
     });
 
     const handleDropFile = (files) => {
+        setErrorHtml('');
         const fileName = files[0].file.name;
         const { baseCode } = files[0];
         const binarySplited = baseCode.split(',');
@@ -68,6 +81,7 @@ const Core = (props) => {
         formik,
         urlDownload,
         handleDropFile,
+        errorHtml,
     };
 
     return (

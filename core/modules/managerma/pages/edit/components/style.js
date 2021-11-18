@@ -148,6 +148,13 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         verticalAlign: 'top',
     },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            color: colorPurple,
+            fontSize: 20,
+        },
+    },
     grandTotal: {
         fontFamily: font,
         fontWeight: 'bold',

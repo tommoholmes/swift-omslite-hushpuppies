@@ -66,6 +66,17 @@ const useStyles = makeStyles((theme) => ({
             display: 'block',
         },
     },
+    errorHtml: {
+        backgroundColor: '#F9E5E4',
+        color: '#B30100',
+        padding: '15px 10px',
+        marginBottom: 10,
+        display: 'flex',
+        alignItems: 'center',
+        '& a': {
+            color: '#408AC0',
+        },
+    },
 }));
 
 export default useStyles;
