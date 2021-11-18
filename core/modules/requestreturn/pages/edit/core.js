@@ -140,7 +140,7 @@ const ContentWrapper = (props) => {
         incrementId: requestreturn.increment_id,
         status: requestreturn.status_label,
         statusCode: requestreturn.status_code,
-        type: requestreturn.return_type,
+        type: requestreturn.return_type_label,
         order: requestreturn.channel_order_increment_id,
         shipping: requestreturn.shipping_address,
         itemsx: requestreturn.items,
@@ -162,6 +162,10 @@ const ContentWrapper = (props) => {
         handleDropFile,
         formikSendPackage,
     };
+
+    useEffect(() => {
+        document.title = `Return #${requestreturn.increment_id}`;
+    }, []);
 
     return (
         <>

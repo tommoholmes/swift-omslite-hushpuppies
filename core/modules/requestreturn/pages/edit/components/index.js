@@ -13,7 +13,7 @@ import clsx from 'clsx';
 import useStyles from '@modules/requestreturn/pages/edit/components/style';
 import gqlService from '@modules/requestreturn/services/graphql';
 
-const OrderQueueEditContent = (props) => {
+const RequestReturnEditContent = (props) => {
     const {
         formik,
         detailReturn,
@@ -197,4 +197,4 @@ const OrderQueueEditContent = (props) => {
     );
 };
 
-export default OrderQueueEditContent;
+export default RequestReturnEditContent;

@@ -715,6 +715,10 @@ const Layout = (props) => {
                 return 'Login';
             }
 
+            if (router.pathname.split('/')?.[1] === 'requestreturn') {
+                return 'Request Return';
+            }
+
             return old;
         });
     }, [activeChildMenu, activeParentMenu, router]);

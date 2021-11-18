@@ -2,6 +2,7 @@
 /* eslint-disable prefer-const */
 import React, { useEffect } from 'react';
 import gqlService from '@modules/requestreturn/services/graphql';
+import Layout from '@layout';
 
 const Core = (props) => {
     const {
@@ -37,8 +38,15 @@ const Core = (props) => {
         channelCodeParam,
     };
 
+    const pageConfig = {
+        header: false,
+        sidebar: false,
+    };
+
     return (
-        <Content {...contentProps} />
+        <Layout pageConfig={pageConfig}>
+            <Content {...contentProps} />
+        </Layout>
     );
 };
 

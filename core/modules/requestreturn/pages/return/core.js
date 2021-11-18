@@ -166,6 +166,10 @@ const ContentWrapper = (props) => {
         handleOnChange,
     };
 
+    useEffect(() => {
+        document.title = `New Return for Order #${queryOrder}`;
+    }, []);
+
     return (
         <>
             <Loading open={backdropLoader} />

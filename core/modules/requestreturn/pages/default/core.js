@@ -5,11 +5,8 @@ import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import gqlService from '@modules/requestreturn/services/graphql';
-
-const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
-const Message = dynamic(() => import('@common_toast'), { ssr: false });
+import Layout from '@layout';
 
 const ContentWrapper = (props) => {
     const {
@@ -18,23 +15,6 @@ const ContentWrapper = (props) => {
     } = props;
     const router = useRouter();
     const [state, setState] = React.useState('');
-    const [backdropLoader, setBackdropLoader] = React.useState(false);
-    const [toastMessage, setToastMessage] = React.useState({
-        open: false,
-        variant: '',
-        text: '',
-    });
-
-    const handleCloseMessage = () => {
-        setToastMessage({ ...toastMessage, open: false });
-    };
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            window.backdropLoader = setBackdropLoader;
-            window.toastMessage = setToastMessage;
-        }
-    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -153,17 +133,15 @@ const ContentWrapper = (props) => {
         setState,
     };
 
+    const pageConfig = {
+        header: false,
+        sidebar: false,
+    };
+
     return (
-        <>
-            <Loading open={backdropLoader} />
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
-            <Message
-                open={toastMessage.open}
-                variant={toastMessage.variant}
-                setOpen={handleCloseMessage}
-                message={toastMessage.text}
-            />
-        </>
+        </Layout>
     );
 };
 
