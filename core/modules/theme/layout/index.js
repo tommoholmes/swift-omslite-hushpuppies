@@ -570,12 +570,6 @@ const Layout = (props) => {
                     label: 'CLI Tools',
                     url: '/tools/clitools',
                 },
-                // {
-                //     aclCode: 'oms_lite_notification',
-                //     key: 'notification',
-                //     label: 'Notification',
-                //     url: '/oms/notification',
-                // },
             ],
         },
         {
@@ -590,6 +584,13 @@ const Layout = (props) => {
                     url: '/userdata/adminstore',
                 },
             ],
+        },
+        {
+            aclCode: 'oms_lite_notification',
+            key: 'notification',
+            label: 'Notification',
+            url: '/oms/notification',
+            hide: true,
         },
     ];
     const mappedMenuList = menuList.reduce((accumulator, parent) => {
