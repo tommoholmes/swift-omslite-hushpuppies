@@ -149,19 +149,47 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.prepareNewMemo({
+    const { loading, data, error } = gqlService.prepareNewMemo({
         request_id: router && router.query && Number(router.query.request_id),
     });
 
     if (loading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading...
+                </div>
+            </Layout>
         );
     }
 
-    if (!data) {
+    if (!data && error) {
+        window.toastMessage({
+            open: true,
+            text: error.message,
+            variant: 'error',
+        });
+        setTimeout(() => { router.push(`/sales/managerma/edit/${router && router.query && Number(router.query.request_id)}`); }, 1500);
         return (
-            <Layout>Data not found!</Layout>
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Error
+                </div>
+            </Layout>
         );
     }
 
