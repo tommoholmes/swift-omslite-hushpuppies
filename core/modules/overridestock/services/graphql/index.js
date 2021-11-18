@@ -52,6 +52,11 @@ export const syncOverrideStockToMarketplace = (variables) => useMutation(Schema.
     ...context,
 });
 
+export const multideleteVirtualStockQuantity = (variables) => useMutation(Schema.multideleteVirtualStockQuantity, {
+    variables,
+    ...context,
+});
+
 export default {
     getVirtualStockQuantityList,
     getVirtualStockQuantityById,
@@ -61,4 +66,5 @@ export default {
     downloadSampleCsv,
     getActivity,
     syncOverrideStockToMarketplace,
+    multideleteVirtualStockQuantity,
 };

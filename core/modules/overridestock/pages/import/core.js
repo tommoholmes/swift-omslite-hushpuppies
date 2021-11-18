@@ -8,30 +8,42 @@ const Core = (props) => {
     const { Content } = props;
     const [uploadVirtualStockQuantity] = gqlService.uploadVirtualStockQuantity();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'import_override_stock' });
+    const [finishedAfterSubmit, setFinishedAfterSubmit] = React.useState(false);
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
     const [showProgress, setshowProgress] = React.useState(false);
+    const intervalRef = React.useRef(null);
     const [getActivity] = gqlService.getActivity({
         variables: {
             code: 'import_vs_qty',
             by_session: true,
         },
         onCompleted: (res) => {
-            setActivityState({ ...res.getActivity, loading: false });
+            setActivityState(res.getActivity);
             if (firstLoad) {
                 setFirstLoad(false);
             }
             if (res.getActivity.run_status === 'running') {
+                clearInterval(intervalRef.current);
+                setshowProgress(true);
                 setTimeout(() => {
-                    setActivityState({ ...res.getActivity, loading: true });
                     getActivity();
-                }, 100);
+                }, 500);
             }
-            if (!firstLoad && res.getActivity.run_status === 'finished') {
+
+            if (res.getActivity.run_status === 'finished' && finishedAfterSubmit) {
+                setshowProgress(true);
+                clearInterval(intervalRef.current);
+            }
+
+            if ((res.getActivity.run_status !== 'running' || res.getActivity.run_status !== 'finished') && finishedAfterSubmit) {
+                clearInterval(intervalRef.current);
                 setshowProgress(true);
             }
         },
         onError: () => {
+            clearInterval(intervalRef.current);
+            setActivityState({ ...activityState });
             getActivity();
         },
     });
@@ -47,29 +59,39 @@ const Core = (props) => {
         const variables = {
             binary,
         };
+
         setshowProgress(false);
         window.backdropLoader(true);
+        setFinishedAfterSubmit(false);
+        intervalRef.current = setInterval(() => {
+            getActivity();
+        }, 250);
+
         uploadVirtualStockQuantity({
             variables,
         })
             .then(() => {
-                setActivityState({ ...activityState, loading: true });
                 getActivity();
-                window.backdropLoader(false);
+                setFinishedAfterSubmit(true);
                 window.toastMessage({
                     open: true,
-                    text: 'Success Import Override Stock',
+                    text: 'Success import override stock',
                     variant: 'success',
                 });
             })
             .catch((e) => {
                 window.backdropLoader(false);
+                setFinishedAfterSubmit(true);
                 window.toastMessage({
                     open: true,
                     text: e.message,
                     variant: 'error',
                 });
             });
+
+        setTimeout(() => {
+            window.backdropLoader(false);
+        }, 1000);
     };
 
     const formik = useFormik({
@@ -99,6 +121,7 @@ const Core = (props) => {
         activityState,
         firstLoad,
         showProgress,
+        finishedAfterSubmit,
     };
 
     return (

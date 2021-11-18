@@ -8,6 +8,8 @@ const Core = (props) => {
     const { Content } = props;
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
+    const intervalRef = React.useRef(null);
+    const [finishedAfterSubmit, setFinishedAfterSubmit] = React.useState(false);
     const [showProgress, setshowProgress] = React.useState(false);
     const [getActivity] = gqlService.getActivity({
         variables: {
@@ -15,26 +17,35 @@ const Core = (props) => {
             by_session: false,
         },
         onCompleted: (res) => {
-            setActivityState({ ...res.getActivity, loading: false });
-
-            if (res.getActivity.run_status === 'running') {
-                setTimeout(() => {
-                    setActivityState({ ...res.getActivity, loading: true });
-                    getActivity();
-                }, 100);
+            setActivityState(res.getActivity);
+            if (firstLoad) {
+                setFirstLoad(false);
             }
-            if (!firstLoad && res.getActivity.run_status === 'finished') {
+            if (res.getActivity.run_status === 'running') {
+                clearInterval(intervalRef.current);
+                setshowProgress(true);
+                setTimeout(() => {
+                    getActivity();
+                }, 500);
+            }
+
+            if (res.getActivity.run_status === 'finished' && finishedAfterSubmit) {
+                clearInterval(intervalRef.current);
+                setshowProgress(true);
+            }
+            if ((res.getActivity.run_status !== 'running' || res.getActivity.run_status !== 'finished') && finishedAfterSubmit) {
+                clearInterval(intervalRef.current);
                 setshowProgress(true);
             }
         },
         onError: () => {
-            setActivityState({ ...activityState, loading: true });
+            clearInterval(intervalRef.current);
+            setActivityState({ ...activityState });
             getActivity();
         },
     });
 
     useEffect(() => {
-        setActivityState({ ...activityState, loading: true });
         getActivity();
     }, []);
 
@@ -50,37 +61,37 @@ const Core = (props) => {
         onSubmit: (values) => {
             setshowProgress(false);
             window.backdropLoader(true);
+            setFinishedAfterSubmit(false);
+            intervalRef.current = setInterval(() => {
+                getActivity();
+            }, 250);
+
             syncOverrideStockToMarketplace({
                 variables: {
                     store_id: values.channel_store_id.channel_store_id?.toString(),
                 },
             })
                 .then(() => {
-                    if (firstLoad) {
-                        setFirstLoad(false);
-                    }
-                    setActivityState({ ...activityState, loading: true });
                     getActivity();
-                    window.backdropLoader(false);
+                    setFinishedAfterSubmit(true);
                     window.toastMessage({
                         open: true,
                         text: 'Success sync stock to mp',
                         variant: 'success',
                     });
                 })
-                .catch((e) => {
-                    if (firstLoad) {
-                        setFirstLoad(false);
-                    }
-                    setActivityState({ ...activityState, loading: true });
-                    getActivity();
-                    window.backdropLoader(false);
+                .catch((err) => {
+                    setFinishedAfterSubmit(true);
                     window.toastMessage({
                         open: true,
-                        text: e.message,
+                        text: err.message,
                         variant: 'error',
                     });
                 });
+
+            setTimeout(() => {
+                window.backdropLoader(false);
+            }, 500);
         },
     });
 
@@ -89,6 +100,7 @@ const Core = (props) => {
         activityState,
         firstLoad,
         showProgress,
+        finishedAfterSubmit,
     };
 
     return (

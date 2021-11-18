@@ -115,6 +115,7 @@ export const getActivity = gql`
             finished_at
             run_by
             run_type
+            run_by_name
             attachment
             error_message
         }
@@ -132,6 +133,12 @@ export const syncOverrideStockToMarketplace = gql`
     }
 `;
 
+export const multideleteVirtualStockQuantity = gql`
+    mutation multideleteVirtualStockQuantity($id: [Int!]!) {
+        multideleteVirtualStockQuantity(id: $id)
+    }
+`;
+
 export default {
     getVirtualStockQuantityList,
     getVirtualStockQuantityById,
@@ -141,4 +148,5 @@ export default {
     uploadVirtualStockQuantity,
     getActivity,
     syncOverrideStockToMarketplace,
+    multideleteVirtualStockQuantity,
 };

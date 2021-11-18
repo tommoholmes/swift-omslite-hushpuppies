@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Header from '@modules/overridestock/pages/list/components/Header';
 
 const OverrideStockListContent = (props) => {
-    const { data, loading, getVirtualStockQuantityList } = props;
+    const { data, loading, getVirtualStockQuantityList, multideleteVirtualStockQuantity } = props;
     const virtualStockQuantityList = (data && data.getVirtualStockQuantityList && data.getVirtualStockQuantityList.items) || [];
     const virtualStockQuantityTotal = (data && data.getVirtualStockQuantityList && data.getVirtualStockQuantityList.total_count) || 0;
+    const isDeleteAll = useRef(false);
+    const [listId, setListId] = useState([]);
 
     const columns = [
         { field: 'entity_id', headerName: 'ID', sortable: 'true', initialSort: 'ASC' },
@@ -40,22 +42,95 @@ const OverrideStockListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
+    const multidelete = (listIdVirtualStock) => {
+        multideleteVirtualStockQuantity({
+            variables: {
+                id: listIdVirtualStock,
+            },
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Delete All Override Stock',
+                    variant: 'success',
+                });
+                isDeleteAll.current = false;
+                getVirtualStockQuantityList({
+                    variables: {
+                        pageSize: 10,
+                        currentPage: 1,
+                    },
+                });
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                isDeleteAll.current = false;
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            });
+    };
+
+    useEffect(() => {
+        if (virtualStockQuantityList.length > 0 && isDeleteAll.current) {
+            const listIdFromGraphql = virtualStockQuantityList.map((virtualStockQuantity) => virtualStockQuantity.entity_id);
+            const tempListId = [...listId, ...listIdFromGraphql.filter((id) => !listId.includes(id))];
+            setListId([...tempListId]);
+
+            if (virtualStockQuantityTotal > tempListId.length) {
+                getVirtualStockQuantityList({
+                    variables: {
+                        pageSize: virtualStockQuantityTotal,
+                        currentPage: 1,
+                    },
+                });
+            } else {
+                multidelete(tempListId);
+            }
+        }
+    }, [virtualStockQuantityList]);
+
+    const deleteAllStock = async () => {
+        if (virtualStockQuantityTotal > 0) {
+            const listIdFromGraphql = virtualStockQuantityList.map((virtualStockQuantity) => virtualStockQuantity.entity_id);
+            const tempListId = [...listId, ...listIdFromGraphql.filter((id) => !listId.includes(id))];
+            setListId([...tempListId]);
+
+            if (virtualStockQuantityTotal > tempListId.length) {
+                getVirtualStockQuantityList({
+                    variables: {
+                        pageSize: virtualStockQuantityTotal,
+                        currentPage: 1,
+                    },
+                });
+            } else {
+                multidelete(tempListId);
+            }
+            isDeleteAll.current = true;
+            window.backdropLoader(true);
+        } else {
+            window.toastMessage({
+                open: true,
+                text: 'Failed Delete All Override Stock',
+                variant: 'error',
+            });
+        }
+    };
 
     return (
         <>
-            <Header />
+            <Header deleteAllStock={deleteAllStock} />
             <Table
                 filters={filters}
                 rows={rows}
                 getRows={getVirtualStockQuantityList}
-                loading={loading}
+                loading={isDeleteAll.current || loading}
                 columns={columns}
                 count={virtualStockQuantityTotal}
+                deleteRows={multideleteVirtualStockQuantity}
                 showCheckbox
             />
         </>

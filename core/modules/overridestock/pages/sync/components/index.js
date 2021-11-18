@@ -22,7 +22,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 const SyncToMPContent = (props) => {
     const {
-        formik, activityState, firstLoad, showProgress,
+        formik, activityState, firstLoad, showProgress, finishedAfterSubmit,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -119,20 +119,21 @@ const SyncToMPContent = (props) => {
                         </Button>
                     </div>
                 )}
-                {activityState && (activityState.run_status === 'running' || showProgress) ? (
+
+                {activityState && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress) ? (
                     <div className={classes.progressContainer}>
                         <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />
                     </div>
                 ) : null}
-                {activityState?.loading ? (
+                {firstLoad ? (
                     <div className={classes.formFieldButton}>
                         <div className={clsx(classes.status)}>Loading...</div>
                     </div>
                 ) : (
-                    !firstLoad
-                    && activityState
+                    activityState
                     && activityState.run_status
-                    && showProgress && (
+                    && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress)
+                    && finishedAfterSubmit && (
                         <div className={classes.formFieldButton}>
                             {activityState.run_status !== 'running' && showProgress ? (
                                 activityState.error_message ? (
