@@ -2,6 +2,7 @@
 import React from 'react';
 import CustomList from '@common_customlist';
 import Autocomplete from '@common_autocomplete';
+import gqlService from '@modules/batchpack/services/graphql';
 import Header from '@modules/batchpack/pages/list/components/Header';
 import useStyles from '@modules/batchpack/pages/list/components/style';
 import Router from 'next/router';
@@ -19,51 +20,33 @@ const PickByBatchListContent = (props) => {
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
     ];
 
-    const optionsStatus = [
-        { name: 'Pick Uncomplete', id: 'pick_uncomplete' },
-        { name: 'Pick Complete', id: 'pick_complete' },
-        { name: 'Pack in Progress', id: 'pack_in_progress' },
-        { name: 'Ready for Pack', id: 'ready_for_pack' },
-        { name: 'Pack Complete', id: 'pack_complete' },
-        { name: 'Ready for Ship', id: 'ready_for_ship' },
-        { name: 'Cannot Fulfill', id: 'cannot_fulfill' },
-        { name: 'Process for Shipping', id: 'process_for_shipping' },
-        { name: 'Pick in Progress', id: 'pick_in_progress' },
-    ];
-
     const filters = [
-        // {
-        //     field: 'status',
-        //     name: 'status',
-        //     type: 'in',
-        //     label: 'Status',
-        //     initialValue: '',
-        //     component: ({ filterValue, setFilterValue }) => (
-        //         <Autocomplete
-        //             style={{ width: 228 }}
-        //             multiple
-        //             value={(filterValue || []).map((option) => optionsStatus.find((e) => e.id === option))}
-        //             onChange={(newValue) => setFilterValue((newValue || []).map((option) => option && option.id))}
-        //             options={optionsStatus}
-        //         />
-        //     ),
-        // },
         {
             field: 'status',
             name: 'status',
             type: 'eq',
             label: 'Status',
             initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.id === filterValue)}
-                    onChange={(newValue) => {
-                        setTimeout(() => { setFilterValue(newValue && newValue.id); }, 500);
-                    }}
-                    options={optionsStatus}
-                />
-            ),
+            component: ({ filterValue, setFilterValue }) => {
+                const [getShipmentStatusByType, getShipmentStatusByTypeRes] = gqlService.getShipmentStatusByType();
+                const statusOptions = (getShipmentStatusByTypeRes
+                    && getShipmentStatusByTypeRes.data
+                    && getShipmentStatusByTypeRes.data.getShipmentStatusByType) || [];
+                const primaryKey = 'value';
+                const labelKey = 'label';
+                return (
+                    <Autocomplete
+                        mode="lazy"
+                        style={{ width: 228 }}
+                        getOptions={getShipmentStatusByType}
+                        value={statusOptions.find((e) => e[primaryKey] === filterValue)}
+                        onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
+                        options={statusOptions}
+                        primaryKey={primaryKey}
+                        labelKey={labelKey}
+                    />
+                );
+            },
         },
         {
             field: 'status',
