@@ -136,10 +136,22 @@ export const nextStoreShipmentList = gql`
     }
 `;
 
+export const getShipmentStatusByType = gql`
+    query{
+        getShipmentStatusByType(
+          type: "pack_list"
+        ){
+            value
+            label
+        }
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getPackList,
     updatePickByBatchQtyPacked,
     packShipment,
     nextStoreShipmentList,
+    getShipmentStatusByType,
 };

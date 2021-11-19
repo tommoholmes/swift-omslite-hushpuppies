@@ -29,10 +29,15 @@ export const nextStoreShipmentList = (options) => useLazyQuery(Schema.nextStoreS
     ...options, ...context, ...fetchPolicy,
 });
 
+export const getShipmentStatusByType = (variables) => useLazyQuery(Schema.getShipmentStatusByType, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getStoreShipmentList,
     getPackList,
     updatePickByBatchQtyPacked,
     packShipment,
     nextStoreShipmentList,
+    getShipmentStatusByType,
 };

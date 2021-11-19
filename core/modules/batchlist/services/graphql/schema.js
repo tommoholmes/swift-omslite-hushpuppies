@@ -255,6 +255,7 @@ export const multipleItemSortingPickByBatch = gql`
       slot_no
       qty
       name
+      sku
     }
   }
 `;
