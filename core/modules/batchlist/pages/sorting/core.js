@@ -94,8 +94,10 @@ const ContentWrapper = (props) => {
 
     const getDataSortingMultiple = (res) => {
         name = (res && res.data && res.data.multipleItemSortingPickByBatch && res.data.multipleItemSortingPickByBatch.length && res.data.multipleItemSortingPickByBatch[0].name) || '-';
+        sku = (res && res.data && res.data.multipleItemSortingPickByBatch && res.data.multipleItemSortingPickByBatch.length && res.data.multipleItemSortingPickByBatch[0].sku) || '-';
         dataMultiple = (res && res.data && res.data.multipleItemSortingPickByBatch && res.data.multipleItemSortingPickByBatch.length && res.data.multipleItemSortingPickByBatch) || [];
         setName(name);
+        setSku(sku);
         setDataMultiple(dataMultiple);
     };
 

@@ -52,7 +52,7 @@ const SortingItemContent = (props) => {
                                             {`Slot ${item.slot_no} : `}
                                         </span>
                                         <span className={classes.slotPcs}>
-                                            {`Qty${item.qty}`}
+                                            {`Qty ${item.qty}`}
                                         </span>
                                     </div>
                                 ))}
