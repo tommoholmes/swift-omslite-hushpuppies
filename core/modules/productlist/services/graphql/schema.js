@@ -80,22 +80,13 @@ export const getProductById = gql`
 export const updateProduct = gql`
     mutation updateProduct(
         $id: Int!,
-        $status: Int,
-        $price: Int,
-        $special_price: Int,
-        $special_price_from: String,
-        $special_price_to: String,
-        
+        $input: [ProductInput],
+        $input_image: [String],
     ){
         updateProduct(
             id: $id,
-            input: {
-                status: $status,
-                price: $price,
-                special_price: $special_price,
-                special_price_from: $special_price_from,
-                special_price_to: $special_price_to,
-            }
+            input: $input,
+            input_image: $input_image,
         )
     }
 `;
@@ -142,6 +133,66 @@ export const getProductListBySku = gql`
     }
 `;
 
+export const getProductAttributes = gql`
+query getProductAttributes($id: Int!, $attribute_set_id: Int){
+    getProductAttributes(id: $id, attribute_set_id: $attribute_set_id){
+      entity_id
+      attribute_set_id
+      attribute_set_options{
+        value
+        label
+      }
+      groups{
+        attribute_group_id
+        attribute_group_name
+        attribute_group_code
+        sort_order
+        attributes{
+          attribute_code
+          frontend_label
+          frontend_input
+          is_required
+          is_readonly
+          attribute_value
+          attribute_options{
+            value
+            label
+          }
+          images
+        }
+      }
+      sourcing{
+        source_id
+        loc_id
+        loc_name
+        company_id
+        company_name
+        sku
+        qty_total
+        qty_reserved
+        qty_incoming
+        qty_saleable
+        qty_buffer
+        priority
+      }
+      vendor_price{
+        vendor{
+          company_id
+          company_name
+        }
+        price{
+          location{
+            loc_id
+            loc_name
+          }
+          price
+          special_price
+        }
+      }
+    }
+  }
+`;
+
 export default {
     getProductList,
     getProductById,
@@ -149,4 +200,5 @@ export default {
     uploadSource,
     downloadSampleCsv,
     getProductListBySku,
+    getProductAttributes,
 };

@@ -33,6 +33,10 @@ export const getProductListBySku = (variables) => useLazyQuery(Schema.getProduct
     variables, ...context, ...fetchPolicy,
 });
 
+export const getProductAttributes = (variables) => useLazyQuery(Schema.getProductAttributes, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getProductList,
     getProductById,
@@ -40,4 +44,5 @@ export default {
     uploadSource,
     downloadSampleCsv,
     getProductListBySku,
+    getProductAttributes,
 };
