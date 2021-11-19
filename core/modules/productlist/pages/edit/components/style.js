@@ -7,8 +7,34 @@ const borderColor = '#DDE1EC';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: '16px 0',
+        padding: '0 16px',
         borderRadius: 16,
+        backgroundColor: 'unset',
+        boxShadow: 'none',
+        '& .title-information': {
+            [theme.breakpoints.down('xs')]: {
+                height: 75,
+            },
+            [theme.breakpoints.up('sm')]: {
+                height: 75,
+            },
+            [theme.breakpoints.up('md')]: {
+                height: 'auto',
+            },
+        },
+    },
+    content: {
+        borderBottom: '3px solid #F5F7FB',
+        padding: '18px 15px',
+        background: '#ffffff',
+        borderRadius: 16,
+        marginBottom: 18,
+        '& hr': {
+            margin: '12px -15px',
+            background: borderColor,
+            border: 0,
+            height: 1,
+        },
     },
     btnBack: {
         display: 'inline-block',
@@ -38,17 +64,19 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: 16,
     },
     formFieldButton: {
-        padding: '24px 0 30px 0px',
+        padding: '16px 0 30px 0px',
     },
     btn: {
         borderRadius: 20,
     },
     divLabel: {
-        width: 300,
         display: 'inline-block',
         [theme.breakpoints.down('xs')]: {
-            width: 140,
+            paddingRight: 10,
+            paddingLeft: 0,
         },
+        paddingLeft: 20,
+        paddingTop: 10,
     },
     label: {
         color: colorText,
@@ -66,27 +94,28 @@ const useStyles = makeStyles((theme) => ({
             fontSize: 20,
         },
     },
-    content: {
-        borderBottom: '3px solid #F5F7FB',
-        padding: '10px 29px 12px 22px',
-    },
     fieldRoot: {
-        width: 'calc(100% - 300px)',
         verticalAlign: 'middle',
-        [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
-        },
-    },
-    fieldRootDesc: {
-        [theme.breakpoints.down('xs')]: {
-            verticalAlign: 'top',
-        },
     },
     fieldInput: {
         border: '1px solid',
         borderColor: colorText,
-        borderRadius: 20,
-        height: 36,
+        borderRadius: '20px !important',
+        height: 35,
+        '&.disabled': {
+            borderColor,
+        },
+    },
+    fieldRootNote: {
+        border: '1px solid',
+        borderColor: colorText,
+        borderRadius: '20px !important',
+        '&.disabled': {
+            borderColor,
+        },
+    },
+    selectControl: {
+        margin: '8px 0px',
     },
     table: {
         borderCollapse: 'collapse',
@@ -106,18 +135,60 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
     },
     autocompleteRoot: {
-        width: 'calc(100% - 300px)',
         verticalAlign: 'middle',
         display: 'inline-flex',
         '& .MuiOutlinedInput-root': {
             borderColor: colorText,
             borderRadius: 20,
             border: '1px solid',
-            height: 36,
+            minHeight: 36,
             padding: '0 9px',
         },
+    },
+
+    //
+    gridAttribute: {
+        display: 'grid',
+        gridTemplateColumns: '30% 60% 10%',
         [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
+            gridTemplateColumns: '40% 60%',
+        },
+        marginBottom: 15,
+    },
+    accordion: {
+        '&.Mui-expanded': {
+            '& h5': {
+                fontWeight: 800,
+            },
+        },
+        '& .MuiAccordionSummary-content': {
+            margin: 0,
+        },
+        '& .MuiAccordionSummary-content.Mui-expanded': {
+            margin: 0,
+        },
+    },
+    accordionDetailRoot: {
+        display: 'block !important',
+    },
+    img: {
+        height: 100,
+        width: 'auto',
+        marginRight: 20,
+    },
+    asterisk: {
+        color: colorPurple,
+        fontSize: 20,
+    },
+    errorHtml: {
+        backgroundColor: '#F9E5E4',
+        color: '#B30100',
+        padding: '15px 10px',
+        margin: '10px 0px',
+        display: 'flex',
+        alignItems: 'center',
+        '& a': {
+            color: '#408AC0',
         },
     },
 }));

@@ -46,7 +46,7 @@ export const getLogistixProviderById = gql`
 
 export const deleteLogistixProvider = gql`
     mutation deleteLogistixProvider(
-        $id: Int!,
+        $id: [Int!],
     ){
         deleteLogistixProvider(
             id: $id

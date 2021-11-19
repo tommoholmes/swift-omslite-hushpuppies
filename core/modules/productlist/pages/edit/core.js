@@ -3,52 +3,61 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import { optionsStatus } from '@modules/productlist/helpers';
 import gqlService from '@modules/productlist/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
         data,
         Content,
+        getProductAttributes,
     } = props;
     const router = useRouter();
-    const product = data.getProductById;
     const [updateProduct] = gqlService.updateProduct();
+    const productDetail = data.getProductAttributes;
+    const [attribute_set_id, set_attribute_set_id] = React.useState(productDetail.attribute_set_id);
 
-    let dateFromSplit;
-    let dateFromSplitNew;
-    let dateToSplit;
-    let dateToSplitNew;
+    const onChangeAttribute = (e) => {
+        const { value } = e.target;
+        set_attribute_set_id(value);
+        getProductAttributes({
+            variables: {
+                id: router && router.query && Number(router.query.id),
+                attribute_set_id: Number(value),
+            },
+        });
+    };
 
-    if (!product.special_from_date) {
-        dateFromSplitNew = product.special_from_date;
-    }
-    if (product.special_from_date) {
-        dateFromSplit = product.special_from_date;
-        [dateFromSplitNew] = dateFromSplit.split(' ');
-    }
-    if (!product.special_to_date) {
-        dateToSplitNew = product.special_to_date;
-    }
-    if (product.special_to_date) {
-        dateToSplit = product.special_to_date;
-        [dateToSplitNew] = dateToSplit.split(' ');
-    }
+    const initValue = () => {
+        const init = [];
+        const valid = [];
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < productDetail.groups.length; i++) {
+            const group = productDetail.groups[i];
+            group.attributes.filter((att) => att.frontend_input !== 'media_image').map((attribute) => {
+                if (attribute.is_required) {
+                    valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
+                }
+                if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
+                    const values = [];
+                    attribute.attribute_value.split(',').forEach((item) => {
+                        values.push(attribute.attribute_options.find((o) => o.value === item));
+                    });
+                    return init.push([attribute.attribute_code, values]);
+                }
+                return (
+                    init.push([attribute.attribute_code, attribute.attribute_value])
+                );
+            });
+        }
+        return {
+            init: Object.fromEntries(init),
+            valid: Object.fromEntries(valid),
+        };
+    };
 
-    const handleSubmit = ({
-        status,
-        price,
-        specialPrice,
-        dateFrom,
-        dateTo,
-    }) => {
+    const handleSubmit = (value) => {
         const variables = {
-            id: product.id,
-            status: status.id,
-            price: Number(price),
-            special_price: Number(specialPrice),
-            special_price_from: dateFrom,
-            special_price_to: dateTo,
+            ...value,
         };
         window.backdropLoader(true);
         updateProduct({
@@ -73,34 +82,48 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            status: optionsStatus.find((e) => e.name === product.product_status.label),
-            attribute: product.attribute_set_name,
-            name: product.name,
-            sku: product.sku,
-            price: product.price_range.maximum_price.regular_price.value,
-            specialPrice: product.special_price,
-            dateFrom: dateFromSplitNew,
-            dateTo: dateToSplitNew,
-            weight: product.weight || 0,
-            visibility: product.visibility,
-            description: product.description.html,
+            ...initValue().init,
+            input_image: [],
         },
         validationSchema: Yup.object().shape({
-            price: Yup.number().nullable(),
-            specialPrice: Yup.number().nullable(),
+            ...initValue().valid,
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            const { input_image, ...restValues } = values;
+            const valueToSubmit = {
+                id: router && router.query && Number(router.query.id),
+                input: Object.keys(restValues).map((key) => {
+                    let attribute_value = restValues[key] || '';
+                    if (typeof restValues[key] === 'object') {
+                        attribute_value = restValues[key]?.map((val) => (val.value)).join(',') || '';
+                    }
+                    return ({
+                        attribute_code: key,
+                        attribute_value,
+                    });
+                }),
+            };
+            valueToSubmit.input = [{ attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) }, ...valueToSubmit.input];
+            if (input_image && input_image.length) {
+                valueToSubmit.input_image = input_image;
+            }
+            handleSubmit(valueToSubmit);
         },
     });
 
-    const stockList = {
-        sourcing: product.sourcing,
+    const handleDropFile = (files) => {
+        const { baseCode } = files[0];
+        const input = formik.values.input_image;
+        input.push(baseCode);
+        formik.setFieldValue('input_image', input);
     };
 
     const contentProps = {
         formik,
-        stockList,
+        productDetail,
+        handleDropFile,
+        attribute_set_id,
+        onChangeAttribute,
     };
 
     return (
@@ -110,25 +133,52 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getProductById({
-        id: router && router.query && Number(router.query.id),
-    });
+    const [getProductAttributes, productAttributes] = gqlService.getProductAttributes();
+    const { loading, data, called } = productAttributes;
 
-    if (loading) {
+    React.useEffect(() => {
+        getProductAttributes({
+            variables: { id: router && router.query && Number(router.query.id) },
+        });
+    }, []);
+
+    if (loading || !called) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Loading...
+                </div>
+            </Layout>
         );
     }
 
-    if (!data) {
+    if (called && !data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 
     return (
         <Layout>
-            <ContentWrapper data={data} {...props} />
+            <ContentWrapper data={data} getProductAttributes={getProductAttributes} {...props} />
         </Layout>
     );
 };
