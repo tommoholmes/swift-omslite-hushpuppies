@@ -25,9 +25,12 @@ query{
     email
     firstname
     lastname
-    middlename
     customer_loc_code
     channel_code
+    group{
+      id
+      code
+  }
   }
 }
 `;

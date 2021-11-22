@@ -30,17 +30,20 @@ const DashboardContent = (props) => {
     const [email, setEmail] = React.useState('');
     const [customer_loc_code, setCustomerLocCode] = React.useState('');
     const [channel_code, setChannelCode] = React.useState('');
+    const [group, setGroup] = React.useState('');
     const handleSetUserInfo = (customer) => {
         const firstnameTemp = customer && customer.firstname;
         const lastnameTemp = customer && customer.lastname;
         const emailTemp = customer && customer.email;
         const customerLocCodeTemp = customer && customer.customer_loc_code;
         const channelCodeTemp = customer && customer.channel_code;
+        const groupTemp = customer && customer.group && customer.group.code;
         setUsername(`${firstnameTemp} ${lastnameTemp}`);
         setFirstname(`${firstnameTemp}`);
         setEmail(`${emailTemp}`);
         setCustomerLocCode(`${customerLocCodeTemp}`);
         setChannelCode(`${channelCodeTemp}`);
+        setGroup(`${groupTemp}`);
     };
     const limitString = (string, limit) => {
         if (string.length > limit) {
@@ -163,7 +166,7 @@ const DashboardContent = (props) => {
                             <div className="user-text">
                                 <span className={styles.textName}>{username}</span>
                                 <br />
-                                <span>Store Manager</span>
+                                <span>{group}</span>
                                 <br />
                                 <span>{email}</span>
                             </div>
