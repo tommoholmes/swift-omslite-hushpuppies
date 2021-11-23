@@ -86,6 +86,11 @@ const useStyles = makeStyles((theme) => ({
             bottom: -1,
         },
     },
+    fieldInputFilter: {
+        '& .MuiInputBase-input': {
+            padding: '8.5px 14px',
+        },
+    },
 }));
 
 export default useStyles;
