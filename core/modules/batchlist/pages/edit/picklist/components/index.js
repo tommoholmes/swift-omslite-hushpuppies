@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/button-has-type */
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
@@ -35,6 +36,13 @@ const PickListEditContent = (props) => {
             return { backgroundColor: '#ECF0FB' };
         }
         return { backgroundColor: '#FFFFFF' };
+    };
+
+    const getIcon = (qty_picked, qty_to_pick) => {
+        if (qty_to_pick === qty_picked) {
+            return classes.checkmark;
+        }
+        return classes.exclamation;
     };
 
     return (
@@ -81,7 +89,7 @@ const PickListEditContent = (props) => {
                 </div>
                 {pickList.items.slice().sort((a, b) => a.is_confirmed - b.is_confirmed).map((e) => (
                     <div className={classes.content} style={getColor(e.is_confirmed, e.qty_picked, e.qty_to_pick)}>
-                        {(e.qty_picked === e.qty_to_pick) ? (
+                        {(pickList.statusValue === 'pick_complete' || pickList.statusValue === 'pick_uncomplete') ? (
                             <div className={classes.gridList}>
                                 <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
                                     <span className={classes.th}>SKU</span>
@@ -102,57 +110,80 @@ const PickListEditContent = (props) => {
                                     <span className={classes.td}>{e.bin_code || '-'}</span>
                                 </h5>
                                 <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
-                                    <span className={classes.checkmark} />
+                                    {(e.is_confirmed) ? (
+                                        <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                    ) : (
+                                        <img className={classes.iconBarcode} src="/assets/img/iconbarcode.svg" alt="" />
+                                    )}
                                 </h5>
                             </div>
                         ) : (
-                            <Link href={`/pickpack/batchlist/picklistitem/${e.entity_id}`}>
-                                <a>
-                                    <div className={classes.gridList}>
-                                        <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
-                                            <span className={classes.th}>SKU</span>
-                                            {' '}
-                                            <br />
-                                            <span className={classes.td}>{e.sku}</span>
-                                        </h5>
-                                        <h5 className={classes.titleList}>
-                                            <span className={classes.th}>QTY</span>
-                                            {' '}
-                                            <br />
-                                            <span className={classes.td}>{`${e.qty_picked}/${e.qty_to_pick}`}</span>
-                                        </h5>
-                                        <h5 className={classes.titleList}>
-                                            <span className={classes.th}>LOCATION</span>
-                                            {' '}
-                                            <br />
-                                            <span className={classes.td}>{e.bin_code || '-'}</span>
-                                        </h5>
-                                        <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
-                                            {!(e.is_confirmed) ? (
-                                                <img className={classes.iconBarcode} src="/assets/img/iconbarcode.svg" alt="" />
-                                            ) : (
-                                                <span className={classes.exclamation} />
-                                            )}
-                                        </h5>
-                                    </div>
-                                </a>
-                            </Link>
+                            e.qty_picked === e.qty_to_pick ? (
+                                <div className={classes.gridList}>
+                                    <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
+                                        <span className={classes.th}>SKU</span>
+                                        {' '}
+                                        <br />
+                                        <span className={classes.td}>{e.sku}</span>
+                                    </h5>
+                                    <h5 className={classes.titleList}>
+                                        <span className={classes.th}>QTY</span>
+                                        {' '}
+                                        <br />
+                                        <span className={classes.td}>{`${e.qty_picked}/${e.qty_to_pick}`}</span>
+                                    </h5>
+                                    <h5 className={classes.titleList}>
+                                        <span className={classes.th}>LOCATION</span>
+                                        {' '}
+                                        <br />
+                                        <span className={classes.td}>{e.bin_code || '-'}</span>
+                                    </h5>
+                                    <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
+                                        <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                    </h5>
+                                </div>
+                            ) : (
+                                <Link href={`/pickpack/batchlist/picklistitem/${e.entity_id}`}>
+                                    <a>
+                                        <div className={classes.gridList}>
+                                            <h5 className={classes.titleList} style={{ textAlign: 'left' }}>
+                                                <span className={classes.th}>SKU</span>
+                                                {' '}
+                                                <br />
+                                                <span className={classes.td}>{e.sku}</span>
+                                            </h5>
+                                            <h5 className={classes.titleList}>
+                                                <span className={classes.th}>QTY</span>
+                                                {' '}
+                                                <br />
+                                                <span className={classes.td}>{`${e.qty_picked}/${e.qty_to_pick}`}</span>
+                                            </h5>
+                                            <h5 className={classes.titleList}>
+                                                <span className={classes.th}>LOCATION</span>
+                                                {' '}
+                                                <br />
+                                                <span className={classes.td}>{e.bin_code || '-'}</span>
+                                            </h5>
+                                            <h5 className={classes.titleList} style={{ textAlign: 'right' }}>
+                                                {(e.is_confirmed) ? (
+                                                    <span className={getIcon(e.qty_picked, e.qty_to_pick)} />
+                                                ) : (
+                                                    <img className={classes.iconBarcode} src="/assets/img/iconbarcode.svg" alt="" />
+                                                )}
+                                            </h5>
+                                        </div>
+                                    </a>
+                                </Link>
+                            )
                         )}
                     </div>
                 ))}
-                <div className={classes.footer}>
-                    <div style={{ width: '60%', display: 'inline-block', padding: 20 }}>
-                        <h2>{pickList.itemsLeft}</h2>
-                        <span>items left to pick</span>
-                    </div>
-                    {((pickList.statusValue === 'pick_complete')) ? (
-                        <button
-                            className={classes.btnFooterDisabled}
-                            disable
-                        >
-                            Done Picking
-                        </button>
-                    ) : (
+                {pickList.statusValue === 'pick_in_progress' ? (
+                    <div className={classes.footer}>
+                        <div style={{ width: '60%', display: 'inline-block', padding: 20 }}>
+                            <h2>{pickList.itemsLeft}</h2>
+                            <span>items left to pick</span>
+                        </div>
                         <button
                             className={classes.btnFooter}
                             type="submit"
@@ -160,8 +191,8 @@ const PickListEditContent = (props) => {
                         >
                             Done Picking
                         </button>
-                    )}
-                </div>
+                    </div>
+                ) : null }
             </Paper>
         </>
     );
