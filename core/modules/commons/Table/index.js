@@ -116,7 +116,7 @@ const CustomTable = (props) => {
     const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn } = useColumns(props.columns);
     const [filters, setFilters] = React.useState(initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })));
     const [sorts, setSorts] = React.useState(
-        props.columns.filter((column) => column.sortable).map(({ field, initialSort }, i) => ({ field, value: i === 0 ? initialSort : undefined })),
+        props.columns.filter((column) => column.sortable).map(({ field, initialSort }) => ({ field, value: initialSort || undefined })),
     );
     const [activeAction, setActiveAction] = React.useState();
 

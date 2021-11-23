@@ -25,9 +25,45 @@ export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
     variables, ...context,
 });
 
+export const getAdminStoreList = (variables) => useLazyQuery(Schema.getAdminStoreList, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getAdminStoreById = (variables) => useQuery(Schema.getAdminStoreById, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const createAdminStore = (variables) => useMutation(Schema.createAdminStore, {
+    variables, ...context,
+});
+
+export const updateAdminStore = (variables) => useMutation(Schema.updateAdminStore, {
+    variables, ...context,
+});
+
+export const getCompanyOptions = (variables) => useQuery(Schema.getCompanyOptions, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getLocationOptions = (variables) => useQuery(Schema.getLocationOptions, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getCustomerGroupOptions = (variables) => useQuery(Schema.getCustomerGroupOptions, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getCompanyList,
     getCompanyById,
     createCompany,
     updateCompany,
+    //
+    getAdminStoreList,
+    getAdminStoreById,
+    createAdminStore,
+    updateAdminStore,
+    getCompanyOptions,
+    getLocationOptions,
+    getCustomerGroupOptions,
 };

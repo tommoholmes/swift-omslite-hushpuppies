@@ -54,6 +54,7 @@ const ProductListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={productTotal}
+                hideActions
             />
         </>
     );

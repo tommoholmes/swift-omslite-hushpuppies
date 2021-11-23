@@ -6,12 +6,20 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
+    const [getAdminStoreList, { data, loading }] = gqlService.getAdminStoreList();
+    const { loading: loadingGroup, data: dataGroup } = gqlService.getCustomerGroupOptions();
+
+    if (loadingGroup) {
+        return (
+            <Layout>Loading...</Layout>
+        );
+    }
 
     const contentProps = {
-        getCompanyList,
+        getAdminStoreList,
         data,
         loading,
+        groupOptions: dataGroup?.getCustomerGroupOptions,
     };
 
     return (

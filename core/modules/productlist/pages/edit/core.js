@@ -44,6 +44,10 @@ const ContentWrapper = (props) => {
                     });
                     return init.push([attribute.attribute_code, values]);
                 }
+                if (attribute.frontend_input === 'boolean') {
+                    const values = attribute.attribute_value === '1';
+                    return init.push([attribute.attribute_code, values]);
+                }
                 return (
                     init.push([attribute.attribute_code, attribute.attribute_value])
                 );
@@ -96,6 +100,8 @@ const ContentWrapper = (props) => {
                     let attribute_value = restValues[key] || '';
                     if (typeof restValues[key] === 'object') {
                         attribute_value = restValues[key]?.map((val) => (val.value)).join(',') || '';
+                    } else if (typeof restValues[key] === 'boolean') {
+                        attribute_value = restValues[key] ? '1' : '0';
                     }
                     return ({
                         attribute_code: key,

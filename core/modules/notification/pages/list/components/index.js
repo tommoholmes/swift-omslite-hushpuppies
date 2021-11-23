@@ -7,6 +7,9 @@ import Autocomplete from '@common_autocomplete';
 import { optionsStatus } from '@modules/notification/helpers';
 import useStyles from '@modules/notification/pages/list/components/style';
 import Header from '@modules/notification/pages/list/components/Header';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const NotificationListContent = (props) => {
     const classes = useStyles();
@@ -15,13 +18,18 @@ const NotificationListContent = (props) => {
     const notificationTotal = (data && data.getNotificationList && data.getNotificationList.total_count) || 0;
 
     const columns = [
-        { field: 'id', headerName: 'ID', sortable: true, initialSort: 'ASC' },
-        { field: 'created_at', headerName: 'Created At', sortable: true },
+        { field: 'id', headerName: 'ID', sortable: true },
+        { field: 'created_at', headerName: 'Created At', sortable: true, initialSort: 'DESC' },
         { field: 'entity_type', headerName: 'Type', sortable: true },
         { field: 'status', headerName: 'Status', sortable: true },
         { field: 'message', headerName: 'Messages', sortable: true },
         { field: 'attachment', headerName: 'Attachment' },
     ];
+
+    const [checked, setChecked] = React.useState({
+        read: false,
+        unread: false,
+    });
 
     const filters = [
         { field: 'id', name: 'id_from', type: 'from', label: 'ID From', initialValue: '' },
@@ -90,6 +98,67 @@ const NotificationListContent = (props) => {
                 />
             ),
         },
+        {
+            field: 'is_read',
+            name: 'is_read',
+            type: 'in',
+            label: '',
+            initialValue: [''],
+            component: ({ filterValue, setFilterValue }) => (
+                <FormGroup>
+                    <FormControlLabel
+                        className={classes.controllable}
+                        control={(
+                            <Checkbox
+                                checked={filterValue.includes('1')}
+                                onChange={(e) => {
+                                    const index = filterValue.indexOf('1');
+                                    if (index !== -1 && !e.target.checked) {
+                                        const temp = filterValue;
+                                        temp.splice(index, 1);
+                                        setFilterValue(temp);
+                                    } else {
+                                        const temp = filterValue;
+                                        if (temp[0] !== '') {
+                                            temp.push('1');
+                                        } else {
+                                            temp[0] = '1';
+                                        }
+                                        setFilterValue(temp);
+                                    }
+                                }}
+                            />
+                        )}
+                        label="Is Read"
+                    />
+                    <FormControlLabel
+                        className={classes.controllable}
+                        control={(
+                            <Checkbox
+                                checked={filterValue.includes('0')}
+                                onChange={(e) => {
+                                    const index = filterValue.indexOf('0');
+                                    if (index !== -1 && !e.target.checked) {
+                                        const temp = filterValue;
+                                        temp.splice(index, 1);
+                                        setFilterValue(temp);
+                                    } else {
+                                        const temp = filterValue;
+                                        if (temp[0] !== '') {
+                                            temp.push('0');
+                                        } else {
+                                            temp[0] = '0';
+                                        }
+                                        setFilterValue(temp);
+                                    }
+                                }}
+                            />
+                        )}
+                        label="Unread"
+                    />
+                </FormGroup>
+            ),
+        },
     ];
 
     const actions = [
@@ -106,6 +175,7 @@ const NotificationListContent = (props) => {
     const rows = notificationList.map((notification) => ({
         ...notification,
         id: notification.id,
+        attachment: notification.attachment ? <a href={notification.attachment} style={{ color: '#BE1F93' }}>Download</a> : '-',
     }));
 
     // if (!data || loading) {
