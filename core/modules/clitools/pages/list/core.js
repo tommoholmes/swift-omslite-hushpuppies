@@ -3,17 +3,18 @@ import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
 import gqlService from '@modules/clitools/services/graphql';
 
-const Core = (props) => {
+const ContentWrapper = (props) => {
     const {
+        getQueueList,
+        data,
+        loading,
+        dataOptions,
         Content,
     } = props;
 
-    const router = useRouter();
     const [addQueueJob] = gqlService.addQueueJob();
-    const [getQueueList, { data, loading }] = gqlService.getQueueList();
 
     const handleSubmit = ({
         id,
@@ -54,7 +55,6 @@ const Core = (props) => {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
-            console.log(values);
         },
     });
 
@@ -63,11 +63,34 @@ const Core = (props) => {
         data,
         loading,
         formik,
+        dataOptions,
+    };
+
+    return (
+        <Content {...contentProps} />
+    );
+};
+
+const Core = (props) => {
+    const [getQueueList, { data, loading }] = gqlService.getQueueList();
+    const { loading: loadingOptions, data: dataOptions } = gqlService.getJobStatusOptions();
+
+    if (loadingOptions) {
+        return (
+            <Layout>Loading...</Layout>
+        );
+    }
+
+    const contentProps = {
+        getQueueList,
+        data,
+        loading,
+        dataOptions: dataOptions.getJobStatusOptions,
     };
 
     return (
         <Layout>
-            <Content {...contentProps} />
+            <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );
 };

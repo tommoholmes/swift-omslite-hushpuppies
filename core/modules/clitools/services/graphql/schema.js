@@ -4,10 +4,14 @@ export const getQueueList = gql`
     query getQueueList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: QueueFilterInput,
+        $sort: QueueSortInput
     ){
         getQueueList(
             pageSize: $pageSize,
             currentPage: $currentPage
+            filter: $filter
+            sort: $sort
         ){
             items {
                 id
@@ -54,8 +58,18 @@ export const addQueueJob = gql`
     }
 `;
 
+export const getJobStatusOptions = gql`
+query{
+    getJobStatusOptions{
+      label
+      value
+    }
+  }
+`;
+
 export default {
     getQueueList,
     getIcubeCommandLineList,
     addQueueJob,
+    getJobStatusOptions,
 };
