@@ -39,6 +39,7 @@ const MarketplaceListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={marketplaceTotal}
+                hideActions
             />
         </>
     );
