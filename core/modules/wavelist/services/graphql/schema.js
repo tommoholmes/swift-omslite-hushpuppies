@@ -129,6 +129,12 @@ query{
   }
 `;
 
+export const getStoreConfig = gql`
+  query{
+    getStoreConfig(path: "swiftoms_pickpack/wave/allow_manual_confirm_pick")
+  }
+`;
+
 export default {
     getPickByWaveList,
     getPickByWaveById,
@@ -136,4 +142,5 @@ export default {
     donePickByWave,
     updatePickByWaveItem,
     getPickByWaveStatus,
+    getStoreConfig,
 };
