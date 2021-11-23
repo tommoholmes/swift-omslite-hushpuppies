@@ -5,23 +5,27 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/adminstore/services/graphql';
 
-const Core = (props) => {
+const ContentWrapper = (props) => {
     const {
+        dataCompany,
+        dataLocation,
+        dataGroup,
         Content,
     } = props;
     const router = useRouter();
-    const [createCompany] = gqlService.createCompany();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { company_code: code, company_name: name };
+    const [createAdminStore] = gqlService.createAdminStore();
+
+    const handleSubmit = (input) => {
+        const variables = { input };
         window.backdropLoader(true);
-        createCompany({
+        createAdminStore({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success create Customer!',
+                text: 'Success create user!',
                 variant: 'success',
             });
             setTimeout(() => router.push('/userdata/adminstore'), 250);
@@ -37,25 +41,68 @@ const Core = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: '',
-            name: '',
+            firstname: '',
+            lastname: '',
+            email: '',
+            customer_loc_code: [],
+            company: dataCompany.getCompanyOptions.find((loc, i) => i === 0),
+            group: dataGroup.getCustomerGroupOptions.find((group, i) => i === 0),
+            password: '',
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            firstname: Yup.string().required('Required!'),
+            lastname: Yup.string().required('Required!'),
+            email: Yup.string().required('Required!'),
+            password: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            const {
+                customer_loc_code, group, company, ...restValues
+            } = values;
+            const valueToSubmit = {
+                ...restValues,
+                customer_loc_code: customer_loc_code.map((loc) => (
+                    String(loc.value)
+                )),
+                group_id: Number(group.value),
+                customer_company_code: String(company.value),
+            };
+            handleSubmit(valueToSubmit);
         },
     });
 
     const contentProps = {
         formik,
+        dataCompany: dataCompany.getCompanyOptions,
+        dataLocation: dataLocation.getLocationOptions,
+        dataGroup: dataGroup.getCustomerGroupOptions,
+    };
+
+    return (
+        <Content {...contentProps} />
+    );
+};
+
+const Core = (props) => {
+    const { loading: loadingCompany, data: dataCompany } = gqlService.getCompanyOptions();
+    const { loading: loadingLocation, data: dataLocation } = gqlService.getLocationOptions();
+    const { loading: loadingGroup, data: dataGroup } = gqlService.getCustomerGroupOptions();
+
+    if (loadingCompany || loadingLocation || loadingGroup) {
+        return (
+            <Layout>Loading...</Layout>
+        );
+    }
+
+    const contentProps = {
+        dataCompany,
+        dataLocation,
+        dataGroup,
     };
 
     return (
         <Layout>
-            <Content {...contentProps} />
+            <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );
 };

@@ -6,17 +6,18 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import Autocomplete from '@common_autocomplete';
 import { useRouter } from 'next/router';
-import locationGqlService from '@modules/location/services/graphql';
 import clsx from 'clsx';
 import useStyles from '@modules/adminstore/pages/edit/components/style';
 
 const AdminStoreEditContent = (props) => {
     const {
         formik,
+        dataCompany,
+        dataLocation,
+        dataGroup,
     } = props;
     const classes = useStyles();
     const router = useRouter();
-    const [getLocationList, getLocationListRes] = locationGqlService.getLocationList();
 
     return (
         <>
@@ -45,11 +46,11 @@ const AdminStoreEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="firstname"
+                            value={formik.values.firstname}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.firstname && formik.errors.firstname)}
+                            helperText={(formik.touched.firstname && formik.errors.firstname) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -62,11 +63,11 @@ const AdminStoreEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
+                            name="lastname"
+                            value={formik.values.lastname}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            error={!!(formik.touched.lastname && formik.errors.lastname)}
+                            helperText={(formik.touched.lastname && formik.errors.lastname) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -79,11 +80,11 @@ const AdminStoreEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="email"
+                            value={formik.values.email}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.email && formik.errors.email)}
+                            helperText={(formik.touched.email && formik.errors.email) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -96,11 +97,12 @@ const AdminStoreEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
+                            name="password"
+                            type="password"
+                            value={formik.values.password}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            error={!!(formik.touched.password && formik.errors.password)}
+                            helperText={(formik.touched.password && formik.errors.password) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -111,44 +113,59 @@ const AdminStoreEditContent = (props) => {
                             <span className={classes.label}>Location</span>
                         </div>
                         <Autocomplete
+                            multiple
                             className={classes.autocompleteRoot}
-                            mode="lazy"
-                            value={formik.values.locationCode}
-                            onChange={(e) => formik.setFieldValue('locationCode', e)}
-                            loading={getLocationListRes.loading}
-                            options={
-                                getLocationListRes
-                                && getLocationListRes.data
-                                && getLocationListRes.data.getLocationList
-                                && getLocationListRes.data.getLocationList.items
-                            }
-                            getOptions={getLocationList}
-                            primaryKey="loc_id"
-                            labelKey="loc_name"
+                            name="customer_loc_code"
+                            value={typeof formik.values.customer_loc_code === 'object' ? formik.values.customer_loc_code
+                                : [formik.values.customer_loc_code]}
+                            onChange={(e) => formik.setFieldValue('customer_loc_code', e)}
+                            primaryKey="value"
+                            labelKey="label"
+                            options={dataLocation}
+                            error={!!(formik.touched.customer_loc_code && formik.errors.customer_loc_code)}
+                            helperText={(formik.touched.customer_loc_code && formik.errors.customer_loc_code) || ''}
+                            fullWidth
                         />
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>Group</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Group</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            name="group"
+                            value={formik.values.group}
+                            onChange={(e) => formik.setFieldValue('group', e)}
+                            primaryKey="value"
+                            labelKey="label"
+                            options={dataGroup}
+                            error={!!(formik.touched.group && formik.errors.group)}
+                            helperText={(formik.touched.group && formik.errors.group) || ''}
+                            fullWidth
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Company</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            name="company"
+                            value={formik.values.company}
+                            onChange={(e) => formik.setFieldValue('company', e)}
+                            primaryKey="value"
+                            labelKey="label"
+                            options={dataCompany}
+                            error={!!(formik.touched.company && formik.errors.company)}
+                            helperText={(formik.touched.company && formik.errors.company) || ''}
+                            fullWidth
                         />
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
-                        // onClick={formik.handleSubmit}
+                        onClick={formik.handleSubmit}
                         variant="contained"
                     >
                         Submit

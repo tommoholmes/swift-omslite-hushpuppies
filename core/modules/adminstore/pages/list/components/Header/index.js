@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Admin Store</h2>
+            <h2 className={classes.title}>All Users</h2>
             <Button
                 className={classes.buttonAdd}
                 onClick={() => router.push('/userdata/adminstore/create')}

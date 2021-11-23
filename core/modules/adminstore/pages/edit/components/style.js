@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
             borderColor: colorText,
             borderRadius: 20,
             border: '1px solid',
-            height: 36,
+            minHeight: 36,
             padding: '0 9px',
         },
         [theme.breakpoints.down('xs')]: {
