@@ -13,7 +13,7 @@ const ScanItemContent = (props) => {
         data, loading, handleDetect, shipment_id,
     } = props;
     const classes = useStyles();
-    const dataToShow = data?.updatePickByWaveQtyPacked?.pick_by_wave_item || null;
+    const dataToShow = data?.updatePickByBatchQtyPacked?.pick_by_batch_sort || null;
     return (
         <>
             <Paper className={classes.container}>

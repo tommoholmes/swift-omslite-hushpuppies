@@ -62,7 +62,7 @@ const PickByBatchListContent = (props) => {
         if (status.value === 'pick_uncomplete') {
             return classes.red;
         }
-        if (status.value === 'pick_in_progress' || status.value === 'pack_in_progress') {
+        if (status.value === 'pick_in_progress' || status.value === 'pack_in_progress' || status.value === 'ready_for_pack') {
             return classes.orange;
         }
         return classes.gray;
