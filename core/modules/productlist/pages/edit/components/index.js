@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import Button from '@common_button';
@@ -125,6 +126,7 @@ const AttributeComponents = ({
                 error={!!(formik.touched[attribute_code] && formik.errors[attribute_code])}
                 selectClasses={classes.fieldInput}
                 formControlClasses={classes.selectControl}
+                enableEmpty={false}
             />
         );
     case 'multiselect':
@@ -209,6 +211,7 @@ const ProductListEditContent = (props) => {
     const router = useRouter();
 
     const [expanded, setExpanded] = React.useState('');
+    const [selected, setSelected] = React.useState(productDetail.vendor_price?.map((vend) => (vend.price[0].location.loc_id)));
     const handleChangeAccordion = (e) => (event, isExpanded) => {
         setExpanded(isExpanded ? e : false);
     };
@@ -248,10 +251,11 @@ const ProductListEditContent = (props) => {
                             dataOptions={productDetail.attribute_set_options}
                             selectClasses={classes.fieldInput}
                             formControlClasses={classes.selectControl}
+                            enableEmpty={false}
                         />
                     </div>
-                    {groupDetails.attributes.map((att) => (
-                        <div className={classes.gridAttribute}>
+                    {groupDetails.attributes.map((att, attIdx) => (
+                        <div className={classes.gridAttribute} key={attIdx}>
                             <div
                                 className={classes.divLabel}
                             >
@@ -264,9 +268,9 @@ const ProductListEditContent = (props) => {
                         </div>
                     ))}
                 </div>
-                {productDetail.groups.map((attGroup) => (attGroup.attribute_group_code !== 'product-details')
+                {productDetail.groups.map((attGroup, attGroupIdx) => (attGroup.attribute_group_code !== 'product-details')
                     && (
-                        <div className={classes.content}>
+                        <div className={classes.content} key={attGroupIdx}>
                             <Accordion
                                 elevation={0}
                                 expanded={expanded === attGroup.attribute_group_code}
@@ -280,8 +284,8 @@ const ProductListEditContent = (props) => {
                                     </h5>
                                 </AccordionSummary>
                                 <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
-                                    {attGroup.attributes.map((att) => (
-                                        <div className={classes.gridAttribute}>
+                                    {attGroup.attributes.map((att, attIdx) => (
+                                        <div className={classes.gridAttribute} key={attIdx}>
                                             <div
                                                 className={classes.divLabel}
                                             >
@@ -305,7 +309,7 @@ const ProductListEditContent = (props) => {
                     >
                         Submit
                     </Button>
-                    { Object.keys(formik.errors).length !== 0
+                    {Object.keys(formik.errors).length !== 0
                         && (
                             <div className={classes.errorHtml}>
                                 <div style={{ paddingLeft: 5 }}>Please make sure all required field is filled!</div>
@@ -314,28 +318,107 @@ const ProductListEditContent = (props) => {
                 </div>
 
                 <div className={classes.content}>
-                    <h2 className={classes.title}>Stock List</h2>
-                    <div className={classes.formField}>
-                        <table className={classes.table}>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <th className={classes.th}>Location</th>
-                                    <th className={classes.th}>Qty Total</th>
-                                    <th className={classes.th}>Qty Reserved</th>
-                                    <th className={classes.th}>Qty Saleable</th>
-                                </tr>
-                                {productDetail.sourcing.map((e) => (
-                                    <tr>
-                                        <td className={classes.td}>{e.loc_name}</td>
-                                        <td className={classes.td}>{e.qty_total}</td>
-                                        <td className={classes.td}>{e.qty_reserved}</td>
-                                        <td className={classes.td}>{e.qty_saleable}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <Accordion
+                        elevation={0}
+                        expanded={expanded === 'stocklist'}
+                        onChange={handleChangeAccordion('stocklist')}
+                    >
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.accordion}>
+                            <h2 className={classes.title}>Stock List</h2>
+
+                        </AccordionSummary>
+                        <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
+                            <div className={classes.formField}>
+                                <table className={classes.table}>
+                                    <tbody>
+                                        <tr className={classes.tr}>
+                                            <th className={classes.th}>Location</th>
+                                            <th className={classes.th}>Qty Total</th>
+                                            <th className={classes.th}>Qty Reserved</th>
+                                            <th className={classes.th}>Qty Saleable</th>
+                                        </tr>
+                                        {productDetail.sourcing.map((e, i) => (
+                                            <tr key={i}>
+                                                <td className={classes.td}>{e.loc_name}</td>
+                                                <td className={classes.td}>{e.qty_total}</td>
+                                                <td className={classes.td}>{e.qty_reserved}</td>
+                                                <td className={classes.td}>{e.qty_saleable}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </AccordionDetails>
+                    </Accordion>
                 </div>
+
+                {productDetail.vendor_price && productDetail.vendor_price.length
+                    ? (
+                        <div className={classes.content}>
+                            <Accordion
+                                elevation={0}
+                                expanded={expanded === 'vendor_price'}
+                                onChange={handleChangeAccordion('vendor_price')}
+                            >
+                                <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.accordion}>
+                                    <h2 className={classes.title}>Vendor Price List</h2>
+
+                                </AccordionSummary>
+                                <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
+                                    <div className={classes.formField}>
+                                        <table className={classes.table}>
+                                            <tbody>
+                                                <tr className={classes.tr}>
+                                                    <th className={classes.th}>Vendor</th>
+                                                    <th className={classes.th}>Location</th>
+                                                    <th className={classes.th}>Price</th>
+                                                </tr>
+                                                {productDetail.vendor_price.map((e, i) => {
+                                                    const optionsVendor = e.price.map((p) => ({
+                                                        label: p.location.loc_name,
+                                                        value: p.location.loc_id,
+                                                    }));
+                                                    return (
+                                                        <tr key={i}>
+                                                            <td className={classes.td}>{e.vendor.company_name}</td>
+                                                            <td className={classes.td}>
+                                                                <Select
+                                                                    value={selected[i]}
+                                                                    onChange={(ev) => {
+                                                                        const temp = [...selected];
+                                                                        temp[i] = Number(ev.target.value);
+                                                                        setSelected(temp);
+                                                                    }}
+                                                                    dataOptions={optionsVendor}
+                                                                    enableEmpty={false}
+                                                                />
+                                                            </td>
+                                                            <td className={classes.td}>
+                                                                <span style={{ fontWeight: 'bold' }}>Price :</span>
+                                                                <span>
+                                                                    {
+                                                                ` IDR${e.price.find((vp) => (vp.location.loc_id === selected[i]))?.price}`
+                                                                    }
+                                                                </span>
+                                                                <br />
+                                                                <span style={{ fontWeight: 'bold' }}>Special Price :</span>
+                                                                <span>
+                                                                    {
+                                                                    ` IDR${e.price.find((vp) => (vp.location.loc_id === selected[i]))?.special_price}`
+                                                                    }
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+                    ) : null}
+
             </Paper>
         </>
     );

@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 16px',
         borderRadius: 16,
         backgroundColor: 'unset',
+        paddingBottom: 20,
         boxShadow: 'none',
         '& .title-information': {
             [theme.breakpoints.down('xs')]: {
@@ -75,8 +76,9 @@ const useStyles = makeStyles((theme) => ({
             paddingRight: 10,
             paddingLeft: 0,
         },
-        paddingLeft: 20,
+        paddingRight: 30,
         paddingTop: 10,
+        textAlign: 'right',
     },
     label: {
         color: colorText,
