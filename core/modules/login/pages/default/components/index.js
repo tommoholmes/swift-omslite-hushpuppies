@@ -42,6 +42,11 @@ const Login = (props) => {
                                             </InputAdornment>
                                         ),
                                     }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            handleSubmit();
+                                        }
+                                    }}
                                 />
                             </div>
                             <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
@@ -58,6 +63,11 @@ const Login = (props) => {
                                                 <img alt="" src="/assets/img/icon-lock.svg" className={classes.iconImg} />
                                             </InputAdornment>
                                         ),
+                                    }}
+                                    onKeyPress={(ev) => {
+                                        if (ev.key === 'Enter') {
+                                            handleSubmit();
+                                        }
                                     }}
                                 />
                             </div>
