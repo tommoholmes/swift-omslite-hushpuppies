@@ -36,7 +36,7 @@ const Core = (props) => {
                 text: res.data.bulkOrderReallocation,
                 variant: 'success',
             });
-            setTimeout(() => router.push('/sales/orderqueue'), 250);
+            setTimeout(() => router.push('/order/orderqueue'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({

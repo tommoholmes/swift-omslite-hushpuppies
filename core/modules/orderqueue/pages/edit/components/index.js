@@ -70,7 +70,7 @@ const OrderQueueEditContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(parent ? `/sales/${parent}` : '/sales/orderqueue')}
+                onClick={() => router.push(parent ? `/order/${parent}` : '/order/orderqueue')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

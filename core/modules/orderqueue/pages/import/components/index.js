@@ -22,7 +22,7 @@ const ProductListImport = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(`/sales/${tab_status}`)}
+                onClick={() => router.push(`/order/${tab_status}`)}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
