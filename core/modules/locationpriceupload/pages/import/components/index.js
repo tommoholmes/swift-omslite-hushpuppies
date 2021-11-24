@@ -7,6 +7,7 @@ import DropFile from '@common_dropfile';
 import clsx from 'clsx';
 import useStyles from '@modules/locationpriceupload/pages/import/components/style';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Head from 'next/head';
 
 const LocationPriceUploadImport = (props) => {
     const { formik, urlDownload, handleDropFile } = props;
@@ -15,6 +16,9 @@ const LocationPriceUploadImport = (props) => {
 
     return (
         <>
+            <Head>
+                <title>Price Location Upload</title>
+            </Head>
             <Button
                 className={classes.btnBack}
                 onClick={() => router.push('/cataloginventory/locationpriceupload')}
@@ -33,6 +37,7 @@ const LocationPriceUploadImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Price Location Upload</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <span className={classes.label}>
@@ -40,9 +45,8 @@ const LocationPriceUploadImport = (props) => {
                                 Download the Sample CSV
                             </a>
                         </span>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                     </div>
-                    <div className={classes.formField}>
+                    <div className={clsx(classes.formField, classes.textLeft)}>
                         <DropFile
                             title="Please select the file : "
                             error={formik.errors.binary && formik.touched.binary}

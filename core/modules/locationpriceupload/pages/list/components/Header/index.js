@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Manage Price By Location</h2>
+            <h2 className={classes.title}>Manage Price</h2>
             <a>
                 <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/locationpriceupload/import')}>
                     Upload Price
