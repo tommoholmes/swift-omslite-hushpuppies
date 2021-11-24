@@ -36,9 +36,15 @@ const BatchDialog = (props) => {
                     Batch By
                     {' '}
                     {title}
-                    <p className={classes.textTitleChild}>
-                        Maximum number of SKU per pick list
-                    </p>
+                    {(title === 'SKU') ? (
+                        <p className={classes.textTitleChild}>
+                            Maximum number of SKU per pick list
+                        </p>
+                    ) : (
+                        <p className={classes.textTitleChild}>
+                            How many picker per batch?
+                        </p>
+                    )}
                 </DialogTitle>
                 <DialogContent classes={{ root: clsx(classes.content, classes.contentCounter) }}>
                     <div className={`${classes.counter} ${classes.counterBtn}`} onClick={handleMin}>
