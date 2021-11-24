@@ -32,7 +32,7 @@ const ProductListContent = (props) => {
         id: product.entity_id,
         productStatus: product.product_status.label,
         actions: () => (
-            <Link href={`/cataloginventory/productlist/edit/${product.entity_id}`}>
+            <Link href={`/product/productlist/edit/${product.entity_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),

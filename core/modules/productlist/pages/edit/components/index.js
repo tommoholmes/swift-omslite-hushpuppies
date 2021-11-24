@@ -221,7 +221,7 @@ const ProductListEditContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/cataloginventory/productlist')}
+                onClick={() => router.push('/product/productlist')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

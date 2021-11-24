@@ -174,7 +174,7 @@ const Sidebar = ({
                 {menuList
                     && menuList.map((menu) => (
                         <div key={menu.key}>
-                            {aclDetail[0] && aclDetail[0].acl_code.includes(menu.aclCode) && (!menu.hide) && (
+                            {aclDetail[0] && (aclDetail[0].acl_code.includes(menu.aclCode) || menu.notInAcl) && (!menu.hide) && (
                                 <div className={classes.divMenu} key={menu.key}>
                                     <ListItem
                                         button

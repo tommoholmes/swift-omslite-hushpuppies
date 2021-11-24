@@ -13,7 +13,7 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Product List</h2>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/cataloginventory/productlist/import')}
+                onClick={() => router.push('/product/productlist/import')}
             >
                 Product Upload
             </Button>
