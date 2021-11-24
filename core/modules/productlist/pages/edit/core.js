@@ -73,7 +73,7 @@ const ContentWrapper = (props) => {
                 text: 'Success Update Product!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/cataloginventory/productlist'), 250);
+            setTimeout(() => router.push('/product/productlist'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({

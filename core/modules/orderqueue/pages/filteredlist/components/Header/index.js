@@ -13,7 +13,7 @@ const HeaderContent = ({ showBulkButton = false }) => {
             <h2 className={classes.title}>Manage Order Queue</h2>
             {/* <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/sales/orderqueue/create')}
+                onClick={() => router.push('/order/orderqueue/create')}
             >
                 Create Sales Channel
             </Button> */}
@@ -21,7 +21,7 @@ const HeaderContent = ({ showBulkButton = false }) => {
             && (
                 <Button
                     className={classes.buttonAdd}
-                    onClick={() => router.push('/sales/failed/import')}
+                    onClick={() => router.push('/order/failed/import')}
                 >
                     Bulk Reallocation
                 </Button>

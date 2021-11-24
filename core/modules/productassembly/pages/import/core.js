@@ -2,17 +2,15 @@ import React, { useEffect } from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import gqlService from '@modules/orderqueue/services/graphql';
+import gqlService from '@modules/productassembly/services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
-    const router = useRouter();
-    const [bulkOrderReallocation] = gqlService.bulkOrderReallocation();
-    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'bulk_order_reallocation' });
-    const tab_status = router && router.query && router.query.tab_status;
+    const [uploadProductAssembly] = gqlService.uploadProductAssembly();
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'product_assembly' });
+    const [errorHtml, setErrorHtml] = React.useState('');
 
     useEffect(() => {
         downloadList();
@@ -27,23 +25,32 @@ const Core = (props) => {
             binary,
         };
         window.backdropLoader(true);
-        bulkOrderReallocation({
+        uploadProductAssembly({
             variables,
-        }).then((res) => {
+        }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: res.data.bulkOrderReallocation,
+                text: 'Order Import Success',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/order/orderqueue'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
+            const regex = /(<([^>]+)>)/ig;
+            if (regex.test(e.message)) {
+                setErrorHtml(e.message);
+                window.toastMessage({
+                    open: true,
+                    text: 'Error',
+                    variant: 'error',
+                });
+            } else {
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            }
         });
     };
 
@@ -55,11 +62,13 @@ const Core = (props) => {
             binary: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
+            setErrorHtml('');
             handleSubmit(values);
         },
     });
 
     const handleDropFile = (files) => {
+        setErrorHtml('');
         const fileName = files[0].file.name;
         const { baseCode } = files[0];
         const binarySplited = baseCode.split(',');
@@ -72,7 +81,7 @@ const Core = (props) => {
         formik,
         urlDownload,
         handleDropFile,
-        tab_status,
+        errorHtml,
     };
 
     return (

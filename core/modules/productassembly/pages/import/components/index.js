@@ -1,43 +1,34 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
-import { useRouter } from 'next/router';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DropFile from '@common_dropfile';
 import clsx from 'clsx';
-import useStyles from '@modules/orderqueue/pages/import/components/style';
+import useStyles from '@modules/productassembly/pages/import/components/style';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const ProductListImport = (props) => {
     const {
         formik,
         urlDownload,
         handleDropFile,
-        tab_status,
+        errorHtml,
     } = props;
     const classes = useStyles();
-    const router = useRouter();
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push(`/order/${tab_status}`)}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
-                />
-            </Button>
-            <h2 className={classes.titleTop}>Bulk Order Reallocation</h2>
+            <h2 className={classes.titleTop}>Bulk Import</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
+                    {errorHtml
+                        && (
+                            <div className={classes.errorHtml}>
+                                <CancelIcon />
+                                <div style={{ paddingLeft: 5 }} dangerouslySetInnerHTML={{ __html: errorHtml }} />
+                            </div>
+                        )}
                     <div className={classes.formField}>
                         <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                     </div>

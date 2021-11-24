@@ -1,21 +1,19 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
 import React from 'react';
 import Button from '@common_button';
 import { useRouter } from 'next/router';
-import useStyles from '@modules/productlist/pages/list/components/Header/style';
+import useStyles from '@modules/orderqueue/pages/list/components/Header/style';
 
-const HeaderContent = (props) => {
+const HeaderContent = () => {
     const classes = useStyles();
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Product List</h2>
+            <h2 className={classes.title}>Product Assembly</h2>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/product/productlist/import')}
+                onClick={() => router.push('/product/productassembly/import')}
             >
-                Product Upload
+                Import Product Assembly
             </Button>
         </div>
     );

@@ -13,13 +13,13 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Manage Order Queue</h2>
             {/* <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/sales/orderqueue/create')}
+                onClick={() => router.push('/order/orderqueue/create')}
             >
                 Create Sales Channel
             </Button> */}
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/sales/orderqueue/import')}
+                onClick={() => router.push('/order/orderqueue/import')}
             >
                 Bulk Reallocation
             </Button>

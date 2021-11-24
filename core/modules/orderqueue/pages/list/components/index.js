@@ -103,7 +103,7 @@ const OrderQueueListContent = (props) => {
         ...orderQueue,
         id: orderQueue.id,
         actions: () => (
-            <Link href={`/sales/orderqueue/edit/${orderQueue.id}`}>
+            <Link href={`/order/orderqueue/edit/${orderQueue.id}`}>
                 <a className="link-button">Edit</a>
             </Link>
         ),
