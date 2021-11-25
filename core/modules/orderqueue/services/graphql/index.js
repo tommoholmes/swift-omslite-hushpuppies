@@ -10,35 +10,64 @@ const fetchPolicy = {
 };
 
 export const getOrderQueueList = (variables) => useLazyQuery(Schema.getOrderQueueList, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getOrderQueueById = (variables) => useQuery(Schema.getOrderQueueById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const setReallocation = (variables) => useMutation(Schema.setReallocation, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const isAccessAllowed = (variables) => useQuery(Schema.isAccessAllowed, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
+export const isAccessAllowedLazy = (options) => useLazyQuery(Schema.isAccessAllowed, {
+    ...options,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const exportOrderToCsv = (options) => useLazyQuery(Schema.exportOrderToCsv, {
-    ...options, ...context, ...fetchPolicy,
+    ...options,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const bulkOrderReallocation = (variables) => useMutation(Schema.bulkOrderReallocation, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const orderImport = (variables) => useMutation(Schema.orderImport, {
-    variables, ...context,
+    variables,
+    ...context,
+});
+
+export const acceptMarketplaceOrderQueue = (variables) => useMutation(Schema.acceptMarketplaceOrderQueue, {
+    variables,
+    ...context,
+});
+
+export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
+    ...context,
+    ...options,
+    fetchPolicy: 'no-cache',
 });
 
 export default {
@@ -50,4 +79,7 @@ export default {
     bulkOrderReallocation,
     downloadSampleCsv,
     orderImport,
+    isAccessAllowedLazy,
+    acceptMarketplaceOrderQueue,
+    getActivity,
 };

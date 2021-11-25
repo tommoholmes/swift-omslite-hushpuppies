@@ -1,18 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const getOrderQueueList = gql`
-    query getOrderQueueList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-        $filter: OrderFilterInput,
-        $sort: OrderSortInput,
-    ){
-        getOrderQueueList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
-            filter: $filter,
-            sort: $sort,
-        ){
+    query getOrderQueueList($pageSize: Int!, $currentPage: Int!, $filter: OrderFilterInput, $sort: OrderSortInput) {
+        getOrderQueueList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 id
                 channel_order_increment_id
@@ -36,12 +26,8 @@ export const getOrderQueueList = gql`
 `;
 
 export const getOrderQueueById = gql`
-    query getOrderQueueById(
-        $id: Int!,
-    ){
-        getOrderQueueById(
-            id: $id
-        ){
+    query getOrderQueueById($id: Int!) {
+        getOrderQueueById(id: $id) {
             id
             is_allow_to_reallocate_order
             is_allow_to_recreate_order
@@ -101,72 +87,63 @@ export const getOrderQueueById = gql`
 `;
 
 export const setReallocation = gql`
-    mutation setReallocation(
-        $id: Int!,
-        $type: String!,
-    ){
-        setReallocation(
-            id: $id,
-            type: $type,
-        )
+    mutation setReallocation($id: Int!, $type: String!) {
+        setReallocation(id: $id, type: $type)
     }
 `;
 
 export const isAccessAllowed = gql`
-    query isAccessAllowed(
-        $acl_code: String!,
-    ){
-        isAccessAllowed(
-            acl_code: $acl_code
-        )
+    query isAccessAllowed($acl_code: String!) {
+        isAccessAllowed(acl_code: $acl_code)
     }
 `;
 
 export const exportOrderToCsv = gql`
-    query exportOrderToCsv(
-        $id: [Int],
-        $filter: OrderFilterInput,
-        $sort: OrderSortInput,
-    ){
-        exportOrderToCsv(
-            id: $id,
-            filter: $filter,
-            sort: $sort,
-        )
+    query exportOrderToCsv($id: [Int], $filter: OrderFilterInput, $sort: OrderSortInput) {
+        exportOrderToCsv(id: $id, filter: $filter, sort: $sort)
     }
 `;
 
 export const bulkOrderReallocation = gql`
-    mutation bulkOrderReallocation(
-        $binary: String!,
-    ){
-        bulkOrderReallocation(
-            input: {
-                binary: $binary,
-            }
-        )
+    mutation bulkOrderReallocation($binary: String!) {
+        bulkOrderReallocation(input: { binary: $binary })
     }
 `;
 
 export const downloadSampleCsv = gql`
-    mutation downloadSampleCsv(
-        $type: String!,
-    ){
-        downloadSampleCsv(
-            type: $type,
-        )
+    mutation downloadSampleCsv($type: String!) {
+        downloadSampleCsv(type: $type)
     }
 `;
 
 export const orderImport = gql`
-    mutation orderImport(
-        $binary: String!,
-    ){
-        orderImport(
-            input: {
-                binary: $binary,
-            }
-        )
+    mutation orderImport($binary: String!) {
+        orderImport(input: { binary: $binary })
+    }
+`;
+
+export const acceptMarketplaceOrderQueue = gql`
+    mutation acceptMarketplaceOrderQueue($binary: String!) {
+        acceptMarketplaceOrderQueue(input: { binary: $binary })
+    }
+`;
+
+export const getActivity = gql`
+    query getActivity($code: String!) {
+        getActivity(code: $code, by_session: true) {
+            activity_id
+            activity_code
+            run_status
+            data_total
+            data_processed
+            started_at
+            snapshot_at
+            finished_at
+            run_by
+            run_type
+            attachment
+            error_message
+        }
     }
 `;
 
@@ -179,4 +156,6 @@ export default {
     bulkOrderReallocation,
     downloadSampleCsv,
     orderImport,
+    acceptMarketplaceOrderQueue,
+    getActivity,
 };

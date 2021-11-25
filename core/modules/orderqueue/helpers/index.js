@@ -17,3 +17,18 @@ export const optionsStatus = [
         idValue: 'processing',
     },
 ];
+
+export const bulkToolsOptions = [
+    {
+        name: 'Accept Marketplace Order',
+        acl: 'sales_order_queue_marketplace_accept',
+        sample: 'bulk_accept_order_marketplace',
+        activity: 'accept_marketplace_order_queue',
+    },
+    {
+        name: 'Order Import',
+        acl: 'sales_order_import',
+        sample: 'order_import',
+        activity: null,
+    },
+];
