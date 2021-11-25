@@ -19,12 +19,12 @@ const clitoolsListContent = (props) => {
 
     const columns = [
         { field: 'id', headerName: 'ID', sortable: true, initialSort: 'DESC' },
-        { field: 'title', headerName: 'Title' },
-        { field: 'status', headerName: 'Status', hideable: true },
-        { field: 'created_at', headerName: 'Created At', hideable: true },
-        { field: 'execute_at', headerName: 'Execute At', hideable: true },
-        { field: 'finish_at', headerName: 'Finished At', hideable: true },
-        { field: 'command', headerName: 'Command', hideable: true },
+        { field: 'title', headerName: 'Title', sortable: true },
+        { field: 'status', headerName: 'Status', sortable: true, hideable: true },
+        { field: 'created_at', headerName: 'Created At', sortable: true, hideable: true },
+        { field: 'execute_at', headerName: 'Execute At', sortable: true, hideable: true },
+        { field: 'finish_at', headerName: 'Finished At', sortable: true, hideable: true },
+        { field: 'command', headerName: 'Command', sortable: true, hideable: true },
     ];
 
     const rows = queueList.map((queue) => ({
