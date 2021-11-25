@@ -74,7 +74,10 @@ const useStyles = makeStyles((theme) => ({
         border: '1px solid',
         borderColor: colorText,
         borderRadius: 20,
-        height: 36,
+        height: 40,
+        '& .MuiOutlinedInput-input:-webkit-autofill': {
+            height: 0,
+        },
     },
     autocompleteRoot: {
         width: 'calc(100% - 300px)',
