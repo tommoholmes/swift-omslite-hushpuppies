@@ -3,7 +3,9 @@
 import React from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
+import { useRouter } from 'next/router';
 import DropFile from '@common_dropfile';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
 import useStyles from '@modules/productassembly/pages/import/components/style';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -16,9 +18,25 @@ const ProductListImport = (props) => {
         errorHtml,
     } = props;
     const classes = useStyles();
+    const router = useRouter();
 
     return (
         <>
+            <Button
+                className={classes.btnBack}
+                onClick={() => router.push('/product/productassembly')}
+                variant="contained"
+                style={{ marginRight: 16 }}
+            >
+                <ChevronLeftIcon style={{
+                    fontSize: 30,
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+                />
+            </Button>
             <h2 className={classes.titleTop}>Bulk Import</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
