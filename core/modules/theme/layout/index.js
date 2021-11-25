@@ -94,12 +94,12 @@ const Layout = (props) => {
             key: 'order',
             label: 'Order',
             children: [
-                // {
-                //     aclCode: 'oms_lite_sales_order_queue',
-                //     key: 'orderqueue',
-                //     label: 'Orders',
-                //     url: '/sales/orderqueue',
-                // },
+                {
+                    aclCode: 'oms_lite_sales_order_queue',
+                    key: 'orderqueue_all',
+                    label: 'All Orders',
+                    url: '/order/allorder',
+                },
                 {
                     aclCode: 'oms_lite_sales_order_queue_allocating',
                     key: 'orderqueue_allocating',

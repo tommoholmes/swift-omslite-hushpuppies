@@ -10,14 +10,14 @@ import { optionsStatus } from '@modules/orderqueue/helpers';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getOrderQueueList, setReallocation, varExport, handleExport, setVarExport } = props;
+    const { data, loading, getOrderQueueList, varExport, handleExport, setVarExport } = props;
     const orderQueueList = (data && data.getOrderQueueList && data.getOrderQueueList.items) || [];
     const orderQueueTotal = (data && data.getOrderQueueList && data.getOrderQueueList.total_count) || 0;
 
     const columns = [
-        { field: 'id', headerName: 'ID', sortable: true, initialSort: 'DESC', hidden: true },
+        { field: 'id', headerName: 'ID', sortable: true, hidden: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
-        { field: 'created_at', headerName: 'Channel Order Date', sortable: true, hideable: true },
+        { field: 'created_at', headerName: 'Channel Order Date', sortable: true, hideable: true, initialSort: 'DESC' },
         { field: 'channel_order_status', headerName: 'Channel Order Status', sortable: true, hideable: true },
         { field: 'last_updated', headerName: 'Last Updated', sortable: true, hideable: true },
         { field: 'channel_code', headerName: 'Channel Code', sortable: true, hideable: true },
@@ -103,7 +103,7 @@ const OrderQueueListContent = (props) => {
         ...orderQueue,
         id: orderQueue.id,
         actions: () => (
-            <Link href={`/order/orderqueue/edit/${orderQueue.id}`}>
+            <Link href={`/order/allorder/edit/${orderQueue.id}`}>
                 <a className="link-button">Edit</a>
             </Link>
         ),
@@ -119,41 +119,42 @@ const OrderQueueListContent = (props) => {
         ),
     }));
 
-    const actions = [
-        {
-            label: 'Set as New',
-            message: 'Are you sure to confirm ?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await variables.id.map((id) => setReallocation({
-                    variables: {
-                        id,
-                        type: 'new',
-                    },
-                }));
-            },
-        },
-        {
-            label: 'Set as Reallocation',
-            message: 'Are you sure to confirm ?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await variables.id.map((id) => setReallocation({
-                    variables: {
-                        id,
-                        type: 'allocation',
-                    },
-                }));
-            },
-        },
-    ];
+    // const actions = [
+    //     {
+    //         label: 'Set as New',
+    //         message: 'Are you sure to confirm ?',
+    //         onClick: async (checkedRows) => {
+    //             const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+    //             await variables.id.map((id) => setReallocation({
+    //                 variables: {
+    //                     id,
+    //                     type: 'new',
+    //                 },
+    //             }));
+    //         },
+    //     },
+    //     {
+    //         label: 'Set as Reallocation',
+    //         message: 'Are you sure to confirm ?',
+    //         onClick: async (checkedRows) => {
+    //             const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+    //             await variables.id.map((id) => setReallocation({
+    //                 variables: {
+    //                     id,
+    //                     type: 'allocation',
+    //                 },
+    //             }));
+    //         },
+    //     },
+    // ];
 
     return (
         <>
             <Header />
             <Table
                 filters={filters}
-                actions={actions}
+                // actions={actions}
+                hideActions
                 rows={rows}
                 getRows={getOrderQueueList}
                 loading={loading}
