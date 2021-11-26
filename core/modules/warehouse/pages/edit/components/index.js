@@ -63,7 +63,7 @@ const WarehouseEditContent = (props) => {
                                         filter: {
                                             framework: { in: 'marketplace' },
                                         },
-                                        pageSize: 50,
+                                        pageSize: 0,
                                         currentPage: 1,
                                     },
                                 }
@@ -105,8 +105,16 @@ const WarehouseEditContent = (props) => {
                                 && getLocationListRes.data.getLocationList
                                 && getLocationListRes.data.getLocationList.items
                             }
+                            getOptionsVariables={
+                                {
+                                    variables: {
+                                        pageSize: 0,
+                                        currentPage: 1,
+                                    },
+                                }
+                            }
                             getOptions={getLocationList}
-                            getOptionLabel={(option) => ((option && (`${option.loc_code } - ${ option.loc_name}`)) || '')}
+                            getOptionLabel={(option) => ((option && (`${option.loc_code} - ${option.loc_name}`)) || '')}
                             primaryKey="loc_id"
                             labelKey="loc_code"
                         />
