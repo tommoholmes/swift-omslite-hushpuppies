@@ -143,6 +143,13 @@ const Layout = (props) => {
                     notInAcl: true,
                 },
                 {
+                    aclCode: 'sales_order_queue_bulk_tools',
+                    key: 'orderqueue_bulk_tools',
+                    label: 'Bulk Tools',
+                    url: '/order/orderqueue/bulktools',
+                    notInAcl: true,
+                },
+                {
                     aclCode: 'oms_lite_sales_order_queue_bulk_import',
                     key: 'orderqueue_bulk_import',
                     label: 'Bulk Import',
@@ -746,10 +753,15 @@ const Layout = (props) => {
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={classes.root}>
-                {showHeader()
-                    && (
-                        <Header notificationRes={notificationRes} mappedMenuList={mappedMenuList} breadcrumbData={getBreadcrumbData()} open={open} setOpen={setOpen} />
-                    )}
+                {showHeader() && (
+                    <Header
+                        notificationRes={notificationRes}
+                        mappedMenuList={mappedMenuList}
+                        breadcrumbData={getBreadcrumbData()}
+                        open={open}
+                        setOpen={setOpen}
+                    />
+                )}
                 {showSidebar() && (
                     <>
                         <Sidebar
