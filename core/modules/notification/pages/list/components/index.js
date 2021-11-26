@@ -26,11 +26,6 @@ const NotificationListContent = (props) => {
         { field: 'attachment', headerName: 'Attachment' },
     ];
 
-    const [checked, setChecked] = React.useState({
-        read: false,
-        unread: false,
-    });
-
     const filters = [
         { field: 'id', name: 'id_from', type: 'from', label: 'ID From', initialValue: '' },
         { field: 'id', name: 'id_to', type: 'to', label: 'ID To', initialValue: '' },
@@ -103,7 +98,7 @@ const NotificationListContent = (props) => {
             name: 'is_read',
             type: 'in',
             label: '',
-            initialValue: [''],
+            initialValue: [],
             component: ({ filterValue, setFilterValue }) => (
                 <FormGroup>
                     <FormControlLabel
@@ -114,11 +109,11 @@ const NotificationListContent = (props) => {
                                 onChange={(e) => {
                                     const index = filterValue.indexOf('1');
                                     if (index !== -1 && !e.target.checked) {
-                                        const temp = filterValue;
+                                        const temp = [...filterValue];
                                         temp.splice(index, 1);
                                         setFilterValue(temp);
                                     } else {
-                                        const temp = filterValue;
+                                        const temp = [...filterValue];
                                         if (temp[0] !== '') {
                                             temp.push('1');
                                         } else {
@@ -129,7 +124,7 @@ const NotificationListContent = (props) => {
                                 }}
                             />
                         )}
-                        label="Is Read"
+                        label="Read"
                     />
                     <FormControlLabel
                         className={classes.controllable}
@@ -139,11 +134,11 @@ const NotificationListContent = (props) => {
                                 onChange={(e) => {
                                     const index = filterValue.indexOf('0');
                                     if (index !== -1 && !e.target.checked) {
-                                        const temp = filterValue;
+                                        const temp = [...filterValue];
                                         temp.splice(index, 1);
                                         setFilterValue(temp);
                                     } else {
-                                        const temp = filterValue;
+                                        const temp = [...filterValue];
                                         if (temp[0] !== '') {
                                             temp.push('0');
                                         } else {

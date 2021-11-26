@@ -36,7 +36,7 @@ const AdminStoreEditContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Edit Customer</h2>
+            <h2 className={classes.titleTop}>Edit User</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>
@@ -58,7 +58,7 @@ const AdminStoreEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>Lastname</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Lastname</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
@@ -92,7 +92,7 @@ const AdminStoreEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Password</span>
+                            <span className={clsx(classes.label)}>New Password</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
