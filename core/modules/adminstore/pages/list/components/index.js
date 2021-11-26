@@ -12,11 +12,11 @@ const AdminStoreContent = (props) => {
     const adminTotal = (data && data.getAdminStoreList && data.getAdminStoreList.total_count) || 0;
 
     const columns = [
-        { field: 'entity_id', headerName: 'ID' },
-        { field: 'name', headerName: 'Name' },
-        { field: 'email', headerName: 'Email' },
-        { field: 'location', headerName: 'Location' },
-        { field: 'group_label', headerName: 'Group' },
+        { field: 'entity_id', headerName: 'ID', sortable: true },
+        { field: 'name', headerName: 'Name', hideable: true, sortable: true },
+        { field: 'email', headerName: 'Email', hideable: true, sortable: true },
+        { field: 'location', headerName: 'Location', hideable: true, sortable: true },
+        { field: 'group_label', headerName: 'Group', hideable: true, sortable: true },
         { field: 'actions', headerName: 'Action', hideable: true },
     ];
 

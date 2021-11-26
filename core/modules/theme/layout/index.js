@@ -149,6 +149,13 @@ const Layout = (props) => {
                     url: '/order/orderqueue/bulktools',
                     notInAcl: true,
                 },
+                {
+                    aclCode: 'oms_lite_sales_order_queue_bulk_import',
+                    key: 'orderqueue_bulk_import',
+                    label: 'Bulk Import',
+                    url: '/order/bulkimport',
+                    notInAcl: true,
+                },
                 // { aclCode: 'orderreallocation', label: 'Order Reallocation', url: '/sales/orderreallocation' },
             ],
         },

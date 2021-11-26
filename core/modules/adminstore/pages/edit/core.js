@@ -55,7 +55,6 @@ const ContentWrapper = (props) => {
             firstname: Yup.string().required('Required!'),
             lastname: Yup.string().required('Required!'),
             email: Yup.string().required('Required!'),
-            password: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
             const {

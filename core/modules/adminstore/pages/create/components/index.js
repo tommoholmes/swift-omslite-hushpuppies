@@ -36,7 +36,7 @@ const AdminStoreCreateContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Edit Customer</h2>
+            <h2 className={classes.titleTop}>Create User</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>
@@ -58,7 +58,7 @@ const AdminStoreCreateContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>Lastname</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Lastname</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
