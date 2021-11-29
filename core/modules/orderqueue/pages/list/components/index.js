@@ -59,7 +59,7 @@ const OrderQueueListContent = (props) => {
         {
             field: 'status',
             name: 'status',
-            type: 'match',
+            type: 'eq',
             label: 'Queue Status',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
