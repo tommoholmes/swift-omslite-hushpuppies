@@ -175,6 +175,21 @@ const Layout = (props) => {
             notInAcl: true,
         },
         {
+            aclCode: 'oms_lite_marketing',
+            key: 'marketing',
+            label: 'Marketing',
+            children: [
+                {
+                    aclCode: 'oms_lite_promotion',
+                    key: 'promotion',
+                    label: 'Promotion',
+                    url: '/marketing/promotion',
+                    notInAcl: true,
+                },
+            ],
+            notInAcl: true,
+        },
+        {
             aclCode: 'header_pick_pack',
             key: 'pickpack',
             label: 'Pick and Pack',
