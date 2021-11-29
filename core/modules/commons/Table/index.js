@@ -84,6 +84,7 @@ const CustomTable = (props) => {
         rows,
         getRows,
         deleteRows,
+        deleteLabel = 'Delete',
         loading,
         filters: initialFilters = [],
         initialPage = 0,
@@ -200,7 +201,7 @@ const CustomTable = (props) => {
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
             {
-                label: 'Delete',
+                label: deleteLabel,
                 message: 'Are you sure you want to delete?',
                 onClick: async (_checkedRows) => {
                     const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
