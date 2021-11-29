@@ -317,7 +317,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'oms_lite_location_price_upload',
                     key: 'locationpriceupload',
-                    label: 'Price by Location',
+                    label: 'Manage Price',
                     url: '/cataloginventory/locationpriceupload',
                 },
                 {
