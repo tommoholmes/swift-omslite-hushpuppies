@@ -12,6 +12,7 @@ const ProductMappingImport = (props) => {
     const {
         formik,
         urlDownload,
+        urlDownloadFix,
         handleDropFile,
     } = props;
     const classes = useStyles();
@@ -36,15 +37,21 @@ const ProductMappingImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Import Mapping</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
                     <div className={classes.formField}>
-                        <span className={classes.label}><a href={urlDownload} className={classes.linkDownload}>Download the Sample CSV</a></span>
-                        <span className={classes.label} style={{ display: 'block' }}>
-                            <a href={urlDownload} className={classes.linkDownload}>Download Fixed Attribute File</a>
+                        <span className={classes.label}>
+                            <a href={urlDownload} className={classes.linkDownload}>
+                                Download the Sample CSV
+                            </a>
                         </span>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
+                        <span className={classes.label} style={{ display: 'block' }}>
+                            <a href={urlDownloadFix} className={classes.linkDownload}>
+                                Download Fixed Attribute File
+                            </a>
+                        </span>
                     </div>
-                    <div className={classes.formField}>
+                    <div className={clsx(classes.formField, classes.textLeft)}>
                         <DropFile
                             title="Please select the file : "
                             error={(

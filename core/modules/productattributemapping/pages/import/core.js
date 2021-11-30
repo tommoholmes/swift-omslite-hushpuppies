@@ -11,13 +11,16 @@ const Core = (props) => {
     } = props;
     const router = useRouter();
     const [uploadStatusProductCategory] = gqlService.uploadStatusProductCategory();
-    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'marketplace_product_attribute_mapping' });
+    const [downloadListFix, downloadListFixRes] = gqlService.downloadSampleCsv({ type: 'marketplace_fixed_product_attribute_mapping' });
 
     useEffect(() => {
         downloadList();
+        downloadListFix();
     }, []);
 
     const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
+    const urlDownloadFix = downloadListFixRes && downloadListFixRes.data && downloadListFixRes.data.downloadSampleCsv;
 
     const handleSubmit = ({
         binary,
@@ -68,6 +71,7 @@ const Core = (props) => {
     const contentProps = {
         formik,
         urlDownload,
+        urlDownloadFix,
         handleDropFile,
     };
 
