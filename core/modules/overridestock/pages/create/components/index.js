@@ -12,9 +12,7 @@ import clsx from 'clsx';
 import useStyles from '@modules/overridestock/pages/create/components/style';
 
 const OverridedStockCreateContent = (props) => {
-    const {
-        formik,
-    } = props;
+    const { formik } = props;
     const classes = useStyles();
     const router = useRouter();
     const [getVirtualStockList, getVirtualStockListRes] = virtualStockGqlService.getVirtualStockList();
@@ -28,13 +26,14 @@ const OverridedStockCreateContent = (props) => {
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
                 />
             </Button>
             <h2 className={classes.titleTop}>Create Override Stock</h2>
@@ -57,6 +56,12 @@ const OverridedStockCreateContent = (props) => {
                                 && getVirtualStockListRes.data.getVirtualStockList.items
                             }
                             getOptions={getVirtualStockList}
+                            getOptionsVariables={{
+                                variables: {
+                                    pageSize: null,
+                                    currentPage: 1,
+                                },
+                            }}
                             primaryKey="vs_id"
                             labelKey="vs_name"
                         />
@@ -118,11 +123,7 @@ const OverridedStockCreateContent = (props) => {
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained">
                         Submit
                     </Button>
                 </div>
