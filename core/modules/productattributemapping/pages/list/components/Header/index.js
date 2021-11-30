@@ -18,12 +18,12 @@ const HeaderContent = (props) => {
                 >
                     Add New Mapping
                 </Button>
-                <Button
+                {/* <Button
                     className={classes.buttonAdd}
                     onClick={() => router.push('/marketplace/productattributemapping/export')}
                 >
                     Export Marketplace Product Attributes
-                </Button>
+                </Button> */}
                 <Button
                     className={classes.buttonAdd}
                     onClick={() => router.push('/marketplace/productattributemapping/import')}

@@ -33,8 +33,8 @@ const AdminStoreContent = (props) => {
     }));
 
     const filters = [
-        { field: 'entity_id', name: 'entity_id', type: 'from', label: 'ID from', initialValue: '' },
-        { field: 'entity_id', name: 'entity_id', type: 'to', label: 'ID to', initialValue: '' },
+        { field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID from', initialValue: '' },
+        { field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID to', initialValue: '' },
         { field: 'name', name: 'name', type: 'like', label: 'Name', initialValue: '' },
         { field: 'email', name: 'email', type: 'like', label: 'Email', initialValue: '' },
         {

@@ -6,7 +6,7 @@ import Autocomplete from '@common_autocomplete';
 import channelGqlService from '@modules/channel/services/graphql';
 import Header from '@modules/orderqueue/pages/filteredlist/components/Header';
 import useStyles from '@modules/orderqueue/pages/filteredlist/components/style';
-import { optionsStatus } from '@modules/orderqueue/helpers';
+// import { optionsStatus } from '@modules/orderqueue/helpers';
 
 const OrderQueueListContent = (props) => {
     const classes = useStyles();
@@ -58,21 +58,21 @@ const OrderQueueListContent = (props) => {
                 );
             },
         },
-        {
-            field: 'status',
-            name: 'status',
-            type: 'match',
-            label: 'Queue Status',
-            initialValue: '',
-            component: ({ filterValue, setFilterValue }) => (
-                <Autocomplete
-                    style={{ width: 228 }}
-                    value={optionsStatus.find((e) => e.idValue === filterValue)}
-                    onChange={(newValue) => setFilterValue(newValue && newValue.idValue)}
-                    options={optionsStatus}
-                />
-            ),
-        },
+        // {
+        //     field: 'status',
+        //     name: 'status',
+        //     type: 'like',
+        //     label: 'Queue Status',
+        //     initialValue: '',
+        //     component: ({ filterValue, setFilterValue }) => (
+        //         <Autocomplete
+        //             style={{ width: 228 }}
+        //             value={optionsStatus.find((e) => e.idValue === filterValue)}
+        //             onChange={(newValue) => setFilterValue(newValue && newValue.idValue)}
+        //             options={optionsStatus}
+        //         />
+        //     ),
+        // },
         { field: 'error_log', name: 'error_log', type: 'like', label: 'Error Log', initialValue: '' },
         { field: 'tab_status', name: 'tab_status', type: 'eq', label: 'Tab Status', class: 'fixed', initialValue: tab_status, hidden: true },
     ];
