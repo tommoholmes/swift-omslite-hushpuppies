@@ -21,8 +21,13 @@ export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampl
     variables, ...context,
 });
 
+export const multidisableProductCategory = (variables) => useMutation(Schema.multidisableProductCategory, {
+    variables, ...context,
+});
+
 export default {
     getProductCategoryList,
     uploadStatusProductCategory,
     downloadSampleCsv,
+    multidisableProductCategory,
 };

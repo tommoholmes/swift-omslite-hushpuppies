@@ -13,4 +13,4 @@ const Page = (props) => (
 // Page.getInitialProps = async () => ({ namespacesRequired: ['common', 'home'] });
 // export default withApollo({ ssr: true })(withTranslation()(Page));
 
-export default withApollo({ ssr: true })(Page);
+export default withApollo({ ssr: false })(Page);
