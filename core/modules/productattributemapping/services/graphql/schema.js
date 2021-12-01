@@ -17,6 +17,7 @@ export const getMarketplaceProductAttributeMappingList = gql`
                 entity_id
                 marketplace_code
                 category_id
+                marketplace_category_name
                 marketplace_attribute_name
                 attribute_code
             }
@@ -60,6 +61,18 @@ export const downloadSampleCsv = gql`
     ){
         downloadSampleCsv(
             type: $type,
+        )
+    }
+`;
+
+export const importMarketplaceProductAttributeMapping = gql`
+    mutation importMarketplaceProductAttributeMapping(
+        $binary: String!,
+    ){
+        importMarketplaceProductAttributeMapping(
+            input: {
+                binary: $binary,
+            }
         )
     }
 `;
@@ -142,6 +155,7 @@ export default {
     deleteMarketplaceProductAttributeMapping,
     downloadMarketplaceProductAttribute,
     uploadStatusProductCategory,
+    importMarketplaceProductAttributeMapping,
     downloadSampleCsv,
     getMpProductAttributeMappingMpOptions,
     getMpProductAttributeMappingMpCategories,
