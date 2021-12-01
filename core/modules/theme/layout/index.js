@@ -171,6 +171,13 @@ const Layout = (props) => {
                     url: '/product/productassembly',
                     notInAcl: true,
                 },
+                {
+                    aclCode: 'oms_lite_product_bin',
+                    key: 'productbin',
+                    label: 'Product Bin',
+                    url: '/product/productbin',
+                    notInAcl: true,
+                },
             ],
             notInAcl: true,
         },
