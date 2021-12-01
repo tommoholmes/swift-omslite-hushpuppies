@@ -47,7 +47,7 @@ const ContentWrapper = (props) => {
         onSubmit: (values) => {
             const { entity_id, attribute_id } = values;
             const valuesToSubmit = {
-                attribute_id: Number(attribute_id),
+                attribute_id: Number(attribute_id.value),
                 entity_id: Number(entity_id.entity_id),
             };
             handleSubmit(valuesToSubmit);
@@ -99,6 +99,7 @@ const ContentWrapper = (props) => {
                             eq: '1',
                         },
                     },
+                    pageSize: 0,
                 },
             });
         }

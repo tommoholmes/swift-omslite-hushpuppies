@@ -15,7 +15,7 @@ const ProductMappingListContent = (props) => {
     const columns = [
         { field: 'entity_id', headerName: 'ID', sortable: true, initialSort: 'ASC' },
         { field: 'marketplace_code', headerName: 'Marketplace Code', sortable: true },
-        { field: 'category_id', headerName: 'Marketplace Category', sortable: true },
+        { field: 'marketplace_category_name', headerName: 'Marketplace Category', sortable: true },
         { field: 'marketplace_attribute_name', headerName: 'Marketplace Attribute Name', sortable: true },
         { field: 'attribute_code', headerName: 'Attribute Code', sortable: true },
     ];
@@ -29,7 +29,7 @@ const ProductMappingListContent = (props) => {
         { field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID from', initialValue: '' },
         { field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID to', initialValue: '' },
         { field: 'marketplace_code', marketplace_code: 'marketplace_code', type: 'like', label: 'Marketplace Code', initialValue: '' },
-        { field: 'category_id', name: 'category_id', type: 'like', label: 'Marketplace Category', initialValue: '' },
+        { field: 'marketplace_category_name', name: 'marketplace_category_name', type: 'like', label: 'Marketplace Category', initialValue: '' },
         {
             field: 'marketplace_attribute_name',
             name: 'marketplace_attribute_name',

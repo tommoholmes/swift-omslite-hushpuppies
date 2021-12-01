@@ -10,7 +10,7 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const [uploadStatusProductCategory] = gqlService.uploadStatusProductCategory();
+    const [importMarketplaceProductAttributeMapping] = gqlService.importMarketplaceProductAttributeMapping();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'marketplace_product_attribute_mapping' });
     const [downloadListFix, downloadListFixRes] = gqlService.downloadSampleCsv({ type: 'marketplace_fixed_product_attribute_mapping' });
 
@@ -29,7 +29,7 @@ const Core = (props) => {
             binary,
         };
         window.backdropLoader(true);
-        uploadStatusProductCategory({
+        importMarketplaceProductAttributeMapping({
             variables,
         }).then(() => {
             window.backdropLoader(false);
