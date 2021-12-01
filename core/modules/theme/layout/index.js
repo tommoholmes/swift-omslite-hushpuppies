@@ -153,35 +153,6 @@ const Layout = (props) => {
             ],
         },
         {
-            aclCode: 'oms_lite_header_product',
-            key: 'product',
-            label: 'Product',
-            children: [
-                {
-                    aclCode: 'oms_lite_product_list',
-                    key: 'productlist',
-                    label: 'Products',
-                    url: '/product/productlist',
-                    notInAcl: true,
-                },
-                {
-                    aclCode: 'oms_lite_product_assembly',
-                    key: 'productassembly',
-                    label: 'Product Assembly',
-                    url: '/product/productassembly',
-                    notInAcl: true,
-                },
-                {
-                    aclCode: 'oms_lite_product_bin',
-                    key: 'productbin',
-                    label: 'Product Bin',
-                    url: '/product/productbin',
-                    notInAcl: true,
-                },
-            ],
-            notInAcl: true,
-        },
-        {
             aclCode: 'header_pick_pack',
             key: 'pickpack',
             label: 'Pick and Pack',
@@ -285,6 +256,35 @@ const Layout = (props) => {
                     url: '/sales/rmastatuses',
                 },
             ],
+        },
+        {
+            aclCode: 'oms_lite_header_product',
+            key: 'product',
+            label: 'Product',
+            children: [
+                {
+                    aclCode: 'oms_lite_product_list',
+                    key: 'productlist',
+                    label: 'Products',
+                    url: '/product/productlist',
+                    notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_product_assembly',
+                    key: 'productassembly',
+                    label: 'Product Assembly',
+                    url: '/product/productassembly',
+                    notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_product_bin',
+                    key: 'productbin',
+                    label: 'Product Bin',
+                    url: '/product/productbin',
+                    notInAcl: true,
+                },
+            ],
+            notInAcl: true,
         },
         {
             aclCode: 'oms_lite_header_catalog_inventory',
@@ -402,12 +402,6 @@ const Layout = (props) => {
                     url: '/marketplace/marketplace',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_store',
-                    key: 'store',
-                    label: 'Store',
-                    url: '/marketplace/store',
-                },
-                {
                     aclCode: 'oms_lite_marketplace_warehouse',
                     key: 'warehouse',
                     label: 'Warehouse',
@@ -418,12 +412,6 @@ const Layout = (props) => {
                     key: 'productcategory',
                     label: 'Product Category',
                     url: '/marketplace/productcategory',
-                },
-                {
-                    aclCode: 'oms_lite_marketplace_attribute_set_mapping',
-                    key: 'attributesetmapping',
-                    label: 'Attribute Set Mapping',
-                    url: '/marketplace/attributesetmapping',
                 },
                 {
                     aclCode: 'oms_lite_mapping_product_attribute',
@@ -579,12 +567,6 @@ const Layout = (props) => {
                     key: 'logistixprovider',
                     label: 'Logistix Provider',
                     url: '/configurations/logistixprovider',
-                },
-                {
-                    aclCode: 'oms_lite_marketplace_feature',
-                    key: 'marketplacefeature',
-                    label: 'Marketplace Feature',
-                    url: '/configurations/marketplacefeature',
                 },
             ],
         },
