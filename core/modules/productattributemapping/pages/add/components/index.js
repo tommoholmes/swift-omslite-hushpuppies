@@ -34,7 +34,7 @@ const ProductAttributeMappingAddContent = (props) => {
     const variantWarn = () => {
         let message = '';
         const { maximum_variant_attribute, minimum_variant_attribute } = setting;
-        if (total > minimum_variant_attribute) {
+        if (total < minimum_variant_attribute) {
             message = `Minimum ${minimum_variant_attribute} variant attribute need mapping`;
         } else if (total > maximum_variant_attribute) {
             message = `Maximum ${maximum_variant_attribute} variant attribute need mapping. Please remove 
@@ -47,7 +47,7 @@ const ProductAttributeMappingAddContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/userdata/adminstore')}
+                onClick={() => router.push('/marketplace/productattributemapping')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -161,18 +161,21 @@ const ProductAttributeMappingAddContent = (props) => {
 
                     <br />
                     <h5 className={classes.titleSmall}>Mapping To</h5>
+                    <br />
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Product Attribute</span>
                         </div>
-                        <Select
-                            selectClasses={classes.fieldInput}
-                            formControlClasses={classes.selectControl}
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
                             name="attribute_id"
                             value={formik.values.attribute_id}
-                            onChange={formik.handleChange}
-                            dataOptions={dataMapAttribute}
+                            onChange={(e) => formik.setFieldValue('attribute_id', e)}
+                            primaryKey="value"
+                            labelKey="label"
+                            options={dataMapAttribute}
                             error={!!(formik.touched.attribute_id && formik.errors.attribute_id)}
+                            helperText={(formik.touched.attribute_id && formik.errors.attribute_id) || ''}
                             fullWidth
                         />
                     </div>
