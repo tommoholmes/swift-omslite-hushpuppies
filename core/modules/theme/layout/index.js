@@ -573,6 +573,12 @@ const Layout = (props) => {
                     label: 'Logistix Provider',
                     url: '/configurations/logistixprovider',
                 },
+                {
+                    aclCode: 'oms_lite_header_mpadapter',
+                    key: 'marketplacebrand',
+                    label: 'Marketplace Brand',
+                    url: '/configurations/marketplacebrand',
+                },
             ],
         },
         {
