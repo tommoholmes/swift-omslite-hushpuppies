@@ -1,22 +1,21 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/button-has-type */
-import React from 'react';
-import TextField from '@common_textfield';
+import React, { useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
-import Link from 'next/link';
 import Router from 'next/router';
 import Scan from '@common_barcodescanner';
 import useStyles from '@modules/batchlist/pages/sorting/components/style';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DialogInputSKU from '@modules/batchlist/pages/sorting/components/DialogInputSKU';
 
 const SortingItemContent = (props) => {
     const {
-        pickList, handleDetect, handleDoneSorting, name, sku, slot,
-        config, dataMultiple, loadSorting,
+        pickList, handleDetect, handleDoneSorting, name, sku, slot, config, dataMultiple, loadSorting, allowManualConfirm, formik,
     } = props;
     const classes = useStyles();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     return (
         <>
@@ -28,45 +27,54 @@ const SortingItemContent = (props) => {
                         handleClose={() => Router.push(`/pickpack/batchlist/edit/${pickList.id}`)}
                     />
                     {loadSorting && <CircularProgress className={classes.progress} />}
-                    <h2 className={classes.h2}>
-                        {name}
-                    </h2>
-                    <span className={classes.text}>
-                        {`SKU ${sku}`}
-                    </span>
+                    <h2 className={classes.h2}>{name}</h2>
+                    <span className={classes.text}>{`SKU ${sku}`}</span>
                     <br />
                     {!loadSorting && dataMultiple && (
                         <>
-                            <span className={classes.text}>
-                                Add to
-                            </span>
-                            {config === 'single_item'
-                                ? (
-                                    <span className={classes.textSlot}>
-                                        {`Slot ${slot}`}
-                                    </span>
-                                )
-                                : dataMultiple.map((item) => (
+                            <span className={classes.text}>Add to</span>
+                            {config === 'single_item' ? (
+                                <span className={classes.textSlot}>{`Slot ${slot}`}</span>
+                            ) : (
+                                dataMultiple.map((item) => (
                                     <div key={item.shipment_id} className={classes.itemSlot}>
-                                        <span className={classes.textSlot}>
-                                            {`Slot ${item.slot_no} : `}
-                                        </span>
-                                        <span className={classes.slotPcs}>
-                                            {`Qty ${item.qty}`}
-                                        </span>
+                                        <span className={classes.textSlot}>{`Slot ${item.slot_no} : `}</span>
+                                        <span className={classes.slotPcs}>{`Qty ${item.qty}`}</span>
                                     </div>
-                                ))}
+                                ))
+                            )}
                         </>
                     )}
                     <br />
 
-                    <Button
-                        className={classes.btn}
-                        onClick={handleDoneSorting}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={handleDoneSorting} variant="contained">
                         Done Sorting
                     </Button>
+                    {allowManualConfirm && (
+                        <>
+                            <br />
+                            <DialogInputSKU
+                                formik={formik}
+                                open={isDialogOpen}
+                                handleClose={() => {
+                                    setIsDialogOpen(false);
+                                }}
+                            />
+                            <button
+                                className="link-button"
+                                type="button"
+                                style={{
+                                    border: 'none',
+                                    background: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '15px',
+                                }}
+                                onClick={() => setIsDialogOpen(true)}
+                            >
+                                Input SKU Manually
+                            </button>
+                        </>
+                    )}
                 </div>
             </Paper>
         </>
