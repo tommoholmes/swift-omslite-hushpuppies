@@ -7,9 +7,11 @@ const Core = (props) => {
     } = props;
 
     const [getProductCategoryList, { data, loading }] = gqlService.getProductCategoryList();
+    const [multidisableProductCategory] = gqlService.multidisableProductCategory();
 
     const contentProps = {
         getProductCategoryList,
+        multidisableProductCategory,
         data,
         loading,
     };
