@@ -41,6 +41,12 @@ export const downloadSampleCsvBinBySKULoc = gql`
     }
 `;
 
+export const massDeleteProductBin = gql`
+    mutation massDeleteProductBin($id: [Int!]!) {
+        massDeleteProductBin(id: $id)
+    }
+`;
+
 export const getActivity = gql`
     query getActivity($code: String!, $by_session: Boolean!) {
         getActivity(code: $code, by_session: $by_session) {
@@ -66,5 +72,6 @@ export default {
     importProductBin,
     downloadSampleCsvBinBySKU,
     downloadSampleCsvBinBySKULoc,
+    massDeleteProductBin,
     getActivity,
 };

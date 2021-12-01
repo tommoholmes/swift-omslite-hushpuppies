@@ -30,6 +30,11 @@ export const downloadSampleCsvBinBySKULoc = (variables) => useMutation(Schema.do
     ...context,
 });
 
+export const massDeleteProductBin = (variables) => useMutation(Schema.massDeleteProductBin, {
+    variables,
+    ...context,
+});
+
 export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
     ...context,
     ...options,
@@ -41,5 +46,6 @@ export default {
     importProductBin,
     downloadSampleCsvBinBySKU,
     downloadSampleCsvBinBySKULoc,
+    massDeleteProductBin,
     getActivity,
 };

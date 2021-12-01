@@ -7,7 +7,7 @@ import Autocomplete from '@common_autocomplete';
 import gqlServiceLoc from '@modules/location/services/graphql';
 
 const ProductBinListContent = (props) => {
-    const { data, loading, getProductBinList } = props;
+    const { data, loading, getProductBinList, massDeleteProductBin } = props;
     const productBinList = (data && data.getProductBinList && data.getProductBinList.items) || [];
     const productBinTotal = (data && data.getProductBinList && data.getProductBinList.total_count) || 0;
 
@@ -98,6 +98,7 @@ const ProductBinListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={productBinTotal}
+                deleteRows={massDeleteProductBin}
                 showCheckbox
             />
         </>

@@ -5,9 +5,11 @@ const Core = (props) => {
     const { Content } = props;
 
     const [getProductBinList, { data, loading }] = gqlService.getProductBinList();
+    const [massDeleteProductBin] = gqlService.massDeleteProductBin();
 
     const contentProps = {
         getProductBinList,
+        massDeleteProductBin,
         data,
         loading,
     };
