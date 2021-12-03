@@ -4,14 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import useStyles from '@modules/login/pages/default/components/style';
-import Link from 'next/link';
+import useStyles from '@modules/forgotpassword/pages/createnewpassword/components/style';
 
-const Login = (props) => {
+const CreateNewPassword = (props) => {
     const classes = useStyles();
-    const {
-        email, setEmail, password, setPassword, handleSubmit,
-    } = props;
+    const { formik } = props;
 
     return (
         <div className={clsx(classes.loginContainer)}>
@@ -21,38 +18,18 @@ const Login = (props) => {
                 </div>
                 <div className={classes.loginContent}>
                     <Typography variant="h6" gutterBottom className={classes.textTitle}>
-                        Sign in to your account
+                        Set a New Password
                     </Typography>
-                    <form>
+
+                    <form onSubmit={(e) => formik.handleSubmit(e)}>
                         <div className="row center-xs start-sm">
                             <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
                                 <TextField
-                                    name="email"
-                                    placeholder="Email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className={classes.textInput}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <img alt="" src="/assets/img/icon-email.svg" className={classes.iconImg} />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    onKeyPress={(ev) => {
-                                        if (ev.key === 'Enter') {
-                                            handleSubmit();
-                                        }
-                                    }}
-                                />
-                            </div>
-                            <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
-                                <TextField
-                                    name="password"
-                                    placeholder="Password"
                                     type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    name="password"
+                                    placeholder="Your a new password"
+                                    value={formik.password}
+                                    onChange={formik.handleChange}
                                     className={classes.textInput}
                                     InputProps={{
                                         startAdornment: (
@@ -61,22 +38,33 @@ const Login = (props) => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                    onKeyPress={(ev) => {
-                                        if (ev.key === 'Enter') {
-                                            handleSubmit();
-                                        }
-                                    }}
+                                    error={!!(formik.touched.password && formik.errors.password)}
+                                    helperText={(formik.touched.password && formik.errors.password) || ''}
                                 />
                             </div>
                             <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
-                                <Button onClick={handleSubmit} variant="contained" className={classes.btnLogin}>
-                                    <span className={classes.btnLoginText}>Login</span>
+                                <TextField
+                                    type="password"
+                                    name="password_confirmation"
+                                    placeholder="Confirm your a new password"
+                                    value={formik.password_confirmation}
+                                    onChange={formik.handleChange}
+                                    className={classes.textInput}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <img alt="" src="/assets/img/icon-lock.svg" className={classes.iconImg} />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    error={!!(formik.touched.password_confirmation && formik.errors.password_confirmation)}
+                                    helperText={(formik.touched.password_confirmation && formik.errors.password_confirmation) || ''}
+                                />
+                            </div>
+                            <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
+                                <Button type="submit" variant="contained" className={classes.btnLogin}>
+                                    <span className={classes.btnLoginText}>Set a New Password</span>
                                 </Button>
-                                <Typography variant="h6" className={classes.btnTextForgot}>
-                                    <Link href="/forgotpassword">
-                                        <a>Forgot your password?</a>
-                                    </Link>
-                                </Typography>
                             </div>
                         </div>
                     </form>
@@ -89,4 +77,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default CreateNewPassword;
