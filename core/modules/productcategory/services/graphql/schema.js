@@ -4,16 +4,21 @@ export const getProductCategoryList = gql`
     query getProductCategoryList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: ProductCategoryFilterInput,
+        $sort: ProductCategorySortInput,
     ){
         getProductCategoryList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 entity_id
                 marketplace_code
                 marketplace_category_id
                 marketplace_category_name
+                is_active
             }
             page_info {
                 current_page
@@ -47,8 +52,19 @@ export const downloadSampleCsv = gql`
     }
 `;
 
+export const multidisableProductCategory = gql`
+    mutation multidisableProductCategory(
+        $id: [Int!]!
+    ){
+        multidisableProductCategory(
+            id: $id
+        )
+    }
+`;
+
 export default {
     getProductCategoryList,
     uploadStatusProductCategory,
     downloadSampleCsv,
+    multidisableProductCategory,
 };

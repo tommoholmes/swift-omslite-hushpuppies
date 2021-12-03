@@ -11,7 +11,7 @@ const Core = (props) => {
     } = props;
     const router = useRouter();
     const [uploadStatusProductCategory] = gqlService.uploadStatusProductCategory();
-    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'marketplace_product_category_update_status' });
 
     useEffect(() => {
         downloadList();

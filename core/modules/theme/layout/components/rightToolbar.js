@@ -26,9 +26,7 @@ const RightToolbar = ({ notificationRes }) => {
     const router = useRouter();
     const [removeCustomerToken] = loginGqlService.removeToken();
     const [getCustomer, getCustomerRes] = loginGqlService.getCustomer();
-    const getCustomerFromGql = () => getCustomerRes
-        && getCustomerRes.data
-        && getCustomerRes.data.customer;
+    const getCustomerFromGql = () => getCustomerRes && getCustomerRes.data && getCustomerRes.data.customer;
     const [username, setUsername] = React.useState('');
     const handleSetUsername = (customer) => {
         const firstname = customer && customer.firstname;
@@ -52,13 +50,13 @@ const RightToolbar = ({ notificationRes }) => {
     }, [getCustomerFromGql()]);
 
     const handleLogout = () => {
-        removeCustomerToken().then(() => {
-            removeIsLoginFlagging();
-            Cookies.remove(custDataNameCookie);
-            router.push('/login');
-        }).catch(() => {
-
-        });
+        removeCustomerToken()
+            .then(() => {
+                removeIsLoginFlagging();
+                Cookies.remove(custDataNameCookie);
+                router.push('/login');
+            })
+            .catch(() => {});
     };
     const { loading, data } = notificationRes;
 
@@ -89,43 +87,48 @@ const RightToolbar = ({ notificationRes }) => {
                     </StyledBadge>
                 </IconButton>
                 <ul style={{ width: 270 }}>
-                    {loading ? <CircularProgress size={20} />
-                        : (
-                            <div>
-                                <a className="viewMessage" href="/oms/notification">
-                                    <li style={{ textAlign: 'left', margin: '5px 0' }}>
-                                        You have
-                                        {' '}
-                                        {data?.getNotificationList.total_count || 0}
-                                        {' '}
-                                        unread
-                                        notifications
-                                    </li>
-                                </a>
-                                {data?.getNotificationList?.items?.map((notif) => (
-                                    <li style={{
-                                        color: 'black', borderTop: '1px solid #B1BCDB', margin: 0, width: 250, textOverflow: 'ellipsis',
+                    {loading ? (
+                        <CircularProgress size={20} />
+                    ) : (
+                        <div>
+                            <a className="viewMessage" href="/oms/notification">
+                                <li style={{ textAlign: 'left', margin: '5px 0' }}>
+                                    You have
+                                    {' '}
+                                    {data?.getNotificationList.total_count || 0}
+                                    {' '}
+                                    unread notifications
+                                </li>
+                            </a>
+                            {data?.getNotificationList?.items?.map((notif, idx) => (
+                                <li
+                                    key={idx}
+                                    style={{
+                                        color: 'black',
+                                        borderTop: '1px solid #B1BCDB',
+                                        margin: 0,
+                                        width: 250,
+                                        textOverflow: 'ellipsis',
                                     }}
-                                    >
-                                        <span style={{ color: '#B1BCDB', fontSize: 12 }}>{notif.created_at}</span>
-                                        <br />
-                                        <span style={{ color: '#435179', fontSize: 14, fontWeight: 'bold' }}>
-                                            {notif.entity_type}
-                                        </span>
-                                        <br />
-                                        <span style={{
+                                >
+                                    <span style={{ color: '#B1BCDB', fontSize: 12 }}>{notif.created_at}</span>
+                                    <br />
+                                    <span style={{ color: '#435179', fontSize: 14, fontWeight: 'bold' }}>{notif.entity_type}</span>
+                                    <br />
+                                    <span
+                                        style={{
                                             color: '#435179',
                                             fontSize: 12,
                                             overflow: 'hidden',
                                         }}
-                                        >
-                                            {notif.message.slice(0, 30)}
-                                            ...
-                                        </span>
-                                    </li>
-                                ))}
-                            </div>
-                        )}
+                                    >
+                                        {notif.message.slice(0, 30)}
+                                        ...
+                                    </span>
+                                </li>
+                            ))}
+                        </div>
+                    )}
                 </ul>
             </li>
 
@@ -169,20 +172,20 @@ const RightToolbar = ({ notificationRes }) => {
                         left: 100%;
                     }
                     a {
-                        color: #FFFFFF;
+                        color: #ffffff;
                         text-decoration: none;
                         white-space: nowrap;
                         font-size: 14px;
                     }
                     a:hover {
                         border-bottom: 1px dashed #fff;
-                        color: #BE1F93;
+                        color: #be1f93;
                     }
                     .linkOut {
-                        color: #BE1F93;
+                        color: #be1f93;
                     }
                     .viewMessage {
-                        color: #BE1F93;
+                        color: #be1f93;
                         font-size: 10px;
                     }
                 `}

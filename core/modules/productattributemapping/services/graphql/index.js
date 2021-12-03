@@ -25,6 +25,10 @@ export const uploadStatusProductCategory = (variables) => useMutation(Schema.upl
     variables, ...context,
 });
 
+export const importMarketplaceProductAttributeMapping = (variables) => useMutation(Schema.importMarketplaceProductAttributeMapping, {
+    variables, ...context,
+});
+
 export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
     variables, ...context,
 });
@@ -66,4 +70,5 @@ export default {
     getMarketplaceProductAttributeList,
     getMpProductVariantAttributeSetting,
     saveMarketplaceProductAttributeMapping,
+    importMarketplaceProductAttributeMapping,
 };
