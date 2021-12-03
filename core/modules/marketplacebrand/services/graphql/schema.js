@@ -43,8 +43,8 @@ export const registerMarketplaceBrand = gql`
 `;
 
 export const getAvailableMpToConnect = gql`
-    query getAvailableMpToConnect($store_id: Int!){
-        getAvailableMpToConnect(store_id: $store_id, callback_url: ""){
+    query getAvailableMpToConnect($store_id: Int!, $callback_url: String!){
+        getAvailableMpToConnect(store_id: $store_id, callback_url: $callback_url){
             brand_id
             store_id
             marketplaces {
@@ -74,13 +74,95 @@ export const getAvailableMpToConnect = gql`
                 marketplace_code
                 marketplace_name
                 status
+                store_detail_id
               }
         }
     }
 `;
 
+export const getLocationList = gql`
+    query {
+        getLocationList(pageSize: 0) {
+        items {
+            loc_id
+            loc_code
+            loc_name
+            loc_city {
+            id
+            label
+            }
+            loc_street
+        }
+        total_count
+        page_info {
+            page_size
+            current_page
+            total_pages
+        }
+        }
+    }
+`;
+
+export const disconnectMarketplaceChannel = gql`
+    mutation disconnectMarketplaceChannel(
+        $input: DisconnectMarketplaceChannelInput!
+    ) {
+        disconnectMarketplaceChannel(input: $input)
+    }  
+`;
+
+export const reconnectMarketplaceChannel = gql`
+    mutation reconnectMarketplaceChannel(
+        $input: ReconnectMarketplaceChannelInput!
+    ) {
+        reconnectMarketplaceChannel(input: $input)
+    }  
+`;
+
+export const registerMarketplaceChannel = gql`
+mutation registerMarketplaceChannel(
+    $input: RegisterMarketplaceChannelInput!
+) {
+    registerMarketplaceChannel(input: $input)
+}  
+`;
+
+export const updateMarketplaceLocation = gql`
+    mutation updateMarketplaceLocation (
+        $store_id: Int!
+    ){
+        updateMarketplaceLocation(store_id: $store_id)
+    }
+`;
+
+export const updateConnectedMarketplace = gql`
+    mutation updateConnectedMarketplace (
+        $store_id: Int!
+    ){
+        updateConnectedMarketplace(store_id: $store_id)
+    }
+`;
+
+export const getMarketplaceCredentials = gql`
+    query getMarketplaceCredentials($store_detail_id: Int!){
+        getMarketplaceCredentials(store_detail_id: $store_detail_id){
+            data_type
+            id
+            store_detail_id
+            type
+            value
+        }
+    }
+`;
 export default {
     getStoreList,
     registerMarketplaceBrand,
     getAvailableMpToConnect,
+    getLocationList,
+    reconnectMarketplaceChannel,
+    disconnectMarketplaceChannel,
+    registerMarketplaceChannel,
+    updateMarketplaceLocation,
+    getMarketplaceCredentials,
+    updateConnectedMarketplace,
 };
