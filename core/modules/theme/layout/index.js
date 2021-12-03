@@ -437,6 +437,12 @@ const Layout = (props) => {
                     label: 'Update Stock History',
                     url: '/marketplace/updatestockhistory',
                 },
+                {
+                    aclCode: 'oms_lite_marketplace_product_promo',
+                    key: 'productpromo',
+                    label: 'Product Promo',
+                    url: '/marketplace/productpromo',
+                },
             ],
         },
         {
