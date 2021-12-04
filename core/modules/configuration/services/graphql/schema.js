@@ -4,10 +4,14 @@ export const getConfigurationTadaList = gql`
     query getConfigurationTadaList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: ConfigurationTadaInputFilter,
+        $sort: ConfigurationTadaSort
     ){
         getConfigurationTadaList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort
         ){
             items {
                 id
