@@ -1,7 +1,7 @@
 // import { withTranslation } from '@i18n';
 import { withApollo } from '@lib_apollo';
-import Content from '@modules/login/pages/default/components';
-import Core from '@modules/login/pages/default/core';
+import Content from '@modules/productcategory/pages/pull/components';
+import Core from '@modules/productcategory/pages/pull/core';
 
 const Page = (props) => (
     <Core
@@ -11,6 +11,6 @@ const Page = (props) => (
 );
 
 // Page.getInitialProps = async () => ({ namespacesRequired: ['common', 'home'] });
-// export default withApollo({ ssr: true })(withTranslation()(Page));
+// export default withApollo({ ssr: false })(withTranslation()(Page));
 
 export default withApollo({ ssr: false })(Page);

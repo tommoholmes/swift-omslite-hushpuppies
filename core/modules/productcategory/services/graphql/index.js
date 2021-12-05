@@ -25,9 +25,12 @@ export const multidisableProductCategory = (variables) => useMutation(Schema.mul
     variables, ...context,
 });
 
+export const pullProductCategory = () => useMutation(Schema.pullProductCategory);
+
 export default {
     getProductCategoryList,
     uploadStatusProductCategory,
     downloadSampleCsv,
     multidisableProductCategory,
+    pullProductCategory,
 };

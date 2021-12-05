@@ -3,6 +3,7 @@
 import React from 'react';
 import Table from '@common_table';
 import Header from '@modules/productcategory/pages/list/components/Header';
+// import MuiAlert from '@material-ui/lab/Alert';
 
 const ProductCategoryListContent = (props) => {
     const { data, loading, getProductCategoryList, multidisableProductCategory } = props;
@@ -21,6 +22,7 @@ const ProductCategoryListContent = (props) => {
         { field: 'marketplace_code', name: 'marketplace_code', type: 'like', label: 'Marketplace', initialValue: '' },
         { field: 'marketplace_category_id', name: 'marketplace_category_id', type: 'like', label: 'Category ID', initialValue: '' },
         { field: 'marketplace_category_name', name: 'marketplace_category_name', type: 'like', label: 'Category Name', initialValue: '' },
+        { field: 'is_active', type: 'eq', initialValue: '1', hidden: true },
     ];
 
     const actions = [
@@ -53,6 +55,7 @@ const ProductCategoryListContent = (props) => {
     return (
         <>
             <Header />
+            {/* <MuiAlert severity="success">This is a success alert — check it out!</MuiAlert> */}
             <Table
                 filters={filters}
                 rows={rows}
