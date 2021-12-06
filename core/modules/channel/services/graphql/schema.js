@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const getChannelList = gql`
-    query getChannelList($pageSize: Int!, $currentPage: Int!, $filter: ChannelFilterInput, $sort: ChannelSortInput, $querySearch: String) {
+    query getChannelList($pageSize: Int, $currentPage: Int!, $filter: ChannelFilterInput, $sort: ChannelSortInput, $querySearch: String) {
         getChannelList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort, search: $querySearch) {
             items {
                 channel_id
