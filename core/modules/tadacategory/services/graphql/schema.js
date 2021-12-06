@@ -4,10 +4,14 @@ export const getCategoryTadaList = gql`
     query getCategoryTadaList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: CategoryTadaInputFilter,
+        $sort: CategoryTadaSort,
     ){
         getCategoryTadaList(
             pageSize: $pageSize,
             currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
         ){
             items {
                 entity_id
