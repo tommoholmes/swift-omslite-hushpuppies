@@ -41,12 +41,20 @@ const ConfigurationTadaListContent = (props) => {
                 const labelKey = 'channel_name';
                 return (
                     <Autocomplete
-                        mode="server"
+                        mode="lazy"
                         style={{ width: 228 }}
                         getOptions={getChannelList}
                         value={channelOptions.find((e) => e[primaryKey] === filterValue)}
                         onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
                         options={channelOptions}
+                        getOptionsVariables={
+                            {
+                                variables: {
+                                    pageSize: null,
+                                    currentPage: 1,
+                                },
+                            }
+                        }
                         primaryKey={primaryKey}
                         labelKey={labelKey}
                     />
