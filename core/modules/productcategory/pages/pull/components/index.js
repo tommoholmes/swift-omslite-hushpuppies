@@ -11,7 +11,7 @@ const PullProductCategoryContent = (props) => {
         await pullProductCategory();
         if (data?.pullProductCategory === true) {
             setCookies('isPull', data.pullProductCategory);
-            await router.push('/marketplace/productcategory');
+            router.push('/marketplace/productcategory');
         }
     }, [data]);
 
