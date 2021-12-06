@@ -66,7 +66,18 @@ export const getMarketplaceProductPromoItemsList = gql`
     }
 `;
 
+export const updateMarketplaceProductPromoToMp = gql`
+    mutation updateMarketplaceProductPromoToMp(
+        $id: [Int!]
+    ){
+        updateMarketplaceProductPromoToMp(
+            id: $id
+        )
+    }
+`;
+
 export default {
     getMarketplaceProductPromoList,
     getMarketplaceProductPromoItemsList,
+    updateMarketplaceProductPromoToMp,
 };
