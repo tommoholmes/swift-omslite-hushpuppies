@@ -264,7 +264,7 @@ const CustomTable = (props) => {
                                         if (action.showMessage !== null) {
                                             setShowMessageActions(action.showMessage);
                                         } else {
-                                            setShowMessageActions(action.true);
+                                            setShowMessageActions(false);
                                         }
                                         if (action.label === 'Delete') {
                                             setOpenConfirmDialog(true);

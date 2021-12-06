@@ -6,17 +6,12 @@ const colorText = '#536777';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: '0 16px',
+        padding: '16px 0',
         borderRadius: 16,
-        backgroundColor: 'unset',
-        boxShadow: 'none',
-        position: 'relative',
     },
     content: {
-        padding: '15px 25px',
-        background: '#ffffff',
-        borderRadius: 16,
-        paddingTop: 25,
+        borderBottom: '3px solid #F5F7FB',
+        padding: '10px 29px 12px 22px',
     },
     btnBack: {
         display: 'inline-block',
