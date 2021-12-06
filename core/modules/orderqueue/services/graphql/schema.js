@@ -147,6 +147,16 @@ export const getActivity = gql`
     }
 `;
 
+export const marketplaceFetchOrder = gql`
+mutation marketplaceFetchOrder(
+    $input: MarketplaceFetchOrderInput!
+){
+    marketplaceFetchOrder(
+        input: $input,
+    )
+}
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -158,4 +168,5 @@ export default {
     orderImport,
     acceptMarketplaceOrderQueue,
     getActivity,
+    marketplaceFetchOrder,
 };

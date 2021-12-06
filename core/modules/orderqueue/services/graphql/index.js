@@ -70,6 +70,11 @@ export const getActivity = (options) => useLazyQuery(Schema.getActivity, {
     fetchPolicy: 'no-cache',
 });
 
+export const marketplaceFetchOrder = (variables) => useMutation(Schema.marketplaceFetchOrder, {
+    variables,
+    ...context,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -82,4 +87,5 @@ export default {
     isAccessAllowedLazy,
     acceptMarketplaceOrderQueue,
     getActivity,
+    marketplaceFetchOrder,
 };

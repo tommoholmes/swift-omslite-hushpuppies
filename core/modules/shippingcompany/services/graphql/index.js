@@ -9,32 +9,40 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getShippingCompanyList = (variables) => useLazyQuery(Schema.getShippingCompanyList, {
-    variables, ...context, ...fetchPolicy,
+export const getTadaShippingCompanyList = (variables) => useLazyQuery(Schema.getTadaShippingCompanyList, {
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const getShippingCompanyById = (variables) => useQuery(Schema.getShippingCompanyById, {
-    variables, ...context, ...fetchPolicy,
+    variables,
+    ...context,
+    ...fetchPolicy,
 });
 
 export const createShippingCompany = (variables) => useMutation(Schema.createShippingCompany, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const updateShippingCompany = (variables) => useMutation(Schema.updateShippingCompany, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const deleteShippingCompany = (variables) => useMutation(Schema.deleteShippingCompany, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export const multideleteShippingCompany = (variables) => useMutation(Schema.multideleteShippingCompany, {
-    variables, ...context,
+    variables,
+    ...context,
 });
 
 export default {
-    getShippingCompanyList,
+    getTadaShippingCompanyList,
     getShippingCompanyById,
     createShippingCompany,
     updateShippingCompany,

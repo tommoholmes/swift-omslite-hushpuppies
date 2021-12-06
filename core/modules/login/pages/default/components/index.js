@@ -5,15 +5,12 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import useStyles from '@modules/login/pages/default/components/style';
+import Link from 'next/link';
 
 const Login = (props) => {
     const classes = useStyles();
     const {
-        email,
-        setEmail,
-        password,
-        setPassword,
-        handleSubmit,
+        email, setEmail, password, setPassword, handleSubmit,
     } = props;
 
     return (
@@ -72,15 +69,13 @@ const Login = (props) => {
                                 />
                             </div>
                             <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
-                                <Button
-                                    onClick={handleSubmit}
-                                    variant="contained"
-                                    className={classes.btnLogin}
-                                >
+                                <Button onClick={handleSubmit} variant="contained" className={classes.btnLogin}>
                                     <span className={classes.btnLoginText}>Login</span>
                                 </Button>
                                 <Typography variant="h6" className={classes.btnTextForgot}>
-                                    Forgot your password?
+                                    <Link href="/forgotpassword">
+                                        <a>Forgot your password?</a>
+                                    </Link>
                                 </Typography>
                             </div>
                         </div>
@@ -90,9 +85,7 @@ const Login = (props) => {
             <div className={classes.containRight}>
                 <img alt="" src="/assets/img/swift-bg-login.png" className={classes.rightImg} />
             </div>
-
         </div>
-
     );
 };
 
