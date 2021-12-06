@@ -1,15 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Table from '@common_table';
-import Header from '@modules/productcategory/pages/list/components/Header';
-import MuiAlert from '@material-ui/lab/Alert';
+import { setCookies } from '@helper_cookies';
 
 const PullProductCategoryContent = (props) => {
     const { data, loading, pullProductCategory } = props;
     const router = useRouter();
-    router.push('/marketplace/productcategory');
+    useEffect(async () => {
+        await pullProductCategory();
+        if (data?.pullProductCategory === true) {
+            setCookies('isPull', data.pullProductCategory);
+            await router.push('/marketplace/productcategory');
+        }
+    }, [data]);
+
     return (
         <div />
     );
