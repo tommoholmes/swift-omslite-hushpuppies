@@ -1,20 +1,15 @@
 import { gql } from '@apollo/client';
 
-export const getShippingCompanyList = gql`
-    query getShippingCompanyList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-    ){
-        getShippingCompanyList(
-            pageSize: $pageSize,
-            currentPage: $currentPage
-        ){
+export const getTadaShippingCompanyList = gql`
+    query getTadaShippingCompanyList($pageSize: Int!, $currentPage: Int!, $filter: ShippingCompanyInputFilter, $sort: ShippingCompanySort) {
+        getTadaShippingCompanyList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 id
                 company_id
                 brand
                 shipping_method
                 is_active
+                is_active_label
             }
             total_count
             page_info {
@@ -27,12 +22,8 @@ export const getShippingCompanyList = gql`
 `;
 
 export const getShippingCompanyById = gql`
-    query getShippingCompanyById(
-        $id: Int!,
-    ){
-        getShippingCompanyById(
-            id: $id
-        ){
+    query getShippingCompanyById($id: Int!) {
+        getShippingCompanyById(id: $id) {
             id
             company_id
             brand
@@ -43,20 +34,8 @@ export const getShippingCompanyById = gql`
 `;
 
 export const createShippingCompany = gql`
-    mutation createShippingCompany(
-        $company_id: Int!,
-        $brand: String!,
-        $shipping_method: String!,
-        $is_active: Int!
-    ){
-        createShippingCompany(
-            input: {
-                company_id: $company_id,
-                brand: $brand,
-                shipping_method: $shipping_method,
-                is_active: $is_active
-            }
-        ){
+    mutation createShippingCompany($company_id: Int!, $brand: String!, $shipping_method: String!, $is_active: Int!) {
+        createShippingCompany(input: { company_id: $company_id, brand: $brand, shipping_method: $shipping_method, is_active: $is_active }) {
             company_id
             brand
             shipping_method
@@ -66,22 +45,8 @@ export const createShippingCompany = gql`
 `;
 
 export const updateShippingCompany = gql`
-    mutation updateShippingCompany(
-        $id: Int!,
-        $company_id: Int!,
-        $brand: String!,
-        $shipping_method: String!,
-        $is_active: Int!,
-    ){
-        updateShippingCompany(
-            id: $id,
-            input: {
-                company_id: $company_id,
-                brand: $brand,
-                shipping_method: $shipping_method,
-                is_active: $is_active
-            }
-        ){
+    mutation updateShippingCompany($id: Int!, $company_id: Int!, $brand: String!, $shipping_method: String!, $is_active: Int!) {
+        updateShippingCompany(id: $id, input: { company_id: $company_id, brand: $brand, shipping_method: $shipping_method, is_active: $is_active }) {
             id
             company_id
             brand
@@ -92,27 +57,19 @@ export const updateShippingCompany = gql`
 `;
 
 export const deleteShippingCompany = gql`
-    mutation deleteShippingCompany (
-        $id: Int!
-    ){
-        deleteShippingCompany(
-            id: $id
-        )
+    mutation deleteShippingCompany($id: Int!) {
+        deleteShippingCompany(id: $id)
     }
 `;
 
 export const multideleteShippingCompany = gql`
-    mutation multideleteShippingCompany (
-        $id: [Int!]!
-    ){
-        multideleteShippingCompany(
-            id: $id
-        )
+    mutation multideleteShippingCompany($id: [Int!]!) {
+        multideleteShippingCompany(id: $id)
     }
 `;
 
 export default {
-    getShippingCompanyList,
+    getTadaShippingCompanyList,
     getShippingCompanyById,
     createShippingCompany,
     updateShippingCompany,

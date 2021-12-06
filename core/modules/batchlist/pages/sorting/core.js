@@ -168,6 +168,7 @@ const ContentWrapper = (props) => {
                         getDataSortingMultiple(res);
                         setSku(values.sku);
                     }
+                    formik.resetForm();
                 })
                 .catch((e) => {
                     window.backdropLoader(false);
