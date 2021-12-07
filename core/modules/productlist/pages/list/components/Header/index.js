@@ -8,6 +8,8 @@ import useStyles from '@modules/productlist/pages/list/components/Header/style';
 const HeaderContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
+    const { handleFetchManual } = props;
+
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Product List</h2>
@@ -16,6 +18,13 @@ const HeaderContent = (props) => {
                 onClick={() => router.push('/product/productlist/import')}
             >
                 Product Upload
+            </Button>
+            <Button
+                className={classes.buttonAdd}
+                onClick={handleFetchManual}
+                style={{ marginRight: 10 }}
+            >
+                Product Fetch
             </Button>
         </div>
     );

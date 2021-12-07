@@ -36,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 20,
         fontWeight: 400,
     },
+    linkBack: {
+        display: 'block',
+        textDecoration: 'underline',
+        color: colorPurple,
+        marginTop: 50,
+        marginBottom: 20,
+    },
 }));
 
 export default useStyles;

@@ -10,6 +10,9 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+    const { loading: loadingConfigCamera, data: dataConfigCamera } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/batch/use_camera_to_scan',
+    });
     const batch_id = router && router.query && Number(router.query.batch);
     const shipment_id = router && router.query && Number(router.query.shipment);
 
@@ -42,10 +45,7 @@ const Core = (props) => {
         }
     };
 
-    const contentProps = {
-        data, loading, handleDetect, shipment_id,
-    };
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || loadingConfigCamera) {
         return (
             <Layout useBreadcrumbs={false}>
                 <div style={{
@@ -62,6 +62,15 @@ const Core = (props) => {
 
         );
     }
+
+    const contentProps = {
+        data,
+        loading,
+        handleDetect,
+        shipment_id,
+        useCamera: dataConfigCamera.getStoreConfig === '1',
+    };
+
     return (
         <Layout useBreadcrumbs={false}>
             <Content {...contentProps} />

@@ -6,11 +6,13 @@ import Paper from '@material-ui/core/Paper';
 import Router from 'next/router';
 import useStyles from '@modules/batchpack/pages/scan/components/style';
 import Scan from '@common_barcodescanner';
+import ManualScan from '@common_manualscanner';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Link from 'next/link';
 
 const ScanItemContent = (props) => {
     const {
-        data, loading, handleDetect, shipment_id,
+        data, loading, handleDetect, shipment_id, useCamera,
     } = props;
     const classes = useStyles();
     const dataToShow = data?.updatePickByBatchQtyPacked?.pick_by_batch_sort || null;
@@ -18,10 +20,19 @@ const ScanItemContent = (props) => {
         <>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <Scan
-                        handleDetect={handleDetect}
-                        handleClose={() => Router.push(`/pickpack/batchpack/detail/${shipment_id}`)}
-                    />
+                    {useCamera
+                        ? (
+                            <Scan
+                                handleDetect={handleDetect}
+                                handleClose={() => Router.push(`/pickpack/batchpack/detail/${shipment_id}`)}
+                            />
+                        )
+                        : (
+                            <ManualScan
+                                handleDetect={handleDetect}
+                            />
+                        )}
+
                     {loading ? <CircularProgress className={classes.progress} />
                         : dataToShow
                             ? (
@@ -33,6 +44,12 @@ const ScanItemContent = (props) => {
                                 </div>
                             )
                             : null}
+                    {!useCamera
+                        ? (
+                            <Link href={`/pickpack/batchpack/detail/${shipment_id}`}>
+                                <a className={classes.linkBack}>Back to Batch Items</a>
+                            </Link>
+                        ) : null}
                 </div>
             </Paper>
         </>

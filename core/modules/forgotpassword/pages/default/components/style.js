@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 24,
         color: '#536777',
         textAlign: 'center',
-        marginBottom: 30,
+        margin: '10px auto',
     },
     textInput: {
         width: '100%',
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     },
     btnTextForgot: {
         display: 'block',
-        marginTop: 26,
+        margin: '20px auto 30px auto',
         textAlign: 'center',
         fontSize: 14,
         color: '#536777',

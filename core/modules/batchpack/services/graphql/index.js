@@ -33,6 +33,10 @@ export const getShipmentStatusByType = (variables) => useLazyQuery(Schema.getShi
     variables, ...context, ...fetchPolicy,
 });
 
+export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getStoreShipmentList,
     getPackList,
@@ -40,4 +44,5 @@ export default {
     packShipment,
     nextStoreShipmentList,
     getShipmentStatusByType,
+    getStoreConfig,
 };

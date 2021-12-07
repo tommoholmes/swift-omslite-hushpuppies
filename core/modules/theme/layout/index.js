@@ -496,7 +496,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'oms_lite_tada_category',
                     key: 'tadacategory',
-                    label: 'Tada Category',
+                    label: 'Category',
                     url: '/tada/tadacategory',
                 },
                 {
@@ -585,6 +585,12 @@ const Layout = (props) => {
                     key: 'marketplacebrand',
                     label: 'Marketplace Brand',
                     url: '/configurations/marketplacebrand',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_feature',
+                    key: 'marketplacefeature',
+                    label: 'Marketplace Feature',
+                    url: '/configurations/marketplacefeature',
                 },
             ],
         },
