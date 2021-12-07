@@ -264,6 +264,9 @@ const useStyles = makeStyles((theme) => ({
     table: {
         borderCollapse: 'collapse',
         width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            width: '1500px',
+        },
     },
     tr: {
         borderBottom: '1px solid',
@@ -466,6 +469,27 @@ const useStyles = makeStyles((theme) => ({
     },
     dataSmallBlack: {
         fontFamily: font,
+    },
+    fieldQty: {
+        '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            display: 'none',
+        },
+        '&[type=number]': {
+            '-moz-appearance': 'textfield',
+        },
+        width: 40,
+        height: 30,
+        textAlign: 'center',
+    },
+    btnSecondary: {
+        margin: '10px 0px !important',
+        borderRadius: '20px !important',
+        backgroundColor: `${borderColor} !important`,
+        color: `${colorPurple} !important`,
+        '&:hover': {
+            backgroundColor: `${borderColor} !important`,
+        },
     },
 }));
 

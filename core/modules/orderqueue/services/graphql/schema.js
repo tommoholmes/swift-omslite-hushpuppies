@@ -69,6 +69,7 @@ export const getOrderQueueById = gql`
             created_at
             error_log
             order_item {
+                id
                 sku
                 base_price
                 sell_price
@@ -148,13 +149,15 @@ export const getActivity = gql`
 `;
 
 export const marketplaceFetchOrder = gql`
-mutation marketplaceFetchOrder(
-    $input: MarketplaceFetchOrderInput!
-){
-    marketplaceFetchOrder(
-        input: $input,
-    )
-}
+    mutation marketplaceFetchOrder($input: MarketplaceFetchOrderInput!) {
+        marketplaceFetchOrder(input: $input)
+    }
+`;
+
+export const editOrderItem = gql`
+    mutation editOrderItem($order_id: Int!, $order_items: [EditOrderItemInput!]!) {
+        editOrderItem(order_id: $order_id, order_items: $order_items)
+    }
 `;
 
 export default {
@@ -169,4 +172,5 @@ export default {
     acceptMarketplaceOrderQueue,
     getActivity,
     marketplaceFetchOrder,
+    editOrderItem,
 };

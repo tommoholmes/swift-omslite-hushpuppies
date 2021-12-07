@@ -75,6 +75,11 @@ export const marketplaceFetchOrder = (variables) => useMutation(Schema.marketpla
     ...context,
 });
 
+export const editOrderItem = (variables) => useMutation(Schema.editOrderItem, {
+    variables,
+    ...context,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -88,4 +93,5 @@ export default {
     acceptMarketplaceOrderQueue,
     getActivity,
     marketplaceFetchOrder,
+    editOrderItem,
 };
