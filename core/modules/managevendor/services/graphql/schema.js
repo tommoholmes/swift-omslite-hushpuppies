@@ -39,6 +39,8 @@ export const getCompanyById = gql`
             company_id
             company_name
             is_new_product
+            company_margin
+            is_product_approval
         }
     }
 `;
@@ -48,18 +50,26 @@ export const updateCompany = gql`
         $id: Int!,
         $company_code: String!,
         $company_name: String!,
+        $company_margin: Int,
+        $is_new_product: Int,
+        $is_product_approval: Int
     ){
         updateCompany(
             id: $id,
             input: {
                 company_code: $company_code,
-                company_name: $company_name
+                company_name: $company_name,
+                company_margin: $company_margin,
+                is_new_product: $is_new_product,
+                is_product_approval: $is_product_approval
             }
         ){
             company_code
             company_id
             company_name
+            company_margin
             is_new_product
+            is_product_approval
         }
     }
 `;
