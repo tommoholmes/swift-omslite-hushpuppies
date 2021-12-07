@@ -58,7 +58,11 @@ export const getAvailableMpToConnect = gql`
                 credentials {
                     channel_code
                     channel_name
-                    fields
+                    fields {
+                        description
+                        name
+                        type
+                    }
                     type
                     url
                     url_info {
@@ -129,9 +133,15 @@ mutation registerMarketplaceChannel(
 
 export const updateMarketplaceLocation = gql`
     mutation updateMarketplaceLocation (
-        $store_id: Int!
+        $loc_id: [Int]!
+        $brand_id: String!
+        $marketplace_code: String!
     ){
-        updateMarketplaceLocation(store_id: $store_id)
+        updateMarketplaceLocation (
+            loc_id: $loc_id
+            brand_id: $brand_id
+            marketplace_code: $marketplace_code
+        )
     }
 `;
 

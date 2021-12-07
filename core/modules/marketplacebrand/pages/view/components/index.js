@@ -3,7 +3,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
@@ -13,15 +12,6 @@ import Autocomplete from '@common_autocomplete';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useStyles from '@modules/marketplacebrand/pages/view/components/style';
-
-import BlibliForm from '@modules/marketplacebrand/pages/view/components/form/blib';
-import JDIDForm from '@modules/marketplacebrand/pages/view/components/form/jdid';
-import NineToNineForm from '@modules/marketplacebrand/pages/view/components/form/ntnid';
-import OramiForm from '@modules/marketplacebrand/pages/view/components/form/orami';
-import SehatQForm from '@modules/marketplacebrand/pages/view/components/form/sehatq';
-import TokopediaForm from '@modules/marketplacebrand/pages/view/components/form/tkpd';
-import ZilingoForm from '@modules/marketplacebrand/pages/view/components/form/zlgo';
-import ZaloraForm from '@modules/marketplacebrand/pages/view/components/form/zlra';
 import ErrorIcon from '@material-ui/icons/Error';
 
 const AdminStoreEditContent = (props) => {
@@ -33,7 +23,6 @@ const AdminStoreEditContent = (props) => {
         setMpActive,
         handleDisconnect,
         handleReconnect,
-        setCredentialsMp,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -68,16 +57,11 @@ const AdminStoreEditContent = (props) => {
     };
 
     const onChangeMp = (mp) => {
-        let setMp = mpActive;
         let url = '';
         switch (Number(mp.status)) {
         case 0:
             formik.handleReset();
-            setMp = {
-                code: mp.marketplace_code,
-                name: mp.marketplace_name,
-            };
-            setMpActive(setMp);
+            setMpActive(mp);
             break;
         case 1:
             handleDisconnect(mp);
@@ -94,39 +78,26 @@ const AdminStoreEditContent = (props) => {
         }
     };
 
-    const formComponents = () => {
-        let form = null;
-        switch (mpActive.code) {
-        case 'BLIB':
-            form = <BlibliForm formik={formik} />;
-            break;
-        case 'JDID':
-            form = <JDIDForm formik={formik} />;
-            break;
-        case 'NTNID':
-            form = <NineToNineForm formik={formik} />;
-            break;
-        case 'ORAMI':
-            form = <OramiForm formik={formik} />;
-            break;
-        case 'SEHATQ':
-            form = <SehatQForm formik={formik} />;
-            break;
-        case 'TKPD':
-            form = <TokopediaForm formik={formik} />;
-            break;
-        case 'ZLGO':
-            form = <ZilingoForm formik={formik} />;
-            break;
-        case 'ZLRA':
-            form = <ZaloraForm formik={formik} />;
-            break;
-
-        default:
-            break;
-        }
-        return form;
-    };
+    const formComponents = () => mpActive.credentials.fields?.map((field) => (
+        <div className={classes.formField}>
+            <div className={classes.divLabel}>
+                <span className={clsx(classes.label, classes.labelRequired)}>{field.description}</span>
+            </div>
+            <TextField
+                className={classes.fieldRoot}
+                variant="outlined"
+                name={field.name}
+                value={formik.values[field.name]}
+                onChange={formik.handleChange}
+                error={!!(formik.errors[field.name])}
+                helperText={(formik.errors[field.name]) || ''}
+                InputProps={{
+                    className: classes.fieldInput,
+                }}
+                required
+            />
+        </div>
+    ));
 
     return (
         <>
@@ -169,7 +140,8 @@ const AdminStoreEditContent = (props) => {
                                                     className={
                                                         clsx(
                                                             classes.mpBtn,
-                                                            mpActive.name === mp.marketplace_name ? 'gray' : buttonCondition(mp.status).style,
+                                                            mpActive.marketplace_name === mp.marketplace_name
+                                                                ? 'gray' : buttonCondition(mp.status).style,
                                                         )
                                                     }
                                                     variant="contained"
@@ -200,11 +172,11 @@ const AdminStoreEditContent = (props) => {
                     )
                     : null}
                 <br />
-                {mpActive.name !== ''
+                {mpActive?.marketplace_name
                     ? (
                         <div className={classes.content}>
-                            <h5 className={classes.titleSmall}>{mpActive.name}</h5>
-                            {mpActive.code === 'JDID' ? (
+                            <h5 className={classes.titleSmall}>{mpActive.marketplace_name}</h5>
+                            {mpActive.marketplace_code === 'JDID' ? (
                                 <div className={classes.warning}>
                                     <ErrorIcon />
                                     <div style={{ paddingLeft: 5 }}>
@@ -220,7 +192,7 @@ const AdminStoreEditContent = (props) => {
                                     </div>
                                 </div>
                             ) : null}
-                            {mpActive.code === 'TKPD' ? (
+                            {mpActive.marketplace_code === 'TKPD' ? (
                                 <div className={classes.warning}>
                                     <ErrorIcon />
                                     <div style={{ paddingLeft: 5 }}>
@@ -250,14 +222,7 @@ const AdminStoreEditContent = (props) => {
                             <div className={classes.formFieldButton}>
                                 <Button
                                     className={classes.btn}
-                                    onClick={async () => {
-                                        const mpSelected = await mpData?.marketplaces?.find((o) => (o.marketplace_code === mpActive.code));
-                                        await setCredentialsMp({
-                                            type: mpSelected.credentials.type,
-                                            url: mpSelected.credentials.url,
-                                        });
-                                        formik.handleSubmit();
-                                    }}
+                                    onClick={formik.handleSubmit}
                                     variant="contained"
                                 >
                                     Submit
