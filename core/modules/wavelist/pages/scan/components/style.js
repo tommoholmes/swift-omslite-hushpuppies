@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: '60% 40%',
     },
     h2: {
-        marginBottom: 0,
+        margin: 0,
         color: colorText,
         letterSpacing: 0,
         '&.quantity': {
@@ -67,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
         textDecoration: 'underline',
         color: colorPurple,
-        marginTop: 100,
-        marginBottom: 50,
+        marginTop: 20,
+        marginBottom: 20,
     },
     fieldRoot: {
         margin: '0 10px',

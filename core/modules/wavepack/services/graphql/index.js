@@ -37,8 +37,8 @@ export const updatePickByWaveQtyPacked = (options) => useMutation(Schema.updateP
     ...options, ...context,
 });
 
-export const getStoreConfig = () => useQuery(Schema.getStoreConfig, {
-    ...context, ...fetchPolicy,
+export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
+    variables, ...context, ...fetchPolicy,
 });
 
 export default {

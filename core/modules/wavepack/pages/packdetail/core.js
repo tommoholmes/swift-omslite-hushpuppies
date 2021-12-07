@@ -15,6 +15,7 @@ const ContentWrapper = (props) => {
     const packlist = data.getPackList.data[0];
 
     const packList = {
+        entityId: packlist.entity_id,
         id: packlist.increment_id,
         shipmentId: packlist.channel_order_increment_id,
         statusLabel: packlist.status.label,

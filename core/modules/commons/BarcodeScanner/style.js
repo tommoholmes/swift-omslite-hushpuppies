@@ -16,10 +16,14 @@ const useStyles = makeStyles(() => ({
             },
         },
     },
+    scanText: {
+        fontStyle: 'italic',
+        marginBottom: 20,
+    },
     closeButton: {
         position: 'absolute',
         top: 5,
-        right: 50,
+        right: 65,
         zIndex: 1,
     },
     closeIcon: {
@@ -35,6 +39,11 @@ const useStyles = makeStyles(() => ({
         left: 0,
         marginTop: '-50px',
     },
+    matchIconManual: {
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+    },
     icon: {
         backgroundColor: 'white',
         border: '5px solid white',
@@ -46,6 +55,9 @@ const useStyles = makeStyles(() => ({
         },
         '&.check': {
             color: '#5EC929',
+        },
+        '&.none': {
+            color: 'gray',
         },
     },
 }));
