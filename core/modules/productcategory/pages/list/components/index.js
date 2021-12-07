@@ -1,10 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '@common_table';
 import Header from '@modules/productcategory/pages/list/components/Header';
+import { useRouter } from '@root/node_modules/next/router';
+import { getCookies, removeCookies } from '@helper_cookies';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const ProductCategoryListContent = (props) => {
+    const [isPull, setIsPull] = useState(null);
+    const cookie = getCookies('isPull');
+    if (isPull === null) {
+        setIsPull(cookie);
+    } else if (cookie) {
+        removeCookies('isPull');
+    }
     const { data, loading, getProductCategoryList, multidisableProductCategory } = props;
     const productCategoryList = (data && data.getProductCategoryList && data.getProductCategoryList.items) || [];
     const productCategoryTotal = (data && data.getProductCategoryList && data.getProductCategoryList.total_count) || 0;
@@ -21,6 +31,7 @@ const ProductCategoryListContent = (props) => {
         { field: 'marketplace_code', name: 'marketplace_code', type: 'like', label: 'Marketplace', initialValue: '' },
         { field: 'marketplace_category_id', name: 'marketplace_category_id', type: 'like', label: 'Category ID', initialValue: '' },
         { field: 'marketplace_category_name', name: 'marketplace_category_name', type: 'like', label: 'Category Name', initialValue: '' },
+        { field: 'is_active', type: 'eq', initialValue: '1', hidden: true },
     ];
 
     const actions = [
@@ -53,6 +64,14 @@ const ProductCategoryListContent = (props) => {
     return (
         <>
             <Header />
+            {isPull && (
+                <MuiAlert icon={false} severity="success">
+                    Process is in progress, please wait. Check the progress
+                    {' '}
+                    <a style={{ color: '#007bdb' }} href="/tools/clitools">here</a>
+                    .
+                </MuiAlert>
+            ) }
             <Table
                 filters={filters}
                 rows={rows}

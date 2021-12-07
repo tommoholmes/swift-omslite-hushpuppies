@@ -6,13 +6,9 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getProductCategoryList, { data, loading }] = gqlService.getProductCategoryList();
-    const [multidisableProductCategory] = gqlService.multidisableProductCategory();
-    const [pullProductCategory] = gqlService.pullProductCategory();
+    const [pullProductCategory, { data, loading }] = gqlService.pullProductCategory();
 
     const contentProps = {
-        getProductCategoryList,
-        multidisableProductCategory,
         pullProductCategory,
         data,
         loading,

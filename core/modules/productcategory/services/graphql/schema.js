@@ -62,9 +62,16 @@ export const multidisableProductCategory = gql`
     }
 `;
 
+export const pullProductCategory = gql`
+    mutation{
+        pullProductCategory
+    }
+`;
+
 export default {
     getProductCategoryList,
     uploadStatusProductCategory,
     downloadSampleCsv,
     multidisableProductCategory,
+    pullProductCategory,
 };
