@@ -7,17 +7,13 @@ import gqlService from '@modules/orderqueue/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        parent,
-        aclCheckData,
+        data, Content, parent, aclCheckData, refetchOrderQueue,
     } = props;
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
+    const [editOrderItem] = gqlService.editOrderItem();
 
-    const handleSubmit = ({
-        type,
-    }) => {
+    const handleSubmit = ({ type }) => {
         const variables = {
             id: orderqueue.id,
             type,
@@ -25,22 +21,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         setReallocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit order status',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit order status',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => window.location.reload(true), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const orderQueue = {
@@ -92,22 +90,64 @@ const ContentWrapper = (props) => {
         },
     });
 
+    const initialValueEditItem = {
+        order_id: orderqueue.id,
+        order_items: orderqueue.order_item.map((item) => ({ ...item, item_id_replacement: null })),
+    };
+
+    const handleSubmitEdit = (values) => {
+        window.backdropLoader(true);
+        const fixValues = {
+            ...values,
+            order_items: values.order_items.map((item) => ({
+                id: item?.id ?? null,
+                qty: item.qty,
+                replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
+                item_id_replacement: item.item_id_replacement,
+                sku: item.name?.sku ?? item.sku,
+            })),
+        };
+
+        editOrderItem({
+            variables: {
+                ...fixValues,
+            },
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit order item',
+                    variant: 'success',
+                });
+                setTimeout(() => refetchOrderQueue(), 1000);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            });
+    };
+
     const contentProps = {
         formikAllocation,
         formikNew,
         orderQueue,
         parent,
         aclCheckData,
+        initialValueEditItem,
+        handleSubmitEdit,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getOrderQueueById({
+    const { loading, data, refetch: refetchOrderQueue } = gqlService.getOrderQueueById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -116,20 +156,17 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        return <Layout>Data not found!</Layout>;
     }
 
     return (
         <Layout>
             <ContentWrapper
+                refetchOrderQueue={refetchOrderQueue}
                 data={data}
                 aclCheckData={aclCheckData}
                 parent={router && router.query && router.query.tab_status}
