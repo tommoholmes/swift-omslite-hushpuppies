@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Header from '@modules/productlist/pages/list/components/Header';
 
 const ProductListContent = (props) => {
-    const { data, loading, getProductList } = props;
+    const { data, loading, getProductList, handleFetchManual } = props;
     const productList = (data && data.getProductList && data.getProductList.items) || [];
     const productTotal = (data && data.getProductList && data.getProductList.total_count) || 0;
 
@@ -46,7 +46,9 @@ const ProductListContent = (props) => {
 
     return (
         <>
-            <Header />
+            <Header
+                handleFetchManual={handleFetchManual}
+            />
             <Table
                 filters={filters}
                 rows={rows}

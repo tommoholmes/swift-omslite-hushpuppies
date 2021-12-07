@@ -37,6 +37,10 @@ export const getProductAttributes = (variables) => useLazyQuery(Schema.getProduc
     variables, ...context, ...fetchPolicy,
 });
 
+export const productFetchManual = (variables) => useMutation(Schema.productFetchManual, {
+    variables, ...context,
+});
+
 export default {
     getProductList,
     getProductById,
@@ -45,4 +49,5 @@ export default {
     downloadSampleCsv,
     getProductListBySku,
     getProductAttributes,
+    productFetchManual,
 };
