@@ -5,6 +5,7 @@ import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
+import MenuItem from '@material-ui/core/MenuItem';
 import clsx from 'clsx';
 import useStyles from '@modules/managevendor/pages/edit/components/style';
 
@@ -14,6 +15,16 @@ const ManageVendorEditContent = (props) => {
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const option = [
+        {
+            name: 'Yes',
+            value: 1,
+        },
+        {
+            name: 'No',
+            value: 0,
+        },
+    ];
 
     return (
         <>
@@ -34,6 +45,7 @@ const ManageVendorEditContent = (props) => {
             </Button>
             <h2 className={classes.titleTop}>
                 Manage Vendor
+                {' '}
                 {formik.values.name}
             </h2>
             <Paper className={classes.container}>
@@ -74,29 +86,77 @@ const ManageVendorEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>New Product</span>
+                            <span className={classes.label}>New Product (Can upload new product)</span>
                         </div>
                         <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
                             <TextField
                                 style={{ width: '100%' }}
                                 variant="outlined"
-                                name="name"
-                                value={formik.values.name}
+                                select
+                                name="is_new"
+                                value={formik.values.is_new}
                                 onChange={formik.handleChange}
-                                error={!!(formik.touched.name && formik.errors.name)}
-                                helperText={(formik.touched.name && formik.errors.name) || ''}
+                                error={!!(formik.touched.is_new && formik.errors.is_new)}
+                                helperText={(formik.touched.is_new && formik.errors.is_new) || ''}
+                                InputProps={{
+                                    className: classes.fieldInput,
+                                }}
+                            >
+                                {option.map((item, index) => (
+                                    <MenuItem value={item.value} key={index}>{item.name}</MenuItem>
+                                ))}
+                            </TextField>
+                        </div>
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Margin</span>
+                        </div>
+                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                            <TextField
+                                style={{ width: '100%' }}
+                                variant="outlined"
+                                name="margin"
+                                value={formik.values.margin}
+                                onChange={formik.handleChange}
+                                type="number"
+                                error={!!(formik.touched.margin && formik.errors.margin)}
+                                helperText={(formik.touched.margin && formik.errors.margin) || ''}
                                 InputProps={{
                                     className: classes.fieldInput,
                                 }}
                             />
-                            <span className={classes.notes}>Can upload new product</span>
+                        </div>
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={classes.label}>Product Auto Approval (Can auto approve product)</span>
+                        </div>
+                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                            <TextField
+                                style={{ width: '100%' }}
+                                variant="outlined"
+                                select
+                                name="is_approve"
+                                value={formik.values.is_approve}
+                                onChange={formik.handleChange}
+                                error={!!(formik.touched.is_approve && formik.errors.is_approve)}
+                                helperText={(formik.touched.is_approve && formik.errors.is_approve) || ''}
+                                InputProps={{
+                                    className: classes.fieldInput,
+                                }}
+                            >
+                                {option.map((item, index) => (
+                                    <MenuItem value={item.value} key={index}>{item.name}</MenuItem>
+                                ))}
+                            </TextField>
                         </div>
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
-                        // onClick={formik.handleSubmit}
+                        onClick={formik.handleSubmit}
                         variant="contained"
                     >
                         Submit

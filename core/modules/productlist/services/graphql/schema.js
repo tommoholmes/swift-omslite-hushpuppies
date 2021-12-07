@@ -193,6 +193,12 @@ query getProductAttributes($id: Int!, $attribute_set_id: Int){
   }
 `;
 
+export const productFetchManual = gql`
+  mutation productFetchManual{
+    productFetchManual
+  }
+`;
+
 export default {
     getProductList,
     getProductById,
@@ -201,4 +207,5 @@ export default {
     downloadSampleCsv,
     getProductListBySku,
     getProductAttributes,
+    productFetchManual,
 };

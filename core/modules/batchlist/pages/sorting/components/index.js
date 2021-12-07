@@ -6,13 +6,16 @@ import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import Router from 'next/router';
 import Scan from '@common_barcodescanner';
+import ManualScan from '@common_manualscanner';
 import useStyles from '@modules/batchlist/pages/sorting/components/style';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogInputSKU from '@modules/batchlist/pages/sorting/components/DialogInputSKU';
+import Link from 'next/link';
 
 const SortingItemContent = (props) => {
     const {
-        pickList, handleDetect, handleDoneSorting, name, sku, slot, config, dataMultiple, loadSorting, allowManualConfirm, formik,
+        pickList, handleDetect, handleDoneSorting, name, sku, slot, config, dataMultiple, loadSorting,
+        allowManualConfirm, formik, useCamera,
     } = props;
     const classes = useStyles();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -21,11 +24,21 @@ const SortingItemContent = (props) => {
         <>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <Scan
-                        barcode={pickList.barcode}
-                        handleDetect={handleDetect}
-                        handleClose={() => Router.push(`/pickpack/batchlist/edit/${pickList.id}`)}
-                    />
+                    {useCamera
+                        ? (
+                            <Scan
+                                barcode={pickList.barcode}
+                                handleDetect={handleDetect}
+                                handleClose={() => Router.push(`/pickpack/batchlist/edit/${pickList.id}`)}
+                            />
+                        )
+                        : (
+                            <ManualScan
+                                barcode={pickList.barcode}
+                                handleDetect={handleDetect}
+                            />
+                        )}
+
                     {loadSorting && <CircularProgress className={classes.progress} />}
                     <h2 className={classes.h2}>{name}</h2>
                     <span className={classes.text}>{`SKU ${sku}`}</span>
@@ -75,6 +88,12 @@ const SortingItemContent = (props) => {
                             </button>
                         </>
                     )}
+                    {!useCamera
+                        ? (
+                            <Link href={`/pickpack/batchlist/edit/${pickList.id}`}>
+                                <a className={classes.linkBack}>Back to Batch List</a>
+                            </Link>
+                        ) : null}
                 </div>
             </Paper>
         </>

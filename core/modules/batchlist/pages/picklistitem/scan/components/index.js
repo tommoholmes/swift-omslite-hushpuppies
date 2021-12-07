@@ -8,11 +8,12 @@ import Paper from '@material-ui/core/Paper';
 import Link from 'next/link';
 import Router from 'next/router';
 import Scan from '@common_barcodescanner';
+import ManualScan from '@common_manualscanner';
 import useStyles from '@modules/batchlist/pages/picklistitem/scan/components/style';
 
 const ScanItemContent = (props) => {
     const {
-        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit, visibility,
+        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit, visibility, useCamera,
     } = props;
     const classes = useStyles();
     const num = /^\d+$/;
@@ -21,11 +22,20 @@ const ScanItemContent = (props) => {
         <>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <Scan
-                        barcode={pickList.barcode}
-                        handleDetect={handleDetect}
-                        handleClose={() => Router.push(`/pickpack/batchlist/picklistitem/${pickList.id}`)}
-                    />
+                    {useCamera
+                        ? (
+                            <Scan
+                                barcode={pickList.barcode}
+                                handleDetect={handleDetect}
+                                handleClose={() => Router.push(`/pickpack/batchlist/picklistitem/${pickList.id}`)}
+                            />
+                        )
+                        : (
+                            <ManualScan
+                                barcode={pickList.barcode}
+                                handleDetect={handleDetect}
+                            />
+                        )}
                     <h2 className={classes.h2}>{pickList.name}</h2>
                     <span className={classes.text}>
                         {`SKU ${pickList.sku} / `}
@@ -65,7 +75,7 @@ const ScanItemContent = (props) => {
 
                     <div className="hidden-mobile">
                         <Link href={`/pickpack/batchlist/picklistitem/${pickList.id}`}>
-                            <a className={classes.linkBack}>Back to Pick List Item</a>
+                            <a className={classes.linkBack}>Back to Pick Item</a>
                         </Link>
                     </div>
                 </div>

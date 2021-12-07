@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const requestResetPassword = gql`
-    mutation requestResetPassword($email: String!) {
-        requestResetPassword(email: $email)
+    mutation requestResetPassword($email: String!, $callback_url: String!) {
+        requestResetPassword(email: $email, callback_url: $callback_url)
     }
 `;
 

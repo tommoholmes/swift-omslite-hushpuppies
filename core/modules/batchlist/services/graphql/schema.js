@@ -227,9 +227,9 @@ export const multipleItemSortingPickByBatch = gql`
 `;
 
 export const getStoreConfig = gql`
-    query {
-        getStoreConfig(path: "swiftoms_pickpack/batch/allow_manual_confirm_pick")
-    }
+  query getStoreConfig($path: String!){
+    getStoreConfig(path: $path)
+  }
 `;
 
 export default {

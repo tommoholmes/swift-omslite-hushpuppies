@@ -56,9 +56,9 @@ const useStyles = makeStyles(() => ({
         width: 370,
         height: 77,
         position: 'relative',
-        fontSize: 18,
+        fontSize: '1rem',
         justifyContent: 'left',
-        paddingLeft: 26,
+        paddingLeft: 18,
         '&.disabled': {
             borderColor,
             background: colorGray,
