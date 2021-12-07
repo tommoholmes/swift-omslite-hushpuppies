@@ -586,6 +586,12 @@ const Layout = (props) => {
                     label: 'Marketplace Brand',
                     url: '/configurations/marketplacebrand',
                 },
+                {
+                    aclCode: 'oms_lite_marketplace_feature',
+                    key: 'marketplacefeature',
+                    label: 'Marketplace Feature',
+                    url: '/configurations/marketplacefeature',
+                },
             ],
         },
         {
