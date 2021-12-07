@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/button-has-type */
 import React from 'react';
@@ -9,22 +8,33 @@ import Link from 'next/link';
 import Router from 'next/router';
 import useStyles from '@modules/wavelist/pages/scan/components/style';
 import Scan from '@common_barcodescanner';
+import ManualScan from '@common_manualscanner';
 
 const ScanItemContent = (props) => {
     const {
-        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit, visibility,
+        pickList, incrementCount, decrementCount, handleDetect, count, setCount, handleSubmit, visibility, useCamera,
     } = props;
     const classes = useStyles();
     const num = /^\d+$/;
+
     return (
         <>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <Scan
-                        barcode={pickList.barcode}
-                        handleDetect={handleDetect}
-                        handleClose={() => Router.push(`/pickpack/wavelist/picklist/item/${pickList.id}`)}
-                    />
+                    {useCamera
+                        ? (
+                            <Scan
+                                barcode={pickList.barcode}
+                                handleDetect={handleDetect}
+                                handleClose={() => Router.push(`/pickpack/wavelist/picklist/item/${pickList.id}`)}
+                            />
+                        )
+                        : (
+                            <ManualScan
+                                barcode={pickList.barcode}
+                                handleDetect={handleDetect}
+                            />
+                        )}
                     <h2 className={classes.h2}>{pickList.name}</h2>
                     <span className={classes.text}>
                         {`SKU ${pickList.sku} / `}
@@ -61,11 +71,12 @@ const ScanItemContent = (props) => {
                     >
                         Confirm
                     </Button>
-                    <div className="hidden-mobile">
-                        <Link href={`/pickpack/wavelist/picklist/item/${pickList.id}`}>
-                            <a className={classes.linkBack}>Back to Pick List Item</a>
-                        </Link>
-                    </div>
+                    {!useCamera
+                        ? (
+                            <Link href={`/pickpack/wavelist/picklist/item/${pickList.id}`}>
+                                <a className={classes.linkBack}>Back to Pick Item</a>
+                            </Link>
+                        ) : null}
                 </div>
             </Paper>
         </>
