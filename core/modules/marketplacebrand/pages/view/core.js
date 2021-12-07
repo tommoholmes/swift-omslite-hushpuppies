@@ -14,14 +14,8 @@ const ContentWrapper = (props) => {
     } = props;
     const router = useRouter();
     const mpData = data.getAvailableMpToConnect;
-    const [credentialsMp, setCredentialsMp] = React.useState({
-        type: null,
-        url: '',
-    });
-    const [mpActive, setMpActive] = React.useState({
-        code: '',
-        name: '',
-    });
+
+    const [mpActive, setMpActive] = React.useState({});
 
     // mutation
     const [registerMarketplaceChannel] = gqlService.registerMarketplaceChannel();
@@ -29,108 +23,16 @@ const ContentWrapper = (props) => {
     const [reconnectMarketplaceChannel] = gqlService.reconnectMarketplaceChannel();
     const [disconnectMarketplaceChannel] = gqlService.disconnectMarketplaceChannel();
 
-    const validationSchema = () => {
-        let valObj = {};
-        switch (mpActive.code) {
-        case 'BLIB':
-            valObj = {
-                merchant_code: Yup.string().required('Required!'),
-                signature_key: Yup.string().required('Required!'),
-                api_seller_key: Yup.string().required('Required!'),
-            };
-            break;
-        case 'JDID':
-            valObj = {
-                api_email: Yup.string().required('Required!'),
-                application_key: Yup.string().required('Required!'),
-                secret_key: Yup.string().required('Required!'),
-            };
-            break;
-        case 'NTNID':
-        case 'ORAMI':
-        case 'SEHATQ':
-        case 'KALCARE':
-        case 'MNC':
-            valObj = {
-                shop_id: Yup.string().required('Required!'),
-                shop_secret: Yup.string().required('Required!'),
-            };
-            break;
-        case 'TKPD':
-            valObj = {
-                fs_id: Yup.number().required('Required!'),
-                client_id: Yup.string().required('Required!'),
-                client_secret: Yup.string().required('Required!'),
-                shop_id: Yup.number().required('Required!'),
-            };
-            break;
-        case 'ZLGO':
-            valObj = {
-                seller_id: Yup.string().required('Required!'),
-                api_key: Yup.string().required('Required!'),
-            };
-            break;
-        case 'ZLRA':
-            valObj = {
-                user_id: Yup.string().required('Required!'),
-                api_key: Yup.string().required('Required!'),
-            };
-            break;
-        default:
-            break;
-        }
-        return valObj;
-    };
-
-    const initialValue = () => {
-        let valObj = {};
-        switch (mpActive.code) {
-        case 'BLIB':
-            valObj = {
-                merchant_code: '',
-                signature_key: '',
-                api_seller_key: '',
-            };
-            break;
-        case 'JDID':
-            valObj = {
-                api_email: '',
-                application_key: '',
-                secret_key: '',
-            };
-            break;
-        case 'NTNID':
-        case 'ORAMI':
-        case 'SEHATQ':
-            valObj = {
-                shop_id: '',
-                shop_secret: '',
-            };
-            break;
-        case 'TKPD':
-            valObj = {
-                fs_id: '',
-                client_id: '',
-                client_secret: '',
-                shop_id: '',
-            };
-            break;
-        case 'ZLGO':
-            valObj = {
-                seller_id: '',
-                api_key: '',
-            };
-            break;
-        case 'ZLRA':
-            valObj = {
-                user_id: '',
-                api_key: '',
-            };
-            break;
-        default:
-            break;
-        }
-        return valObj;
+    const schemaObj = (schemaType) => {
+        const initialValue = {};
+        const type = {
+            string: Yup.string().required('Required!'),
+            number: Yup.number().required('Required!'),
+        };
+        return mpActive?.credentials?.fields?.reduce((obj, item) => ({
+            ...obj,
+            [item.name]: schemaType === 'validation' ? type[item.type] : '',
+        }), initialValue);
     };
 
     const handleSubmit = (input) => {
@@ -156,10 +58,10 @@ const ContentWrapper = (props) => {
         });
     };
 
-    const handleUpdateLocation = () => {
+    const handleUpdateLocation = (variables) => {
         window.backdropLoader(true);
         updateMarketplaceLocation({
-            variables: { store_id: router && router.query && Number(router.query.id) },
+            variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -167,7 +69,7 @@ const ContentWrapper = (props) => {
                 text: 'Success register marketplace!',
                 variant: 'success',
             });
-            setTimeout(() => router.push(credentialsMp.url), 250);
+            setTimeout(() => router.push(mpActive.credentials?.url), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -235,7 +137,7 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: {
             location: [],
-            ...initialValue(),
+            ...schemaObj(),
         },
         validationSchema: Yup.object().shape({
             location: Yup.array()
@@ -244,33 +146,34 @@ const ContentWrapper = (props) => {
                 )
                 .min(1)
                 .required('Required!'),
-            ...validationSchema(),
+            ...schemaObj('validation'),
         }),
         onSubmit: (values) => {
             const { location, ...restValues } = values;
             const valueToSubmit = {
                 brand_id: mpData.brand_id,
                 loc_id: location.map((loc) => (Number(loc.loc_id))),
-                marketplace_code: mpActive.code,
-                credentials: '{}',
+                marketplace_code: mpActive.marketplace_code,
             };
-            const credentials = {};
-            const keys = Object.keys(restValues);
-            if (keys.length) {
-                keys.forEach((key) => {
-                    let data_type = 'string';
-                    let value = String(restValues[key]);
-                    if (mpActive.code === 'TKPD' && (key === 'fs_id' || key === 'shop_id')) {
-                        data_type = 'integer';
-                        value = Number(restValues[key]);
-                    }
-                    credentials[key] = { data_type, value };
-                });
-                valueToSubmit.credentials = JSON.stringify(credentials);
-            }
-            if (credentialsMp.type === 'oauth2') {
-                handleUpdateLocation();
+            if (mpActive?.credentials?.type === 'oauth2') {
+                handleUpdateLocation(valueToSubmit);
             } else {
+                const keys = Object.keys(restValues);
+                if (keys.length) {
+                    const credentials = {};
+                    keys.forEach((key) => {
+                        let data_type = 'string';
+                        let value = String(restValues[key]);
+                        if (mpActive.marketplace_code === 'TKPD' && (key === 'fs_id' || key === 'shop_id')) {
+                            data_type = 'integer';
+                            value = Number(restValues[key]);
+                        }
+                        credentials[key] = { data_type, value };
+                    });
+                    valueToSubmit.credentials = JSON.stringify(credentials);
+                } else {
+                    valueToSubmit.credentials = '{}';
+                }
                 handleSubmit(valueToSubmit);
             }
         },
@@ -284,7 +187,6 @@ const ContentWrapper = (props) => {
         setMpActive,
         handleDisconnect,
         handleReconnect,
-        setCredentialsMp,
     };
 
     return (
