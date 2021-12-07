@@ -65,7 +65,7 @@ const ProductCategoryListContent = (props) => {
         <>
             <Header />
             {isPull && (
-                <MuiAlert icon={false} severity="success">
+                <MuiAlert icon={false} severity="success" style={{ marginBottom: '1rem' }}>
                     Process is in progress, please wait. Check the progress
                     {' '}
                     <a style={{ color: '#007bdb' }} href="/tools/clitools">here</a>

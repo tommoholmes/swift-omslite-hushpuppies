@@ -12,6 +12,8 @@ const PullProductCategoryContent = (props) => {
         if (data?.pullProductCategory === true) {
             setCookies('isPull', data.pullProductCategory);
             router.push('/marketplace/productcategory');
+        } else {
+            router.push('/marketplace/productcategory');
         }
     }, [data]);
 
