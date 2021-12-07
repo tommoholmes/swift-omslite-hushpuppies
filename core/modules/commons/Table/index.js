@@ -217,7 +217,12 @@ const CustomTable = (props) => {
         return (
             <div className={classes.tableToolbar}>
                 <div className="top-buttons-wrapper">
-                    {!loading && <div className="top-item records-found">{`${count} records found.`}</div>}
+                    {!loading && (
+                        <div className="top-item records-found">
+                            {`${count} records found `}
+                            {checkedRows.length ? ` (${checkedRows.length} selected)` : null}
+                        </div>
+                    )}
                     {!hideActions && (
                         <div className="top-item">
                             <ConfirmDialog
