@@ -496,7 +496,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'oms_lite_tada_category',
                     key: 'tadacategory',
-                    label: 'Tada Category',
+                    label: 'Category',
                     url: '/tada/tadacategory',
                 },
                 {
