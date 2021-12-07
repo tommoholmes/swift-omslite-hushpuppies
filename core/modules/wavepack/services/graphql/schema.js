@@ -74,6 +74,7 @@ export const getPackList = gql`
 query getPackList($id: [Int!]!) {
     getPackList(id: $id) {
       data {
+        entity_id
         increment_id
         channel_order_increment_id
         status {
@@ -147,8 +148,8 @@ mutation packShipment($id: [Int!]){
 `;
 
 export const getStoreConfig = gql`
-  query{
-    getStoreConfig(path: "swiftoms_pickpack/batch/allow_manual_confirm_pick")
+  query getStoreConfig($path: String!){
+    getStoreConfig(path: $path)
   }
 `;
 

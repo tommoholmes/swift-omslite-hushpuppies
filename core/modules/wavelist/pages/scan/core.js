@@ -11,6 +11,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
         allowManualConfirm,
+        useCamera,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByWaveItemById.pick_by_wave_item;
@@ -90,6 +91,7 @@ const ContentWrapper = (props) => {
         setCount,
         handleSubmit,
         visibility,
+        useCamera,
     };
 
     return (
@@ -99,13 +101,20 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig();
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/wave/allow_manual_confirm_pick',
+    });
+
+    const { loading: loadingConfigCamera, data: dataConfigCamera } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/wave/use_camera_to_scan',
+    });
+
     const { loading, data } = gqlService.getPickByWaveItemById({
         item_id: router && router.query && Number(router.query.id),
     });
     const classes = useStyles();
 
-    if (loading || loadingConfig) {
+    if (loading || loadingConfig || loadingConfigCamera) {
         return (
             <Layout>
                 <div className={classes.loadingFetch}>
@@ -127,7 +136,12 @@ const Core = (props) => {
 
     return (
         <Layout useBreadcrumbs={false}>
-            <ContentWrapper data={data} allowManualConfirm={dataConfig.getStoreConfig === '1'} {...props} />
+            <ContentWrapper
+                data={data}
+                allowManualConfirm={dataConfig.getStoreConfig === '1'}
+                useCamera={dataConfigCamera.getStoreConfig === '1'}
+                {...props}
+            />
         </Layout>
     );
 };

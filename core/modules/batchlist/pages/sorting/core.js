@@ -11,7 +11,7 @@ import { useFormik } from 'formik';
 
 const ContentWrapper = (props) => {
     const {
-        data, Content, config = 'single_item', allowManualConfirm,
+        data, Content, config = 'single_item', allowManualConfirm, useCamera,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByBatchItemById.pick_by_batch_item;
@@ -193,6 +193,7 @@ const ContentWrapper = (props) => {
         loadSorting,
         allowManualConfirm,
         formik,
+        useCamera,
     };
 
     return <Content {...contentProps} />;
@@ -202,12 +203,17 @@ const Core = (props) => {
     const router = useRouter();
 
     const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfigSorting();
-    const { loading: loadingConfigAllowManual, data: dataConfigAllowManual } = gqlService.getStoreConfig();
+    const { loading: loadingConfigAllowManual, data: dataConfigAllowManual } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/batch/allow_manual_confirm_pick',
+    });
+    const { loading: loadingConfigCamera, data: dataConfigCamera } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/batch/use_camera_to_scan',
+    });
     const { loading, data } = gqlService.getPickByBatchItemById({
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading || loadingConfig || loadingConfigAllowManual) {
+    if (loading || loadingConfig || loadingConfigAllowManual || loadingConfigCamera) {
         return <Layout>Loading...</Layout>;
     }
 
@@ -219,6 +225,7 @@ const Core = (props) => {
         <Layout>
             <ContentWrapper
                 data={data}
+                useCamera={dataConfigCamera.getStoreConfig === '1'}
                 config={dataConfig.getStoreConfig}
                 allowManualConfirm={dataConfigAllowManual.getStoreConfig === '1'}
                 {...props}

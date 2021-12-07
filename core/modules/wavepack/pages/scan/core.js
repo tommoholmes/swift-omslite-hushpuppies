@@ -10,9 +10,13 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+    const id = router && router.query && Number(router.query.id);
     const wave_id = router && router.query && Number(router.query.wave);
     const shipment_id = router && router.query && Number(router.query.shipment);
 
+    const { loading: loadingConfigCamera, data: dataConfigCamera } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/wave/use_camera_to_scan',
+    });
     const [updatePickByWaveQtyPacked, { data, loading }] = gqlService.updatePickByWaveQtyPacked({
         onCompleted: () => {
             window.toastMessage({
@@ -42,10 +46,7 @@ const Core = (props) => {
         }
     };
 
-    const contentProps = {
-        data, loading, handleDetect, shipment_id,
-    };
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || loadingConfigCamera) {
         return (
             <Layout useBreadcrumbs={false}>
                 <div style={{
@@ -62,6 +63,16 @@ const Core = (props) => {
 
         );
     }
+
+    const contentProps = {
+        data,
+        loading,
+        handleDetect,
+        shipment_id,
+        id,
+        useCamera: dataConfigCamera.getStoreConfig === '1',
+    };
+
     return (
         <Layout useBreadcrumbs={false}>
             <Content {...contentProps} />

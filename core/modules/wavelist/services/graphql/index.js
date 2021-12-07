@@ -33,8 +33,8 @@ export const getPickByWaveStatus = (variables) => useQuery(Schema.getPickByWaveS
     variables, ...context, ...fetchPolicy,
 });
 
-export const getStoreConfig = () => useQuery(Schema.getStoreConfig, {
-    ...context, ...fetchPolicy,
+export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
+    variables, ...context, ...fetchPolicy,
 });
 
 export default {
