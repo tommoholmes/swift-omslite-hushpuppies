@@ -120,7 +120,7 @@ const ContentWrapper = (props) => {
                     text: 'Success edit order item',
                     variant: 'success',
                 });
-                refetchOrderQueue();
+                setTimeout(() => refetchOrderQueue(), 1000);
             })
             .catch((e) => {
                 window.backdropLoader(false);
