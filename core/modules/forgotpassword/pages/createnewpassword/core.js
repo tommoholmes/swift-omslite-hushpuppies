@@ -16,6 +16,16 @@ const Core = (props) => {
         if (!token || !email) {
             router.push('/login');
         }
+        if (email) {
+            Yup.string()
+                .email()
+                .isValid(email)
+                .then((isValid) => {
+                    if (!isValid) {
+                        router.push('/login');
+                    }
+                });
+        }
     }, [token, email]);
 
     const formik = useFormik({
