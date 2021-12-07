@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from '@modules/productpromo/services/graphql/schema';
 
 const context = {
@@ -17,7 +17,12 @@ export const getMarketplaceProductPromoItemsList = (variables) => useLazyQuery(S
     variables, ...context, ...fetchPolicy,
 });
 
+export const updateMarketplaceProductPromoToMp = (variables) => useMutation(Schema.updateMarketplaceProductPromoToMp, {
+    variables, ...context,
+});
+
 export default {
     getMarketplaceProductPromoList,
     getMarketplaceProductPromoItemsList,
+    updateMarketplaceProductPromoToMp,
 };

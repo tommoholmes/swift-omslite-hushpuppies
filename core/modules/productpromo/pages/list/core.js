@@ -7,11 +7,13 @@ const Core = (props) => {
     } = props;
 
     const [getMarketplaceProductPromoList, { data, loading }] = gqlService.getMarketplaceProductPromoList();
+    const [updateMarketplaceProductPromoToMp] = gqlService.updateMarketplaceProductPromoToMp();
 
     const contentProps = {
         getMarketplaceProductPromoList,
         data,
         loading,
+        updateMarketplaceProductPromoToMp,
     };
 
     return (

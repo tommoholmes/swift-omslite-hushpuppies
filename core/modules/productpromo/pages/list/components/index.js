@@ -9,7 +9,7 @@ import useStyles from '@modules/productpromo/pages/list/components/style';
 
 const ProductPromoListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getMarketplaceProductPromoList } = props;
+    const { data, loading, getMarketplaceProductPromoList, updateMarketplaceProductPromoToMp } = props;
     const productPromoList = (data && data.getMarketplaceProductPromoList && data.getMarketplaceProductPromoList.items) || [];
     const productPromoTotal = (data && data.getMarketplaceProductPromoList && data.getMarketplaceProductPromoList.total_count) || 0;
 
@@ -133,10 +133,13 @@ const ProductPromoListContent = (props) => {
         {
             label: 'Update to marketplace',
             message: 'Are you sure you want to update?',
-            // onClick: async (checkedRows) => {
-            //     const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-            //     await testing({ variables });
-            // },
+            onClick: async (checkedRows) => {
+                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                await updateMarketplaceProductPromoToMp({ variables });
+            },
+
+            confirmDialog: true,
+            showMessage: true,
         },
     ];
 

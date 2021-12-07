@@ -184,7 +184,7 @@ const CustomTable = (props) => {
         setOpenConfirmDialog(false);
         window.toastMessage({
             open: true,
-            text: 'Delete canceled!',
+            text: 'Canceled!',
             variant: 'error',
         });
     };
@@ -264,9 +264,9 @@ const CustomTable = (props) => {
                                         if (action.showMessage !== null) {
                                             setShowMessageActions(action.showMessage);
                                         } else {
-                                            setShowMessageActions(action.true);
+                                            setShowMessageActions(false);
                                         }
-                                        if (action.label === 'Delete') {
+                                        if (action.confirmDialog) {
                                             setOpenConfirmDialog(true);
                                         } else {
                                             setTimeout(() => {
