@@ -5,6 +5,8 @@ import Layout from '@layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+const URL_SET_NEW_PASSWORD = '/forgotpassword/createnewpassword';
+
 const Core = (props) => {
     const { Content } = props;
     const router = useRouter();
@@ -18,7 +20,7 @@ const Core = (props) => {
             email: Yup.string().email().required('Required!'),
         }),
         onSubmit: (values) => {
-            const variables = { email: values.email };
+            const variables = { email: values.email, callback_url: `${window.location.origin}${URL_SET_NEW_PASSWORD}` };
             window.backdropLoader(true);
             requestResetPassword({
                 variables,

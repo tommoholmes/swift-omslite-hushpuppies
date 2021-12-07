@@ -6,6 +6,7 @@ import Button from '@common_button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import useStyles from '@modules/forgotpassword/pages/default/components/style';
 import Head from 'next/head';
+import Link from 'next/link';
 
 const ForgotPassword = (props) => {
     const classes = useStyles();
@@ -25,11 +26,12 @@ const ForgotPassword = (props) => {
                         <Typography variant="h6" gutterBottom className={classes.textTitle}>
                             Forgot your password ?
                         </Typography>
-
+                        <Typography variant="h6" gutterBottom className={classes.btnTextForgot}>
+                            Please enter your email address below to receive a password reset link.
+                        </Typography>
                         <form onSubmit={(e) => formik.handleSubmit(e)}>
                             <div className="row center-xs start-sm">
                                 <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
-                                    <p>Please enter your email address below to receive a password reset link.</p>
                                     <TextField
                                         name="email"
                                         placeholder="Email"
@@ -51,6 +53,11 @@ const ForgotPassword = (props) => {
                                     <Button type="submit" variant="contained" className={classes.btnLogin}>
                                         <span className={classes.btnLoginText}>Reset My Password</span>
                                     </Button>
+                                    <Typography variant="h6" className={classes.btnTextForgot}>
+                                        <Link href="/login">
+                                            <a>Back to login page</a>
+                                        </Link>
+                                    </Typography>
                                 </div>
                             </div>
                         </form>
