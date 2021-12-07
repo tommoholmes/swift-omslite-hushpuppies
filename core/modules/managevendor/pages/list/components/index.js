@@ -11,10 +11,16 @@ const ManageVendorListContent = (props) => {
     const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
 
     const columns = [
-        { field: 'company_id', headerName: 'ID' },
-        { field: 'company_code', headerName: 'Vendor Code' },
-        { field: 'company_name', headerName: 'Vendor Name' },
-        { field: 'actions', headerName: 'Action', hideable: true },
+        { field: 'company_id', headerName: 'ID', hideable: true, sortable: true, initialSort: 'ASC' },
+        { field: 'company_code', headerName: 'Vendor Code', hideable: true, sortable: true },
+        { field: 'company_name', headerName: 'Vendor Name', hideable: true, sortable: true },
+        { field: 'actions', headerName: 'Action', hideable: true, sortable: true },
+    ];
+
+    const filters = [
+        { field: 'company_id', name: 'company_id', type: 'from', label: 'ID', initialValue: '' },
+        { field: 'company_code', name: 'company_code', type: 'like', label: 'Vendor Code', initialValue: '' },
+        { field: 'company_name', name: 'company_name', type: 'like', label: 'Vendor Name', initialValue: '' },
     ];
 
     const rows = companyList.map((company) => ({
@@ -42,6 +48,8 @@ const ManageVendorListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={companyTotal}
+                filters={filters}
+                hideActions
             />
         </>
     );
