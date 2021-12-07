@@ -4,8 +4,8 @@ export const getMarketplaceProductPromoList = gql`
     query getMarketplaceProductPromoList(
         $pageSize: Int,
         $currentPage: Int,
-        $filter: ProductPromoFilterInput,
-        $sort: ProductPromoSortInput,
+        $filter: MarketplaceProductPromoFilterInput,
+        $sort: MarketplaceProductPromoSortInput,
     ){
         getMarketplaceProductPromoList(
             pageSize: $pageSize,
@@ -37,8 +37,8 @@ export const getMarketplaceProductPromoItemsList = gql`
         $parent_id: Int!,
         $pageSize: Int,
         $currentPage: Int,
-        $filter: ProductPromoItemsFilterInput,
-        $sort: ProductPromoItemsSortInput,
+        $filter: MarketplaceProductPromoItemsFilterInput,
+        $sort: MarketplaceProductPromoItemsSortInput,
     ){
         getMarketplaceProductPromoItemsList(
             parent_id: $parent_id,
