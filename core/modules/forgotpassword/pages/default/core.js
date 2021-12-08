@@ -21,13 +21,38 @@ const Core = (props) => {
             email: Yup.string().email().required('Required!'),
             g_recaptcha_response: Yup.string().typeError('Required!').required('Required!'),
         }),
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             const variables = {
                 email: values.email,
-                g_recaptcha_response: values.g_recaptcha_response,
                 callback_url: `${window.location.origin}${URL_SET_NEW_PASSWORD}`,
             };
             window.backdropLoader(true);
+
+            try {
+                const res = await fetch('/captcha-validation', {
+                    method: 'POST',
+                    headers: new Headers({ 'content-type': 'application/json' }),
+                    body: JSON.stringify({ response: values.g_recaptcha_response }),
+                });
+                const resJson = await res.json();
+                if (!resJson.success) {
+                    window.backdropLoader(false);
+                    window.toastMessage({
+                        open: true,
+                        variant: 'error',
+                        text: 'Invalid captcha!',
+                    });
+                    return;
+                }
+            } catch (e) {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    variant: 'error',
+                    text: e.message,
+                });
+            }
+
             requestResetPassword({
                 variables,
             })
@@ -45,7 +70,7 @@ const Core = (props) => {
                     window.toastMessage({
                         open: true,
                         variant: 'error',
-                        text: e.message.split(':')[0],
+                        text: e.message,
                     });
                 });
         },
