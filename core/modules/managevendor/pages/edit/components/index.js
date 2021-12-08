@@ -57,6 +57,7 @@ const ManageVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
+                            disabled
                             name="code"
                             value={formik.values.code}
                             onChange={formik.handleChange}
@@ -75,6 +76,7 @@ const ManageVendorEditContent = (props) => {
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="name"
+                            disabled
                             value={formik.values.name}
                             onChange={formik.handleChange}
                             error={!!(formik.touched.name && formik.errors.name)}
