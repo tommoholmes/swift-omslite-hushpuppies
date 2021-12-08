@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => {
+const defaultFilterComponent = ({ filterValue, setFilterValue, disabled, typeInput }) => {
     const classes = useStyles();
 
     return (
@@ -23,6 +23,7 @@ const defaultFilterComponent = ({ filterValue, setFilterValue, disabled }) => {
             inputProps={{
                 className: classes.input,
             }}
+            type={typeInput || 'string'}
             variant="outlined"
             size="small"
             value={filterValue}
@@ -70,6 +71,7 @@ const TableFilters = (props) => {
                         },
                         setFilterValue: (value) => setFilterValueByField(field, value),
                         disabled: field.disabled,
+                        typeInput: field.typeInput,
                     })}
                 </div>
             )))}

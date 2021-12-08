@@ -1,19 +1,30 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
+export const getMarketplaceProductStatusList = gql`
+    query getMarketplaceProductStatusList(
         $pageSize: Int!,
         $currentPage: Int!,
+        $filter: MarketplaceProductStatusFilterInput,
+        $sort: MarketplaceProductStatusSortInput,
     ){
-        getCompanyList(
+        getMarketplaceProductStatusList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort
         ){
-            items {
-                company_id
-                company_code
-                company_name
-            }
+            items{
+                id
+                sku
+                marketplace_code
+                marketplace_store_id
+                marketplace_product_id
+                marketplace_upload_id
+                marketplace_status
+                status
+                message
+                updated_at
+              }
             total_count
             page_info {
                 page_size
@@ -25,5 +36,5 @@ export const getCompanyList = gql`
 `;
 
 export default {
-    getCompanyList,
+    getMarketplaceProductStatusList,
 };

@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
+const colorText = '#536777';
 
 const useStyles = makeStyles((theme) => ({
     headerContainer: {
@@ -30,6 +31,26 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             float: 'left',
             marginTop: 7,
+        },
+    },
+    fieldRoot: {
+        width: 'calc(100% + 32.8px)',
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
+        },
+    },
+    fieldInput: {
+        border: '1px solid',
+        borderColor: colorText,
+        borderRadius: 20,
+        height: 36,
+        '& .MuiOutlinedInput-notchedOutline': {
+            bottom: -1,
+        },
+    },
+    fieldInputFilter: {
+        '& .MuiInputBase-input': {
+            padding: '8.5px 14px',
         },
     },
 }));
