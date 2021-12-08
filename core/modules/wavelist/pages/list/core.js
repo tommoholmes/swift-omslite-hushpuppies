@@ -6,12 +6,16 @@ const Core = (props) => {
         Content,
     } = props;
 
+    const pageConfig = {
+        title: 'Pick by Wave List',
+    };
+
     const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getPickByWaveStatus();
     const [getPickByWaveList, { data, loading }] = gqlService.getPickByWaveList();
 
     if (loadingOptionStatus) {
         return (
-            <Layout useBreadcrumbs={false}>
+            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -34,7 +38,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

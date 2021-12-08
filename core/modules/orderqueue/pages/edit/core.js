@@ -155,16 +155,20 @@ const Core = (props) => {
         acl_code: 'sales_order_queue_edit_replacement',
     });
 
+    const pageConfig = {
+        title: `Detail Order #${router.query?.id}`,
+    };
+
     if (loading || aclCheckLoading) {
-        return <Layout>Loading...</Layout>;
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
-        return <Layout>Data not found!</Layout>;
+        return <Layout pageConfig={pageConfig}>Data not found!</Layout>;
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper
                 refetchOrderQueue={refetchOrderQueue}
                 data={data}

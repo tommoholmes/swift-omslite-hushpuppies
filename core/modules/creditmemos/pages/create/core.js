@@ -149,13 +149,18 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `New Memo #${router?.query?.request_id}`,
+    };
+
     const { loading, data, error } = gqlService.prepareNewMemo({
         request_id: router && router.query && Number(router.query.request_id),
     });
 
     if (loading) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -178,7 +183,7 @@ const Core = (props) => {
         });
         setTimeout(() => { router.push(`/sales/managerma/edit/${router && router.query && Number(router.query.request_id)}`); }, 1500);
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -194,7 +199,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper
                 parentId={router && router.query && Number(router.query.request_id)}
                 data={data}

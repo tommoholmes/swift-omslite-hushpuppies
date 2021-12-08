@@ -8,6 +8,11 @@ const Core = (props) => {
     const {
         Content,
     } = props;
+
+    const pageConfig = {
+        title: 'Fetch Order',
+    };
+
     const [marketplaceFetchOrder] = gqlService.marketplaceFetchOrder();
 
     const handleSubmit = (input, resetForm) => {
@@ -52,7 +57,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

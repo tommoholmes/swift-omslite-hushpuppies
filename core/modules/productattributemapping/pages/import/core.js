@@ -10,6 +10,11 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+
+    const pageConfig = {
+        title: 'Import Mapping',
+    };
+
     const [importMarketplaceProductAttributeMapping] = gqlService.importMarketplaceProductAttributeMapping();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'marketplace_product_attribute_mapping' });
     const [downloadListFix, downloadListFixRes] = gqlService.downloadSampleCsv({ type: 'marketplace_fixed_product_attribute_mapping' });
@@ -76,7 +81,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

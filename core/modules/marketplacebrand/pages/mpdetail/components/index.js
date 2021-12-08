@@ -19,7 +19,7 @@ const AdminStoreCreateContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(`/configurations/marketplacebrand/view/${router.query.id}`)}
+                onClick={() => router.push(`/configurations/marketplacebrand/view/${router?.query?.id}`)}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

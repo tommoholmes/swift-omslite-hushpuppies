@@ -10,6 +10,11 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+
+    const pageConfig = {
+        title: 'Product Upload',
+    };
+
     const [uploadSource] = gqlService.uploadSource();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'product' });
 
@@ -72,7 +77,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

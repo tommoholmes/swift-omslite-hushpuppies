@@ -89,6 +89,11 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Pack by Batch ID ${router.query?.id}`,
+    };
+
     const { loading, data } = gqlService.getPackList({
         id: [router && router.query && Number(router.query.id)],
     });
@@ -96,7 +101,7 @@ const Core = (props) => {
 
     if (loading) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
                     Loading . . .
                 </div>
@@ -106,7 +111,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
                     No records to display
                 </div>
@@ -115,7 +120,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

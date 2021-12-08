@@ -121,12 +121,15 @@ const ContentWrapper = (props) => {
 };
 
 const Core = (props) => {
+    const pageConfig = {
+        title: 'Add New Mapping',
+    };
     const { loading: loadingMarketplace, data: dataMarketplace } = gqlService.getMpProductAttributeMappingMpOptions();
     const { loading: loadingMapAttribute, data: dataMapAttribute } = gqlService.getProductEavAttributeOptions();
 
     if (loadingMarketplace || loadingMapAttribute) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
@@ -136,7 +139,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );

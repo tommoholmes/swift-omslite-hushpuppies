@@ -10,6 +10,11 @@ const Core = (props) => {
     const {
         Content,
     } = props;
+
+    const pageConfig = {
+        title: 'Marketplace - Bulk Shipment',
+    };
+
     const [activityState, setActivityState] = React.useState();
     const [firstLoad, setFirstLoad] = React.useState(true);
     const [showProgress, setshowProgress] = React.useState(false);
@@ -84,7 +89,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );
