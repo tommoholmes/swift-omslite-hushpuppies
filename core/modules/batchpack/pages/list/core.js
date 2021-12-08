@@ -6,6 +6,10 @@ const Core = (props) => {
         Content,
     } = props;
 
+    const pageConfig = {
+        title: 'Pack by Batch List',
+    };
+
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
 
     const contentProps = {
@@ -15,7 +19,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

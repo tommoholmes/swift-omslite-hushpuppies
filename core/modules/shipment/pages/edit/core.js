@@ -235,6 +235,11 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Detail Shipment #${router.query?.id}`,
+    };
+
     const { loading: loadingCompany, data: dataCompany } = gqlService.getShipmentAvailableCompany({
         shipment_id: router && router.query && Number(router.query.id),
     });
@@ -245,18 +250,18 @@ const Core = (props) => {
 
     if (loading || loadingCompany) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper data={data} dataCompany={dataCompany} refetch={refetch} {...props} />
         </Layout>
     );

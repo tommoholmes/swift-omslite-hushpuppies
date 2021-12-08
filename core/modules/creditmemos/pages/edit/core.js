@@ -46,24 +46,29 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `View Memo #${router?.query?.id}`,
+    };
+
     const { loading, data } = gqlService.getCreditMemoById({
         id: router && router.query && Number(router.query.id),
     });
 
     if (loading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

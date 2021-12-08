@@ -761,7 +761,7 @@ const Layout = (props) => {
     return (
         <>
             <Head>
-                <title>{currentLocation}</title>
+                <title>{pageConfig?.title ? pageConfig.title : currentLocation}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={classes.root}>

@@ -9,6 +9,11 @@ const Core = (props) => {
     const {
         Content,
     } = props;
+
+    const pageConfig = {
+        title: 'Bulk Order Reallocation',
+    };
+
     const router = useRouter();
     const [bulkOrderReallocation] = gqlService.bulkOrderReallocation();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'bulk_order_reallocation' });
@@ -76,7 +81,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

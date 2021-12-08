@@ -218,20 +218,24 @@ const ContentWrapper = (props) => {
 const Core = (props) => {
     const { loading, data } = gqlService.getCustomer();
 
+    const pageConfig = {
+        title: 'Edit Account',
+    };
+
     if (loading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

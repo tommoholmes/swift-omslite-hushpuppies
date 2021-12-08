@@ -11,6 +11,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
     } = props;
+
     const wavelist = data.getPickByWaveById.pick_by_wave;
     const router = useRouter();
 
@@ -79,9 +80,13 @@ const Core = (props) => {
     });
     const classes = useStyles();
 
+    const pageConfig = {
+        title: `Pick by Wave #${router.query?.id}`,
+    };
+
     if (loading) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
                     Loading . . .
                 </div>
@@ -91,7 +96,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
                     No records to display
                 </div>
@@ -100,7 +105,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

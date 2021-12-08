@@ -86,6 +86,11 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Edit User #${router?.query?.id}`,
+    };
+
     const { loading, data } = gqlService.getAdminStoreById({
         id: router && router.query && Number(router.query.id),
     });
@@ -95,13 +100,13 @@ const Core = (props) => {
 
     if (loading || loadingCompany || loadingLocation || loadingGroup) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
@@ -113,7 +118,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );

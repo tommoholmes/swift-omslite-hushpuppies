@@ -139,6 +139,11 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Product Detail #${router?.query?.id}`,
+    };
+
     const [getProductAttributes, productAttributes] = gqlService.getProductAttributes();
     const { loading, data, called } = productAttributes;
 
@@ -150,7 +155,7 @@ const Core = (props) => {
 
     if (loading || !called) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -167,7 +172,7 @@ const Core = (props) => {
 
     if (called && !data) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -183,7 +188,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper data={data} getProductAttributes={getProductAttributes} {...props} />
         </Layout>
     );

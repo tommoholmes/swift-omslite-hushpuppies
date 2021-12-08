@@ -71,8 +71,12 @@ const Core = (props) => {
         startPicking,
     };
 
+    const pageConfig = {
+        title: 'Create Pick by Batch - Manual Order',
+    };
+
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

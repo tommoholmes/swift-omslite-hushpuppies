@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import Layout from '@layout';
 import gqlService from '@modules/orderqueue/services/graphql';
 import { useRouter } from 'next/router';
@@ -8,6 +9,22 @@ const Core = (props) => {
     } = props;
 
     const router = useRouter();
+    const capitalizeWord = () => {
+        const words = router.query?.tab_status.split('_');
+
+        for (let i = 0; i < words.length; i++) {
+            words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+        }
+        if (words.length > 1) {
+            return words.join(' ');
+        }
+        return `Order ${ words.join(' ')}`;
+    };
+
+    const pageConfig = {
+        title: capitalizeWord(),
+    };
+
     const tab_status = router && router.query && router.query.tab_status;
     const [load, setLoad] = React.useState(false);
     const [varExport, setVarExport] = React.useState({});
@@ -50,7 +67,7 @@ const Core = (props) => {
 
     if (load) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -66,7 +83,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

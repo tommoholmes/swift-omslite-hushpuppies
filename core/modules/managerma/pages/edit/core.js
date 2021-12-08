@@ -162,6 +162,10 @@ const ContentWrapper = (props) => {
 const Core = (props) => {
     const router = useRouter();
 
+    const pageConfig = {
+        title: `Manage RMA #${router?.query?.id}`,
+    };
+
     const { loading: loadingStatus, data: dataStatusItem } = gqlService.getRmaItemStatusOptions();
     const { loading: loadingReturnType, data: dataReturnType } = gqlService.getStoreConfig({
         path: 'swiftoms_rma/rma_request/return_type',
@@ -178,13 +182,13 @@ const Core = (props) => {
 
     if (loading || loadingStatus || loadingReturnType || loadingPackageCondition || loadingReason) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
@@ -198,7 +202,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );
