@@ -11,9 +11,8 @@ const Core = (props) => {
     } = props;
     const router = useRouter();
     const pageConfig = {
-        title: `Pack by Wave - Scan ID ${router.query?.id}`,
+        title: `Pack by Wave - Scan ID ${router.query?.shipment}`,
     };
-    const id = router && router.query && Number(router.query.id);
     const wave_id = router && router.query && Number(router.query.wave);
     const shipment_id = router && router.query && Number(router.query.shipment);
 
@@ -72,7 +71,6 @@ const Core = (props) => {
         loading,
         handleDetect,
         shipment_id,
-        id,
         useCamera: dataConfigCamera.getStoreConfig === '1',
     };
 

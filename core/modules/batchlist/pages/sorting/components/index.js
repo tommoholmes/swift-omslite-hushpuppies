@@ -34,6 +34,7 @@ const SortingItemContent = (props) => {
                         )
                         : (
                             <ManualScan
+                                showHint
                                 barcode={pickList.barcode}
                                 handleDetect={handleDetect}
                             />

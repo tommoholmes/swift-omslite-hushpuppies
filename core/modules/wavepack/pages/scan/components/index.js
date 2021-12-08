@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 const ScanItemContent = (props) => {
     const {
-        data, loading, handleDetect, id, useCamera,
+        data, loading, handleDetect, shipment_id, useCamera,
     } = props;
     const classes = useStyles();
     const dataToShow = data?.updatePickByWaveQtyPacked?.pick_by_wave_item || null;
@@ -24,7 +24,7 @@ const ScanItemContent = (props) => {
                         ? (
                             <Scan
                                 handleDetect={handleDetect}
-                                handleClose={() => Router.push(`/pickpack/wavepack/packlist/detail/${id}`)}
+                                handleClose={() => Router.push(`/pickpack/wavepack/packlist/detail/${shipment_id}`)}
                             />
                         )
                         : (
@@ -46,7 +46,7 @@ const ScanItemContent = (props) => {
                             : null}
                     {!useCamera
                         ? (
-                            <Link href={`/pickpack/wavepack/packlist/detail/${id}`}>
+                            <Link href={`/pickpack/wavepack/packlist/detail/${shipment_id}`}>
                                 <a className={classes.linkBack}>Back to Wave Items</a>
                             </Link>
                         ) : null}
