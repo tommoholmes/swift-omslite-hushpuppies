@@ -71,9 +71,13 @@ const Core = (props) => {
     });
     const classes = useStyles();
 
+    const pageConfig = {
+        title: `Pack by Wave #${router.query?.id}`,
+    };
+
     if (loading) {
         return (
-            <Layout useBreadcrumbs={false}>
+            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
                     Loading . . .
                 </div>
@@ -83,7 +87,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout useBreadcrumbs={false}>
+            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
                     No records to display
                 </div>
@@ -92,7 +96,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

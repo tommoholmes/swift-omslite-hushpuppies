@@ -10,6 +10,11 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+
+    const pageConfig = {
+        title: 'Export Source',
+    };
+
     const [downloadSource] = gqlService.downloadSource();
 
     const handleSubmit = ({
@@ -55,7 +60,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

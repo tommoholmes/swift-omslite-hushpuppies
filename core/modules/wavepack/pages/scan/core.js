@@ -10,6 +10,9 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+    const pageConfig = {
+        title: `Pack by Wave - Scan ID ${router.query?.id}`,
+    };
     const id = router && router.query && Number(router.query.id);
     const wave_id = router && router.query && Number(router.query.wave);
     const shipment_id = router && router.query && Number(router.query.shipment);
@@ -48,7 +51,7 @@ const Core = (props) => {
 
     if (typeof window === 'undefined' || loadingConfigCamera) {
         return (
-            <Layout useBreadcrumbs={false}>
+            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -74,7 +77,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

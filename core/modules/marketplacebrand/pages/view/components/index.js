@@ -157,7 +157,7 @@ const AdminStoreEditContent = (props) => {
                                                     <div style={{ height: 10 }} />
                                                     <a
                                                         href={`
-                                                        /configurations/marketplacebrand/view/${router.query.id}/mpdetail/${mp.store_detail_id}
+                                                        /configurations/marketplacebrand/view/${router?.query?.id}/mpdetail/${mp.store_detail_id}
                                                         `}
                                                         style={{ color: '#BE1F93' }}
                                                     >

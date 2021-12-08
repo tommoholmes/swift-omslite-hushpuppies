@@ -98,6 +98,11 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Pick by Batch - Scan ID ${router.query?.id}`,
+    };
+
     const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
         path: 'swiftoms_pickpack/batch/allow_manual_confirm_pick',
     });
@@ -111,18 +116,18 @@ const Core = (props) => {
 
     if (loading || loadingConfig || loadingConfigCamera) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper
                 data={data}
                 useCamera={dataConfigCamera.getStoreConfig === '1'}

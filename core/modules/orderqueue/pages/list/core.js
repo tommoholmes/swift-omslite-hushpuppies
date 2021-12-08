@@ -7,6 +7,10 @@ const Core = (props) => {
         Content,
     } = props;
 
+    const pageConfig = {
+        title: 'Order Queue',
+    };
+
     const router = useRouter();
     const [varExport, setVarExport] = React.useState({});
     const [getOrderQueueList, { data, loading }] = gqlService.getOrderQueueList();
@@ -52,7 +56,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

@@ -10,6 +10,11 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Pack by Batch ID ${router.query?.shipment} - Scan Batch ${router.query?.batch}`,
+    };
+
     const { loading: loadingConfigCamera, data: dataConfigCamera } = gqlService.getStoreConfig({
         path: 'swiftoms_pickpack/batch/use_camera_to_scan',
     });
@@ -47,7 +52,7 @@ const Core = (props) => {
 
     if (typeof window === 'undefined' || loadingConfigCamera) {
         return (
-            <Layout useBreadcrumbs={false}>
+            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -72,7 +77,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

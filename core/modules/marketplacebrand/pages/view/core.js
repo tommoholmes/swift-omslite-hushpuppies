@@ -196,6 +196,9 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+    const pageConfig = {
+        title: `View Marketplace Brand #${router?.query?.id}`,
+    };
     const [updateConnectedMarketplace, { loading }] = gqlService.updateConnectedMarketplace({});
     const [getLocationList, { loading: loadingLocation, data: dataLocation }] = gqlService.getLocationList();
     const [getAvailableMpToConnect, { loading: loadingMp, data, refetch }] = gqlService.getAvailableMpToConnect({
@@ -214,7 +217,7 @@ const Core = (props) => {
 
     if (loading || loadingMp || loadingLocation) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -231,7 +234,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -253,7 +256,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );

@@ -329,13 +329,18 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
+
+    const pageConfig = {
+        title: `Marketplace #${router.query?.id}`,
+    };
+
     const { loading, data, refetch } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
     if (loading) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div style={{
                     display: 'flex',
                     color: '#435179',
@@ -352,12 +357,12 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper data={data} {...props} refetch={refetch} />
         </Layout>
     );

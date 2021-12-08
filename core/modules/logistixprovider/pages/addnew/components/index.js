@@ -35,7 +35,7 @@ const LogistixProviderContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                Create Logistix Provider
+                Add New Logistix Provider
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>

@@ -114,9 +114,13 @@ const Core = (props) => {
     });
     const classes = useStyles();
 
+    const pageConfig = {
+        title: `Pick by Wave - Scan ID ${router.query?.id}`,
+    };
+
     if (loading || loadingConfig || loadingConfigCamera) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
                     Loading . . .
                 </div>
@@ -126,7 +130,7 @@ const Core = (props) => {
 
     if (!data) {
         return (
-            <Layout>
+            <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
                     No records to display
                 </div>
@@ -135,7 +139,7 @@ const Core = (props) => {
     }
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout useBreadcrumbs={false} pageConfig={pageConfig}>
             <ContentWrapper
                 data={data}
                 allowManualConfirm={dataConfig.getStoreConfig === '1'}
