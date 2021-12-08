@@ -9,11 +9,13 @@ const PullProductCategoryContent = (props) => {
     const router = useRouter();
     useEffect(async () => {
         await pullProductCategory();
-        if (data?.pullProductCategory === true) {
-            setCookies('isPull', data.pullProductCategory);
-            router.push('/marketplace/productcategory');
-        } else {
-            router.push('/marketplace/productcategory');
+        if (loading === false && data?.pullProductCategory !== undefined) {
+            if (data.pullProductCategory === true) {
+                setCookies('isPull', data.pullProductCategory);
+                router.push('/marketplace/productcategory');
+            } else {
+                router.push('/marketplace/productcategory');
+            }
         }
     }, [data]);
 
