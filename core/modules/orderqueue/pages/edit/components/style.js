@@ -491,6 +491,12 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: `${borderColor} !important`,
         },
     },
+    btnClear: {
+        cursor: 'pointer',
+        outline: 'none',
+        background: 'none',
+        border: 'none',
+    },
 }));
 
 export default useStyles;

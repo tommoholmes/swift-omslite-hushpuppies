@@ -10,16 +10,15 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
 import { formatPriceNumber } from '@helper_currency';
-import { Formik, Field, FieldArray } from 'formik';
-import Autocomplete from '@common_autocomplete';
-import gqlProduct from '@modules/productlist/services/graphql';
+import { Formik, FieldArray, Field } from 'formik';
+import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
 
 const OrderQueueEditContent = (props) => {
     const {
@@ -76,40 +75,14 @@ const OrderQueueEditContent = (props) => {
     };
 
     const [isModeEdit, setIsModeEdit] = useState(false);
-    const [searchSKU, setSearchSKU] = useState('');
-    const [optionsSKU, setOptionsSKU] = useState([]);
-    const [getProductList, getProductListRes] = gqlProduct.getProductList();
-    const replacementOptions = initialValueEditItem.order_items;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [idxOpendModal, setIdxOpendModal] = useState(null);
 
-    useEffect(() => {
-        const onChangeTimeOut = setTimeout(() => {
-            const isExist = searchSKU && optionsSKU.filter((elm) => elm?.sku?.toLowerCase().includes(searchSKU?.toLowerCase()));
-            if (searchSKU && isExist.length <= 3) {
-                getProductList({
-                    variables: {
-                        pageSize: 20,
-                        currentPage: 1,
-                        filter: {
-                            product_name: {
-                                like: searchSKU,
-                            },
-                        },
-                    },
-                });
-            }
+    const handleOpenModal = (idx) => {
+        setIdxOpendModal(idx);
+        setIsModalOpen(true);
+    };
 
-            return null;
-        }, 500);
-
-        return () => clearTimeout(onChangeTimeOut);
-    }, [searchSKU]);
-
-    useEffect(() => {
-        if (getProductListRes && getProductListRes.data && getProductListRes.data.getProductList && getProductListRes.data.getProductList.items) {
-            const sku = new Set(optionsSKU.map((d) => d.sku));
-            setOptionsSKU([...optionsSKU, ...getProductListRes.data.getProductList.items.filter((d) => !sku.has(d.sku))]);
-        }
-    }, [getProductListRes.data]);
     return (
         <>
             <Button
@@ -255,214 +228,164 @@ const OrderQueueEditContent = (props) => {
                     </div>
                     <br />
                     <div>
-                        <div style={{
- display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-}}>
+                        <div>
                             <div>
                                 <h5 className={classes.titleSmall}>Items Ordered</h5>
                             </div>
-                            <div style={{ textAlign: 'center' }}>
-                                {orderQueue.isAllowReallocate && (
-                                    <Button className={isModeEdit ? classes.btnSecondary : classes.btn} onClick={() => setIsModeEdit(!isModeEdit)}>
-                                        {isModeEdit ? 'Cancel' : 'Edit'}
-                                    </Button>
-                                )}
-                            </div>
                         </div>
-
-                        <div style={{ overflowX: 'auto' }}>
-                            <table className={classes.table}>
-                                <tbody>
-                                    <tr className={classes.tr}>
-                                        <th className={classes.th} style={{ paddingLeft: 0 }}>
-                                            SKU Product
-                                        </th>
-                                        <th className={classes.th}>Name</th>
-                                        <th className={classes.th} style={{ textAlign: 'right' }}>
-                                            Price
-                                        </th>
-                                        <th className={classes.th}>qty</th>
-                                        <th className={classes.th} style={{ textAlign: 'right' }}>
-                                            Discount Amount
-                                        </th>
-                                        <th className={classes.th}>Location Code</th>
-                                        <th className={classes.th}>Pickup At</th>
-                                        {(aclCheckData && aclCheckData.isAccessAllowed) === true && <th className={classes.th}>Replacement For</th>}
-                                        {orderQueue.isAllowReallocate && isModeEdit && <th className={classes.th}>Action</th>}
-                                    </tr>
-                                    {isModeEdit && (
-                                        <Formik initialValues={initialValueEditItem}>
-                                            {({
- values, setFieldValue, errors, touched,
-}) => (
-                                                <>
-                                                    <FieldArray name="order_items">
-                                                        {({ remove, push }) => (
-                                                            <>
-                                                                {values.order_items.map((item, idx) => (
-                                                                    <tr key={idx}>
-                                                                        <td className={classes.td} style={{ paddingLeft: 0 }}>
-                                                                            {item?.sku}
-                                                                        </td>
-                                                                        <td className={classes.td} style={{ width: 300 }}>
-                                                                            {!item?.is_can_delete && item?.name}
-                                                                            {item?.is_can_delete && (
-                                                                                <Autocomplete
-                                                                                    name={`order_items.${idx}.sku`}
-                                                                                    mode={optionsSKU.length > 0 ? 'default' : 'lazy'}
-                                                                                    className={`${classes.autocomplete}`}
-                                                                                    value={values.order_items[idx].name}
-                                                                                    onChange={(e) => {
-                                                                                        setFieldValue(`order_items.${idx}.sku`, e?.sku ?? '');
-                                                                                        setFieldValue(
-                                                                                            `order_items.${idx}.base_price`,
-                                                                                            e?.product_price ?? 0,
-                                                                                        );
-                                                                                        setFieldValue(`order_items.${idx}.name`, e);
-                                                                                    }}
-                                                                                    loading={
-                                                                                        !values.order_items[idx].sku && getProductListRes.loading
-                                                                                    }
-                                                                                    options={optionsSKU}
-                                                                                    getOptionsVariables={{
-                                                                                        variables: {
-                                                                                            search: searchSKU,
-                                                                                            pageSize: 20,
-                                                                                            currentPage: 1,
-                                                                                        },
-                                                                                    }}
-                                                                                    getOptions={getProductList}
-                                                                                    primaryKey="sku"
-                                                                                    labelKey="product_name"
-                                                                                    onInputChange={(e) => setSearchSKU(e && e.target && e.target.value)}
-                                                                                    error={
-                                                                                        !!(
-                                                                                            errors?.order_items?.[idx]?.name
-                                                                                            && touched?.order_items?.[idx]?.name
-                                                                                        )
-                                                                                    }
-                                                                                    helperText={
-                                                                                        (errors?.order_items?.[idx]?.name
-                                                                                            && touched?.order_items?.[idx]?.name)
-                                                                                        || ''
-                                                                                    }
-                                                                                />
-                                                                            )}
-                                                                        </td>
-
-                                                                        <td className={classes.td} style={{ textAlign: 'right' }}>
-                                                                            {typeof item?.base_price === 'string'
-                                                                                ? item?.base_price
-                                                                                : formatPriceNumber(item?.base_price)}
-                                                                        </td>
-                                                                        <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                            {!item.is_can_delete && item?.qty}
-                                                                            {item.is_can_delete && (
-                                                                                <Field
-                                                                                    className={classes.fieldQty}
-                                                                                    name={`order_items.${idx}.qty`}
-                                                                                    type="number"
-                                                                                />
-                                                                            )}
-                                                                        </td>
-                                                                        <td className={classes.td} style={{ textAlign: 'right' }}>
-                                                                            {item?.discount_amount}
-                                                                        </td>
-                                                                        <td className={classes.td}>{item?.loc_code || '-'}</td>
-                                                                        <td className={classes.td}>{item?.pickup_name || '-'}</td>
-                                                                        {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
-                                                                            <td className={classes.td}>
-                                                                                {!item?.is_can_delete && (item?.replacement_for || '-')}
-                                                                                {item?.is_can_delete && (
-                                                                                    <Autocomplete
-                                                                                        name={`order_items.${idx}.sku`}
-                                                                                        className={`${classes.autocomplete}`}
-                                                                                        value={values.order_items[idx].replacement_for}
-                                                                                        onChange={(e) => {
-                                                                                            setFieldValue(
-                                                                                                `order_items.${idx}.item_id_replacement`,
-                                                                                                e?.id,
-                                                                                            );
-                                                                                            setFieldValue(`order_items.${idx}.replacement_for`, e);
-                                                                                        }}
-                                                                                        options={replacementOptions}
-                                                                                        primaryKey="id"
-                                                                                        labelKey="sku"
-                                                                                        error={
-                                                                                            !!(
-                                                                                                errors?.order_items?.[idx]?.replacement_for
-                                                                                                && touched?.order_items?.[idx]?.replacement_for
-                                                                                            )
-                                                                                        }
-                                                                                        helperText={
-                                                                                            (errors?.order_items?.[idx]?.replacement_for
-                                                                                                && touched?.order_items?.[idx]?.replacement_for)
-                                                                                            || ''
-                                                                                        }
-                                                                                    />
-                                                                                )}
-                                                                            </td>
-                                                                        )}
-                                                                        {item?.is_can_delete ? (
-                                                                            <td
-                                                                                className="link-button"
-                                                                                style={{ cursor: 'pointer' }}
-                                                                                onClick={() => remove(idx)}
-                                                                            >
-                                                                                delete
-                                                                            </td>
+                        <Formik initialValues={initialValueEditItem}>
+                            {({ values, setFieldValue, setValues }) => (
+                                <>
+                                    <ModalFindProduct
+                                        open={isModalOpen}
+                                        handleClose={() => setIsModalOpen(false)}
+                                        idx={idxOpendModal}
+                                        values={values}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table className={classes.table}>
+                                            <tbody>
+                                                <tr className={classes.tr}>
+                                                    <th className={classes.th} style={{ paddingLeft: 0 }}>
+                                                        SKU Product
+                                                    </th>
+                                                    <th className={classes.th}>Name</th>
+                                                    <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                        Price
+                                                    </th>
+                                                    <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                        qty
+                                                    </th>
+                                                    <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                        Discount Amount
+                                                    </th>
+                                                    <th className={classes.th}>Location Code</th>
+                                                    <th className={classes.th}>Pickup At</th>
+                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
+                                                        <th className={classes.th}>Replacement For</th>
+                                                    )}
+                                                    {orderQueue.isAllowReallocate && isModeEdit && (
+                                                        <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                            Action
+                                                        </th>
+                                                    )}
+                                                </tr>
+                                                <FieldArray name="order_items">
+                                                    {({ remove }) => (
+                                                        <>
+                                                            {values.order_items.map((e, idx) => (
+                                                                <tr key={idx}>
+                                                                    <td className={classes.td} style={{ paddingLeft: 0 }}>
+                                                                        {e.sku}
+                                                                    </td>
+                                                                    <td className={classes.td}>{e.name}</td>
+                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
+                                                                        {typeof e?.base_price === 'string'
+                                                                            ? e?.base_price
+                                                                            : formatPriceNumber(e?.base_price)}
+                                                                    </td>
+                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
+                                                                        {isModeEdit ? (
+                                                                            <Field
+                                                                                type="number"
+                                                                                className={classes.fieldQty}
+                                                                                name={`order_items.[${idx}].qty`}
+                                                                            />
                                                                         ) : (
-                                                                            '-'
+                                                                            e?.qty
                                                                         )}
-                                                                    </tr>
-                                                                ))}
-                                                                <div>
-                                                                    <Button
-                                                                        className={classes.btnSecondary}
-                                                                        onClick={() => push({ is_can_delete: true })}
-                                                                    >
-                                                                        Add Product
-                                                                    </Button>
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                    </FieldArray>
-                                                    <div>
-                                                        <Button className={classes.btn} onClick={() => handleSubmitEdit(values)}>
-                                                            Submit
-                                                        </Button>
-                                                    </div>
-                                                </>
-                                            )}
-                                        </Formik>
-                                    )}
+                                                                    </td>
+                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
+                                                                        {e.discount_amount}
+                                                                    </td>
+                                                                    <td className={classes.td}>{e.loc_code || '-'}</td>
+                                                                    <td className={classes.td}>{e.pickup_name || '-'}</td>
+                                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
+                                                                        <td className={classes.td}>{e.replacement_for || '-'}</td>
+                                                                    )}
+                                                                    {isModeEdit && (
+                                                                        <td
+                                                                            className={classes.td}
+                                                                            style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}
+                                                                        >
+                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
+                                                                                <img src="/assets/img/replace.svg" alt="replace" />
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={`link-button ${classes.btnClear}`}
+                                                                                    onClick={() => handleOpenModal(idx)}
+                                                                                >
+                                                                                    replace
+                                                                                </button>
+                                                                            </div>
+                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
+                                                                                <img src="/assets/img/trash.svg" alt="delete" />
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={`link-button ${classes.btnClear}`}
+                                                                                    onClick={() => {
+                                                                                        const tempDeletedItems = [...values.deleted_items];
+                                                                                        tempDeletedItems.push(values.order_items[idx]);
 
-                                    {!isModeEdit
-                                        && orderQueue.orderItem.map((e, idx) => (
-                                            <tr key={idx}>
-                                                <td className={classes.td} style={{ paddingLeft: 0 }}>
-                                                    {e.sku}
-                                                </td>
-                                                <td className={classes.td}>{e.name}</td>
-                                                <td className={classes.td} style={{ textAlign: 'right' }}>
-                                                    {formatPriceNumber(e.base_price)}
-                                                </td>
-                                                <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                    {e?.qty}
-                                                </td>
-                                                <td className={classes.td} style={{ textAlign: 'right' }}>
-                                                    {e.discount_amount}
-                                                </td>
-                                                <td className={classes.td}>{e.loc_code || '-'}</td>
-                                                <td className={classes.td}>{e.pickup_name || '-'}</td>
-                                                {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
-                                                    <td className={classes.td}>{e.replacement_for || '-'}</td>
+                                                                                        setFieldValue('deleted_items', tempDeletedItems);
+                                                                                        remove(idx);
+                                                                                    }}
+                                                                                >
+                                                                                    delete
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    )}
+                                                                </tr>
+                                                            ))}
+                                                        </>
+                                                    )}
+                                                </FieldArray>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'end',
+                                            alignItems: 'center',
+                                            margin: '15px 0',
+                                        }}
+                                    >
+                                        {orderQueue.isAllowReallocate && (
+                                            <>
+                                                <div>
+                                                    <Button
+                                                        style={{ height: '30px' }}
+                                                        className={classes.btn}
+                                                        onClick={() => (isModeEdit ? handleSubmitEdit(values) : setIsModeEdit(true))}
+                                                    >
+                                                        {isModeEdit ? 'Save' : 'Edit Order'}
+                                                    </Button>
+                                                </div>
+                                                {isModeEdit && (
+                                                    <div style={{ margin: '15px 15px 0px 15px' }}>
+                                                        <button
+                                                            type="button"
+                                                            className={`link-button ${classes.btnClear}`}
+                                                            onClick={() => {
+                                                                setFieldValue('deleted_items', []);
+                                                                setValues(initialValueEditItem);
+                                                                setIsModeEdit(false);
+                                                            }}
+                                                        >
+                                                            cancel
+                                                        </button>
+                                                    </div>
                                                 )}
-                                            </tr>
-                                        ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </Formik>
                     </div>
                 </div>
                 <div className={classes.content}>
