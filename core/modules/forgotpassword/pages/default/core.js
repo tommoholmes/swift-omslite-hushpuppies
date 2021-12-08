@@ -15,12 +15,18 @@ const Core = (props) => {
     const formik = useFormik({
         initialValues: {
             email: '',
+            g_recaptcha_response: '',
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email().required('Required!'),
+            g_recaptcha_response: Yup.string().typeError('Required!').required('Required!'),
         }),
         onSubmit: (values) => {
-            const variables = { email: values.email, callback_url: `${window.location.origin}${URL_SET_NEW_PASSWORD}` };
+            const variables = {
+                email: values.email,
+                g_recaptcha_response: values.g_recaptcha_response,
+                callback_url: `${window.location.origin}${URL_SET_NEW_PASSWORD}`,
+            };
             window.backdropLoader(true);
             requestResetPassword({
                 variables,
