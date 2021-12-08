@@ -10,7 +10,7 @@ import useStyles from '@common_barcodescanner/style';
 
 const ManualScan = (props) => {
     const {
-        handleDetect, barcode,
+        handleDetect, barcode, showHint = false,
     } = props;
 
     const classes = useStyles();
@@ -62,6 +62,11 @@ const ManualScan = (props) => {
                     : <RemoveCircleIcon className={clsx(classes.icon, 'none')} />
                     : <div className={classes.scanText}>Press SCAN button on your device</div>}
             </div>
+            {showHint && (
+                <div className={classes.matchIconManual}>
+                    <div className={classes.scanText}>Press SCAN button on your device</div>
+                </div>
+            )}
         </>
     );
 };

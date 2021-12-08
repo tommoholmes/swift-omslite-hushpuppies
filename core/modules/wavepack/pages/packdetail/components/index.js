@@ -120,7 +120,7 @@ const BatchListPickListContent = (props) => {
                                     QTY
                                 </h5>
                                 <h5
-                                    className={clsx(classes.bodyList, 'bold', list.qty_packed > 0 && list.qty_packed <= list.qty && 'red')}
+                                    className={clsx(classes.bodyList, 'bold', list.qty_packed > 0 && list.qty_packed < list.qty && 'red')}
                                     style={{ fontSize: 18 }}
                                 >
                                     {`${list.qty_packed}/${list.qty}`}
@@ -150,7 +150,7 @@ const BatchListPickListContent = (props) => {
                 <button
                     className={classes.btnFooterDisabled}
                     type="submit"
-                    onClick={() => router.push(`/pickpack/wavepack/packlist/scan/${packList.entityId}/${packList.pick_id}/${packList.id}`)}
+                    onClick={() => router.push(`/pickpack/wavepack/packlist/scan/${packList.pick_id}/${packList.entityId}`)}
                 >
                     Start Scanning
                 </button>
