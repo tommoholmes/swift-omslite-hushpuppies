@@ -10,10 +10,13 @@ import useStyles from '@modules/requestvendor/pages/edit/components/style';
 
 const RequestVendorEditContent = (props) => {
     const {
-        formik,
+        vendor,
+        handleApprove,
+        handleNotApprove,
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const disabledButton = (vendor.status === 'approved' || vendor.status === 'not_approved');
 
     return (
         <>
@@ -33,23 +36,20 @@ const RequestVendorEditContent = (props) => {
                 />
             </Button>
             <h2 className={classes.titleTop}>
-                Edit Vendor
-                {formik.values.name}
+                {`Edit Vendor ${vendor.companyName}`}
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Firstname</span>
+                            <span className={classes.label}>Firstname</span>
                         </div>
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            name="firstname"
+                            value={vendor.firstname}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -62,11 +62,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="lastname"
+                            value={vendor.lastname}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -79,11 +77,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="email"
+                            value={vendor.email}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -96,11 +92,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="street"
+                            value={vendor.street}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -113,11 +107,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="countryName"
+                            value={vendor.countryName}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -130,11 +122,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="region"
+                            value={vendor.region}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -147,11 +137,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="city"
+                            value={vendor.city}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -164,11 +152,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="phone"
+                            value={vendor.phone}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -181,11 +167,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="companyName"
+                            value={vendor.companyName}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -198,11 +182,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="code"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.code && formik.errors.code)}
-                            helperText={(formik.touched.code && formik.errors.code) || ''}
+                            name="companyCode"
+                            value={vendor.companyCode}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -215,11 +197,9 @@ const RequestVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            name="name"
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={!!(formik.touched.name && formik.errors.name)}
-                            helperText={(formik.touched.name && formik.errors.name) || ''}
+                            name="statusLabel"
+                            value={vendor.statusLabel}
+                            disabled
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -229,15 +209,17 @@ const RequestVendorEditContent = (props) => {
                 <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
-                        // onClick={formik.handleSubmit}
+                        onClick={handleApprove}
                         variant="contained"
+                        disabled={disabledButton}
                     >
                         Approve
                     </Button>
                     <Button
-                        className={classes.btn}
-                        // onClick={formik.handleSubmit}
+                        className={clsx(classes.btn, 'btn-not')}
+                        onClick={handleNotApprove}
                         variant="contained"
+                        disabled={disabledButton}
                     >
                         Not Approved
                     </Button>

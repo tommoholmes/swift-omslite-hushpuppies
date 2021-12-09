@@ -35,7 +35,22 @@ const useStyles = makeStyles((theme) => ({
     },
     btn: {
         borderRadius: 20,
+        boxShadow: 'none',
+        border: '1px solid',
+        borderColor: colorPurple,
+        letterSpacing: 0,
+        textTransform: 'capitalize',
+        padding: '5px 25px',
+        marginTop: 15,
         marginRight: 10,
+        '&.btn-not': {
+            background: '#FFFFFF',
+            color: colorPurple,
+        },
+        '&.btn-not.Mui-disabled': {
+            background: 'rgba(0, 0, 0, 0.12)',
+            color: 'rgba(0, 0, 0, 0.26)',
+        },
     },
     divLabel: {
         width: 300,
