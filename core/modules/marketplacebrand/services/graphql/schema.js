@@ -48,6 +48,8 @@ export const getAvailableMpToConnect = gql`
             brand_id
             store_id
             marketplaces {
+                features
+                is_under_development
                 config {
                     data_type
                     id

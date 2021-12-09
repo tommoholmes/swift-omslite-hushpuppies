@@ -29,6 +29,9 @@ const ContentWrapper = (props) => {
             string: Yup.string().required('Required!'),
             number: Yup.number().required('Required!'),
         };
+        if (mpActive?.credentials?.type === 'oauth2') {
+            return initialValue;
+        }
         return mpActive?.credentials?.fields?.reduce((obj, item) => ({
             ...obj,
             [item.name]: schemaType === 'validation' ? type[item.type] : '',

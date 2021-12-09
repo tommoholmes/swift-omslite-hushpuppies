@@ -13,6 +13,12 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useStyles from '@modules/marketplacebrand/pages/view/components/style';
 import ErrorIcon from '@material-ui/icons/Error';
+import CheckIcon from '@material-ui/icons/Check';
+import Modal from '@material-ui/core/Modal';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+import CloseIcon from '@material-ui/icons/Close';
 
 const AdminStoreEditContent = (props) => {
     const {
@@ -27,6 +33,9 @@ const AdminStoreEditContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
     const jdidUrl = 'https://channel.sirclo-integrations.com.dmmy.me/jdid?secret=eyJicmFuZF9pZCI6NDAyLCJkYXRlIjoiMDAwMS0wMS0wMVQwMDowMDowMFoifQ';
+
+    const [showModal, setShowModal] = React.useState(false);
+
     const buttonCondition = (status) => {
         const button = {
             text: '',
@@ -62,6 +71,7 @@ const AdminStoreEditContent = (props) => {
         case 0:
             formik.handleReset();
             setMpActive(mp);
+            setTimeout(() => { setShowModal(true); }, 10);
             break;
         case 1:
             handleDisconnect(mp);
@@ -125,35 +135,48 @@ const AdminStoreEditContent = (props) => {
                             <div className={classes.gridMp}>
                                 {mpData.marketplaces.map((mp) => (
                                     <div className={classes.mp}>
-                                        <div className={classes.mpImageContainer}>
-                                            <img
-                                                className={classes.mpImage}
-                                                src={mp.image_url}
-                                                alt={mp.marketplace_name}
-                                                onError={(event) => event.target.style.display = 'none'}
-                                            />
+                                        <div className={classes.topMp}>
+                                            <div className={classes.mpImageContainer}>
+                                                <img
+                                                    className={classes.mpImage}
+                                                    src={mp.image_url}
+                                                    alt={mp.marketplace_name}
+                                                    onError={(event) => event.target.style.display = 'none'}
+                                                />
+                                            </div>
+                                            <div className={classes.featuresContainer}>
+                                                {mp.features.map((feature) => (
+                                                    <div style={{ display: 'flex' }}>
+                                                        <CheckIcon className={classes.check} />
+                                                        <p style={{ margin: 0, marginBottom: 5 }}>{feature}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <br />
                                         {buttonCondition(mp.status).text
                                             && (
                                                 <Button
                                                     className={
                                                         clsx(
                                                             classes.mpBtn,
-                                                            mpActive.marketplace_name === mp.marketplace_name
-                                                                ? 'gray' : buttonCondition(mp.status).style,
+                                                            buttonCondition(mp.status).style,
+                                                            mp.is_under_development && 'disabled',
                                                         )
                                                     }
                                                     variant="contained"
-                                                    onClick={() => onChangeMp(mp)}
+                                                    onClick={() => (mp.is_under_development ? null : onChangeMp(mp))}
                                                 >
                                                     {buttonCondition(mp.status).text}
                                                 </Button>
                                             )}
+                                        {mp.is_under_development && (
+                                            <div style={{ marginTop: 5 }}>
+                                                Under Development
+                                            </div>
+                                        )}
                                         {buttonCondition(mp.status).viewDetail
                                             && (
                                                 <>
-                                                    <br />
                                                     <div style={{ height: 10 }} />
                                                     <a
                                                         href={`
@@ -172,65 +195,91 @@ const AdminStoreEditContent = (props) => {
                     )
                     : null}
                 <br />
-                {mpActive?.marketplace_name
-                    ? (
-                        <div className={classes.content}>
-                            <h5 className={classes.titleSmall}>{mpActive.marketplace_name}</h5>
-                            {mpActive.marketplace_code === 'JDID' ? (
-                                <div className={classes.warning}>
-                                    <ErrorIcon />
-                                    <div style={{ paddingLeft: 5 }}>
-                                        Make sure you have registered the following url callbacks:
-                                        {' '}
-                                        <span style={{ fontWeight: 550 }}>
-                                            {jdidUrl}
-                                        </span>
-                                        {' '}
-                                        on your JD.id console. You can read more details
-                                        {' '}
-                                        <a href="https://help.sirclo.com/integrasi-dengan-jd-id-1" target="_blank" rel="noreferrer">Here</a>
+                <Modal
+                    className={classes.modal}
+                    open={showModal}
+                    onClose={() => setShowModal(false)}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={showModal}>
+                        {mpActive?.marketplace_name
+                            ? (
+                                <div className={classes.paper}>
+                                    <div style={{ position: 'relative' }}>
+                                        {/* <h5 className={classes.titleSmall}>{mpActive.marketplace_name}</h5> */}
+                                        <CloseIcon className={classes.close} onClick={() => setShowModal(false)} />
+                                    </div>
+                                    <div className={classes.mpImageModalContainer}>
+                                        <img
+                                            className={classes.mpImageModal}
+                                            src={mpActive.image_url}
+                                            alt={mpActive.marketplace_name}
+                                            onError={(event) => event.target.style.display = 'none'}
+                                        />
+                                    </div>
+                                    {mpActive.marketplace_code === 'JDID' ? (
+                                        <div className={classes.warning}>
+                                            <ErrorIcon />
+                                            <div style={{ paddingLeft: 5 }}>
+                                                Make sure you have registered the following url callbacks:
+                                                {' '}
+                                                <span style={{ fontWeight: 550 }}>
+                                                    {jdidUrl}
+                                                </span>
+                                                {' '}
+                                                on your JD.id console. You can read more details
+                                                {' '}
+                                                <a href="https://help.sirclo.com/integrasi-dengan-jd-id-1" target="_blank" rel="noreferrer">Here</a>
+                                            </div>
+                                        </div>
+                                    ) : null}
+                                    {mpActive.marketplace_code === 'TKPD' ? (
+                                        <div className={classes.warning}>
+                                            <ErrorIcon />
+                                            <div style={{ paddingLeft: 5 }}>
+                                                If you are using your own FSID, please make sure to whitelist Sirclo IP Address.
+                                            </div>
+                                        </div>
+                                    ) : null}
+                                    <div className={classes.form}>
+                                        <div className={classes.formField}>
+                                            <div className={classes.divLabel}>
+                                                <span className={clsx(classes.label, classes.labelRequired)}>Location</span>
+                                            </div>
+                                            <Autocomplete
+                                                multiple
+                                                className={classes.autocompleteRoot}
+                                                name="location"
+                                                value={formik.values.location}
+                                                onChange={(e) => formik.setFieldValue('location', e)}
+                                                primaryKey="loc_id"
+                                                labelKey="loc_name"
+                                                options={dataLocation}
+                                                error={!!(formik.touched.location && formik.errors.location)}
+                                                helperText={(formik.touched.location && formik.errors.location) || ''}
+                                                fullWidth
+                                            />
+                                        </div>
+                                        {mpActive?.credentials?.type === 'oauth2' ? null : formComponents()}
+                                    </div>
+                                    <div className={classes.formFieldButton}>
+                                        <Button
+                                            className={classes.btn}
+                                            onClick={formik.handleSubmit}
+                                            variant="contained"
+                                        >
+                                            Submit
+                                        </Button>
                                     </div>
                                 </div>
-                            ) : null}
-                            {mpActive.marketplace_code === 'TKPD' ? (
-                                <div className={classes.warning}>
-                                    <ErrorIcon />
-                                    <div style={{ paddingLeft: 5 }}>
-                                        If you are using your own FSID, please make sure to whitelist Sirclo IP Address.
-                                    </div>
-                                </div>
-                            ) : null}
-                            <div className={classes.formField}>
-                                <div className={classes.divLabel}>
-                                    <span className={clsx(classes.label, classes.labelRequired)}>Location</span>
-                                </div>
-                                <Autocomplete
-                                    multiple
-                                    className={classes.autocompleteRoot}
-                                    name="location"
-                                    value={formik.values.location}
-                                    onChange={(e) => formik.setFieldValue('location', e)}
-                                    primaryKey="loc_id"
-                                    labelKey="loc_name"
-                                    options={dataLocation}
-                                    error={!!(formik.touched.location && formik.errors.location)}
-                                    helperText={(formik.touched.location && formik.errors.location) || ''}
-                                    fullWidth
-                                />
-                            </div>
-                            {formComponents()}
-                            <div className={classes.formFieldButton}>
-                                <Button
-                                    className={classes.btn}
-                                    onClick={formik.handleSubmit}
-                                    variant="contained"
-                                >
-                                    Submit
-                                </Button>
-                            </div>
-                        </div>
-                    )
-                    : null}
+                            )
+                            : <CircularProgress className={classes.progress} size={60} />}
+                    </Fade>
+                </Modal>
             </Paper>
         </>
     );

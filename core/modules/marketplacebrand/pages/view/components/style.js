@@ -6,6 +6,7 @@ const colorGray = '#B1BCDB';
 const colorOrange = '#FF962C';
 const colorPurple = '#BE1F93';
 const colorBlue = '#4A87FE';
+const colorGreen = '#41C328';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -17,9 +18,25 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         padding: '15px 25px',
-        background: '#ffffff',
         borderRadius: 16,
         paddingTop: 25,
+    },
+    paper: {
+        backgroundColor: 'white',
+        boxShadow: theme.shadows[5],
+        padding: 40,
+        borderRadius: 20,
+        border: 'none',
+        width: '80%',
+        minHeight: 350,
+        '@media (max-width: 767px )': {
+            width: '90%',
+        },
+        textAlign: 'left',
+        overflow: 'auto',
+        position: 'absolute',
+        top: '20%',
+        left: '10%',
     },
     btnBack: {
         display: 'inline-block',
@@ -38,6 +55,11 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         display: 'inline-block',
     },
+    form: {
+        borderBottom: `1px solid ${colorGray}`,
+        marginBottom: 30,
+        paddingBottom: 20,
+    },
     formField: {
         padding: 0,
         paddingBottom: 16,
@@ -45,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: '1fr 4fr',
     },
     formFieldButton: {
-        padding: '24px 29px 30px 22px',
+        padding: '12px 29px 0px 22px',
     },
     btn: {
         borderRadius: 20,
@@ -92,28 +114,55 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
         marginBottom: 8,
     },
+    topMp: {
+        display: 'grid',
+        gridTemplateColumns: '50% 50%',
+        alignItems: 'center',
+    },
+    featuresContainer: {
+        textAlign: 'left',
+    },
     gridMp: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateColumns: 'repeat(3, 1fr)',
     },
     mp: {
         textAlign: 'center',
-        padding: '20px 0',
+        padding: 20,
+        borderRadius: 20,
+        backgroundColor: 'white',
+        margin: '0 10px 20px 10px',
+        alignItems: 'center',
+        display: 'grid',
     },
     mpImageContainer: {
         height: 72,
         display: 'flex',
         justifyContent: 'center',
     },
+    mpImageModalContainer: {
+        borderBottom: `1px solid ${colorGray}`,
+        marginBottom: 30,
+        paddingBottom: 20,
+        display: 'flex',
+        position: 'relative',
+    },
     mpImage: {
         width: 72,
         height: 'auto',
         alignSelf: 'center',
     },
+    mpImageModal: {
+        width: 'auto',
+        minWidth: 60,
+        height: 60,
+    },
     mpBtn: {
+        width: '100%',
         textTransform: 'unset',
         letterSpacing: '.5px',
         fontWeight: 550,
+        marginTop: 20,
         '&.purple': {
             backgroundColor: colorPurple,
         },
@@ -125,6 +174,10 @@ const useStyles = makeStyles((theme) => ({
         },
         '&.orange': {
             backgroundColor: colorOrange,
+        },
+        '&.disabled': {
+            opacity: 0.5,
+            cursor: 'default',
         },
     },
     autocompleteRoot: {
@@ -150,6 +203,18 @@ const useStyles = makeStyles((theme) => ({
         '& a': {
             color: '#408AC0',
         },
+    },
+    check: {
+        color: colorGreen,
+        fontSize: 20,
+        marginRight: 5,
+        fontWeight: 600,
+    },
+    close: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        cursor: 'pointer',
     },
 }));
 
