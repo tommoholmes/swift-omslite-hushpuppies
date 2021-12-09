@@ -93,13 +93,14 @@ const ContentWrapper = (props) => {
     const initialValueEditItem = {
         order_id: orderqueue.id,
         order_items: orderqueue.order_item.map((item) => ({ ...item, item_id_replacement: null })),
+        deleted_items: [],
     };
 
     const handleSubmitEdit = (values) => {
-        window.backdropLoader(true);
+        const mergedValues = [...values.order_items, ...values.deleted_items.map((item) => ({ ...item, qty: 0 }))];
         const fixValues = {
-            ...values,
-            order_items: values.order_items.map((item) => ({
+            order_id: values.order_id,
+            order_items: mergedValues.map((item) => ({
                 id: item?.id ?? null,
                 qty: item.qty,
                 replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
@@ -107,7 +108,7 @@ const ContentWrapper = (props) => {
                 sku: item.name?.sku ?? item.sku,
             })),
         };
-
+        window.backdropLoader(true);
         editOrderItem({
             variables: {
                 ...fixValues,
