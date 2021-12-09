@@ -9,11 +9,11 @@ const fetchPolicy = {
     fetchPolicy: 'cache-and-network',
 };
 
-export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList, {
+export const getVendorRequestList = (variables) => useLazyQuery(Schema.getVendorRequestList, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getCompanyById = (variables) => useQuery(Schema.getCompanyById, {
+export const getVendorRequestById = (variables) => useQuery(Schema.getVendorRequestById, {
     variables, ...context, ...fetchPolicy,
 });
 
@@ -21,8 +21,18 @@ export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
     variables, ...context,
 });
 
+export const vendorRequestApprove = (variables) => useMutation(Schema.vendorRequestApprove, {
+    variables, ...context,
+});
+
+export const vendorRequestNotApprove = (variables) => useMutation(Schema.vendorRequestNotApprove, {
+    variables, ...context,
+});
+
 export default {
-    getCompanyList,
-    getCompanyById,
+    getVendorRequestList,
+    getVendorRequestById,
     updateCompany,
+    vendorRequestApprove,
+    vendorRequestNotApprove,
 };
