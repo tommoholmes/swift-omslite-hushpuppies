@@ -453,7 +453,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'requestVendor',
                     key: 'requestvendor',
-                    label: 'Request Vendor',
+                    label: 'Manage Vendor Request',
                     url: '/vendorportal/requestvendor',
                 },
                 {
