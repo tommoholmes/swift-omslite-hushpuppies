@@ -93,13 +93,18 @@ const CreateNewPassword = (props) => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                    error={passwordError || (formik.touched.password && formik.errors.password !== '')}
+                                    error={passwordError !== '' || (formik.touched.password && formik.errors.password !== '')}
                                     helperText={(formik.touched.password && formik.errors.password) || passwordError}
                                 />
                                 {passwordErrorStatus !== '' && (
-                                    <div style={{
- display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '10px 0px', width: '100%',
-}}
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            padding: '10px 0px',
+                                            width: '100%',
+                                        }}
                                     >
                                         <div style={{ height: 5, width: '75%', backgroundColor: '#a3a099' }}>
                                             <div
