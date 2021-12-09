@@ -41,6 +41,8 @@ const Core = (props) => {
             password: Yup.string().required('Required!'),
             password_confirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
         }),
+        validateOnChange: true,
+        validateOnBlur: true,
         onSubmit: (values) => {
             const variables = { input: { ...values } };
 
@@ -75,6 +77,7 @@ const Core = (props) => {
     const pageConfig = {
         header: false,
         sidebar: false,
+        title: 'Set New Password',
     };
 
     return (
