@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 import Layout from '@layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { recaptcha } from '@config';
+import getConfig from 'next/config';
+import { useState } from 'react';
 
 const URL_SET_NEW_PASSWORD = '/forgotpassword/createnewpassword';
 
@@ -12,10 +15,14 @@ const Core = (props) => {
     const router = useRouter();
     const [requestResetPassword] = gqlService.requestResetPassword();
 
+    const { publicRuntimeConfig } = getConfig();
+
+    const [isCaptchaEnable] = useState(recaptcha.enable && recaptcha.siteKey[publicRuntimeConfig.appEnv]);
+
     const formik = useFormik({
         initialValues: {
             email: '',
-            g_recaptcha_response: '',
+            g_recaptcha_response: isCaptchaEnable ? '' : 'captcha_disabled',
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email().required('Required!'),
@@ -28,29 +35,31 @@ const Core = (props) => {
             };
             window.backdropLoader(true);
 
-            try {
-                const res = await fetch('/captcha-validation', {
-                    method: 'POST',
-                    headers: new Headers({ 'content-type': 'application/json' }),
-                    body: JSON.stringify({ response: values.g_recaptcha_response }),
-                });
-                const resJson = await res.json();
-                if (!resJson.success) {
+            if (isCaptchaEnable) {
+                try {
+                    const res = await fetch('/captcha-validation', {
+                        method: 'POST',
+                        headers: new Headers({ 'content-type': 'application/json' }),
+                        body: JSON.stringify({ response: values.g_recaptcha_response }),
+                    });
+                    const resJson = await res.json();
+                    if (!resJson.success) {
+                        window.backdropLoader(false);
+                        window.toastMessage({
+                            open: true,
+                            variant: 'error',
+                            text: 'Invalid captcha!',
+                        });
+                        return;
+                    }
+                } catch (e) {
                     window.backdropLoader(false);
                     window.toastMessage({
                         open: true,
                         variant: 'error',
-                        text: 'Invalid captcha!',
+                        text: e.message,
                     });
-                    return;
                 }
-            } catch (e) {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    variant: 'error',
-                    text: e.message,
-                });
             }
 
             requestResetPassword({
