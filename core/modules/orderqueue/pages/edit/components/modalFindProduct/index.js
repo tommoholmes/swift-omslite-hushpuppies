@@ -13,7 +13,7 @@ const ModalFindProduct = (props) => {
     } = props;
     const classes = useStyles();
 
-    const [searchSKU, setSearchSKU] = useState('');
+    const [searchSKU, setSearchSKU] = useState();
     const [optionsSKU, setOptionsSKU] = useState([]);
     const [selectedSKU, setSelectedSKU] = useState(null);
 
@@ -39,6 +39,12 @@ const ModalFindProduct = (props) => {
     };
 
     useEffect(() => {
+        if (open) {
+            setSelectedSKU(values?.order_items[idx]?.replacement_for && optionsSKU.find((item) => item.sku === values.order_items[idx].sku));
+        }
+    }, [open]);
+
+    useEffect(() => {
         const onChangeTimeOut = setTimeout(() => {
             const isExist = searchSKU && optionsSKU.filter((elm) => elm?.sku?.toLowerCase().includes(searchSKU?.toLowerCase()));
             if (searchSKU && isExist.length <= 3) {
@@ -56,7 +62,7 @@ const ModalFindProduct = (props) => {
             }
 
             return null;
-        }, 500);
+        }, 250);
 
         return () => clearTimeout(onChangeTimeOut);
     }, [searchSKU]);
@@ -90,6 +96,7 @@ const ModalFindProduct = (props) => {
                 {idx !== null && (
                     <>
                         <Autocomplete
+                            defaultValue={{ sku: 'tes', product_name: 'tes' }}
                             name={`order_items.${idx}.sku`}
                             mode={optionsSKU.length > 0 ? 'default' : 'lazy'}
                             className={`${classes.autocompleteRoot}`}
