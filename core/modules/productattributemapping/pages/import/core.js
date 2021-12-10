@@ -10,14 +10,22 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const [uploadStatusProductCategory] = gqlService.uploadStatusProductCategory();
-    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
+
+    const pageConfig = {
+        title: 'Import Mapping',
+    };
+
+    const [importMarketplaceProductAttributeMapping] = gqlService.importMarketplaceProductAttributeMapping();
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'marketplace_product_attribute_mapping' });
+    const [downloadListFix, downloadListFixRes] = gqlService.downloadSampleCsv({ type: 'marketplace_fixed_product_attribute_mapping' });
 
     useEffect(() => {
         downloadList();
+        downloadListFix();
     }, []);
 
     const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
+    const urlDownloadFix = downloadListFixRes && downloadListFixRes.data && downloadListFixRes.data.downloadSampleCsv;
 
     const handleSubmit = ({
         binary,
@@ -26,7 +34,7 @@ const Core = (props) => {
             binary,
         };
         window.backdropLoader(true);
-        uploadStatusProductCategory({
+        importMarketplaceProductAttributeMapping({
             variables,
         }).then(() => {
             window.backdropLoader(false);
@@ -68,11 +76,12 @@ const Core = (props) => {
     const contentProps = {
         formik,
         urlDownload,
+        urlDownloadFix,
         handleDropFile,
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

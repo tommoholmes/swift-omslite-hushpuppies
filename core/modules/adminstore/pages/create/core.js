@@ -84,13 +84,16 @@ const ContentWrapper = (props) => {
 };
 
 const Core = (props) => {
+    const pageConfig = {
+        title: 'Create User',
+    };
     const { loading: loadingCompany, data: dataCompany } = gqlService.getCompanyOptions();
     const { loading: loadingLocation, data: dataLocation } = gqlService.getLocationOptions();
     const { loading: loadingGroup, data: dataGroup } = gqlService.getCustomerGroupOptions();
 
     if (loadingCompany || loadingLocation || loadingGroup) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
@@ -101,7 +104,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );

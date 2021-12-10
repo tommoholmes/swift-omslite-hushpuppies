@@ -14,8 +14,17 @@ const ContentWrapper = (props) => {
     const company = data.getCompanyById;
     const [updateCompany] = gqlService.updateCompany();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
+    const handleSubmit = ({
+        code, name, is_new, margin, is_approve,
+    }) => {
+        const variables = {
+            id: company.company_id,
+            company_code: code,
+            company_name: name,
+            is_new_product: is_new,
+            company_margin: margin === '' ? 0 : margin,
+            is_product_approval: is_approve,
+        };
         window.backdropLoader(true);
         updateCompany({
             variables,
@@ -41,6 +50,9 @@ const ContentWrapper = (props) => {
         initialValues: {
             code: company.company_code,
             name: company.company_name,
+            is_new: company.is_new_product,
+            margin: company.company_margin,
+            is_approve: company.is_product_approval,
         },
         validationSchema: Yup.object().shape({
             code: Yup.string().required('Required!'),

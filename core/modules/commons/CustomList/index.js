@@ -83,7 +83,7 @@ const CustomList = (props) => {
         initialRowsPerPage = 15,
         header = null,
         handleClickRow,
-        handleChecked = () => {},
+        handleChecked = () => { },
         count,
         usePagination = false,
         twoColumns = false,
@@ -300,13 +300,24 @@ const CustomList = (props) => {
     return (
         <div>
             {renderTableToolbar()}
-            {checkboxAll && (
+            {checkboxAll ? (
                 <div
                     className={clsx(classes.gridList, classes.content, classes.boxAll)}
                     style={{ gridTemplateColumns: `1fr repeat(${columns.length}, 2fr)` }}
                 >
                     <Checkbox checked={isCheckedAllRows} onChange={(e) => handleChangeCheckboxAllRows(e.target.checked)} />
-                    <span className={classes.title}>Select All</span>
+                    <span className={classes.title}>
+                        {`${count} records found `}
+                        {checkedRows.length ? ` (${checkedRows.length} selected)` : null}
+                    </span>
+                </div>
+            ) : (
+                <div
+                    className={clsx(classes.gridList, classes.content, classes.boxAll)}
+                >
+                    <span className={classes.title}>
+                        {`${count} records found `}
+                    </span>
                 </div>
             )}
             {loading ? (

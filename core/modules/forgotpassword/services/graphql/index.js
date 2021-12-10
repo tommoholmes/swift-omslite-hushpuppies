@@ -1,0 +1,32 @@
+import { useMutation, useQuery } from '@apollo/client';
+import * as Schema from '@modules/forgotpassword/services/graphql/schema';
+
+const context = {
+    context: { request: 'internal' },
+};
+
+const fetchPolicy = {
+    fetchPolicy: 'cache-and-network',
+};
+
+export const requestResetPassword = (variables) => useMutation(Schema.requestResetPassword, {
+    variables,
+    ...context,
+});
+
+export const setNewPassword = (variables) => useMutation(Schema.setNewPassword, {
+    variables,
+    ...context,
+});
+
+export const getStoreConfigCaptchaSiteKey = (variables) => useQuery(Schema.getStoreConfigCaptchaSiteKey, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
+export default {
+    requestResetPassword,
+    setNewPassword,
+    getStoreConfigCaptchaSiteKey,
+};

@@ -41,8 +41,8 @@ const queryItemDetail = `
 `;
 
 export const getPickByBatchStatus = gql`
-    query{
-        getPickByBatchStatus{
+    query {
+        getPickByBatchStatus {
             value
             label
         }
@@ -50,22 +50,12 @@ export const getPickByBatchStatus = gql`
 `;
 
 export const getPickByBatchList = gql`
-    query getPickByBatchList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-        $filter: PickByBatchFilterInput,
-        $sort: PickByBatchSortInput,
-    ){
-        getPickByBatchList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
-            filter: $filter,
-            sort: $sort,
-        ){
+    query getPickByBatchList($pageSize: Int!, $currentPage: Int!, $filter: PickByBatchFilterInput, $sort: PickByBatchSortInput) {
+        getPickByBatchList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 entity_id
                 created_at
-                status{
+                status {
                     label
                     value
                 }
@@ -82,13 +72,9 @@ export const getPickByBatchList = gql`
 `;
 
 export const getPickByBatchById = gql`
-    query getPickByBatchById(
-        $id: Int!,
-    ){
-        getPickByBatchById(
-            id: $id
-        ){
-            pick_by_batch{
+    query getPickByBatchById($id: Int!) {
+        getPickByBatchById(id: $id) {
+            pick_by_batch {
                 entity_id
                 status {
                     label
@@ -102,7 +88,7 @@ export const getPickByBatchById = gql`
                     entity_id
                     total_items
                     picked_by
-                    status{
+                    status {
                         value
                     }
                 }
@@ -184,24 +170,14 @@ export const updatePickByBatchItem = gql`
 `;
 
 export const startSortingPickByBatch = gql`
-    mutation startSortingPickByBatch(
-        $batch_id: Int!,
-    ){
-        startSortingPickByBatch(
-            batch_id: $batch_id
-        )
+    mutation startSortingPickByBatch($batch_id: Int!) {
+        startSortingPickByBatch(batch_id: $batch_id)
     }
 `;
 
 export const itemSortingPickByBatch = gql`
-    mutation itemSortingPickByBatch(
-        $batch_id: Int!,
-        $barcode: String!,
-    ){
-        itemSortingPickByBatch(
-            batch_id: $batch_id,
-            barcode: $barcode
-        ){
+    mutation itemSortingPickByBatch($batch_id: Int!, $barcode: String, $sku: String) {
+        itemSortingPickByBatch(batch_id: $batch_id, barcode: $barcode, sku: $sku) {
             pick_by_batch_sort {
                 barcode
                 bin_code
@@ -222,12 +198,8 @@ export const itemSortingPickByBatch = gql`
 `;
 
 export const doneSortingPickByBatch = gql`
-    mutation doneSortingPickByBatch(
-        $batch_id: Int!,
-    ){
-        doneSortingPickByBatch(
-            batch_id: $batch_id
-        ){
+    mutation doneSortingPickByBatch($batch_id: Int!) {
+        doneSortingPickByBatch(batch_id: $batch_id) {
             pick_by_batch {
                 entity_id
             }
@@ -236,33 +208,27 @@ export const doneSortingPickByBatch = gql`
 `;
 
 export const getStoreConfigSorting = gql`
-    query{
+    query {
         getStoreConfig(path: "swiftoms_pickpack/batch/sorting_method")
     }
 `;
 
 export const multipleItemSortingPickByBatch = gql`
-    mutation multipleItemSortingPickByBatch(
-        $batch_id: Int!
-        $barcode: String!
-    ){
-    multipleItemSortingPickByBatch(
-      batch_id: $batch_id
-      barcode: $barcode
-    ){
-      slot_no
-      shipment_id
-      slot_no
-      qty
-      name
-      sku
+    mutation multipleItemSortingPickByBatch($batch_id: Int!, $barcode: String, $sku: String) {
+        multipleItemSortingPickByBatch(batch_id: $batch_id, barcode: $barcode, sku: $sku) {
+            slot_no
+            shipment_id
+            slot_no
+            qty
+            name
+            sku
+        }
     }
-  }
 `;
 
 export const getStoreConfig = gql`
-  query{
-    getStoreConfig(path: "swiftoms_pickpack/batch/allow_manual_confirm_pick")
+  query getStoreConfig($path: String!){
+    getStoreConfig(path: $path)
   }
 `;
 

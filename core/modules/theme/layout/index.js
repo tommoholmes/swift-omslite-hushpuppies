@@ -295,6 +295,35 @@ const Layout = (props) => {
             ],
         },
         {
+            aclCode: 'oms_lite_header_product',
+            key: 'product',
+            label: 'Product',
+            children: [
+                {
+                    aclCode: 'oms_lite_product_list',
+                    key: 'productlist',
+                    label: 'Products',
+                    url: '/product/productlist',
+                    notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_product_assembly',
+                    key: 'productassembly',
+                    label: 'Product Assembly',
+                    url: '/product/productassembly',
+                    notInAcl: true,
+                },
+                {
+                    aclCode: 'oms_lite_product_bin',
+                    key: 'productbin',
+                    label: 'Product Bin',
+                    url: '/product/productbin',
+                    notInAcl: true,
+                },
+            ],
+            notInAcl: true,
+        },
+        {
             aclCode: 'oms_lite_header_catalog_inventory',
             key: 'inventory',
             label: 'Inventory',
@@ -332,7 +361,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'oms_lite_location_price_upload',
                     key: 'locationpriceupload',
-                    label: 'Price by Location',
+                    label: 'Manage Price',
                     url: '/cataloginventory/locationpriceupload',
                 },
                 {
@@ -410,12 +439,6 @@ const Layout = (props) => {
                     url: '/marketplace/marketplace',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_store',
-                    key: 'store',
-                    label: 'Store',
-                    url: '/marketplace/store',
-                },
-                {
                     aclCode: 'oms_lite_marketplace_warehouse',
                     key: 'warehouse',
                     label: 'Warehouse',
@@ -426,12 +449,6 @@ const Layout = (props) => {
                     key: 'productcategory',
                     label: 'Product Category',
                     url: '/marketplace/productcategory',
-                },
-                {
-                    aclCode: 'oms_lite_marketplace_attribute_set_mapping',
-                    key: 'attributesetmapping',
-                    label: 'Attribute Set Mapping',
-                    url: '/marketplace/attributesetmapping',
                 },
                 {
                     aclCode: 'oms_lite_mapping_product_attribute',
@@ -446,11 +463,23 @@ const Layout = (props) => {
                     url: '/marketplace/productstatus',
                 },
                 {
-                    aclCode: 'oms_lite_marketplace_update_stock_history',
-                    key: 'updatestockhistory',
-                    label: 'Update Stock History',
-                    url: '/marketplace/updatestockhistory',
+                    aclCode: 'oms_lite_marketplace_product_price',
+                    key: 'productprice',
+                    label: 'Product Price',
+                    url: '/marketplace/productprice',
                 },
+                {
+                    aclCode: 'oms_lite_marketplace_product_promo',
+                    key: 'productpromo',
+                    label: 'Product Promo',
+                    url: '/marketplace/productpromo',
+                },
+                // {
+                //     aclCode: 'oms_lite_marketplace_update_stock_history',
+                //     key: 'updatestockhistory',
+                //     label: 'Update Stock History',
+                //     url: '/marketplace/updatestockhistory',
+                // },
             ],
         },
         {
@@ -461,7 +490,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'requestVendor',
                     key: 'requestvendor',
-                    label: 'Request Vendor',
+                    label: 'Manage Vendor Request',
                     url: '/vendorportal/requestvendor',
                 },
                 {
@@ -504,7 +533,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'oms_lite_tada_category',
                     key: 'tadacategory',
-                    label: 'Tada Category',
+                    label: 'Category',
                     url: '/tada/tadacategory',
                 },
                 {
@@ -587,6 +616,18 @@ const Layout = (props) => {
                     key: 'logistixprovider',
                     label: 'Logistix Provider',
                     url: '/configurations/logistixprovider',
+                },
+                {
+                    aclCode: 'oms_lite_header_mpadapter',
+                    key: 'marketplacebrand',
+                    label: 'Marketplace Brand',
+                    url: '/configurations/marketplacebrand',
+                },
+                {
+                    aclCode: 'oms_lite_marketplace_feature',
+                    key: 'marketplacefeature',
+                    label: 'Marketplace Feature',
+                    url: '/configurations/marketplacefeature',
                 },
             ],
         },
@@ -757,7 +798,7 @@ const Layout = (props) => {
     return (
         <>
             <Head>
-                <title>{currentLocation}</title>
+                <title>{pageConfig?.title ? pageConfig.title : currentLocation}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={classes.root}>

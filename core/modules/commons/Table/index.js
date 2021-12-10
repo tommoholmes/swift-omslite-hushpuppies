@@ -84,6 +84,7 @@ const CustomTable = (props) => {
         rows,
         getRows,
         deleteRows,
+        deleteLabel = 'Delete',
         loading,
         filters: initialFilters = [],
         initialPage = 0,
@@ -183,7 +184,7 @@ const CustomTable = (props) => {
         setOpenConfirmDialog(false);
         window.toastMessage({
             open: true,
-            text: 'Delete canceled!',
+            text: 'Canceled!',
             variant: 'error',
         });
     };
@@ -200,7 +201,7 @@ const CustomTable = (props) => {
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
             {
-                label: 'Delete',
+                label: deleteLabel,
                 message: 'Are you sure you want to delete?',
                 onClick: async (_checkedRows) => {
                     const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
@@ -216,7 +217,12 @@ const CustomTable = (props) => {
         return (
             <div className={classes.tableToolbar}>
                 <div className="top-buttons-wrapper">
-                    {!loading && <div className="top-item records-found">{`${count} records found.`}</div>}
+                    {!loading && (
+                        <div className="top-item records-found">
+                            {`${count} records found `}
+                            {checkedRows.length ? ` (${checkedRows.length} selected)` : null}
+                        </div>
+                    )}
                     {!hideActions && (
                         <div className="top-item">
                             <ConfirmDialog
@@ -263,9 +269,9 @@ const CustomTable = (props) => {
                                         if (action.showMessage !== null) {
                                             setShowMessageActions(action.showMessage);
                                         } else {
-                                            setShowMessageActions(action.true);
+                                            setShowMessageActions(false);
                                         }
-                                        if (action.label === 'Delete') {
+                                        if (action.confirmDialog) {
                                             setOpenConfirmDialog(true);
                                         } else {
                                             setTimeout(() => {

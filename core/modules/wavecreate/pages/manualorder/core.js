@@ -43,8 +43,12 @@ const Core = (props) => {
         startPicking,
     };
 
+    const pageConfig = {
+        title: 'Create Pick by Wave - Manual Order',
+    };
+
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout useBreadcrumbs={false} pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

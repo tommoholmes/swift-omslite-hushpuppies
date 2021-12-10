@@ -1,21 +1,29 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
-import React from 'react';
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable react/jsx-closing-bracket-location */
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable max-len */
+
+import React, { useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
 import { formatPriceNumber } from '@helper_currency';
+import { Formik, FieldArray, Field } from 'formik';
+import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
 
 const OrderQueueEditContent = (props) => {
     const {
-        formikAllocation,
-        formikNew,
-        orderQueue,
-        parent,
-        aclCheckData,
-    } = props;
+ formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit,
+} = props;
     const classes = useStyles();
     const router = useRouter();
 
@@ -66,6 +74,15 @@ const OrderQueueEditContent = (props) => {
         return null;
     };
 
+    const [isModeEdit, setIsModeEdit] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [idxOpendModal, setIdxOpendModal] = useState(null);
+
+    const handleOpenModal = (idx) => {
+        setIdxOpendModal(idx);
+        setIsModalOpen(true);
+    };
+
     return (
         <>
             <Button
@@ -74,24 +91,21 @@ const OrderQueueEditContent = (props) => {
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>
-                {`Detail Order #${orderQueue.id}`}
-            </h2>
+            <h2 className={classes.titleTop}>{`Detail Order #${orderQueue.id}`}</h2>
             <Paper className={classes.container}>
                 <div className={classes.contentHeader}>
                     <div className="divHeader">
-                        <div className={getClassByStatus(orderQueue.status)}>
-                            {orderQueue.status}
-                        </div>
+                        <div className={getClassByStatus(orderQueue.status)}>{orderQueue.status}</div>
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeaderWithIcon">
@@ -99,80 +113,70 @@ const OrderQueueEditContent = (props) => {
                                 src={iconFilter(orderQueue.channelCode)}
                                 alt=""
                                 className="iconHeader"
-                                onError={(event) => event.target.style.display = 'none'}
+                                onError={(event) => (event.target.style.display = 'none')}
                             />
                             {orderQueue.channelName}
                         </h5>
                     </div>
                     <div className="divHeader">
-                        <h5 className="titleHeader">
-                            Channel Order Number
-                        </h5>
+                        <h5 className="titleHeader">Channel Order Number</h5>
                         <span className="spanHeader">{orderQueue.channelOrderId}</span>
                     </div>
                     <div className="divHeader">
-                        <h5 className="titleHeader">
-                            Channel Order Date
-                        </h5>
+                        <h5 className="titleHeader">Channel Order Date</h5>
                         <span className="spanHeader">{orderQueue.createdAt}</span>
                     </div>
                     <div className="divHeader">
-                        <h5 className="titleHeader">
-                            Last Update
-                        </h5>
+                        <h5 className="titleHeader">Last Update</h5>
                         <span className="spanHeader">{orderQueue.lastUpdated}</span>
                     </div>
                     <div className="divHeader">
-                        <h5 className="titleHeader">
-                            Acceptance Deadline
-                        </h5>
+                        <h5 className="titleHeader">Acceptance Deadline</h5>
                         <span className="spanHeader">{orderQueue.acceptanceDeadline}</span>
                     </div>
                 </div>
 
-                {orderQueue.isAllowReallocate
-                    && (
-                        <div className={classes.content}>
-                            <div style={{ textAlign: 'center', marginBottom: 10 }}>
-                                <div className={classes.orderLabel}>
-                                    Order status is
-                                    {' '}
-                                    <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
-                                </div>
-                                <Button
-                                    className={classes.btn}
-                                    type="submit"
-                                    onClick={formikAllocation.handleSubmit}
-                                    variant="contained"
-                                    buttonType="primary-rounded"
-                                >
-                                    Set as Allocating
-                                </Button>
+                {orderQueue.isAllowReallocate && (
+                    <div className={classes.content}>
+                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                            <div className={classes.orderLabel}>
+                                Order status is
+{' '}
+<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
+                            <Button
+                                className={classes.btn}
+                                type="submit"
+                                onClick={formikAllocation.handleSubmit}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                Set as Allocating
+                            </Button>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                {orderQueue.isAllowRecreate
-                    && (
-                        <div className={classes.content}>
-                            <div style={{ textAlign: 'center', marginBottom: 10 }}>
-                                <div>
-                                    Order status is
-                                    {' '}
-                                    <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
-                                </div>
-                                <Button
-                                    className={classes.btn}
-                                    type="submit"
-                                    onClick={formikNew.handleSubmit}
-                                    variant="contained"
-                                    buttonType="primary-rounded"
-                                >
-                                    Set as New
-                                </Button>
+                {orderQueue.isAllowRecreate && (
+                    <div className={classes.content}>
+                        <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                            <div>
+                                Order status is
+{' '}
+<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
+                            <Button
+                                className={classes.btn}
+                                type="submit"
+                                onClick={formikNew.handleSubmit}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                Set as New
+                            </Button>
                         </div>
-                    )}
+                    </div>
+                )}
 
                 <div className={classes.content}>
                     <div className={classes.grid}>
@@ -224,35 +228,164 @@ const OrderQueueEditContent = (props) => {
                     </div>
                     <br />
                     <div>
-                        <h5 className={classes.titleSmall}>Items Ordered</h5>
-                        <div style={{ overflowX: 'auto' }}>
-                            <table className={classes.table}>
-                                <tbody>
-                                    <tr className={classes.tr}>
-                                        <th className={classes.th} style={{ paddingLeft: 0 }}>SKU Product</th>
-                                        <th className={classes.th}>Name</th>
-                                        <th className={classes.th} style={{ textAlign: 'right' }}>Price</th>
-                                        <th className={classes.th} style={{ textAlign: 'right' }}>Discount Amount</th>
-                                        <th className={classes.th}>Location Code</th>
-                                        <th className={classes.th}>Pickup At</th>
-                                        {(aclCheckData && aclCheckData.isAccessAllowed) === true
-                                            && <th className={classes.th}>Replacement For</th>}
-                                    </tr>
-                                    {orderQueue.orderItem.map((e) => (
-                                        <tr>
-                                            <td className={classes.td} style={{ paddingLeft: 0 }}>{e.sku}</td>
-                                            <td className={classes.td}>{e.name}</td>
-                                            <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(e.base_price)}</td>
-                                            <td className={classes.td} style={{ textAlign: 'right' }}>{e.discount_amount}</td>
-                                            <td className={classes.td}>{e.loc_code || '-'}</td>
-                                            <td className={classes.td}>{e.pickup_name || '-'}</td>
-                                            {(aclCheckData && aclCheckData.isAccessAllowed) === true
-                                                && <td className={classes.td}>{e.replacement_for || '-'}</td>}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div>
+                            <div>
+                                <h5 className={classes.titleSmall}>Items Ordered</h5>
+                            </div>
                         </div>
+                        <Formik initialValues={initialValueEditItem}>
+                            {({ values, setFieldValue, setValues }) => (
+                                <>
+                                    <ModalFindProduct
+                                        open={isModalOpen}
+                                        handleClose={() => setIsModalOpen(false)}
+                                        idx={idxOpendModal}
+                                        values={values}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table className={classes.table}>
+                                            <tbody>
+                                                <tr className={classes.tr}>
+                                                    <th className={classes.th} style={{ paddingLeft: 0 }}>
+                                                        SKU Product
+                                                    </th>
+                                                    <th className={classes.th}>Name</th>
+                                                    <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                        Price
+                                                    </th>
+                                                    <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                        qty
+                                                    </th>
+                                                    <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                        Discount Amount
+                                                    </th>
+                                                    <th className={classes.th}>Location Code</th>
+                                                    <th className={classes.th}>Pickup At</th>
+                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
+                                                        <th className={classes.th}>Replacement For</th>
+                                                    )}
+                                                    {orderQueue.isAllowReallocate && isModeEdit && (
+                                                        <th className={classes.th} style={{ textAlign: 'center' }}>
+                                                            Action
+                                                        </th>
+                                                    )}
+                                                </tr>
+                                                <FieldArray name="order_items">
+                                                    {({ remove }) => (
+                                                        <>
+                                                            {values.order_items.map((e, idx) => (
+                                                                <tr key={idx}>
+                                                                    <td className={classes.td} style={{ paddingLeft: 0 }}>
+                                                                        {e.sku}
+                                                                    </td>
+                                                                    <td className={classes.td}>{e.name}</td>
+                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
+                                                                        {typeof e?.base_price === 'string'
+                                                                            ? e?.base_price
+                                                                            : formatPriceNumber(e?.base_price)}
+                                                                    </td>
+                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
+                                                                        {isModeEdit ? (
+                                                                            <Field
+                                                                                type="number"
+                                                                                className={classes.fieldQty}
+                                                                                name={`order_items.[${idx}].qty`}
+                                                                            />
+                                                                        ) : (
+                                                                            e?.qty
+                                                                        )}
+                                                                    </td>
+                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
+                                                                        {e.discount_amount}
+                                                                    </td>
+                                                                    <td className={classes.td}>{e.loc_code || '-'}</td>
+                                                                    <td className={classes.td}>{e.pickup_name || '-'}</td>
+                                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
+                                                                        <td className={classes.td}>{e.replacement_for || '-'}</td>
+                                                                    )}
+                                                                    {isModeEdit && (
+                                                                        <td
+                                                                            className={classes.td}
+                                                                            style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}
+                                                                        >
+                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
+                                                                                <img src="/assets/img/replace.svg" alt="replace" />
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={`link-button ${classes.btnClear}`}
+                                                                                    onClick={() => handleOpenModal(idx)}
+                                                                                >
+                                                                                    replace
+                                                                                </button>
+                                                                            </div>
+                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
+                                                                                <img src="/assets/img/trash.svg" alt="delete" />
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={`link-button ${classes.btnClear}`}
+                                                                                    onClick={() => {
+                                                                                        const tempDeletedItems = [...values.deleted_items];
+                                                                                        tempDeletedItems.push(values.order_items[idx]);
+
+                                                                                        setFieldValue('deleted_items', tempDeletedItems);
+                                                                                        remove(idx);
+                                                                                    }}
+                                                                                >
+                                                                                    delete
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    )}
+                                                                </tr>
+                                                            ))}
+                                                        </>
+                                                    )}
+                                                </FieldArray>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'end',
+                                            alignItems: 'center',
+                                            margin: '15px 0',
+                                        }}
+                                    >
+                                        {aclCheckData && aclCheckData.isAccessAllowed && (
+                                            <>
+                                                <div>
+                                                    <Button
+                                                        style={{ height: '30px' }}
+                                                        className={classes.btn}
+                                                        onClick={() => (isModeEdit ? handleSubmitEdit(values) : setIsModeEdit(true))}
+                                                    >
+                                                        {isModeEdit ? 'Save' : 'Edit Order'}
+                                                    </Button>
+                                                </div>
+                                                {isModeEdit && (
+                                                    <div style={{ margin: '15px 15px 0px 15px' }}>
+                                                        <button
+                                                            type="button"
+                                                            className={`link-button ${classes.btnClear}`}
+                                                            onClick={() => {
+                                                                setFieldValue('deleted_items', []);
+                                                                setValues(initialValueEditItem);
+                                                                setIsModeEdit(false);
+                                                            }}
+                                                        >
+                                                            cancel
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </Formik>
                     </div>
                 </div>
                 <div className={classes.content}>
@@ -262,13 +395,17 @@ const OrderQueueEditContent = (props) => {
                             <tbody>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Shipping Cost</td>
-                                    <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(orderQueue.shippingCost)}</td>
+                                    <td className={classes.td} style={{ textAlign: 'right' }}>
+                                        {formatPriceNumber(orderQueue.shippingCost)}
+                                    </td>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr className={classes.tr}>
                                     <td className={classes.td}>Grand Total</td>
-                                    <td className={classes.td} style={{ textAlign: 'right' }}>{formatPriceNumber(orderQueue.grandTotal)}</td>
+                                    <td className={classes.td} style={{ textAlign: 'right' }}>
+                                        {formatPriceNumber(orderQueue.grandTotal)}
+                                    </td>
                                 </tr>
                             </tbody>
                         </div>
@@ -292,7 +429,6 @@ const OrderQueueEditContent = (props) => {
                         </div>
                     </div> */}
                 </div>
-
             </Paper>
         </>
     );

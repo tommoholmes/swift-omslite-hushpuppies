@@ -7,10 +7,13 @@ const Core = (props) => {
         Content,
     } = props;
 
+    const pageConfig = {
+        title: 'Order Queue',
+    };
+
     const router = useRouter();
     const [varExport, setVarExport] = React.useState({});
     const [getOrderQueueList, { data, loading }] = gqlService.getOrderQueueList();
-    // const [multideleteChannel] = gqlService.multideleteChannel();
     const [setReallocation] = gqlService.setReallocation();
     const [exportOrderToCsv] = gqlService.exportOrderToCsv({
         onCompleted: (res) => {
@@ -43,7 +46,6 @@ const Core = (props) => {
 
     const contentProps = {
         getOrderQueueList,
-        // multideleteChannel,
         setReallocation,
         data,
         loading,
@@ -54,7 +56,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

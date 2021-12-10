@@ -36,10 +36,10 @@ const ProductCategoryImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Update Categories Status</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <span className={classes.label}><a href={urlDownload} className={classes.linkDownload}>Download the Sample CSV</a></span>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                     </div>
                     <div className={classes.formField}>
                         <DropFile

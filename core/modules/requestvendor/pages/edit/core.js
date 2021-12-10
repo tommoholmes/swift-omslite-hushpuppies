@@ -1,7 +1,6 @@
+/* eslint-disable no-use-before-define */
 import React from 'react';
 import Layout from '@layout';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/requestvendor/services/graphql';
 
@@ -11,19 +10,22 @@ const ContentWrapper = (props) => {
         Content,
     } = props;
     const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const Vendor = data.getVendorRequestById;
+    const [vendorRequestApprove] = gqlService.vendorRequestApprove();
+    const [vendorRequestNotApprove] = gqlService.vendorRequestNotApprove();
 
-    const handleSubmit = ({ code, name }) => {
-        const variables = { id: company.company_id, company_code: code, company_name: name };
+    const handleApprove = () => {
+        const variables = {
+            id: vendor.id,
+        };
         window.backdropLoader(true);
-        updateCompany({
+        vendorRequestApprove({
             variables,
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success edit Vendor!',
+                text: 'Order was Approved',
                 variant: 'success',
             });
             setTimeout(() => router.push('/vendorportal/requestvendor'), 250);
@@ -37,22 +39,52 @@ const ContentWrapper = (props) => {
         });
     };
 
-    const formik = useFormik({
-        initialValues: {
-            code: company.company_code,
-            name: company.company_name,
-        },
-        validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
-        }),
-        onSubmit: (values) => {
-            handleSubmit(values);
-        },
-    });
+    const handleNotApprove = () => {
+        const variables = {
+            id: vendor.id,
+        };
+        window.backdropLoader(true);
+        vendorRequestNotApprove({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order was Not Approved',
+                variant: 'success',
+            });
+            setTimeout(() => router.push('/vendorportal/requestvendor'), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
+    const vendor = {
+        id: Vendor.entity_id,
+        firstname: Vendor.first_name,
+        lastname: Vendor.last_name,
+        email: Vendor.email,
+        street: Vendor.company_street,
+        countryId: Vendor.company_country_id,
+        countryName: Vendor.company_country_name,
+        region: Vendor.company_region,
+        city: Vendor.company_city,
+        phone: Vendor.no_telephone,
+        companyName: Vendor.company_name,
+        companyCode: Vendor.company_code,
+        status: Vendor.status,
+        statusLabel: Vendor.status_label,
+    };
 
     const contentProps = {
-        formik,
+        vendor,
+        handleApprove,
+        handleNotApprove,
     };
 
     return (
@@ -62,7 +94,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading, data } = gqlService.getVendorRequestById({
         id: router && router.query && Number(router.query.id),
     });
 

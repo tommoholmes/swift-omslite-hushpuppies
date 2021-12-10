@@ -11,6 +11,11 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+
+    const pageConfig = {
+        title: 'Add New Logistix Provider',
+    };
+
     const [saveLogistixProvider] = gqlService.saveLogistixProvider();
 
     const handleSubmit = (input) => {
@@ -56,7 +61,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

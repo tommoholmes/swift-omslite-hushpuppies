@@ -1,18 +1,26 @@
 import { gql } from '@apollo/client';
 
-export const getCompanyList = gql`
-    query getCompanyList(
-        $pageSize: Int!,
-        $currentPage: Int!,
+export const getVendorRequestList = gql`
+    query getVendorRequestList(
+        $pageSize: Int,
+        $currentPage: Int,
+        $filter: VendorRequestFilterInput,
+        $sort: VendorRequestSortInput
     ){
-        getCompanyList(
+        getVendorRequestList(
             pageSize: $pageSize,
-            currentPage: $currentPage
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort
         ){
             items {
-                company_id
+                entity_id
+                first_name
+                last_name
                 company_code
                 company_name
+                status
+                status_label
             }
             total_count
             page_info {
@@ -24,17 +32,27 @@ export const getCompanyList = gql`
     }
 `;
 
-export const getCompanyById = gql`
-    query getCompanyById(
+export const getVendorRequestById = gql`
+    query getVendorRequestById(
         $id: Int!,
     ){
-        getCompanyById(
+        getVendorRequestById(
             id: $id
         ){
-            company_code
-            company_id
+            entity_id
+            first_name
+            last_name
+            email
+            company_street
+            company_country_id
+            company_country_name
+            company_region
+            company_city
+            no_telephone
             company_name
-            is_new_product
+            company_code
+            status
+            status_label
         }
     }
 `;
@@ -60,8 +78,30 @@ export const updateCompany = gql`
     }
 `;
 
+export const vendorRequestApprove = gql`
+    mutation vendorRequestApprove(
+        $id: Int!,
+    ){
+        vendorRequestApprove(
+            id: $id
+        )
+    }
+`;
+
+export const vendorRequestNotApprove = gql`
+    mutation vendorRequestNotApprove(
+        $id: Int!,
+    ){
+        vendorRequestNotApprove(
+            id: $id
+        )
+    }
+`;
+
 export default {
-    getCompanyList,
-    getCompanyById,
+    getVendorRequestList,
+    getVendorRequestById,
     updateCompany,
+    vendorRequestApprove,
+    vendorRequestNotApprove,
 };

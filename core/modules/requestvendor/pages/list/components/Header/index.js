@@ -9,7 +9,7 @@ const HeaderContent = (props) => {
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Vendor Request</h2>
+            <h2 className={classes.title}>Manage Vendor Request</h2>
         </div>
     );
 };

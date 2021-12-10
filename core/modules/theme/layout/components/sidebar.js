@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable max-len */
 import React from 'react';
 import clsx from 'clsx';
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
     },
     swiftOmsLogo: {
+        cursor: 'pointer',
         padding: 12,
         '&.open': { justifyContent: 'flex-start' },
         '&.close': { justifyContent: 'center' },
@@ -133,7 +135,11 @@ const Sidebar = ({
 
     const SidebarContent = () => (
         <>
-            <div className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}>
+            <div
+                className={clsx(classes.toolbar, classes.swiftOmsLogo, open ? 'open' : 'close')}
+                onClick={() => router.push('/')}
+                onKeyDown={() => router.push('/')}
+            >
                 <img alt="" src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'} />
             </div>
             <Hidden smUp>

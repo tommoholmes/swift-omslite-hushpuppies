@@ -10,6 +10,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
         allowManualConfirm,
+        useCamera,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByBatchItemById.pick_by_batch_item;
@@ -87,6 +88,7 @@ const ContentWrapper = (props) => {
         setCount,
         handleSubmit,
         visibility,
+        useCamera,
     };
 
     return (
@@ -96,26 +98,42 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig();
+
+    const pageConfig = {
+        title: `Pick by Batch - Scan ID ${router.query?.id}`,
+    };
+
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/batch/allow_manual_confirm_pick',
+    });
+    const { loading: loadingConfigCamera, data: dataConfigCamera } = gqlService.getStoreConfig({
+        path: 'swiftoms_pickpack/batch/use_camera_to_scan',
+    });
+
     const { loading, data } = gqlService.getPickByBatchItemById({
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading || loadingConfig) {
+    if (loading || loadingConfig || loadingConfigCamera) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout>
-            <ContentWrapper data={data} allowManualConfirm={dataConfig.getStoreConfig === '1'} {...props} />
+        <Layout pageConfig={pageConfig}>
+            <ContentWrapper
+                data={data}
+                useCamera={dataConfigCamera.getStoreConfig === '1'}
+                allowManualConfirm={dataConfig.getStoreConfig === '1'}
+                {...props}
+            />
         </Layout>
     );
 };

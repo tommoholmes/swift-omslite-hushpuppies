@@ -11,12 +11,12 @@ const HeaderContent = (props) => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Manage Order Queue</h2>
-            {/* <Button
+            <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/order/orderqueue/create')}
+                onClick={() => router.push('/order/fetchorder')}
             >
-                Create Sales Channel
-            </Button> */}
+                Fetch Order
+            </Button>
             {/* <Button
                 className={classes.buttonAdd}
                 onClick={() => router.push('/order/orderqueue/import')}

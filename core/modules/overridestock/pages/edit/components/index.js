@@ -12,9 +12,7 @@ import clsx from 'clsx';
 import useStyles from '@modules/overridestock/pages/edit/components/style';
 
 const OverrideStockEditContent = (props) => {
-    const {
-        formik,
-    } = props;
+    const { formik } = props;
     const classes = useStyles();
     const router = useRouter();
     const [getVirtualStockList, getVirtualStockListRes] = virtualStockGqlService.getVirtualStockList();
@@ -28,13 +26,14 @@ const OverrideStockEditContent = (props) => {
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
                 />
             </Button>
             <h2 className={classes.titleTop}>Edit Override Stock</h2>
@@ -56,6 +55,12 @@ const OverrideStockEditContent = (props) => {
                                 && getVirtualStockListRes.data.getVirtualStockList
                                 && getVirtualStockListRes.data.getVirtualStockList.items
                             }
+                            getOptionsVariables={{
+                                variables: {
+                                    pageSize: null,
+                                    currentPage: 1,
+                                },
+                            }}
                             getOptions={getVirtualStockList}
                             primaryKey="vs_id"
                             labelKey="vs_name"
@@ -118,11 +123,7 @@ const OverrideStockEditContent = (props) => {
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
+                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained">
                         Submit
                     </Button>
                 </div>

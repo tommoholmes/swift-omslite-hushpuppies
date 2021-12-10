@@ -106,20 +106,24 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
+    const pageConfig = {
+        title: `Pick by Batch #${router.query?.id}`,
+    };
+
     if (loading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <ContentWrapper data={data} {...props} />
         </Layout>
     );

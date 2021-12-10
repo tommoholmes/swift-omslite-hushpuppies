@@ -6,6 +6,9 @@ const Core = (props) => {
         Content,
     } = props;
 
+    const pageConfig = {
+        title: 'Pack by Wave List',
+    };
     const [getPickByWaveList, { data, loading }] = gqlService.getPickByWaveList();
 
     const contentProps = {
@@ -15,7 +18,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout useBreadcrumbs={false}>
+        <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
             <Content {...contentProps} />
         </Layout>
     );

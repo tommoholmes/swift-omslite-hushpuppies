@@ -216,7 +216,7 @@ const DashboardContent = (props) => {
                             <span>Failed Order</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push('/sales/orderqueue')}>
+                    <a className="link" href="/order/allorder">
                         Manage Order
                     </a>
                 </div>
@@ -258,7 +258,7 @@ const DashboardContent = (props) => {
                             <span>Marketplace</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push('/sales/shipment')}>
+                    <a className="link" href="/sales/shipment">
                         Manage Shipment
                     </a>
                 </div>
@@ -273,7 +273,7 @@ const DashboardContent = (props) => {
                             <span>Request to Proceed</span>
                         </div>
                     </div>
-                    <a className="link" href="#" onClick={() => router.push(' /sales/managerma')}>
+                    <a className="link" href="/sales/managerma">
                         Manage Return
                     </a>
                 </div>
