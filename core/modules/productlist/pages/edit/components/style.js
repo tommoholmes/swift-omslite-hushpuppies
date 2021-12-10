@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    topPage: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        paddingRight: 10,
+    },
     content: {
         borderBottom: '3px solid #F5F7FB',
         padding: '18px 15px',
@@ -186,7 +191,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#F9E5E4',
         color: '#B30100',
         padding: '15px 10px',
-        margin: '10px 0px',
+        marginBottom: 10,
         display: 'flex',
         alignItems: 'center',
         '& a': {

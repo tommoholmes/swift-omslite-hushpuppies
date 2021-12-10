@@ -219,22 +219,41 @@ const ProductListEditContent = (props) => {
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push('/product/productlist')}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
-                />
-            </Button>
-            <h2 className={classes.titleTop}>Product Detail</h2>
+            <div className={classes.topPage}>
+                <div>
+                    <Button
+                        className={classes.btnBack}
+                        onClick={() => router.push('/product/productlist')}
+                        variant="contained"
+                        style={{ marginRight: 16 }}
+                    >
+                        <ChevronLeftIcon style={{
+                            fontSize: 30,
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                        }}
+                        />
+                    </Button>
+                    <h2 className={classes.titleTop}>Product Detail</h2>
+                </div>
+                <div className={classes.formFieldButton}>
+                    <Button
+                        className={classes.btn}
+                        onClick={formik.handleSubmit}
+                        variant="contained"
+                    >
+                        Save
+                    </Button>
+                </div>
+            </div>
+            {Object.keys(formik.errors).length !== 0
+                        && (
+                            <div className={classes.errorHtml}>
+                                <div style={{ paddingLeft: 5 }}>Please make sure all required field is filled!</div>
+                            </div>
+                        )}
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.gridAttribute}>
@@ -301,21 +320,6 @@ const ProductListEditContent = (props) => {
                             </Accordion>
                         </div>
                     ))}
-                <div className={classes.formFieldButton}>
-                    <Button
-                        className={classes.btn}
-                        onClick={formik.handleSubmit}
-                        variant="contained"
-                    >
-                        Submit
-                    </Button>
-                    {Object.keys(formik.errors).length !== 0
-                        && (
-                            <div className={classes.errorHtml}>
-                                <div style={{ paddingLeft: 5 }}>Please make sure all required field is filled!</div>
-                            </div>
-                        )}
-                </div>
 
                 <div className={classes.content}>
                     <Accordion
@@ -397,14 +401,15 @@ const ProductListEditContent = (props) => {
                                                                 <span style={{ fontWeight: 'bold' }}>Price :</span>
                                                                 <span>
                                                                     {
-                                                                ` IDR${e.price.find((vp) => (vp.location.loc_id === selected[i]))?.price}`
+                                                                        ` IDR${e.price.find((vp) => (vp.location.loc_id === selected[i]))?.price}`
                                                                     }
                                                                 </span>
                                                                 <br />
                                                                 <span style={{ fontWeight: 'bold' }}>Special Price :</span>
                                                                 <span>
                                                                     {
-                                                                    ` IDR${e.price.find((vp) => (vp.location.loc_id === selected[i]))?.special_price}`
+                                                                        ` IDR${e.price.find((vp) => (
+                                                                            vp.location.loc_id === selected[i]))?.special_price}`
                                                                     }
                                                                 </span>
                                                             </td>
