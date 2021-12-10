@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
     select: {
         height: 31,
     },
+    formControlFullWidth: {
+        margin: theme.spacing(1),
+        marginLeft: 0,
+        width: '100%',
+    },
     root: {
         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
         fontSize: 14,
@@ -34,11 +39,17 @@ const CustomTextField = ({
     labelToMap = 'label',
     error = false,
     errorMessage = 'This is a Required field.',
+    fullWidth = false,
     ...other
 }) => {
     const classes = useStyles();
     return (
-        <FormControl variant={variant} className={formControlClasses || classes.formControl} error={error}>
+        <FormControl
+            variant={variant}
+            className={formControlClasses || fullWidth ? classes.formControlFullWidth
+                : classes.formControl}
+            error={error}
+        >
             <Select
                 native
                 className={selectClasses || classes.select}
@@ -59,7 +70,7 @@ const CustomTextField = ({
                 ))}
             </Select>
             {error
-            && <FormHelperText>{errorMessage}</FormHelperText>}
+                && <FormHelperText>{errorMessage}</FormHelperText>}
         </FormControl>
     );
 };
