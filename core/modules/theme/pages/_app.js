@@ -41,7 +41,7 @@ class MyApp extends App {
             lastPathNoAuth = getLastPathWithoutLogin();
         } else {
             isLogin = allcookie.isLogin || 0;
-            lastPathNoAuth = req && req.session && req.session.lastPathNoAuth ? req.session.lastPathNoAuth : '/login';
+            lastPathNoAuth = req && req.session && req.session.lastPathNoAuth ? req.session.lastPathNoAuth : '/';
         }
         isLogin = parseInt(isLogin);
         routeMiddleware({
