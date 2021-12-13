@@ -35,8 +35,15 @@ query{
 }
 `;
 
+export const getStoreConfig = gql`
+  query getStoreConfig($path: String!){
+    getStoreConfig(path: $path)
+  }
+`;
+
 export default {
     getCustomerToken,
     removeToken,
     getCustomer,
+    getStoreConfig,
 };

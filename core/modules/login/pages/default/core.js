@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-import { getToken } from '@modules/login/services/graphql';
+import { getToken, getStoreConfig } from '@modules/login/services/graphql';
 import { expiredToken } from '@config';
 import { setLogin } from '@helper_auth';
 import { useRouter } from 'next/router';
@@ -10,6 +10,10 @@ const Core = (props) => {
         Content,
     } = props;
     const router = useRouter();
+    const pageConfig = {
+        header: false,
+        sidebar: false,
+    };
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [getCustomerToken] = getToken();
@@ -35,17 +39,18 @@ const Core = (props) => {
         });
     };
 
+    const { loading: loadingConfig, data: dataConfig } = getStoreConfig({
+        path: 'swiftoms_vendorportal/configuration/enable_vendor_portal',
+    });
+
     const contentProps = {
         email,
         setEmail,
         password,
         setPassword,
         handleSubmit,
-    };
-
-    const pageConfig = {
-        header: false,
-        sidebar: false,
+        loadingConfig,
+        dataConfig: dataConfig && dataConfig.getStoreConfig && dataConfig.getStoreConfig === '1',
     };
 
     return (

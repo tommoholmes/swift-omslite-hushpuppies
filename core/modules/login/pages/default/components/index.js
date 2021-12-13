@@ -5,13 +5,15 @@ import TextField from '@common_textfield';
 import Button from '@common_button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import useStyles from '@modules/login/pages/default/components/style';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const Login = (props) => {
     const classes = useStyles();
     const {
-        email, setEmail, password, setPassword, handleSubmit,
+        email, setEmail, password, setPassword, handleSubmit, dataConfig,
     } = props;
+    const router = useRouter();
 
     return (
         <div className={clsx(classes.loginContainer)}>
@@ -77,6 +79,12 @@ const Login = (props) => {
                                         <a>Forgot your password?</a>
                                     </Link>
                                 </Typography>
+                                {dataConfig
+                                && (
+                                    <Button onClick={() => router.push('/registervendor')} variant="contained" className={classes.btnVendor}>
+                                        <span className={classes.btnVendorText}>Register Vendor</span>
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </form>

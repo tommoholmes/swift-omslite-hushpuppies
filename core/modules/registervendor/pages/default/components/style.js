@@ -23,7 +23,11 @@ const useStyles = makeStyles((theme) => ({
     formField: {
         padding: 0,
         paddingBottom: 25,
-        position: 'relative',
+    },
+    label: {
+        fontSize: 12,
+        color: '#B1BCDB',
+        marginBottom: 5,
     },
     headerLogin: {
         [theme.breakpoints.down('xs')]: {
@@ -58,17 +62,15 @@ const useStyles = makeStyles((theme) => ({
     },
     loginContent: {
         maxWidth: 307,
+        marginTop: 50,
         [theme.breakpoints.up('sm')]: {
-            left: '5%',
-            position: 'absolute',
-            top: '50%',
-            transform: 'translateY(-50%)',
+            marginLeft: '5%',
         },
         [theme.breakpoints.up('md')]: {
-            left: '9%',
+            marginLeft: '9%',
         },
         [theme.breakpoints.up('lg')]: {
-            left: '15%',
+            marginLeft: '25%',
         },
         [theme.breakpoints.down('xs')]: {
             margin: '20% auto',
@@ -76,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     btnLogin: {
+        marginTop: 20,
         background: colorPurple,
         borderRadius: 7,
         padding: 6,
@@ -86,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     },
     btnLoginText: {
         color: '#FFFFFF',
-        padding: '2px 121px',
+        padding: '2px 0px',
         letterSpacing: 2,
         fontSize: 20,
     },
@@ -96,23 +99,6 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontSize: 14,
         color: '#536777',
-    },
-    btnVendor: {
-        marginTop: 20,
-        background: 'transparent',
-        borderRadius: 7,
-        border: `1px solid ${colorPurple}`,
-        padding: 6,
-        width: '100%',
-        '&:hover': {
-            background: 'transparent',
-        },
-    },
-    btnVendorText: {
-        color: colorPurple,
-        letterSpacing: 1,
-        fontSize: 20,
-        textTransform: 'capitalize',
     },
 }));
 
