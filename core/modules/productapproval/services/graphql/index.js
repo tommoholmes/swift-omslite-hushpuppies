@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import * as Schema from '@modules/productapproval/services/graphql/schema';
 
 const context = {
@@ -13,6 +13,16 @@ export const getCompanyList = (variables) => useLazyQuery(Schema.getCompanyList,
     variables, ...context, ...fetchPolicy,
 });
 
+export const getVendorProductApprovalList = (variables) => useLazyQuery(Schema.getVendorProductApprovalList, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const productsApprove = (variables) => useMutation(Schema.productsApprove, {
+    variables, ...context,
+});
+
 export default {
     getCompanyList,
+    getVendorProductApprovalList,
+    productsApprove,
 };

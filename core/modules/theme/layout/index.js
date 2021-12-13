@@ -153,28 +153,6 @@ const Layout = (props) => {
             ],
         },
         {
-            aclCode: 'oms_lite_header_product',
-            key: 'product',
-            label: 'Product',
-            children: [
-                {
-                    aclCode: 'oms_lite_product_list',
-                    key: 'productlist',
-                    label: 'Products',
-                    url: '/product/productlist',
-                    notInAcl: true,
-                },
-                {
-                    aclCode: 'oms_lite_product_assembly',
-                    key: 'productassembly',
-                    label: 'Product Assembly',
-                    url: '/product/productassembly',
-                    notInAcl: true,
-                },
-            ],
-            notInAcl: true,
-        },
-        {
             aclCode: 'oms_lite_marketing',
             key: 'marketing',
             label: 'Marketing',

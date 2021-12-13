@@ -24,6 +24,46 @@ export const getCompanyList = gql`
     }
 `;
 
+export const getVendorProductApprovalList = gql`
+    query getVendorProductApprovalList(
+        $pageSize: Int!,
+        $currentPage: Int!,
+        $filter: VendorProductApprovalFilterInput,
+        $sort: VendorProductApprovalSortInput,
+    ){
+        getVendorProductApprovalList(
+            pageSize: $pageSize,
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
+        ){
+            items{
+                entity_id
+                approval_status
+                sku
+                name
+                vendor_name
+                price
+                special_price
+                status
+              }
+            total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
+            }
+        }
+    }
+`;
+
+export const productsApprove = gql`
+    mutation productsApprove($ids: [Int!]!){
+        productsApprove(ids: $ids)
+    }
+`;
+
 export default {
     getCompanyList,
+    productsApprove,
 };
