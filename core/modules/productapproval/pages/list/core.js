@@ -6,10 +6,12 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
+    const [getVendorProductApprovalList, { data, loading }] = gqlService.getVendorProductApprovalList();
+    const [productsApprove] = gqlService.productsApprove();
 
     const contentProps = {
-        getCompanyList,
+        getVendorProductApprovalList,
+        productsApprove,
         data,
         loading,
     };
