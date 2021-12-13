@@ -27,7 +27,7 @@ const Core = (props) => {
             window.toastMessage({
                 open: true,
                 variant: 'success',
-                text: 'Success Request New Vendor',
+                text: 'Congratulation, your registration will be processed immediately.',
             });
             setTimeout(() => { router.push('/login'); }, 250);
         }).catch((e) => {
