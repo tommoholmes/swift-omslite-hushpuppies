@@ -354,7 +354,7 @@ const OrderQueueEditContent = (props) => {
                                             margin: '15px 0',
                                         }}
                                     >
-                                        {aclCheckData && aclCheckData.isAccessAllowed && (
+                                        {aclCheckData && aclCheckData.isAccessAllowed && orderQueue.isAllowReallocate && (
                                             <>
                                                 <div>
                                                     <Button
