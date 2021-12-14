@@ -314,6 +314,12 @@ export const getShipmentStatusByType = gql`
     }
 `;
 
+export const getStoreConfig = gql`
+  query getStoreConfig($path: String!){
+    getStoreConfig(path: $path)
+  }
+`;
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -333,4 +339,5 @@ export default {
     getExportStatusHistory,
     getActivity,
     getShipmentStatusByType,
+    getStoreConfig,
 };

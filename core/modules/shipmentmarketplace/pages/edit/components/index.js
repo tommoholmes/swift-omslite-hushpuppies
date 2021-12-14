@@ -26,6 +26,7 @@ const ShipmentMarketplaceEditContent = (props) => {
         formikShipped,
         formikDelivered,
         formikNotes,
+        dataConfig,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -65,6 +66,25 @@ const ShipmentMarketplaceEditContent = (props) => {
             return `/assets/img/print_icon/${code}.png`;
         }
         return null;
+    };
+
+    const step = () => {
+        switch (shipmentMarketplace.statusValue) {
+        case 'process_for_shipping':
+        case 'pick_in_progress':
+            return 1;
+        case 'ready_for_pack':
+        case 'pick_uncomplete':
+            return 2;
+        case 'ready_for_ship':
+            return 3;
+        case 'order_shipped':
+            return 4;
+        case 'order_delivered':
+            return 5;
+        default:
+            return 0;
+        }
     };
 
     return (
@@ -146,80 +166,78 @@ const ShipmentMarketplaceEditContent = (props) => {
                                     <div className="step line">
                                         <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
                                         <div className={classes.statusLabelActive}>
-                                            {shipmentMarketplace.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                                            {step() >= 1 && shipmentMarketplace.allocation === 'confirmed' ? 'Confirmed' : 'Unconfirmed'}
                                         </div>
                                     </div>
                                     <div className="step line">
-                                        {(shipmentMarketplace.statusValue === 'process_for_shipping') ? (
-                                            <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Ready for Pack
-                                                </div>
-                                            </>
-                                        ) : (
+                                        {step() >= 2 ? (
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
                                                 <div className={classes.statusLabelActive}>
                                                     Ready for Pack
                                                 </div>
                                             </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready for Pack
+                                                </div>
+                                            </>
                                         )}
                                     </div>
                                     <div className="step line">
-                                        {(shipmentMarketplace.statusValue === 'process_for_shipping') || (shipmentMarketplace.statusValue === 'ready_for_pack') ? (
-                                            <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Ready to Ship
-                                                </div>
-                                            </>
-                                        ) : (
+                                        {step() >= 3 ? (
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
                                                 <div className={classes.statusLabelActive}>
                                                     Ready to Ship
                                                 </div>
                                             </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready to Ship
+                                                </div>
+                                            </>
                                         )}
                                     </div>
                                     <div className="step line">
-                                        {(shipmentMarketplace.statusValue === 'order_shipped') || (shipmentMarketplace.statusValue === 'order_delivered')
-                                            || (shipmentMarketplace.statusValue === 'closed') || (shipmentMarketplace.statusValue === 'canceled') ? (
-                                                <>
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
-                                                    <div className={classes.statusLabelActive}>
-                                                        Order Shipped
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {' '}
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />
-                                                    <div className={classes.statusLabelInactive}>
-                                                        Order Shipped
-                                                    </div>
-                                                </>
-                                            )}
+                                        {step() >= 4 ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Order Shipped
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {' '}
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Order Shipped
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                     <div className="step">
-                                        {!((shipmentMarketplace.statusValue === 'order_delivered') || (shipmentMarketplace.statusValue === 'closed')
-                                            || (shipmentMarketplace.statusValue === 'canceled')) ? (
-                                                <>
-                                                    {' '}
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                                                    <div className={classes.statusLabelInactive}>
-                                                        Order Delivered
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
-                                                    <div className={classes.statusLabelActive}>
-                                                        Order Delivered
-                                                    </div>
-                                                </>
-                                            )}
+                                        {step() >= 5 ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Order Delivered
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Order Delivered
+                                                </div>
+
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -248,14 +266,17 @@ const ShipmentMarketplaceEditContent = (props) => {
                                             >
                                                 Print Pick List
                                             </Button>
-                                            <Button
-                                                className={classes.btn}
-                                                onClick={formikPicked.handleSubmit}
-                                                variant="contained"
-                                                style={{ marginLeft: 10 }}
-                                            >
-                                                Mark Pick Complete
-                                            </Button>
+                                            {dataConfig
+                                                && (
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikPicked.handleSubmit}
+                                                        variant="contained"
+                                                        style={{ marginLeft: 10 }}
+                                                    >
+                                                        Mark Pick Complete
+                                                    </Button>
+                                                )}
                                         </>
                                     ) : (
                                         <>
@@ -319,19 +340,22 @@ const ShipmentMarketplaceEditContent = (props) => {
                                     >
                                         Print Pack List
                                     </Button>
-                                    <Button
-                                        className={classes.btn}
-                                        onClick={formikPacked.handleSubmit}
-                                        variant="contained"
-                                        style={{ marginLeft: 10 }}
-                                    >
-                                        Mark Pack Complete
-                                    </Button>
+                                    {dataConfig
+                                        && (
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikPacked.handleSubmit}
+                                                variant="contained"
+                                                style={{ marginLeft: 10 }}
+                                            >
+                                                Mark Pack Complete
+                                            </Button>
+                                        )}
                                 </div>
                             </>
                         )}
                         {(shipmentMarketplace.statusValue === 'ready_for_ship'
-                            || (shipmentMarketplace.statusValue === 'order_shipped' && !shipmentMarketplace.trackNumber))
+                            || (shipmentMarketplace.statusValue === 'order_shipped' && !shipmentMarketplace.awb))
                             && (
                                 <>
                                     <div>
@@ -349,19 +373,30 @@ const ShipmentMarketplaceEditContent = (props) => {
                                                 className: classes.fieldInput,
                                             }}
                                         />
-                                        <div className={classes.formFieldButton2}>
-                                            <Button
-                                                className={classes.btn}
-                                                onClick={formikShipped.handleSubmit}
-                                                variant="contained"
-                                            >
-                                                Shipped
-                                            </Button>
-                                        </div>
+                                        {shipmentMarketplace.allocation === 'confirmed'
+                                            && (
+                                                (dataConfig && (shipmentMarketplace.statusValue === 'ready_for_ship'
+                                                || shipmentMarketplace.statusValue === 'shipment_booked'))
+                                            || (!dataConfig && (shipmentMarketplace.statusValue !== 'order_delivered'
+                                                || shipmentMarketplace.statusValue !== 'closed'
+                                                || shipmentMarketplace.statusValue !== 'canceled'))
+                                            )
+                                            ? (
+                                                <div className={classes.formFieldButton2}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikShipped.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Shipped
+                                                    </Button>
+                                                </div>
+                                            )
+                                            : null}
                                     </div>
                                 </>
                             )}
-                        {(shipmentMarketplace.statusValue === 'order_shipped' && (shipmentMarketplace.trackNumber)) && (
+                        {(shipmentMarketplace.statusValue === 'order_shipped' && (shipmentMarketplace.awb)) && (
                             <>
                                 {(shipmentMarketplace.awb) ? (
                                     <span className={classes.orderLabel} style={{ marginBottom: 10 }}>

@@ -11,6 +11,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
         refetch,
+        dataConfig,
     } = props;
     const shipmentmarketplace = data.getStoreShipmentById;
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
@@ -320,6 +321,7 @@ const ContentWrapper = (props) => {
         formikShipped,
         formikDelivered,
         formikNotes,
+        dataConfig,
     };
 
     return (
@@ -334,11 +336,14 @@ const Core = (props) => {
         title: `Marketplace #${router.query?.id}`,
     };
 
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
+        path: 'swiftoms_shipment/general/pick_and_pack',
+    });
     const { loading, data, refetch } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    if (loading || loadingConfig) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -363,7 +368,12 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper data={data} {...props} refetch={refetch} />
+            <ContentWrapper
+                dataConfig={dataConfig.getStoreConfig === '1'}
+                data={data}
+                {...props}
+                refetch={refetch}
+            />
         </Layout>
     );
 };

@@ -4,7 +4,7 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Autocomplete from '@common_autocomplete';
 import Tabs from '@common_tabs';
-import { optionsAllocation, dataTab } from '@modules/shipmentmarketplace/helpers';
+import { optionsAllocation, dataTabAll, dataTabNoPickPack } from '@modules/shipmentmarketplace/helpers';
 import Header from '@modules/shipmentmarketplace/pages/list/components/Header';
 import useStyles from '@modules/shipmentmarketplace/pages/list/components/style';
 import clsx from 'clsx';
@@ -12,8 +12,9 @@ import TextField from '@common_textfield';
 
 const ShipmentMarketplaceListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getStoreShipmentList, confirmMarketplaceShipment, pickShipment, packShipment,
-        setVarExport, varExport, exportStoreShipmentToCsv, getExportStatusHistory, optionsStatus } = props;
+    const { data, loading, getStoreShipmentList, confirmMarketplaceShipment,
+        pickShipment, packShipment, setVarExport, varExport, exportStoreShipmentToCsv,
+        getExportStatusHistory, optionsStatus, dataConfig } = props;
     const storeShipmentList = (data && data.getStoreShipmentList && data.getStoreShipmentList.items) || [];
     const storeShipmentTotal = (data && data.getStoreShipmentList && data.getStoreShipmentList.total_count) || 0;
     const [tab, setTab] = React.useState('process_for_shipping');
@@ -223,7 +224,7 @@ const ShipmentMarketplaceListContent = (props) => {
         track_number: shipmentmarketplace.track_number || '-',
     }));
 
-    const actions = [
+    let actions = [
         {
             label: 'Print Pick List',
             message: 'ready for print?',
@@ -257,22 +258,6 @@ const ShipmentMarketplaceListContent = (props) => {
             onClick: async (checkedRows) => {
                 const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
                 await confirmMarketplaceShipment({ variables });
-            },
-        },
-        {
-            label: 'Mark Pick Complete',
-            message: 'Are you sure to confirm ?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await pickShipment({ variables });
-            },
-        },
-        {
-            label: 'Mark Pack Complete',
-            message: 'Are you sure to confirm ?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
-                await packShipment({ variables });
             },
         },
     ];
@@ -353,10 +338,34 @@ const ShipmentMarketplaceListContent = (props) => {
         setTab(0);
     };
 
+    React.useEffect(() => {
+        if (dataConfig) {
+            actions = [
+                ...actions,
+                {
+                    label: 'Mark Pick Complete',
+                    message: 'Are you sure to confirm ?',
+                    onClick: async (checkedRows) => {
+                        const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                        await pickShipment({ variables });
+                    },
+                },
+                {
+                    label: 'Mark Pack Complete',
+                    message: 'Are you sure to confirm ?',
+                    onClick: async (checkedRows) => {
+                        const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+                        await packShipment({ variables });
+                    },
+                },
+            ];
+        }
+    }, [dataConfig]);
+
     return (
         <>
             <Header />
-            <Tabs data={dataTab} onChange={onChangeTab} value={tab} allItems={false} />
+            <Tabs data={dataConfig ? dataTabAll : dataTabNoPickPack} onChange={onChangeTab} value={tab} allItems={false} />
             {!load && (
                 <Table
                     filters={filters}

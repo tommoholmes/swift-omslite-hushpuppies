@@ -8,6 +8,10 @@ const Core = (props) => {
     } = props;
     const router = useRouter();
     const [varExport, setVarExport] = React.useState({});
+
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
+        path: 'swiftoms_shipment/general/pick_and_pack',
+    });
     const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
     const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
@@ -38,7 +42,7 @@ const Core = (props) => {
         },
     });
 
-    if (loadingOptionStatus) {
+    if (loadingOptionStatus || loadingConfig) {
         return (
             <Layout useBreadcrumbs={false}>
                 <div style={{
@@ -67,6 +71,7 @@ const Core = (props) => {
         setVarExport,
         varExport,
         optionsStatus: optionsStatus.getShipmentStatusByType,
+        dataConfig: dataConfig.getStoreConfig === '1',
     };
 
     return (
