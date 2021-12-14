@@ -21,10 +21,18 @@ export const optionsStatus = [
     { id: 'shipment_booked', name: 'Shipment Booked' },
 ];
 
-export const dataTab = [
+export const dataTabAll = [
     { label: 'Process for Shipping', value: 'process_for_shipping' },
     { label: 'Ready for Pack', value: 'ready_for_pack' },
     { label: 'Ready for Ship', value: 'ready_for_ship' },
+    { label: 'Order Shipped - No AWB', value: 'order_shipped_no_awb' },
+    { label: 'Order Shipped - AWB', value: 'order_shipped_awb' },
+    { label: 'Order Delivered', value: 'order_delivered' },
+    { label: 'All', value: 0 },
+];
+
+export const dataTabNoPickPack = [
+    { label: 'Process for Shipping', value: 'process_for_shipping' },
     { label: 'Order Shipped - No AWB', value: 'order_shipped_no_awb' },
     { label: 'Order Shipped - AWB', value: 'order_shipped_awb' },
     { label: 'Order Delivered', value: 'order_delivered' },

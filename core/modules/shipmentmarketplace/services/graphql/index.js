@@ -83,6 +83,10 @@ export const getShipmentStatusByType = (variables) => useQuery(Schema.getShipmen
     variables, ...context, ...fetchPolicy,
 });
 
+export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -102,4 +106,5 @@ export default {
     getExportStatusHistory,
     getActivity,
     getShipmentStatusByType,
+    getStoreConfig,
 };
