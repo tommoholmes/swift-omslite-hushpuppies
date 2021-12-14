@@ -496,7 +496,7 @@ const Layout = (props) => {
                     url: '/vendorportal/productapproval',
                 },
                 {
-                    aclCode: 'irisPayoutApproval',
+                    aclCode: 'oms_lite_vendor_iris',
                     key: 'irispayoutapproval',
                     label: 'Iris Payout Approval',
                     url: '/vendorportal/irispayoutapproval',
