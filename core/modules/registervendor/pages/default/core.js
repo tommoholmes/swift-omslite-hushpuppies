@@ -60,7 +60,7 @@ const Core = (props) => {
             last_name: Yup.string().required('Required!'),
             email: Yup.string().email('Email not valid').required('Required!'),
             password: Yup.string().required('Required!'),
-            password_confirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+            password_confirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required!'),
             company_code: Yup.string().required('Required!'),
             company_name: Yup.string().required('Required!'),
         }),
