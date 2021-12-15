@@ -18,7 +18,18 @@ export const getStoreConfig = gql`
     }
 `;
 
+export const isAccessAllowed = gql`
+    query isAccessAllowed(
+        $acl_code: String!
+    ){
+        isAccessAllowed(
+            acl_code: $acl_code
+        )
+    }
+`;
+
 export default {
     customerAccessControlList,
     getStoreConfig,
+    isAccessAllowed,
 };
