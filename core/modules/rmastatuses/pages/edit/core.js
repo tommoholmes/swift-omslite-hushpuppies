@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { optionsInItem, optionsEmailCustomer, optionsEmailAdmin } from '@modules/rmastatuses/helpers';
 import gqlService from '@modules/rmastatuses/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
@@ -101,7 +102,11 @@ const Core = (props) => {
         status_code: router && router.query && String(router.query.id),
     });
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_rma_statuses',
+    });
+
+    if (loading || aclCheckLoading) {
         return (
             <Layout>Loading...</Layout>
         );
@@ -111,6 +116,10 @@ const Core = (props) => {
         return (
             <Layout>Data not found!</Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

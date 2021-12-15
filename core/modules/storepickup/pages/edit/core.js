@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/storepickup/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
@@ -295,7 +296,11 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'shipment_pickup_dashboard',
+    });
+
+    if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -316,6 +321,10 @@ const Core = (props) => {
         return (
             <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

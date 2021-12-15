@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/locationpickup/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import { optionsActive } from '@modules/locationpickup/helpers';
 
 const ContentWrapper = (props) => {
@@ -74,12 +75,20 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_location_pickup',
+    });
+
+    if (loading || aclCheckLoading) {
         return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
         return <Layout>Data not found!</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

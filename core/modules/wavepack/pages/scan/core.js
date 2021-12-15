@@ -4,6 +4,7 @@ import React from 'react';
 import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/wavepack/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const Core = (props) => {
     const {
@@ -48,7 +49,11 @@ const Core = (props) => {
         }
     };
 
-    if (typeof window === 'undefined' || loadingConfigCamera) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'pick_by_wave_packlist',
+    });
+
+    if (typeof window === 'undefined' || loadingConfigCamera || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div style={{
@@ -64,6 +69,10 @@ const Core = (props) => {
             </Layout>
 
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {

@@ -3,6 +3,8 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import gqlService from '@modules/orderqueue/services/graphql';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const Core = (props) => {
     const {
@@ -51,6 +53,19 @@ const Core = (props) => {
             handleSubmit(values, resetForm);
         },
     });
+
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_sales_order_queue',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

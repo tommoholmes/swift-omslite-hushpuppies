@@ -3,6 +3,8 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import gqlService from '@modules/locationpriceupload/services/graphql';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const Core = (props) => {
     const {
@@ -61,6 +63,19 @@ const Core = (props) => {
         formik.setFieldValue('filename', fileName);
         formik.setFieldValue('binary', baseCode);
     };
+
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_location_price_upload',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

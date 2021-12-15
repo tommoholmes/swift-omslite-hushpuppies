@@ -1,5 +1,6 @@
 import Layout from '@layout';
 import gqlService from '@modules/shipmentmarketplace/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import { useRouter } from 'next/router';
 
 const Core = (props) => {
@@ -42,7 +43,11 @@ const Core = (props) => {
         },
     });
 
-    if (loadingOptionStatus || loadingConfig) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'shipment_marketplace_dashboard',
+    });
+
+    if (loadingOptionStatus || loadingConfig || aclCheckLoading) {
         return (
             <Layout useBreadcrumbs={false}>
                 <div style={{
@@ -57,6 +62,10 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {

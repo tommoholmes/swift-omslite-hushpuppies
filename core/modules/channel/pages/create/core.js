@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/channel/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import { optionsYesNo } from '@modules/channel/helpers';
 
 const Core = (props) => {
@@ -124,6 +125,18 @@ const Core = (props) => {
             // console.log(values);
         },
     });
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_channel',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

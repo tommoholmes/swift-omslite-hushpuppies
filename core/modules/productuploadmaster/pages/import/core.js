@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import gqlService from '@modules/productuploadmaster/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const Core = (props) => {
     const {
         Content,
     } = props;
-    // const router = useRouter();
+    const router = useRouter();
     const [uploadSource] = gqlService.uploadSource();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'source' });
 
@@ -64,6 +65,18 @@ const Core = (props) => {
         formik.setFieldValue('filename', fileName);
         formik.setFieldValue('binary', baseCode);
     };
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'productUploadMaster',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

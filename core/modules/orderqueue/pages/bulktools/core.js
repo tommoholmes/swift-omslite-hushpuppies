@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import gqlService from '@modules/orderqueue/services/graphql';
 import { bulkToolsOptions } from '@modules/orderqueue/helpers';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const ContentWrapper = (props) => {
     const { Content, bulkToolsOptionsState } = props;
@@ -207,8 +209,17 @@ const Core = (props) => {
         }
     }, [data]);
 
-    if (loading) {
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'sales_order_queue_bulk_tools',
+    });
+
+    if (loading || aclCheckLoading) {
         return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

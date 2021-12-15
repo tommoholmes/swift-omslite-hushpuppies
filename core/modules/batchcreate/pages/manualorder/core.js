@@ -2,6 +2,7 @@
 import Layout from '@layout';
 import gqlService from '@modules/batchcreate/services/graphql';
 import batchGqlService from '@modules/batchlist/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import Router from 'next/router';
 
 const Core = (props) => {
@@ -63,6 +64,18 @@ const Core = (props) => {
             });
         });
     };
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'pick_by_batch_create',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        Router.push('/');
+    }
 
     const contentProps = {
         getStoreShipmentList,

@@ -1,6 +1,8 @@
 import Layout from '@layout';
 import gqlService from '@modules/marketplacefeature/services/graphql';
 import { useState } from 'react';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const Core = (props) => {
     const { Content } = props;
@@ -35,7 +37,12 @@ const Core = (props) => {
             });
     };
 
-    if (loading) {
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_marketplace_feature',
+    });
+
+    if (loading || aclCheckLoading) {
         return (
             <Layout>
                 <div>loading.....</div>
@@ -48,6 +55,10 @@ const Core = (props) => {
                 <div>not found</div>
             </Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {

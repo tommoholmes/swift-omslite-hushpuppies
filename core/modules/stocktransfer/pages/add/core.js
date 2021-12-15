@@ -1,6 +1,7 @@
 import Layout from '@layout';
 import { useRouter } from 'node_modules/next/router';
 import gqlService from '@modules/stocktransfer/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import React from 'react';
 
 const ContentWrapper = (props) => {
@@ -57,10 +58,25 @@ const ContentWrapper = (props) => {
     return <Content {...contentProps} />;
 };
 
-const Core = (props) => (
-    <Layout>
-        <ContentWrapper {...props} />
-    </Layout>
-);
+const Core = (props) => {
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_stock_transfer',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
+
+    return (
+        <Layout>
+            <ContentWrapper {...props} />
+        </Layout>
+    );
+};
 
 export default Core;

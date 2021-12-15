@@ -146,7 +146,7 @@ const Layout = (props) => {
             ],
         },
         {
-            aclCode: 'oms_lite_marketing',
+            aclCode: 'header_marketing',
             key: 'marketing',
             label: 'Marketing',
             children: [
@@ -157,7 +157,6 @@ const Layout = (props) => {
                     url: '/marketing/promotion',
                 },
             ],
-            notInAcl: true,
         },
         {
             aclCode: 'header_pick_pack',
@@ -240,7 +239,7 @@ const Layout = (props) => {
             ],
         },
         {
-            aclCode: 'oms_lite_header_return',
+            aclCode: 'header_sales_return',
             key: 'salesreturn',
             label: 'Return',
             children: [
@@ -263,10 +262,9 @@ const Layout = (props) => {
                     url: '/sales/rmastatuses',
                 },
             ],
-            notInAcl: true,
         },
         {
-            aclCode: 'oms_lite_header_product',
+            aclCode: 'header_product',
             key: 'product',
             label: 'Product',
             children: [
@@ -289,7 +287,6 @@ const Layout = (props) => {
                     url: '/product/productbin',
                 },
             ],
-            notInAcl: true,
         },
         {
             aclCode: 'oms_lite_header_catalog_inventory',

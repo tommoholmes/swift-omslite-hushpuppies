@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/adminstore/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
@@ -100,7 +101,11 @@ const Core = (props) => {
     const { loading: loadingLocation, data: dataLocation } = gqlService.getLocationOptions();
     const { loading: loadingGroup, data: dataGroup } = gqlService.getCustomerGroupOptions();
 
-    if (loading || loadingCompany || loadingLocation || loadingGroup) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_admin_store',
+    });
+
+    if (loading || loadingCompany || loadingLocation || loadingGroup || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
@@ -110,6 +115,10 @@ const Core = (props) => {
         return (
             <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {
