@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/managevendor/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
@@ -62,6 +63,18 @@ const ContentWrapper = (props) => {
             handleSubmit(values);
         },
     });
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'manageVendor',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

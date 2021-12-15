@@ -1,5 +1,7 @@
 import Layout from '@layout';
 import gqlService from '@modules/shipment/services/graphql';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const Core = (props) => {
     const {
@@ -10,7 +12,12 @@ const Core = (props) => {
     const [getShipmentList, { data, loading }] = gqlService.getShipmentList();
     const [confirmShipment] = gqlService.confirmShipment();
 
-    if (loadingOptionStatus) {
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_sales_shipment',
+    });
+
+    if (loadingOptionStatus || aclCheckLoading) {
         return (
             <Layout useBreadcrumbs={false}>
                 <div style={{
@@ -25,6 +32,10 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {

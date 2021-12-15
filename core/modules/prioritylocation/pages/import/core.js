@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/prioritylocation/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const Core = (props) => {
     const {
@@ -65,6 +66,18 @@ const Core = (props) => {
         formik.setFieldValue('filename', fileName);
         formik.setFieldValue('binary', baseCode.slice(idx + 7));
     };
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_priority_location_by_city',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

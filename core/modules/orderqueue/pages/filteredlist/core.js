@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 import Layout from '@layout';
 import gqlService from '@modules/orderqueue/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import { useRouter } from 'next/router';
 
 const Core = (props) => {
@@ -65,6 +66,10 @@ const Core = (props) => {
         }
     }, [tab_status]);
 
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_sales_order_queue',
+    });
+
     if (load) {
         return (
             <Layout pageConfig={pageConfig}>
@@ -80,6 +85,14 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

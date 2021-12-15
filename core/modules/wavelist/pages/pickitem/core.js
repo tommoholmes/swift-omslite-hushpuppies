@@ -4,6 +4,7 @@ import Layout from '@layout';
 // import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/wavelist/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/wavelist/pages/pickitem/components/style';
 
 const ContentWrapper = (props) => {
@@ -44,7 +45,11 @@ const Core = (props) => {
         title: `Pick by Wave ID ${router.query?.id}`,
     };
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'pick_by_wave_list',
+    });
+
+    if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div className={classes.loadingFetch}>
@@ -62,6 +67,10 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

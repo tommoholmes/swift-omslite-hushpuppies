@@ -5,6 +5,8 @@ import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import gqlService from '@modules/homedelivery/services/graphql';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const Core = (props) => {
     const {
@@ -76,6 +78,19 @@ const Core = (props) => {
         formik.setFieldValue('filename', fileName);
         formik.setFieldValue('binary', baseCode.slice(idx + 7));
     };
+
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'shipment_delivery_dashboard',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,

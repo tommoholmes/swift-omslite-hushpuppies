@@ -3,6 +3,7 @@ import React from 'react';
 import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/wavepack/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/wavepack/pages/packlist/components/style';
 
 const ContentWrapper = (props) => {
@@ -75,7 +76,11 @@ const Core = (props) => {
         title: `Pack by Wave #${router.query?.id}`,
     };
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'pick_by_wave_packlist',
+    });
+
+    if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
                 <div className={classes.loadingFetch}>
@@ -93,6 +98,10 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

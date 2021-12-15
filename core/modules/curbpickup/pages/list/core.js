@@ -1,5 +1,7 @@
 import Layout from '@layout';
 import gqlService from '@modules/curbpickup/services/graphql';
+import aclService from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const Core = (props) => {
     const {
@@ -11,6 +13,11 @@ const Core = (props) => {
     const [packShipment] = gqlService.packShipment();
     const [pickedupShipment] = gqlService.pickedupShipment();
     const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
+
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'shipment_curbside_pickup',
+    });
 
     if (loadingOptionStatus) {
         return (
@@ -27,6 +34,14 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {

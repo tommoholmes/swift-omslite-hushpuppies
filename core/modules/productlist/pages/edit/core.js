@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/productlist/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
@@ -153,7 +154,11 @@ const Core = (props) => {
         });
     }, []);
 
-    if (loading || !called) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_product_list',
+    });
+
+    if (loading || !called || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -185,6 +190,10 @@ const Core = (props) => {
                 </div>
             </Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

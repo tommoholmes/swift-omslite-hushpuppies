@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/shipment/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -248,7 +249,11 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading || loadingCompany) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_sales_shipment',
+    });
+
+    if (loading || loadingCompany || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
@@ -258,6 +263,10 @@ const Core = (props) => {
         return (
             <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

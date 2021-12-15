@@ -1,6 +1,7 @@
 import Layout from '@layout';
 import { useRouter } from 'node_modules/next/router';
 import gqlService from '@modules/stockadjustment/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import React from 'react';
 
 const ContentWrapper = (props) => {
@@ -77,12 +78,20 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'inventory_adjustment_dashboard',
+    });
+
+    if (loading || aclCheckLoading) {
         return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
         return <Layout>Data not found!</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     return (

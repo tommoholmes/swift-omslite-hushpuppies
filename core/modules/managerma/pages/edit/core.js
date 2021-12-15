@@ -3,6 +3,7 @@ import Layout from '@layout';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/managerma/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
 
 const ContentWrapper = (props) => {
@@ -180,7 +181,11 @@ const Core = (props) => {
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading || loadingStatus || loadingReturnType || loadingPackageCondition || loadingReason) {
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_rma_manage',
+    });
+
+    if (loading || loadingStatus || loadingReturnType || loadingPackageCondition || loadingReason || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
@@ -190,6 +195,10 @@ const Core = (props) => {
         return (
             <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     const contentProps = {

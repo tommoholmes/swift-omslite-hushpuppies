@@ -5,6 +5,7 @@ import Layout from '@layout';
 import gqlService from '@modules/shipments/services/graphql';
 import { optionsYesNo } from '@modules/shipments/helpers';
 import gqlConfig from '@modules/theme/services/graphql';
+import { useRouter } from 'next/router';
 
 const ContentWrapper = (props) => {
     const { Content, data, storeConfigData } = props;
@@ -97,8 +98,17 @@ const Core = (props) => {
         path: 'swiftoms_shipment/courier/courier_options',
     });
 
-    if (loading || StoreConfigLoading) {
+    const router = useRouter();
+    const { loading: aclCheckLoading, data: aclCheckData } = gqlConfig.isAccessAllowed({
+        acl_code: 'oms_lite_config_shipments',
+    });
+
+    if (loading || StoreConfigLoading || aclCheckLoading) {
         return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     let newData = [];

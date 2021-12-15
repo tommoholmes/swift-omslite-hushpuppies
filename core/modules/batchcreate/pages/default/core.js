@@ -1,6 +1,7 @@
 import Layout from '@layout';
 import { useFormik } from 'formik';
 import gqlService from '@modules/batchcreate/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 import { useRouter } from 'next/router';
 
 const Core = (props) => {
@@ -59,6 +60,18 @@ const Core = (props) => {
             handleSubmit(values);
         },
     });
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'pick_by_batch_create',
+    });
+
+    if (aclCheckLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
 
     const contentProps = {
         formik,
