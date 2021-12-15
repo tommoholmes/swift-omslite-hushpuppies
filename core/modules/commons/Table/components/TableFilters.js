@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable arrow-body-style */
@@ -63,7 +64,16 @@ const TableFilters = (props) => {
         <div style={{ padding: 12 }}>
             {emptyFiltersField && <div style={{ padding: 12 }}>Filter fields is empty.</div>}
             {filters.map((field, i) => (field.hidden ? null : (
-                <div className={classnames('col-filter', field.class)} key={i} style={{ padding: 12, display: 'inline-block' }}>
+                <div
+                    className={classnames('col-filter', field.class)}
+                    key={i}
+                    style={{ padding: 12, display: 'inline-block' }}
+                    onKeyPress={(ev) => {
+                        if (ev.key === 'Enter') {
+                            if (!emptyFiltersField) setParentFilters(filters);
+                        }
+                    }}
+                >
                     <div>{field.label}</div>
                     {(field.component || defaultFilterComponent)({
                         get filterValue() {
