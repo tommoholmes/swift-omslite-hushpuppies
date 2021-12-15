@@ -47,7 +47,9 @@ const ContentWrapper = (props) => {
             email: admin.email,
             customer_loc_code: admin.customer_loc_code?.length
                 ? admin.customer_loc_code.map((code) => (dataLocation.getLocationOptions.find((loc) => loc.value === code))) : [],
-            company: dataCompany.getCompanyOptions.find((loc) => Number(loc.value) === Number(admin.customer_company_code)),
+            company: admin.customer_company_code
+                ? dataCompany.getCompanyOptions.find((loc) => Number(loc.value) === Number(admin.customer_company_code))
+                : '',
             group: dataGroup.getCustomerGroupOptions.find((group) => Number(group.value) === Number(admin.group_id)),
             password: '',
         },
@@ -62,11 +64,11 @@ const ContentWrapper = (props) => {
             } = values;
             const valueToSubmit = {
                 ...restValues,
-                customer_loc_code: customer_loc_code.map((loc) => (
+                customer_loc_code: customer_loc_code?.map((loc) => (
                     String(loc.value)
                 )),
                 group_id: Number(group.value),
-                customer_company_code: String(company.value),
+                customer_company_code: company?.value ? String(company.value) : '',
             };
             handleSubmit(valueToSubmit);
         },
