@@ -93,7 +93,7 @@ const CreateNewPassword = (props) => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                    error={passwordError !== '' || (formik.touched.password && formik.errors.password !== '')}
+                                    error={passwordError !== '' || (formik.touched.password && formik.errors.password)}
                                     helperText={(formik.touched.password && formik.errors.password) || passwordError}
                                 />
                                 {passwordErrorStatus !== '' && (
