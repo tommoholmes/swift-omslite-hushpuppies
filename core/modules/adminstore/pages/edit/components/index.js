@@ -101,8 +101,6 @@ const AdminStoreEditContent = (props) => {
                             type="password"
                             value={formik.values.password}
                             onChange={formik.handleChange}
-                            error={!!(formik.touched.password && formik.errors.password)}
-                            helperText={(formik.touched.password && formik.errors.password) || ''}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -122,8 +120,6 @@ const AdminStoreEditContent = (props) => {
                             primaryKey="value"
                             labelKey="label"
                             options={dataLocation}
-                            error={!!(formik.touched.customer_loc_code && formik.errors.customer_loc_code)}
-                            helperText={(formik.touched.customer_loc_code && formik.errors.customer_loc_code) || ''}
                             fullWidth
                         />
                     </div>
@@ -156,8 +152,6 @@ const AdminStoreEditContent = (props) => {
                             primaryKey="value"
                             labelKey="label"
                             options={dataCompany}
-                            error={!!(formik.touched.company && formik.errors.company)}
-                            helperText={(formik.touched.company && formik.errors.company) || ''}
                             fullWidth
                         />
                     </div>
