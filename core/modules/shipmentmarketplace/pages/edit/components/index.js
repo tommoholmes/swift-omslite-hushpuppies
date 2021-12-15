@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
@@ -166,7 +167,10 @@ const ShipmentMarketplaceEditContent = (props) => {
                                     <div className="step line">
                                         <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
                                         <div className={classes.statusLabelActive}>
-                                            {step() >= 1 && shipmentMarketplace.allocation === 'confirmed' ? 'Confirmed' : 'Unconfirmed'}
+                                            {step() >= 1 && shipmentMarketplace.allocation === 'confirmed'
+                                                ? shipmentMarketplace.statusValue === 'pick_in_progress'
+                                                    ? 'Pick In Progress'
+                                                    : 'Confirmed' : 'Process for Shipping'}
                                         </div>
                                     </div>
                                     <div className="step line">
@@ -174,14 +178,16 @@ const ShipmentMarketplaceEditContent = (props) => {
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
                                                 <div className={classes.statusLabelActive}>
-                                                    Ready for Pack
+                                                    {shipmentMarketplace.statusValue === 'pick_uncomplete'
+                                                        ? 'Pick Incomplete' : 'Ready for Pack'}
                                                 </div>
                                             </>
                                         ) : (
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
                                                 <div className={classes.statusLabelInactive}>
-                                                    Ready for Pack
+                                                    {shipmentMarketplace.statusValue === 'pick_uncomplete'
+                                                        ? 'Pick Uncomplete' : 'Ready for Pack'}
                                                 </div>
                                             </>
                                         )}
@@ -251,109 +257,156 @@ const ShipmentMarketplaceEditContent = (props) => {
                                 </span>
                             </>
                         )}
-                        {(shipmentMarketplace.statusValue === 'process_for_shipping') && (
+                        {(shipmentMarketplace.statusValue === 'process_for_shipping'
+                            && !shipmentMarketplace.allocation) && (
                             <>
                                 Print your packlist, Pick your items
                                 <br />
                                 and pack your items
                                 <div className={classes.formFieldButton}>
-                                    {(shipmentMarketplace.allocation) ? (
+                                    <>
+                                        <Button
+                                            className={classes.btn}
+                                            type="submit"
+                                            onClick={formikConfirm.handleSubmit}
+                                            variant="contained"
+                                            style={{ marginRight: 10 }}
+                                        >
+                                            Confirm Order
+                                        </Button>
+                                        <FormDialog
+                                            labelButton="Canceled"
+                                            titleDialog="Cancel Reason"
+                                            message={(
+                                                <>
+                                                    <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                    <Autocomplete
+                                                        className={clsx(classes.autocompleteRoot, 'popup')}
+                                                        mode="lazy"
+                                                        value={formikCanceled.values.reason}
+                                                        onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                        loading={getShipmentCancelReasonRes.loading}
+                                                        options={
+                                                            getShipmentCancelReasonRes
+                                                                && getShipmentCancelReasonRes.data
+                                                                && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                        }
+                                                        getOptions={getShipmentCancelReason}
+                                                        error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                        helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                        primaryKey="value"
+                                                        labelKey="label"
+                                                    />
+                                                    <div className={classes.formFieldButton}>
+                                                        <Button
+                                                            className={classes.btn}
+                                                            onClick={formikCanceled.handleSubmit}
+                                                            variant="contained"
+                                                        >
+                                                            Submit
+                                                        </Button>
+                                                    </div>
+                                                </>
+                                            )}
+                                        />
+                                    </>
+                                </div>
+                            </>
+                        )}
+
+                        {((shipmentMarketplace.statusValue === 'process_for_shipping'
+                            || shipmentMarketplace.statusValue === 'pick_in_progress')
+                            && shipmentMarketplace.allocation) && (
+                            <>
+                                {dataConfig
+                                    ? (
                                         <>
-                                            <Button
-                                                className={clsx(classes.btn, 'print')}
-                                                onClick={() => window.open(`/printoms/pick/${shipmentMarketplace.id}`)}
-                                                variant="contained"
-                                            >
-                                                Print Pick List
-                                            </Button>
-                                            {dataConfig
-                                                && (
-                                                    <Button
-                                                        className={classes.btn}
-                                                        onClick={formikPicked.handleSubmit}
-                                                        variant="contained"
-                                                        style={{ marginLeft: 10 }}
-                                                    >
-                                                        Mark Pick Complete
-                                                    </Button>
-                                                )}
+                                            Print your packlist, Pick your items
+                                            <br />
+                                            and pack your items
+                                            <div className={classes.formFieldButton}>
+                                                <Button
+                                                    className={clsx(classes.btn, 'print')}
+                                                    onClick={() => window.open(`/printoms/pick/${shipmentMarketplace.id}`)}
+                                                    variant="contained"
+                                                >
+                                                    Print Pick List
+                                                </Button>
+
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikPicked.handleSubmit}
+                                                    variant="contained"
+                                                    style={{ marginLeft: 10 }}
+                                                >
+                                                    Mark Pick Complete
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )
+                                    : (
+                                        <>
+                                            <br />
+                                            Order ready to process
+                                            <div className={classes.formFieldButton}>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikShipped.handleSubmit}
+                                                    variant="contained"
+                                                >
+                                                    Order Shipped
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )}
+                            </>
+                        )}
+
+                        {(shipmentMarketplace.statusValue === 'ready_for_pack'
+                        || shipmentMarketplace.statusValue === 'pick_uncomplete') && (
+                            <>
+                                {dataConfig
+                                    ? (
+                                        <>
+                                            The packing order is ready to be processed
+                                            <div className={classes.formFieldButton}>
+                                                <Button
+                                                    className={clsx(classes.btn, 'print')}
+                                                    onClick={() => window.open(`/printoms/pack/${shipmentMarketplace.id}`)}
+                                                    variant="contained"
+                                                >
+                                                    Print Pack List
+                                                </Button>
+
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikPacked.handleSubmit}
+                                                    variant="contained"
+                                                    style={{ marginLeft: 10 }}
+                                                >
+                                                    Mark Pack Complete
+                                                </Button>
+                                            </div>
                                         </>
                                     ) : (
                                         <>
-                                            <Button
-                                                className={classes.btn}
-                                                type="submit"
-                                                onClick={formikConfirm.handleSubmit}
-                                                variant="contained"
-                                                style={{ marginRight: 10 }}
-                                            >
-                                                Confirm Order
-                                            </Button>
-                                            <FormDialog
-                                                labelButton="Canceled"
-                                                titleDialog="Cancel Reason"
-                                                message={(
-                                                    <>
-                                                        <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
-                                                        <Autocomplete
-                                                            className={clsx(classes.autocompleteRoot, 'popup')}
-                                                            mode="lazy"
-                                                            value={formikCanceled.values.reason}
-                                                            onChange={(e) => formikCanceled.setFieldValue('reason', e)}
-                                                            loading={getShipmentCancelReasonRes.loading}
-                                                            options={
-                                                                getShipmentCancelReasonRes
-                                                                && getShipmentCancelReasonRes.data
-                                                                && getShipmentCancelReasonRes.data.getShipmentCancelReason
-                                                            }
-                                                            getOptions={getShipmentCancelReason}
-                                                            error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
-                                                            helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
-                                                            primaryKey="value"
-                                                            labelKey="label"
-                                                        />
-                                                        <div className={classes.formFieldButton}>
-                                                            <Button
-                                                                className={classes.btn}
-                                                                onClick={formikCanceled.handleSubmit}
-                                                                variant="contained"
-                                                            >
-                                                                Submit
-                                                            </Button>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            />
+                                            <br />
+                                            Order ready to process
+                                            <div className={classes.formFieldButton}>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikShipped.handleSubmit}
+                                                    variant="contained"
+                                                >
+                                                    Order Shipped
+                                                </Button>
+                                            </div>
                                         </>
                                     )}
-                                </div>
+
                             </>
                         )}
-                        {(shipmentMarketplace.statusValue === 'ready_for_pack') && (
-                            <>
-                                The packing order is ready to be processed
-                                <div className={classes.formFieldButton}>
-                                    <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/pack/${shipmentMarketplace.id}`)}
-                                        variant="contained"
-                                    >
-                                        Print Pack List
-                                    </Button>
-                                    {dataConfig
-                                        && (
-                                            <Button
-                                                className={classes.btn}
-                                                onClick={formikPacked.handleSubmit}
-                                                variant="contained"
-                                                style={{ marginLeft: 10 }}
-                                            >
-                                                Mark Pack Complete
-                                            </Button>
-                                        )}
-                                </div>
-                            </>
-                        )}
+
                         {(shipmentMarketplace.statusValue === 'ready_for_ship'
                             || (shipmentMarketplace.statusValue === 'order_shipped' && !shipmentMarketplace.awb))
                             && (
@@ -376,10 +429,10 @@ const ShipmentMarketplaceEditContent = (props) => {
                                         {shipmentMarketplace.allocation === 'confirmed'
                                             && (
                                                 (dataConfig && (shipmentMarketplace.statusValue === 'ready_for_ship'
-                                                || shipmentMarketplace.statusValue === 'shipment_booked'))
-                                            || (!dataConfig && (shipmentMarketplace.statusValue !== 'order_delivered'
-                                                || shipmentMarketplace.statusValue !== 'closed'
-                                                || shipmentMarketplace.statusValue !== 'canceled'))
+                                                    || shipmentMarketplace.statusValue === 'shipment_booked'))
+                                                || (!dataConfig && (shipmentMarketplace.statusValue !== 'order_delivered'
+                                                    || shipmentMarketplace.statusValue !== 'closed'
+                                                    || shipmentMarketplace.statusValue !== 'canceled'))
                                             )
                                             ? (
                                                 <div className={classes.formFieldButton2}>
@@ -388,7 +441,7 @@ const ShipmentMarketplaceEditContent = (props) => {
                                                         onClick={formikShipped.handleSubmit}
                                                         variant="contained"
                                                     >
-                                                        Shipped
+                                                        Order Shipped
                                                     </Button>
                                                 </div>
                                             )
