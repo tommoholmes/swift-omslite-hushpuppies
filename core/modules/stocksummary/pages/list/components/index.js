@@ -71,10 +71,24 @@ const StockSummaryList = (props) => {
             initialValue: '',
         },
         {
-            field: 'channel_stock',
-            name: 'channel_stock',
+            field: 'channel_name',
+            name: 'channel_name',
             type: 'like',
-            label: 'Channel Stock',
+            label: 'Channel',
+            initialValue: '',
+        },
+        {
+            field: 'sync_status',
+            name: 'sync_status',
+            type: 'like',
+            label: 'Sync Status',
+            initialValue: '',
+        },
+        {
+            field: 'sync_message',
+            name: 'sync_message',
+            type: 'like',
+            label: 'Sync Message',
             initialValue: '',
         },
     ];
