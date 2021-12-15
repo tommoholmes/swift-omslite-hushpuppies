@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 const HeaderContent = (props) => {
     const classes = useStyles();
     const [exportStockSummaryList] = gqlService.exportStockSummaryList();
+    const [syncStockSummaryToMP] = gqlService.syncStockSummaryToMP();
     const router = useRouter();
 
     return (
@@ -38,6 +39,31 @@ const HeaderContent = (props) => {
                 }}
             >
                 Export
+            </Button>
+            <Button
+                className={classes.buttonAdd}
+                onClick={async () => {
+                    window.backdropLoader(true);
+                    try {
+                        const resp = await syncStockSummaryToMP();
+                        window.backdropLoader(false);
+                        window.toastMessage({
+                            open: true,
+                            text: 'Success export stock summary',
+                            variant: 'success',
+                        });
+                        setTimeout(() => router.push(resp?.data?.exportStockSummaryList), 250);
+                    } catch (error) {
+                        window.backdropLoader(false);
+                        window.toastMessage({
+                            open: true,
+                            text: error.message,
+                            variant: 'error',
+                        });
+                    }
+                }}
+            >
+                Sync To Marketplace
             </Button>
         </div>
     );

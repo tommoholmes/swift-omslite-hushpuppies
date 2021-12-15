@@ -32,7 +32,14 @@ export const exportStockSummaryList = gql`
     }
 `;
 
+export const syncStockSummaryToMP = gql`
+    mutation {
+        syncStockSummaryToMP
+    }
+`;
+
 export default {
     getStockSummaryList,
     exportStockSummaryList,
+    syncStockSummaryToMP,
 };
