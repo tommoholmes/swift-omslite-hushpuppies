@@ -174,6 +174,11 @@ const useStyles = makeStyles((theme) => ({
         '&.noMargin': {
             marginTop: 0,
         },
+        '&.btn-cancel': {
+            marginLeft: 10,
+            backgroundColor: '#FFFFFF',
+            color: colorPurple,
+        },
     },
     contentHeader: {
         padding: '18px 15px',
