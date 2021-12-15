@@ -166,7 +166,8 @@ const ShipmentMarketplaceListContent = (props) => {
     ];
 
     const getIconByStatus = (status) => {
-        if (status.value === 'process_for_pack' || status.value === 'process_for_shipping') {
+        if (status.value === 'process_for_pack' || status.value === 'process_for_shipping'
+        || status.value === 'pick_in_progress') {
             if (status.label === 'Cannot Fulfill') {
                 return '/assets/img/order_status/cannotfulfill.svg';
             }
@@ -175,7 +176,7 @@ const ShipmentMarketplaceListContent = (props) => {
         if (status.value === 'cannot_fulfill' || status.value === 'canceled') {
             return '/assets/img/order_status/cannotfulfill.svg';
         }
-        if (status.value === 'ready_for_pack') {
+        if (status.value === 'ready_for_pack' || status.value === 'pick_uncomplete') {
             return '/assets/img/order_status/readyforpack.svg';
         }
         if (status.value === 'ready_for_pickup'
