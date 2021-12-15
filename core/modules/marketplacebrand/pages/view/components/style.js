@@ -215,6 +215,7 @@ const useStyles = makeStyles((theme) => ({
         right: 0,
         top: 0,
         cursor: 'pointer',
+        zIndex: 1,
     },
 }));
 
