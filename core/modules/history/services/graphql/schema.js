@@ -15,6 +15,9 @@ export const getHistoryUpdateStockList = gql`
                 message
                 status
                 type
+                sku
+                channel_code
+                marketplace
             }
             total_count
             page_info {
