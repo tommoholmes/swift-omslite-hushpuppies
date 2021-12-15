@@ -39,7 +39,9 @@ const Core = (props) => {
             email: Yup.string().email().required('Required!'),
             token: Yup.string().required('Required!'),
             password: Yup.string().required('Required!'),
-            password_confirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+            password_confirmation: Yup.string()
+                .oneOf([Yup.ref('password'), null], 'Passwords must match')
+                .required('Passwords must match'),
         }),
         validateOnChange: true,
         validateOnBlur: true,
@@ -55,9 +57,9 @@ const Core = (props) => {
                     window.toastMessage({
                         open: true,
                         variant: 'success',
-                        text: 'success set new password',
+                        text: 'You updated your password.',
                     });
-                    setTimeout(() => router.push('/login'), 2000);
+                    setTimeout(() => router.push('/login'), 1500);
                 })
                 .catch((e) => {
                     window.backdropLoader(false);
