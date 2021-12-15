@@ -80,6 +80,11 @@ export const editOrderItem = (variables) => useMutation(Schema.editOrderItem, {
     ...context,
 });
 
+export const cancelOrder = (variables) => useMutation(Schema.cancelOrder, {
+    variables,
+    ...context,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -94,4 +99,5 @@ export default {
     getActivity,
     marketplaceFetchOrder,
     editOrderItem,
+    cancelOrder,
 };

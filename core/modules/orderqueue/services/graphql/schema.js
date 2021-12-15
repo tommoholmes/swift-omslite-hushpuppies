@@ -160,6 +160,14 @@ export const editOrderItem = gql`
     }
 `;
 
+export const cancelOrder = gql`
+    mutation cancelOrder($id: Int!) {
+        cancelOrder(id: $id){
+            status
+        }
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -173,4 +181,5 @@ export default {
     getActivity,
     marketplaceFetchOrder,
     editOrderItem,
+    cancelOrder,
 };

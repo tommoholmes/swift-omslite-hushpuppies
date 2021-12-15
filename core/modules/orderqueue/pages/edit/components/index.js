@@ -16,13 +16,14 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
+import clsx from 'clsx';
 import { formatPriceNumber } from '@helper_currency';
 import { Formik, FieldArray, Field } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
 
 const OrderQueueEditContent = (props) => {
     const {
- formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit,
+ formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
 } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -152,6 +153,15 @@ const OrderQueueEditContent = (props) => {
                                 buttonType="primary-rounded"
                             >
                                 Set as Allocating
+                            </Button>
+                            <Button
+                                className={clsx(classes.btn, 'btn-cancel')}
+                                type="submit"
+                                onClick={handleCancel}
+                                variant="contained"
+                                buttonType="primary-rounded"
+                            >
+                                Cancel
                             </Button>
                         </div>
                     </div>

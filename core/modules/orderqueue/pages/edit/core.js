@@ -12,6 +12,7 @@ const ContentWrapper = (props) => {
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
     const [editOrderItem] = gqlService.editOrderItem();
+    const [cancelOrder] = gqlService.cancelOrder();
 
     const handleSubmit = ({ type }) => {
         const variables = {
@@ -27,6 +28,33 @@ const ContentWrapper = (props) => {
                 window.toastMessage({
                     open: true,
                     text: 'Success edit order status',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            });
+    };
+
+    const handleCancel = () => {
+        const variables = {
+            id: orderqueue.id,
+        };
+        window.backdropLoader(true);
+        cancelOrder({
+            variables,
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was canceled',
                     variant: 'success',
                 });
                 setTimeout(() => window.location.reload(true), 250);
@@ -141,6 +169,7 @@ const ContentWrapper = (props) => {
         aclCheckData,
         initialValueEditItem,
         handleSubmitEdit,
+        handleCancel,
     };
 
     return <Content {...contentProps} />;
