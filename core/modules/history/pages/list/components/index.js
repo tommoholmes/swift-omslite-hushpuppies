@@ -15,10 +15,13 @@ const UpdateStockHistoryListContent = (props) => {
     const columns = [
         { field: 'entity_id', headerName: 'ID' },
         { field: 'type', headerName: 'Type' },
+        { field: 'sku', headerName: 'SKU', hideable: true, sortable: true },
+        { field: 'marketplace', headerName: 'Channel', hideable: true, sortable: true },
+        { field: 'channel_code', headerName: 'Channel Code', hideable: true, sortable: true },
+        { field: 'created_at', headerName: 'Updated At', hideable: true, sortable: true },
         { field: 'message', headerName: 'Message', hideable: true, sortable: true },
         { field: 'status', headerName: 'Status', hideable: true, sortable: true },
-        { field: 'created_at', headerName: 'Created At', hideable: true, sortable: true },
-        { field: 'last_trigered_by', headerName: 'Last Trigered By', hideable: true, sortable: true },
+        { field: 'last_trigered_by', headerName: 'Updated By', hideable: true, sortable: true },
     ];
 
     const filters = [
@@ -27,6 +30,9 @@ const UpdateStockHistoryListContent = (props) => {
         { field: 'type', name: 'type', type: 'like', label: 'Type' },
         { field: 'message', name: 'message', type: 'like', label: 'Message' },
         { field: 'status', name: 'status', type: 'like', label: 'Status' },
+        { field: 'sku', name: 'sku', type: 'like', label: 'SKU' },
+        { field: 'marketplace', name: 'marketplace', type: 'like', label: 'Channel' },
+        { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel Code' },
         {
             field: 'created_at',
             name: 'created_at_from',
