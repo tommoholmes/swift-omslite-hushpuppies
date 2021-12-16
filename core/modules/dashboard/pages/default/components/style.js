@@ -278,7 +278,9 @@ const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: 'minmax(0, 1fr)',
     },
     imageIcon: {
-        marginLeft: '10px',
+        marginLeft: 10,
+        marginRight: 10,
+        width: 36,
     },
     dialogTextContainer: {
         width: '500px',
