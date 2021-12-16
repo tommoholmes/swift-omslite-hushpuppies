@@ -12,19 +12,23 @@ const ProductApprovalListContent = (props) => {
     const productTotal = (data && data.getVendorProductApprovalList && data.getVendorProductApprovalList.total_count) || 0;
 
     const columns = [
-        { field: 'entity_id', headerName: 'ID' },
-        { field: 'approval_status', headerName: 'Approval status' },
-        { field: 'sku', headerName: 'SKU' },
-        { field: 'name', headerName: 'Product Name' },
-        { field: 'vendor_name', headerName: 'Vendor' },
-        { field: 'price', headerName: 'Price' },
-        { field: 'special_price', headerName: 'Special Price' },
-        { field: 'status', headerName: 'Status' },
+        { field: 'entity_id', headerName: 'ID', sortable: true, hideable: true },
+        { field: 'approval_status', headerName: 'Approval status', sortable: true, hideable: true },
+        { field: 'sku', headerName: 'SKU', sortable: true, hideable: true },
+        { field: 'name', headerName: 'Product Name', sortable: true, hideable: true },
+        { field: 'vendor_name', headerName: 'Vendor', sortable: true, hideable: true },
+        { field: 'price', headerName: 'Price', sortable: true, hideable: true },
+        { field: 'special_price', headerName: 'Special Price', sortable: true, hideable: true },
+        { field: 'special_from_date', headerName: 'Special Price From', sortable: true, hideable: true, hidden: true },
+        { field: 'special_to_date', headerName: 'Special Price To', sortable: true, hideable: true, hidden: true },
+        { field: 'status', headerName: 'Status', sortable: true, hideable: true },
     ];
 
     const rows = productList.map((product) => ({
         ...product,
         id: product.entity_id,
+        approval_status: product.approval_status === '0' ? 'Not Approved' : 'Approved',
+        status: product.status === '1' ? 'Enabled' : 'Disabled',
     }));
 
     const filters = [
@@ -33,8 +37,8 @@ const ProductApprovalListContent = (props) => {
         { field: 'sku', name: 'sku', type: 'like', label: 'SKU', initialValue: '' },
         { field: 'name', name: 'name', type: 'like', label: 'Product Name', initialValue: '' },
         {
-            field: 'vendor_code',
-            name: 'vendor_code',
+            field: 'vendor_id',
+            name: 'vendor_id',
             type: 'eq',
             label: 'Vendor',
             initialValue: '',
