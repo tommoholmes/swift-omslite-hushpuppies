@@ -21,8 +21,33 @@ export const updateCompany = (variables) => useMutation(Schema.updateCompany, {
     variables, ...context,
 });
 
+export const getVendorList = (variables) => useLazyQuery(Schema.getVendorList, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getVendorById = (variables) => useQuery(Schema.getVendorById, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const getCourierOption = () => useQuery(Schema.getCourierOption, {
+    ...context, ...fetchPolicy,
+});
+
+export const getShipperMethodOption = () => useQuery(Schema.getShipperMethodOption, {
+    ...context, ...fetchPolicy,
+});
+
+export const vendorUpdate = (variables) => useMutation(Schema.vendorUpdate, {
+    variables, ...context,
+});
+
 export default {
     getCompanyList,
     getCompanyById,
     updateCompany,
+    getVendorList,
+    getVendorById,
+    getCourierOption,
+    getShipperMethodOption,
+    vendorUpdate,
 };

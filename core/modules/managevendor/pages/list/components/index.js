@@ -7,14 +7,14 @@ import Header from '@modules/managevendor/pages/list/components/Header';
 
 const ManageVendorListContent = (props) => {
     const { data, loading, getCompanyList } = props;
-    const companyList = (data && data.getCompanyList && data.getCompanyList.items) || [];
-    const companyTotal = (data && data.getCompanyList && data.getCompanyList.total_count) || 0;
+    const vendorList = (data && data.getVendorList && data.getVendorList.items) || [];
+    const vendorTotal = (data && data.getVendorList && data.getVendorList.total_count) || 0;
 
     const columns = [
         { field: 'company_id', headerName: 'ID', hideable: true, sortable: true, initialSort: 'ASC' },
         { field: 'company_code', headerName: 'Vendor Code', hideable: true, sortable: true },
         { field: 'company_name', headerName: 'Vendor Name', hideable: true, sortable: true },
-        { field: 'actions', headerName: 'Action', hideable: true, sortable: true },
+        { field: 'actions', headerName: 'Action' },
     ];
 
     const filters = [
@@ -23,11 +23,11 @@ const ManageVendorListContent = (props) => {
         { field: 'company_name', name: 'company_name', type: 'like', label: 'Vendor Name', initialValue: '' },
     ];
 
-    const rows = companyList.map((company) => ({
-        ...company,
-        id: company.company_id,
+    const rows = vendorList.map((vendor) => ({
+        ...vendor,
+        id: vendor.company_id,
         actions: () => (
-            <Link href={`/vendorportal/managevendor/edit/${company.company_id}`}>
+            <Link href={`/vendorportal/managevendor/edit/${vendor.company_id}`}>
                 <a className="link-button">view</a>
             </Link>
         ),
@@ -47,7 +47,7 @@ const ManageVendorListContent = (props) => {
                 getRows={getCompanyList}
                 loading={loading}
                 columns={columns}
-                count={companyTotal}
+                count={vendorTotal}
                 filters={filters}
                 hideActions
             />

@@ -8,7 +8,7 @@ const Core = (props) => {
         Content,
     } = props;
 
-    const [getCompanyList, { data, loading }] = gqlService.getCompanyList();
+    const [getCompanyList, { data, loading }] = gqlService.getVendorList();
 
     const router = useRouter();
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({

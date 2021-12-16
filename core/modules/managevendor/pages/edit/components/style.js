@@ -3,11 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
+const colorGray = '#B1BCDB';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: '16px 0',
+        padding: '0 16px',
         borderRadius: 16,
+        backgroundColor: 'unset',
+        boxShadow: 'none',
     },
     btnBack: {
         display: 'inline-block',
@@ -26,12 +29,21 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: font,
         display: 'inline-block',
     },
+    titleSmall: {
+        fontFamily: font,
+        color: colorGray,
+        fontSize: 12,
+        textTransform: 'uppercase',
+        margin: 0,
+        marginBottom: 8,
+        marginTop: 18,
+    },
     formField: {
-        padding: 0,
+        padding: '0 10px',
         paddingBottom: 16,
     },
     formFieldButton: {
-        padding: '24px 29px 30px 22px',
+        padding: '0px 29px 30px 22px',
     },
     btn: {
         borderRadius: 20,
@@ -62,7 +74,10 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         borderBottom: '3px solid #F5F7FB',
-        padding: '10px 29px 12px 22px',
+        padding: '10px 15px',
+        background: '#ffffff',
+        borderRadius: 16,
+        marginBottom: 18,
     },
     fieldRoot: {
         width: 'calc(100% - 300px)',
@@ -85,6 +100,21 @@ const useStyles = makeStyles((theme) => ({
     notes: {
         display: 'inline-block',
         marginTop: 10,
+    },
+    autocompleteRoot: {
+        width: 'calc(100% - 300px)',
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            borderRadius: 20,
+            border: '1px solid',
+            minHeight: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 115px)',
+        },
     },
 }));
 
