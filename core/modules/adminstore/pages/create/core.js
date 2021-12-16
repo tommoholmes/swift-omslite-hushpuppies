@@ -45,7 +45,7 @@ const ContentWrapper = (props) => {
             firstname: '',
             lastname: '',
             email: '',
-            customer_loc_code: [''],
+            customer_loc_code: [],
             company: '',
             group: dataGroup.getCustomerGroupOptions.find((group, i) => i === 0),
             password: '',
