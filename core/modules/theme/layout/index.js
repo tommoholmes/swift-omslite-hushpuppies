@@ -465,16 +465,10 @@ const Layout = (props) => {
                     url: '/vendorportal/managevendor',
                 },
                 {
-                    aclCode: 'categoryUpload',
-                    key: 'categoryupload',
-                    label: 'Category Upload',
-                    url: '/vendorportal/categoryupload',
-                },
-                {
-                    aclCode: 'productUploadMaster',
-                    key: 'productuploadmaster',
-                    label: 'Product Upload Master',
-                    url: '/vendorportal/productuploadmaster',
+                    aclCode: 'vendor_bulk_tools',
+                    key: 'vendorbulktools',
+                    label: 'Bulk Tools',
+                    url: '/vendorportal/bulktools',
                 },
                 {
                     aclCode: 'productApproval',
