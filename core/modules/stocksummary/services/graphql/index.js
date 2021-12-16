@@ -20,7 +20,13 @@ export const exportStockSummaryList = (variables) => useMutation(Schema.exportSt
     ...context,
 });
 
+export const syncStockSummaryToMP = (variables) => useMutation(Schema.syncStockSummaryToMP, {
+    variables,
+    ...context,
+});
+
 export default {
     getStockSummaryList,
     exportStockSummaryList,
+    syncStockSummaryToMP,
 };
