@@ -19,7 +19,7 @@ export const setNewPassword = (variables) => useMutation(Schema.setNewPassword, 
     ...context,
 });
 
-export const getStoreConfigCaptchaSiteKey = (variables) => useQuery(Schema.getStoreConfigCaptchaSiteKey, {
+export const validateResetPasswordLinkToken = (variables) => useQuery(Schema.validateResetPasswordLinkToken, {
     variables,
     ...context,
     ...fetchPolicy,
@@ -28,5 +28,5 @@ export const getStoreConfigCaptchaSiteKey = (variables) => useQuery(Schema.getSt
 export default {
     requestResetPassword,
     setNewPassword,
-    getStoreConfigCaptchaSiteKey,
+    validateResetPasswordLinkToken,
 };

@@ -11,6 +11,9 @@ const Core = (props) => {
     const router = useRouter();
     const { token, email } = router.query;
     const [setNewPassword] = gqlService.setNewPassword();
+    const { error } = gqlService.validateResetPasswordLinkToken({
+        token,
+    });
 
     useEffect(() => {
         if (!token || !email) {
@@ -26,7 +29,16 @@ const Core = (props) => {
                     }
                 });
         }
-    }, [token, email]);
+
+        if (error) {
+            window.toastMessage({
+                open: true,
+                variant: 'error',
+                text: error.message,
+            });
+            setTimeout(() => router.push('/login'), 2500);
+        }
+    }, [token, email, error]);
 
     const formik = useFormik({
         initialValues: {
@@ -66,7 +78,7 @@ const Core = (props) => {
                     window.toastMessage({
                         open: true,
                         variant: 'error',
-                        text: e.message.split(':')[0],
+                        text: e.message,
                     });
                 });
         },
