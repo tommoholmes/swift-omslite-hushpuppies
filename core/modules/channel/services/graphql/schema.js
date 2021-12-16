@@ -66,8 +66,8 @@ export const createChannel = gql`
         $token: String
         $end_point: String
         $delta_stock_url: String
-        $framework: String
-        $rule_type: String
+        $framework: String!
+        $rule_type: String!
         $virtual_stock: [VirtualStockAssignment]
         $webhook_shipment_complete: String
         $webhook_invoice: String
@@ -139,8 +139,8 @@ export const updateChannel = gql`
         $token: String
         $end_point: String
         $delta_stock_url: String
-        $framework: String
-        $rule_type: String
+        $framework: String!
+        $rule_type: String!
         $virtual_stock: [VirtualStockAssignment]
         $webhook_shipment_complete: String
         $webhook_invoice: String
