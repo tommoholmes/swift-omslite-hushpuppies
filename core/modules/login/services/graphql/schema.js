@@ -31,6 +31,7 @@ query{
       id
       code
   }
+  customer_company_code
   }
 }
 `;

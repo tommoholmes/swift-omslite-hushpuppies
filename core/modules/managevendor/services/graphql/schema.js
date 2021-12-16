@@ -74,8 +74,88 @@ export const updateCompany = gql`
     }
 `;
 
+export const getVendorList = gql`
+    query getVendorList(
+        $pageSize: Int!,
+        $currentPage: Int!,
+        $filter: VendorFilterInput,
+        $sort: VendorSortInput,
+    ){
+        getVendorList(
+            pageSize: $pageSize,
+            currentPage: $currentPage,
+            filter: $filter,
+            sort: $sort,
+        ){
+            items {
+                company_id
+                company_code
+                company_name
+            }
+            total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
+            }
+        }
+    }
+`;
+
+export const getVendorById = gql`
+    query getVendorById($id: Int!){
+        getVendorById(id: $id){
+            company_id
+            company_code
+            company_name
+            company_street
+            company_country_id
+            company_region
+            company_city
+            no_telephone
+            is_new_product
+            company_margin
+            is_product_approval
+            logo
+            promotion_banner
+            shipper_shipping
+            vendor_shipping
+        }
+    }
+`;
+
+export const getCourierOption = gql`
+    query {
+        getCourierOption {
+            label
+            value
+        }
+    }
+`;
+
+export const getShipperMethodOption = gql`
+    query {
+        getShipperMethodOption {
+            label
+            value
+        }
+    }
+`;
+
+export const vendorUpdate = gql`
+    mutation vendorUpdate($input: VendorUpdateInput!){
+        vendorUpdate(input: $input)
+    }
+`;
+
 export default {
     getCompanyList,
     getCompanyById,
     updateCompany,
+
+    getVendorList,
+    getVendorById,
+    getCourierOption,
+    getShipperMethodOption,
+    vendorUpdate,
 };

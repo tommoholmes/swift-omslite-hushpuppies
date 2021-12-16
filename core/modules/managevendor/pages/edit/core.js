@@ -5,30 +5,24 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/managevendor/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import Cookies from 'js-cookie';
 
 const ContentWrapper = (props) => {
     const {
         data,
+        dataCourier,
+        dataShipper,
         Content,
     } = props;
     const router = useRouter();
-    const company = data.getCompanyById;
-    const [updateCompany] = gqlService.updateCompany();
+    const vendor = data.getVendorById;
+    const [vendorUpdate] = gqlService.vendorUpdate();
+    const isVendor = JSON.parse(Cookies.get('cdt'))?.customer_company_code !== null;
 
-    const handleSubmit = ({
-        code, name, is_new, margin, is_approve,
-    }) => {
-        const variables = {
-            id: company.company_id,
-            company_code: code,
-            company_name: name,
-            is_new_product: is_new,
-            company_margin: margin === '' ? 0 : margin,
-            is_product_approval: is_approve,
-        };
+    const handleSubmit = (input) => {
         window.backdropLoader(true);
-        updateCompany({
-            variables,
+        vendorUpdate({
+            variables: { input },
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -49,35 +43,51 @@ const ContentWrapper = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            code: company.company_code,
-            name: company.company_name,
-            is_new: company.is_new_product,
-            margin: company.company_margin,
-            is_approve: company.is_product_approval,
+            company_id: vendor.company_id,
+            company_code: vendor.company_code,
+            company_name: vendor.company_name,
+            company_street: vendor.company_street,
+            company_country_id: vendor.company_country_id,
+            company_region: vendor.company_region,
+            company_city: vendor.copany_city,
+            no_telephone: vendor.no_telephone,
+            is_new_product: vendor.is_new_product,
+            company_margin: vendor.company_margin,
+            is_product_approval: vendor.is_product_approval,
+            logo: '',
+            promotion_banner: '',
+            shipper_shipping: vendor.shipper_shipping?.length
+                ? vendor.shipper_shipping.map((code) => (dataShipper.find((ship) => ship.value === code)))
+                : [],
+            vendor_shipping: vendor.vendor_shipping?.length
+                ? vendor.vendor_shipping.map((code) => (dataCourier.find((ship) => ship.value === code)))
+                : [],
         },
         validationSchema: Yup.object().shape({
-            code: Yup.string().required('Required!'),
-            name: Yup.string().required('Required!'),
+            company_code: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            const { shipper_shipping, vendor_shipping, ...restValues } = values;
+            const valuesToSubmit = {
+                ...restValues,
+                shipper_shipping: shipper_shipping?.map((ship) => ship.value),
+                vendor_shipping: vendor_shipping?.map((ship) => ship.value),
+            };
+            handleSubmit(valuesToSubmit);
         },
     });
 
-    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'manageVendor',
-    });
-
-    if (aclCheckLoading) {
-        return <Layout>Loading...</Layout>;
-    }
-
-    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
-        router.push('/');
-    }
-
+    const handleDropFile = (name, files) => {
+        const { baseCode } = files[0];
+        formik.setFieldValue(name, baseCode);
+    };
     const contentProps = {
         formik,
+        isVendor,
+        vendor,
+        dataCourier,
+        dataShipper,
+        handleDropFile,
     };
 
     return (
@@ -87,25 +97,45 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getCompanyById({
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'manageVendor',
+    });
+
+    const { loading: loadingCourier, data: dataCourier } = gqlService.getCourierOption();
+    const { loading: shipperLoading, data: dataShipper } = gqlService.getShipperMethodOption();
+    const { loading, data } = gqlService.getVendorById({
         id: router && router.query && Number(router.query.id),
     });
 
-    if (loading) {
+    const pageConfig = {
+        title: `Manage Vendor ${data && data.getVendorById && data.getVendorById.company_name ? data.getVendorById.company_name : ''}`,
+    };
+
+    if (loading || loadingCourier || shipperLoading || aclCheckLoading) {
         return (
-            <Layout>Loading...</Layout>
+            <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
+    }
+
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
     }
 
     if (!data) {
         return (
-            <Layout>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>Data not found!</Layout>
         );
     }
 
+    const contentProps = {
+        data,
+        dataCourier: dataCourier.getCourierOption,
+        dataShipper: dataShipper.getShipperMethodOption,
+    };
+
     return (
-        <Layout>
-            <ContentWrapper data={data} {...props} />
+        <Layout pageConfig={pageConfig}>
+            <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );
 };
