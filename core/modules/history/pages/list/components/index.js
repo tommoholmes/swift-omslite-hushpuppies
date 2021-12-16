@@ -18,9 +18,9 @@ const UpdateStockHistoryListContent = (props) => {
         { field: 'sku', headerName: 'SKU', hideable: true, sortable: true },
         { field: 'marketplace', headerName: 'Channel', hideable: true, sortable: true },
         { field: 'channel_code', headerName: 'Channel Code', hideable: true, sortable: true },
-        { field: 'created_at', headerName: 'Updated At', hideable: true, sortable: true },
         { field: 'message', headerName: 'Message', hideable: true, sortable: true },
         { field: 'status', headerName: 'Status', hideable: true, sortable: true },
+        { field: 'created_at', headerName: 'Updated At', hideable: true, sortable: true },
         { field: 'last_trigered_by', headerName: 'Updated By', hideable: true, sortable: true },
     ];
 
