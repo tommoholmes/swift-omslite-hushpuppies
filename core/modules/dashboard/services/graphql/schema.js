@@ -30,7 +30,9 @@ export const getDashboardData = gql`
 
 export const getChannelList = gql`
     query{
-        getChannelList{
+        getChannelList(
+            pageSize: null
+        ){
             items{
                 channel_id
                 channel_code
@@ -39,6 +41,12 @@ export const getChannelList = gql`
                 virtual_stock_list
                 location_list
            }
+           total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
+            }
         }
     }
 `;

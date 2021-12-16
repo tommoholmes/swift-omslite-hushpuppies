@@ -12,14 +12,14 @@ export const setNewPassword = gql`
     }
 `;
 
-export const getStoreConfigCaptchaSiteKey = gql`
-    query {
-        getStoreConfig(path: "msp_securitysuite_recaptcha/general/public_key")
+export const validateResetPasswordLinkToken = gql`
+    query validateResetPasswordLinkToken($token: String!) {
+        validateResetPasswordLinkToken(token: $token)
     }
 `;
 
 export default {
     requestResetPassword,
     setNewPassword,
-    getStoreConfigCaptchaSiteKey,
+    validateResetPasswordLinkToken,
 };
