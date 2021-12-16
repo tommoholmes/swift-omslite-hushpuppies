@@ -45,6 +45,8 @@ export const getVendorProductApprovalList = gql`
                 vendor_name
                 price
                 special_price
+                special_from_date
+                special_to_date
                 status
               }
             total_count
