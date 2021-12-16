@@ -1,9 +1,12 @@
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '@common_table';
 import Header from '@modules/irispayoutapproval/pages/list/components/Header';
 import useStyles from '@modules/locationpriceupload/pages/list/components/style';
 import TextField from '@common_textfield';
+import dynamic from 'next/dynamic';
+
+const Message = dynamic(() => import('@common_toast'), { ssr: false });
 
 const VendorIrisPayoutApprovalContent = (props) => {
     const classes = useStyles();
@@ -15,7 +18,7 @@ const VendorIrisPayoutApprovalContent = (props) => {
         { field: 'entity_id', headerName: 'ID', sortable: true, initialSort: 'ASC', hideable: true },
         { field: 'created_at', headerName: 'Created At', sortable: true, hideable: true },
         { field: 'updated_at', headerName: 'Updated At', hideable: true },
-        { field: 'beneficiary_id ', headerName: 'Beneficiary Id', hideable: true },
+        { field: 'beneficiary_id', headerName: 'Beneficiary Id', hideable: true },
         { field: 'no_reference', headerName: 'No Reference', hideable: true },
         { field: 'vendor_id', headerName: 'Vendor Id', hideable: true },
         { field: 'amount', headerName: 'Amount', hideable: true },
@@ -140,6 +143,17 @@ const VendorIrisPayoutApprovalContent = (props) => {
         id: irisPayout.entity_id,
     }));
 
+    const [toastMessage, setToastMessage] = useState({
+        open: false,
+        variant: '',
+        text: '',
+        htmlMessage: '',
+    });
+
+    const handleCloseMessage = () => {
+        setToastMessage({ ...toastMessage, open: false });
+    };
+
     return (
         <>
             <Header />
@@ -170,10 +184,11 @@ const VendorIrisPayoutApprovalContent = (props) => {
                                     variant: 'success',
                                 });
                             } catch (e) {
-                                window.toastMessage({
+                                setToastMessage({
                                     open: true,
-                                    text: e.message,
+                                    text: '',
                                     variant: 'error',
+                                    htmlMessage: e.message,
                                 });
                             }
                             window.backdropLoader(false);
@@ -196,16 +211,25 @@ const VendorIrisPayoutApprovalContent = (props) => {
                                     variant: 'success',
                                 });
                             } catch (e) {
-                                window.toastMessage({
+                                setToastMessage({
                                     open: true,
-                                    text: e.message,
+                                    text: '',
                                     variant: 'error',
+                                    htmlMessage: e.message,
                                 });
                             }
                             window.backdropLoader(false);
                         },
                     },
                 ]}
+            />
+            <Message
+                open={toastMessage.open}
+                variant={toastMessage.variant}
+                setOpen={handleCloseMessage}
+                message={toastMessage.text}
+                htmlMessage={toastMessage.htmlMessage}
+                autoHideDuration={5000}
             />
         </>
     );
