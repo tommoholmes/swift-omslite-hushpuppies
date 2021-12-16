@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         borderRadius: 20,
         textTransform: 'capitalize',
+        margin: '0px 10px',
         [theme.breakpoints.down('xs')]: {
             float: 'left',
             marginTop: 7,

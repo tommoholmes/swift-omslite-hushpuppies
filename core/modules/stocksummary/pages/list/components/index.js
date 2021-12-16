@@ -1,7 +1,10 @@
 import Header from '@modules/stocksummary/pages/list/components/Header';
 import React from 'react';
 import Table from '@common_table';
+import Autocomplete from '@common_autocomplete';
 import useStyles from '@modules/stocksummary/pages/list/components/style';
+import gqlChannel from '@modules/channel/services/graphql';
+import { optionsStatusSync } from '@modules/stocksummary/helpers';
 
 const StockSummaryList = (props) => {
     const classes = useStyles();
@@ -42,6 +45,12 @@ const StockSummaryList = (props) => {
             sortable: true,
         },
         {
+            field: 'last_sync_at',
+            headerName: 'Last Sync at',
+            hideable: 'true',
+            sortable: true,
+        },
+        {
             field: 'sync_status_label',
             headerName: 'Sync Status',
             hideable: 'true',
@@ -76,6 +85,28 @@ const StockSummaryList = (props) => {
             type: 'like',
             label: 'Channel',
             initialValue: '',
+            component: ({ filterValue, setFilterValue }) => {
+                const [getChannelList, getChannelListRes] = gqlChannel.getChannelList();
+                const channelOptions = (getChannelListRes
+                        && getChannelListRes.data
+                        && getChannelListRes.data.getChannelList
+                        && getChannelListRes.data.getChannelList.items)
+                    || [];
+                const primaryKey = 'channel_code';
+                const labelKey = 'channel_name';
+                return (
+                    <Autocomplete
+                        mode="lazy"
+                        style={{ width: 228 }}
+                        getOptions={getChannelList}
+                        value={channelOptions.find((e) => e[primaryKey] === filterValue)}
+                        onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
+                        options={channelOptions}
+                        primaryKey={primaryKey}
+                        labelKey={labelKey}
+                    />
+                );
+            },
         },
         {
             field: 'sync_status',
@@ -90,6 +121,16 @@ const StockSummaryList = (props) => {
             type: 'like',
             label: 'Sync Message',
             initialValue: '',
+            component: ({ filterValue, setFilterValue }) => (
+                <Autocomplete
+                    style={{ width: 228 }}
+                    value={optionsStatusSync.find((e) => e.value === filterValue)}
+                    onChange={(newValue) => setFilterValue(newValue && newValue.value)}
+                    options={optionsStatusSync}
+                    primaryKey="value"
+                    labelKey="label"
+                />
+            ),
         },
     ];
 
