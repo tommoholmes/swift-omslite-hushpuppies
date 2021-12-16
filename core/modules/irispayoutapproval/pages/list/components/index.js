@@ -1,9 +1,12 @@
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '@common_table';
 import Header from '@modules/irispayoutapproval/pages/list/components/Header';
 import useStyles from '@modules/locationpriceupload/pages/list/components/style';
 import TextField from '@common_textfield';
+import dynamic from 'next/dynamic';
+
+const Message = dynamic(() => import('@common_toast'), { ssr: false });
 
 const VendorIrisPayoutApprovalContent = (props) => {
     const classes = useStyles();
@@ -140,6 +143,17 @@ const VendorIrisPayoutApprovalContent = (props) => {
         id: irisPayout.entity_id,
     }));
 
+    const [toastMessage, setToastMessage] = useState({
+        open: false,
+        variant: '',
+        text: '',
+        htmlMessage: '',
+    });
+
+    const handleCloseMessage = () => {
+        setToastMessage({ ...toastMessage, open: false });
+    };
+
     return (
         <>
             <Header />
@@ -170,10 +184,11 @@ const VendorIrisPayoutApprovalContent = (props) => {
                                     variant: 'success',
                                 });
                             } catch (e) {
-                                window.toastMessage({
+                                setToastMessage({
                                     open: true,
-                                    text: e.message,
+                                    text: '',
                                     variant: 'error',
+                                    htmlMessage: e.message,
                                 });
                             }
                             window.backdropLoader(false);
@@ -196,16 +211,25 @@ const VendorIrisPayoutApprovalContent = (props) => {
                                     variant: 'success',
                                 });
                             } catch (e) {
-                                window.toastMessage({
+                                setToastMessage({
                                     open: true,
-                                    text: e.message,
+                                    text: '',
                                     variant: 'error',
+                                    htmlMessage: e.message,
                                 });
                             }
                             window.backdropLoader(false);
                         },
                     },
                 ]}
+            />
+            <Message
+                open={toastMessage.open}
+                variant={toastMessage.variant}
+                setOpen={handleCloseMessage}
+                message={toastMessage.text}
+                htmlMessage={toastMessage.htmlMessage}
+                autoHideDuration={5000}
             />
         </>
     );

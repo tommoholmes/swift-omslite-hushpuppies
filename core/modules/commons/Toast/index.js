@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import Snackbar from '@material-ui/core/Snackbar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -19,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    anchorLink: {
+        '& a': {
+            textDecoration: 'underline',
+            color: '#0645AD',
+        },
+    },
 }));
 
 function Alert(props) {
@@ -27,8 +34,9 @@ function Alert(props) {
 }
 
 const Toast = ({
-    open, message, setOpen, variant = 'info', autoHideDuration = 3000,
+    open, message, setOpen, variant = 'info', autoHideDuration = 3000, htmlMessage = null,
 }) => {
+    const classes = useStyles();
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -48,6 +56,7 @@ const Toast = ({
         >
             <Alert onClose={handleClose} severity={variant}>
                 {message}
+                {htmlMessage && <div className={classes.anchorLink} dangerouslySetInnerHTML={{ __html: htmlMessage }} />}
             </Alert>
         </Snackbar>
     );
