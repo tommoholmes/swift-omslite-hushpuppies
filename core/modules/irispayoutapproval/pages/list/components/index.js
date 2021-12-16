@@ -18,7 +18,7 @@ const VendorIrisPayoutApprovalContent = (props) => {
         { field: 'entity_id', headerName: 'ID', sortable: true, initialSort: 'ASC', hideable: true },
         { field: 'created_at', headerName: 'Created At', sortable: true, hideable: true },
         { field: 'updated_at', headerName: 'Updated At', hideable: true },
-        { field: 'beneficiary_id ', headerName: 'Beneficiary Id', hideable: true },
+        { field: 'beneficiary_id', headerName: 'Beneficiary Id', hideable: true },
         { field: 'no_reference', headerName: 'No Reference', hideable: true },
         { field: 'vendor_id', headerName: 'Vendor Id', hideable: true },
         { field: 'amount', headerName: 'Amount', hideable: true },
