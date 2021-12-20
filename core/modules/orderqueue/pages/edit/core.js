@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
@@ -7,8 +8,8 @@ import gqlService from '@modules/orderqueue/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data, Content, parent, aclCheckData, refetchOrderQueue,
-    } = props;
+ data, Content, parent, aclCheckData, refetchOrderQueue,
+} = props;
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
     const [editOrderItem] = gqlService.editOrderItem();
@@ -134,8 +135,17 @@ const ContentWrapper = (props) => {
                 replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
                 item_id_replacement: item.item_id_replacement,
                 sku: item.name?.sku ?? item.sku,
+                loc_code: !Array.isArray(item?.loc_code)
+                    ? null
+                    : (() => {
+                          const newLoc = item?.loc_code.map((loc) => loc?.value).join(',');
+                          const result = initialValueEditItem.order_items.find((initItem) => initItem.loc_code === newLoc);
+                          if (result) return null;
+                          return newLoc;
+                      })(),
             })),
         };
+        console.log(fixValues);
         window.backdropLoader(true);
         editOrderItem({
             variables: {

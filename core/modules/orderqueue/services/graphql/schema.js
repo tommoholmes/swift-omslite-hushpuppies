@@ -162,8 +162,16 @@ export const editOrderItem = gql`
 
 export const cancelOrder = gql`
     mutation cancelOrder($id: Int!) {
-        cancelOrder(id: $id){
+        cancelOrder(id: $id) {
             status
+        }
+    }
+`;
+export const getLocationOptions = gql`
+    query {
+        getLocationOptions {
+            label
+            value
         }
     }
 `;
@@ -182,4 +190,5 @@ export default {
     marketplaceFetchOrder,
     editOrderItem,
     cancelOrder,
+    getLocationOptions,
 };

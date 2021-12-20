@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-param-reassign */
@@ -10,16 +11,18 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Autocomplete from '@common_autocomplete';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
 import clsx from 'clsx';
 import { formatPriceNumber } from '@helper_currency';
 import { Formik, FieldArray, Field } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
+import gqlLocation from '@modules/orderqueue/services/graphql';
 
 const OrderQueueEditContent = (props) => {
     const {
@@ -83,6 +86,36 @@ const OrderQueueEditContent = (props) => {
         setIdxOpendModal(idx);
         setIsModalOpen(true);
     };
+
+    const [getLocationOptions, { data: dataLoc, loading: LoadingLoc }] = gqlLocation.getLocationOptions();
+    const firstRenderGetLoc = useRef(true);
+    const [initialLocation, setInitialLocation] = useState([]);
+
+    useEffect(() => {
+        getLocationOptions();
+    }, []);
+
+    useEffect(() => {
+        if (firstRenderGetLoc.current && dataLoc && dataLoc.getLocationOptions) {
+            const uniqueLocCodeBefore = initialValueEditItem?.order_items?.reduce((newList, current) => {
+                const currentLoc = current?.loc_code?.split(',').map((item) => item);
+                currentLoc?.forEach((loc) => {
+                    if (!newList.some((x) => x === loc)) {
+                        newList.push(loc);
+                    }
+                });
+
+                return newList;
+            }, []);
+
+            const locCodes = new Set(uniqueLocCodeBefore);
+
+            const fixInitialLoc = dataLoc.getLocationOptions.filter((d) => locCodes.has(d.value));
+
+            setInitialLocation(fixInitialLoc);
+            firstRenderGetLoc.current = false;
+        }
+    }, [dataLoc]);
 
     return (
         <>
@@ -237,14 +270,16 @@ const OrderQueueEditContent = (props) => {
                         </div>
                     </div>
                     <br />
-                    <div>
+                    <div style={{ width: '100%' }}>
                         <div>
                             <div>
                                 <h5 className={classes.titleSmall}>Items Ordered</h5>
                             </div>
                         </div>
                         <Formik initialValues={initialValueEditItem}>
-                            {({ values, setFieldValue, setValues }) => (
+                            {({
+ values, setFieldValue, setValues, touched, errors,
+}) => (
                                 <>
                                     <ModalFindProduct
                                         open={isModalOpen}
@@ -253,7 +288,7 @@ const OrderQueueEditContent = (props) => {
                                         values={values}
                                         setFieldValue={setFieldValue}
                                     />
-                                    <div style={{ overflowX: 'auto' }}>
+                                    <div style={{ overflowX: 'auto', overflowY: 'hidden' }}>
                                         <table className={classes.table}>
                                             <tbody>
                                                 <tr className={classes.tr}>
@@ -309,7 +344,39 @@ const OrderQueueEditContent = (props) => {
                                                                     <td className={classes.td} style={{ textAlign: 'center' }}>
                                                                         {e.discount_amount}
                                                                     </td>
-                                                                    <td className={classes.td}>{e.loc_code || '-'}</td>
+                                                                    {/* <td className={classes.td}>{e.loc_code || '-'}</td> */}
+                                                                    <td className={classes.td} style={{ width: `${isModeEdit ? '300px' : 'auto'}` }}>
+                                                                        {!isModeEdit ? (
+                                                                            <td className={classes.td}>{e.loc_code || '-'}</td>
+                                                                        ) : (
+                                                                            <Autocomplete
+                                                                                multiple
+                                                                                className={classes.autocompleteRoot}
+                                                                                name={`order_items.[${idx}].loc_code`}
+                                                                                value={(() => {
+                                                                                    if (typeof e.loc_code === 'string') {
+                                                                                        const currentLoc = e.loc_code.split(',').map((item) => item);
+
+                                                                                        const fixInitialLoc = currentLoc?.map((d) => initialLocation.find((loc) => loc?.value === d));
+                                                                                        return fixInitialLoc;
+                                                                                    }
+                                                                                    return e.loc_code;
+                                                                                })()}
+                                                                                onChange={(val) => {
+                                                                                    if (Array.isArray(val)) {
+                                                                                        setFieldValue(`order_items.[${idx}].loc_code`, val);
+                                                                                    }
+                                                                                }}
+                                                                                primaryKey="value"
+                                                                                labelKey="label"
+                                                                                options={dataLoc && dataLoc.getLocationOptions}
+                                                                                loading={LoadingLoc}
+                                                                                error={!!(touched.location && errors.location)}
+                                                                                helperText={(touched.location && errors.location) || ''}
+                                                                                fullWidth
+                                                                            />
+                                                                        )}
+                                                                    </td>
                                                                     <td className={classes.td}>{e.pickup_name || '-'}</td>
                                                                     {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
                                                                         <td className={classes.td}>{e.replacement_for || '-'}</td>
