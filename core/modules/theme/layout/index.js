@@ -453,13 +453,13 @@ const Layout = (props) => {
             label: 'Vendor',
             children: [
                 {
-                    aclCode: 'requestVendor',
+                    aclCode: 'oms_lite_vendor_request',
                     key: 'requestvendor',
                     label: 'Manage Vendor Request',
                     url: '/vendorportal/requestvendor',
                 },
                 {
-                    aclCode: 'manageVendor',
+                    aclCode: 'oms_lite_vendor_manage',
                     key: 'managevendor',
                     label: 'Manage Vendor',
                     url: '/vendorportal/managevendor',
@@ -471,10 +471,16 @@ const Layout = (props) => {
                     url: '/vendorportal/bulktools',
                 },
                 {
-                    aclCode: 'productApproval',
+                    aclCode: 'oms_lite_vendor_product_approval',
                     key: 'productapproval',
                     label: 'Product Approval',
                     url: '/vendorportal/productapproval',
+                },
+                {
+                    aclCode: 'vendor_manage_promotion',
+                    key: 'managepromotion',
+                    label: 'Manage Promotion',
+                    url: '/vendorportal/managepromotion',
                 },
                 {
                     aclCode: 'oms_lite_vendor_iris',
