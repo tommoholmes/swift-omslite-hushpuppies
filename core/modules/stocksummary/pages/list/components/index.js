@@ -80,8 +80,8 @@ const StockSummaryList = (props) => {
             initialValue: '',
         },
         {
-            field: 'channel_name',
-            name: 'channel_name',
+            field: 'channel_code',
+            name: 'channel_code',
             type: 'like',
             label: 'Channel',
             initialValue: '',
@@ -98,6 +98,7 @@ const StockSummaryList = (props) => {
                     <Autocomplete
                         mode="lazy"
                         style={{ width: 228 }}
+                        loading={getChannelListRes?.loading}
                         getOptions={getChannelList}
                         value={channelOptions.find((e) => e[primaryKey] === filterValue)}
                         onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
@@ -114,13 +115,6 @@ const StockSummaryList = (props) => {
             type: 'like',
             label: 'Sync Status',
             initialValue: '',
-        },
-        {
-            field: 'sync_message',
-            name: 'sync_message',
-            type: 'like',
-            label: 'Sync Message',
-            initialValue: '',
             component: ({ filterValue, setFilterValue }) => (
                 <Autocomplete
                     style={{ width: 228 }}
@@ -131,6 +125,13 @@ const StockSummaryList = (props) => {
                     labelKey="label"
                 />
             ),
+        },
+        {
+            field: 'sync_message',
+            name: 'sync_message',
+            type: 'like',
+            label: 'Sync Message',
+            initialValue: '',
         },
     ];
 
