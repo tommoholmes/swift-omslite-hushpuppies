@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
@@ -6,11 +7,14 @@ import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Autocomplete from '@common_autocomplete';
+import FormDialog from '@common_formdialog';
 import clsx from 'clsx';
 import useStyles from '@modules/storepickup/pages/edit/components/style';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import { formatPriceNumber } from '@helper_currency';
+import gqlService from '@modules/homedelivery/services/graphql';
 
 const StorePickupEditContent = (props) => {
     const {
@@ -21,9 +25,29 @@ const StorePickupEditContent = (props) => {
         formikPacked,
         formikPickedUp,
         formikNotes,
+        formikCanceled,
+        pickPackEnable,
     } = props;
     const classes = useStyles();
     const router = useRouter();
+    const [getShipmentCancelReason, getShipmentCancelReasonRes] = gqlService.getShipmentCancelReason();
+
+    const step = () => {
+        switch (storePickup.statusValue) {
+        case 'process_for_shipping':
+        case 'pick_in_progress':
+            return 1;
+        case 'ready_for_pack':
+        case 'pick_uncomplete':
+            return 2;
+        case 'ready_for_pickup':
+            return 3;
+        case 'customer_picked_up':
+            return 4;
+        default:
+            return 0;
+        }
+    };
 
     return (
         <>
@@ -83,55 +107,52 @@ const StorePickupEditContent = (props) => {
                                     <div className="step line">
                                         <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
                                         <div className={classes.statusLabelActive}>
-                                            {storePickup.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                                            {step() >= 1 && storePickup.allocation === 'confirmed'
+                                                ? storePickup.statusValue === 'pick_in_progress'
+                                                    ? 'Pick In Progress'
+                                                    : 'Confirmed' : 'Process for Shipping'}
                                         </div>
                                     </div>
                                     <div className="step line">
-                                        {(storePickup.statusValue === 'process_for_shipping') ? (
+                                        {step() >= 2 ? (
                                             <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Ready for Pack
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    {storePickup.statusValue === 'pick_uncomplete'
+                                                        ? 'Pick Incomplete' : 'Ready for Pack'}
                                                 </div>
                                             </>
                                         )
                                             : (
                                                 <>
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
-                                                    <div className={classes.statusLabelActive}>
-                                                        Ready for Pack
+                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                                    <div className={classes.statusLabelInactive}>
+                                                        {storePickup.statusValue === 'pick_uncomplete'
+                                                            ? 'Pick Incomplete' : 'Ready for Pack'}
                                                     </div>
+
                                                 </>
                                             )}
                                     </div>
                                     <div className="step line">
-                                        {(storePickup.statusValue === 'process_for_shipping') || (storePickup.statusValue === 'ready_for_pack') ? (
-                                            <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Ready for Pickup
-                                                </div>
-                                            </>
-                                        ) : (
+                                        {step() >= 3 ? (
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
                                                 <div className={classes.statusLabelActive}>
                                                     Ready for Pickup
                                                 </div>
                                             </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready for Pickup
+                                                </div>
+                                            </>
                                         )}
                                     </div>
                                     <div className="step">
-                                        {!(storePickup.statusValue === 'customer_picked_up') ? (
-                                            <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Customer
-                                                    <br />
-                                                    Picked Up
-                                                </div>
-                                            </>
-                                        ) : (
+                                        {step() >= 4 ? (
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
                                                 <div className={classes.statusLabelActive}>
@@ -139,6 +160,16 @@ const StorePickupEditContent = (props) => {
                                                     <br />
                                                     Picked Up
                                                 </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Customer
+                                                    <br />
+                                                    Picked Up
+                                                </div>
+
                                             </>
                                         )}
                                     </div>
@@ -148,9 +179,7 @@ const StorePickupEditContent = (props) => {
                     <hr />
                     <div className={classes.printProgress}>
 
-                        {(storePickup.statusValue === 'process_for_shipping' || storePickup.statusValue === 'pick_in_progress'
-                        || storePickup.statusValue === 'pick_uncomplete')
-                            && (storePickup.allocation !== 'cannot_fulfill') && (
+                        {step() === 1 && !storePickup.allocation && (
                             <>
                                 <div className={classes.progressTitle}>
                                     Order for store pickup at
@@ -158,67 +187,34 @@ const StorePickupEditContent = (props) => {
                                     {storePickup.location}
                                 </div>
                                 <div className={classes.formFieldButton}>
-
                                     <br />
-                                    {!(storePickup.allocation) ? (
-                                        <>
-                                            <Button
-                                                className={classes.btn}
-                                                type="submit"
-                                                onClick={formikConfirm.handleSubmit}
-                                                variant="contained"
-                                                buttonType="primary-rounded"
-                                                style={{ marginRight: 10 }}
-                                            >
-                                                <CheckIcon style={{ marginRight: 10 }} />
-                                                Confirm
-                                            </Button>
-                                            <Button
-                                                className={classes.btn}
-                                                type="submit"
-                                                onClick={formikCantFullfill.handleSubmit}
-                                                variant="contained"
-                                                buttonType="outlined-rounded"
-                                            >
-                                                <CloseIcon style={{ marginRight: 10 }} />
-                                                Cannot Fullfill
-                                            </Button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Button
-                                                className={clsx(classes.btn)}
-                                                onClick={() => window.open(`/printoms/pick/${storePickup.id}`)}
-                                                variant="contained"
-                                                buttonType="outlined-rounded"
-                                                style={{ marginRight: 10 }}
-                                            >
-                                                Print Pick List
-                                            </Button>
-                                            {/* <Button
-                                                className={clsx(classes.btn)}
-                                                onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
-                                                variant="contained"
-                                                style={{ marginRight: 10 }}
-                                                buttonType="outlined-rounded"
-                                            >
-                                                Print Shipping Label
-                                            </Button> */}
-                                            <Button
-                                                className={classes.btn}
-                                                onClick={formikPicked.handleSubmit}
-                                                variant="contained"
-                                            >
-                                                <CheckIcon style={{ marginRight: 10 }} />
-                                                Mark Pick Complete
-                                            </Button>
-                                        </>
-                                    )}
+                                    <Button
+                                        className={classes.btn}
+                                        type="submit"
+                                        onClick={formikConfirm.handleSubmit}
+                                        variant="contained"
+                                        buttonType="primary-rounded"
+                                        style={{ marginRight: 10 }}
+                                    >
+                                        <CheckIcon style={{ marginRight: 10 }} />
+                                        Confirm
+                                    </Button>
+                                    <Button
+                                        className={classes.btn}
+                                        type="submit"
+                                        onClick={formikCantFullfill.handleSubmit}
+                                        variant="contained"
+                                        buttonType="outlined-rounded"
+                                    >
+                                        <CloseIcon style={{ marginRight: 10 }} />
+                                        Cannot Fullfill
+                                    </Button>
                                 </div>
                             </>
                         )}
-                        {(storePickup.statusValue === 'process_for_shipping')
-                            && (storePickup.allocation === 'cannot_fulfill') && (
+
+                        {step() === 1
+                            && storePickup.allocation === 'cannot_fulfill' && (
                             <>
                                 <div className={classes.progressTitle}>
                                     Order for store pickup at
@@ -236,7 +232,8 @@ const StorePickupEditContent = (props) => {
                                 </div>
                             </>
                         )}
-                        {(storePickup.statusValue === 'ready_for_pack') && (
+
+                        {step() === 1 && storePickup.allocation === 'confirmed' && (
                             <>
                                 <div className={classes.progressTitle}>
                                     Order for store pickup at
@@ -244,37 +241,158 @@ const StorePickupEditContent = (props) => {
                                     {storePickup.location}
                                 </div>
                                 <div className={classes.formFieldButton}>
-                                    <Button
-                                        className={classes.btn}
-                                        onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
-                                        buttonType="outlined-rounded"
-                                        variant="contained"
-                                        style={{ marginRight: 10 }}
-                                    >
-                                        Print Pack List
-                                    </Button>
-                                    {/* <Button
-                                        className={classes.btn}
-                                        onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
-                                        variant="contained"
-                                        buttonType="outlined-rounded"
-                                        style={{ marginRight: 10 }}
-                                    >
-                                        Print Shipping Label
-                                    </Button> */}
                                     <br />
-                                    <Button
-                                        className={classes.btn}
-                                        onClick={formikPacked.handleSubmit}
-                                        variant="contained"
-                                    >
-                                        <CheckIcon style={{ marginRight: 10 }} />
-                                        Mark Pack Complete
-                                    </Button>
+                                    {pickPackEnable
+                                        ? (
+                                            <>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={() => window.open(`/printoms/pick/${storePickup.id}`)}
+                                                    variant="contained"
+                                                    buttonType="outlined-rounded"
+                                                    style={{ marginRight: 10 }}
+                                                >
+                                                    Print Pick List
+                                                </Button>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikPicked.handleSubmit}
+                                                    variant="contained"
+                                                    style={{ marginRight: 10 }}
+                                                >
+                                                    <CheckIcon style={{ marginRight: 10 }} />
+                                                    Mark Pick Complete
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikPickedUp.handleSubmit}
+                                                variant="contained"
+                                                style={{ maxHeight: 45, marginRight: 10 }}
+                                            >
+                                                Pick Up Complete
+                                            </Button>
+                                        )}
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
                                 </div>
                             </>
                         )}
-                        {(storePickup.statusValue === 'ready_for_pickup') && (
+
+                        {step() === 2 && (
+                            <>
+                                <div className={classes.progressTitle}>
+                                    Order for store pickup at
+                                    {' '}
+                                    {storePickup.location}
+                                </div>
+                                <div className={classes.formFieldButton}>
+                                    {pickPackEnable
+                                        ? (
+                                            <>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={() => window.open(`/printoms/pack/${storePickup.id}`)}
+                                                    buttonType="outlined-rounded"
+                                                    variant="contained"
+                                                    style={{ marginRight: 10 }}
+                                                >
+                                                    Print Pack List
+                                                </Button>
+                                                <br />
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikPacked.handleSubmit}
+                                                    variant="contained"
+                                                    style={{ marginRight: 10 }}
+                                                >
+                                                    <CheckIcon style={{ marginRight: 10 }} />
+                                                    Mark Pack Complete
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikPickedUp.handleSubmit}
+                                                variant="contained"
+                                                style={{ maxHeight: 45, marginRight: 10 }}
+                                            >
+                                                Pick Up Complete
+                                            </Button>
+                                        )}
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
+                                </div>
+                            </>
+                        )}
+                        {step() === 3 && (
                             <>
                                 <div className={classes.formFieldButton}>
                                     <TextField

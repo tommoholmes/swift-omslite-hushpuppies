@@ -186,6 +186,24 @@ export const getShipmentStatusByType = gql`
     }
 `;
 
+export const getStoreConfig = gql`
+  query getStoreConfig($path: String!){
+    getStoreConfig(path: $path)
+  }
+`;
+
+export const canceledShipment = gql`
+    mutation canceledShipment(
+        $id: Int!,
+        $cancel_reason_id: String,
+    ){
+        canceledShipment(
+            id: $id
+            cancel_reason_id: $cancel_reason_id,
+        )
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getShipmentById,
@@ -196,4 +214,5 @@ export default {
     pickedupShipment,
     saveShipmentNotes,
     getShipmentStatusByType,
+    canceledShipment,
 };

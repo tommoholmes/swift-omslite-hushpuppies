@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable max-len */
 import React from 'react';
@@ -28,11 +28,35 @@ const HomeDeliveryEditContent = (props) => {
         formikShipped,
         formikDelivered,
         formikNotes,
+        pickPackEnable,
     } = props;
     const classes = useStyles();
     const router = useRouter();
     const [getShipmentCancelReason, getShipmentCancelReasonRes] = gqlService.getShipmentCancelReason();
     const [getCourierOption, getCourierOptionRes] = gqlService.getCourierOption();
+
+    const step = () => {
+        switch (homeDelivery.statusValue) {
+        case 'process_for_shipping':
+        case 'pick_in_progress':
+            return 1;
+        case 'ready_for_pack':
+        case 'pick_uncomplete':
+            return 2;
+        case 'ready_for_ship':
+        case 'shipment_booked':
+        case 'gosend_rejected':
+            return 3;
+        case 'order_shipped':
+        case 'canceled':
+        case 'closed':
+            return 4;
+        case 'order_delivered':
+            return 5;
+        default:
+            return 0;
+        }
+    };
 
     return (
         <>
@@ -85,7 +109,7 @@ const HomeDeliveryEditContent = (props) => {
                     {/* <h5 className={classes.title}>
                         {homeDelivery.statusLabel}
                     </h5> */}
-                    {homeDelivery.allocation === 'cannot_fulfill' ? (
+                    {homeDelivery.allocation === 'cannot_fulfill' || step() === 0 ? (
                         <div className={classes.progressBarFail}>
                             <div className="step">
                                 <img className="imgIcon" alt="" src="/assets/img/order_status/cannotfulfill.svg" />
@@ -102,80 +126,84 @@ const HomeDeliveryEditContent = (props) => {
                                     <div className="step line">
                                         <img className="imgIcon" alt="" src="/assets/img/order_status/processforpack.svg" />
                                         <div className={classes.statusLabelActive}>
-                                            {homeDelivery.statusLabel === 'Unconfirmed' ? 'Unconfirmed' : 'Confirmed'}
+                                            {step() >= 1 && homeDelivery.allocation === 'confirmed'
+                                                ? homeDelivery.statusValue === 'pick_in_progress'
+                                                    ? 'Pick In Progress'
+                                                    : 'Confirmed' : 'Process for Shipping'}
                                         </div>
                                     </div>
                                     <div className="step line">
-                                        {(homeDelivery.statusValue === 'process_for_shipping') ? (
-                                            <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Ready for Pack
-                                                </div>
-                                            </>
-                                        ) : (
+                                        {step() >= 2 ? (
                                             <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack.svg" />
                                                 <div className={classes.statusLabelActive}>
-                                                    Ready for Pack
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                    <div className="step line">
-                                        {(homeDelivery.statusValue === 'process_for_shipping') || (homeDelivery.statusValue === 'ready_for_pack') ? (
-                                            <>
-                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
-                                                <div className={classes.statusLabelInactive}>
-                                                    Ready to Ship
+                                                    {homeDelivery.statusValue === 'pick_uncomplete'
+                                                        ? 'Pick Incomplete' : 'Ready for Pack'}
                                                 </div>
                                             </>
                                         ) : (
                                             <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpack_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    {homeDelivery.statusValue === 'pick_uncomplete'
+                                                        ? 'Pick Incomplete' : 'Ready for Pack'}
+                                                </div>
+
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className="step line">
+                                        {step() >= 3 ? (
+                                            <>
                                                 <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup.svg" />
                                                 <div className={classes.statusLabelActive}>
-                                                    Ready to Ship
+                                                    Ready for Ship
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/readyforpickup_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Ready for Ship
                                                 </div>
                                             </>
                                         )}
                                     </div>
                                     <div className="step line">
-                                        {(homeDelivery.statusValue === 'order_shipped') || (homeDelivery.statusValue === 'order_delivered')
-                                            || (homeDelivery.statusValue === 'closed') || (homeDelivery.statusValue === 'canceled') ? (
-                                                <>
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
-                                                    <div className={classes.statusLabelActive}>
-                                                        Order Shipped
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {' '}
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />
-                                                    <div className={classes.statusLabelInactive}>
-                                                        Order Shipped
-                                                    </div>
-                                                </>
-                                            )}
+                                        {step() >= 4 ? (
+
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Order Shipped
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/ordershipped_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Order Shipped
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                     <div className="step">
-                                        {!((homeDelivery.statusValue === 'order_delivered') || (homeDelivery.statusValue === 'closed')
-                                            || (homeDelivery.statusValue === 'canceled')) ? (
-                                                <>
-                                                    {' '}
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
-                                                    <div className={classes.statusLabelInactive}>
-                                                        Order Delivered
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
-                                                    <div className={classes.statusLabelActive}>
-                                                        Order Delivered
-                                                    </div>
-                                                </>
-                                            )}
+                                        {step() >= 5 ? (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked.svg" />
+                                                <div className={classes.statusLabelActive}>
+                                                    Order Delivered
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img className="imgIcon" alt="" src="/assets/img/order_status/customerpicked_gray.svg" />
+                                                <div className={classes.statusLabelInactive}>
+                                                    Order Delivered
+                                                </div>
+
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -183,103 +211,75 @@ const HomeDeliveryEditContent = (props) => {
                     <hr />
                     <br />
                     <div className={classes.printProgress}>
-                        {(homeDelivery.statusValue === 'process_for_shipping')
-                            && (homeDelivery.allocation !== 'cannot_fulfill') && (
+
+                        {homeDelivery.statusValue === 'process_for_shipping'
+                            && !homeDelivery.allocation && (
                             <>
                                 Print your packlist, Pick your items
                                 <br />
                                 and pack your items
                                 <div className={classes.formFieldButton}>
-                                    {/* <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
+                                    <Button
+                                        className={classes.btn}
+                                        type="submit"
+                                        onClick={formikConfirm.handleSubmit}
                                         variant="contained"
+                                        buttonType="primary-rounded"
+                                        style={{ marginRight: 10 }}
                                     >
-                                        Print Pick List
-                                    </Button> */}
-                                    <br />
-                                    {!(homeDelivery.allocation) ? (
-                                        <>
-                                            <Button
-                                                className={classes.btn}
-                                                type="submit"
-                                                onClick={formikConfirm.handleSubmit}
-                                                variant="contained"
-                                                buttonType="primary-rounded"
-                                                style={{ marginRight: 10 }}
-                                            >
-                                                <CheckIcon style={{ marginRight: 10 }} />
-                                                Confirm
-                                            </Button>
-                                            <Button
-                                                className={classes.btn}
-                                                type="submit"
-                                                onClick={formikCantFullfill.handleSubmit}
-                                                variant="contained"
-                                                buttonType="outlined-rounded"
-                                            >
-                                                <CloseIcon style={{ marginRight: 10 }} />
-                                                Cannot Fullfill
-                                            </Button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {/* <FormDialog
-                                                labelButton="Canceled"
-                                                titleDialog="Cancel Reason"
-                                                message={(
-                                                    <>
-                                                        <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
-                                                        <Autocomplete
-                                                            className={clsx(classes.autocompleteRoot, 'popup')}
-                                                            mode="lazy"
-                                                            value={formikCanceled.values.reason}
-                                                            onChange={(e) => formikCanceled.setFieldValue('reason', e)}
-                                                            loading={getShipmentCancelReasonRes.loading}
-                                                            options={
-                                                                getShipmentCancelReasonRes
+                                        <CheckIcon style={{ marginRight: 10 }} />
+                                        Confirm
+                                    </Button>
+                                    <Button
+                                        className={classes.btn}
+                                        type="submit"
+                                        onClick={formikCantFullfill.handleSubmit}
+                                        variant="contained"
+                                        buttonType="outlined-rounded"
+                                    >
+                                        <CloseIcon style={{ marginRight: 10 }} />
+                                        Cannot Fullfill
+                                    </Button>
+
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
                                                                     && getShipmentCancelReasonRes.data
                                                                     && getShipmentCancelReasonRes.data.getShipmentCancelReason
-                                                            }
-                                                            getOptions={getShipmentCancelReason}
-                                                            error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
-                                                            helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
-                                                            primaryKey="value"
-                                                            labelKey="label"
-                                                        />
-                                                        <div className={classes.formFieldButton}>
-                                                            <Button
-                                                                className={classes.btn}
-                                                                onClick={formikCanceled.handleSubmit}
-                                                                variant="contained"
-                                                            >
-                                                                Submit
-                                                            </Button>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            /> */}
-                                            <Button
-                                                className={clsx(classes.btn, 'print')}
-                                                onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
-                                                variant="contained"
-                                            >
-                                                Print Pick List
-                                            </Button>
-                                            <Button
-                                                className={classes.btn}
-                                                onClick={formikPicked.handleSubmit}
-                                                variant="contained"
-                                                style={{ marginLeft: 10 }}
-                                            >
-                                                <CheckIcon style={{ marginRight: 10 }} />
-                                                Mark Pick Complete
-                                            </Button>
-                                        </>
-                                    )}
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
                                 </div>
                             </>
                         )}
+
                         {(homeDelivery.statusValue === 'process_for_shipping')
                             && (homeDelivery.allocation === 'cannot_fulfill') && (
                             <>
@@ -299,49 +299,260 @@ const HomeDeliveryEditContent = (props) => {
                                 </div>
                             </>
                         )}
-                        {(homeDelivery.statusValue === 'ready_for_pack') && (
+
+                        {step() === 1 && homeDelivery.allocation === 'confirmed' && (
                             <>
-                                the packing order is ready to be processed
+                                Print your packlist, Pick your items
+                                <br />
+                                and pack your items
                                 <div className={classes.formFieldButton}>
-                                    {/* <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
-                                        variant="contained"
-                                    >
-                                        Print Pick List
-                                    </Button> */}
-                                    <Button
-                                        className={clsx(classes.btn, 'print')}
-                                        onClick={() => window.open(`/printoms/pack/${homeDelivery.id}`)}
-                                        variant="contained"
-                                    >
-                                        Print Pack List
-                                    </Button>
-                                    <Button
-                                        className={classes.btn}
-                                        onClick={formikPacked.handleSubmit}
-                                        variant="contained"
-                                        style={{ marginLeft: 10 }}
-                                    >
-                                        <CheckIcon style={{ marginRight: 10 }} />
-                                        Mark Pack Complete
-                                    </Button>
+                                    {pickPackEnable ? (
+                                        <>
+                                            <Button
+                                                className={clsx(classes.btn, 'print')}
+                                                onClick={() => window.open(`/printoms/pick/${homeDelivery.id}`)}
+                                                variant="contained"
+                                            >
+                                                Print Pick List
+                                            </Button>
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikPicked.handleSubmit}
+                                                variant="contained"
+                                                style={{ marginLeft: 10, marginRight: 10 }}
+                                            >
+                                                <CheckIcon style={{ marginRight: 10 }} />
+                                                Mark Pick Complete
+                                            </Button>
+                                        </>
+
+                                    ) : (
+                                        <div>
+                                            <span className={classes.spanText}>Or enter shipping and tracking information</span>
+                                            <Autocomplete
+                                                className={classes.autocompleteRoot}
+                                                mode="lazy"
+                                                value={formikShipped.values.carrier}
+                                                onChange={(e) => formikShipped.setFieldValue('carrier', e)}
+                                                loading={getCourierOptionRes.loading}
+                                                options={
+                                                    getCourierOptionRes
+                                                    && getCourierOptionRes.data
+                                                    && getCourierOptionRes.data.getCourierOption
+                                                }
+                                                getOptions={getCourierOption}
+                                                error={!!(formikShipped.touched.carrier && formikShipped.errors.carrier)}
+                                                helperText={(formikShipped.touched.carrier && formikShipped.errors.carrier) || ''}
+                                                primaryKey="value"
+                                                labelKey="label"
+                                            />
+                                            <TextField
+                                                className={clsx(classes.fieldRoot, 'fieldCenter')}
+                                                label="Name"
+                                                variant="outlined"
+                                                name="name"
+                                                value={formikShipped.values.name}
+                                                onChange={formikShipped.handleChange}
+                                                error={!!(formikShipped.touched.name && formikShipped.errors.name)}
+                                                helperText={(formikShipped.touched.name && formikShipped.errors.name) || ''}
+                                                InputProps={{
+                                                    className: classes.fieldInput,
+                                                }}
+                                            />
+                                            <TextField
+                                                className={classes.fieldRoot}
+                                                label="AWB Number"
+                                                variant="outlined"
+                                                name="reference"
+                                                value={formikShipped.values.reference}
+                                                onChange={formikShipped.handleChange}
+                                                error={!!(formikShipped.touched.reference && formikShipped.errors.reference)}
+                                                helperText={(formikShipped.touched.reference && formikShipped.errors.reference) || ''}
+                                                InputProps={{
+                                                    className: classes.fieldInput,
+                                                }}
+                                            />
+                                            <div className={classes.formFieldButton2}>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikShipped.handleSubmit}
+                                                    variant="contained"
+                                                >
+                                                    Order Shipped
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
                                 </div>
                             </>
                         )}
-                        {((homeDelivery.statusValue === 'ready_for_ship') || (homeDelivery.statusValue === 'shipment_booked')) && (
+
+                        {step() === 2 && (
                             <>
-                                {!(homeDelivery.statusValue === 'shipment_booked') && (
-                                    <div className={classes.formFieldButton}>
-                                        <Button
-                                            className={classes.btn}
-                                            onClick={formikCourier.handleSubmit}
-                                            variant="contained"
-                                        >
-                                            Book Courier
-                                        </Button>
-                                    </div>
-                                )}
+                                the packing order is ready to be processed
+                                <div className={classes.formFieldButton}>
+                                    {pickPackEnable ? (
+                                        <>
+                                            <Button
+                                                className={clsx(classes.btn, 'print')}
+                                                onClick={() => window.open(`/printoms/pack/${homeDelivery.id}`)}
+                                                variant="contained"
+                                            >
+                                                Print Pack List
+                                            </Button>
+                                            <Button
+                                                className={classes.btn}
+                                                onClick={formikPacked.handleSubmit}
+                                                variant="contained"
+                                                style={{ marginLeft: 10, marginRight: 10 }}
+                                            >
+                                                <CheckIcon style={{ marginRight: 10 }} />
+                                                Mark Pack Complete
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <div>
+                                            <span className={classes.spanText}>Or enter shipping and tracking information</span>
+                                            <Autocomplete
+                                                className={classes.autocompleteRoot}
+                                                mode="lazy"
+                                                value={formikShipped.values.carrier}
+                                                onChange={(e) => formikShipped.setFieldValue('carrier', e)}
+                                                loading={getCourierOptionRes.loading}
+                                                options={
+                                                    getCourierOptionRes
+                                                    && getCourierOptionRes.data
+                                                    && getCourierOptionRes.data.getCourierOption
+                                                }
+                                                getOptions={getCourierOption}
+                                                error={!!(formikShipped.touched.carrier && formikShipped.errors.carrier)}
+                                                helperText={(formikShipped.touched.carrier && formikShipped.errors.carrier) || ''}
+                                                primaryKey="value"
+                                                labelKey="label"
+                                            />
+                                            <TextField
+                                                className={clsx(classes.fieldRoot, 'fieldCenter')}
+                                                label="Name"
+                                                variant="outlined"
+                                                name="name"
+                                                value={formikShipped.values.name}
+                                                onChange={formikShipped.handleChange}
+                                                error={!!(formikShipped.touched.name && formikShipped.errors.name)}
+                                                helperText={(formikShipped.touched.name && formikShipped.errors.name) || ''}
+                                                InputProps={{
+                                                    className: classes.fieldInput,
+                                                }}
+                                            />
+                                            <TextField
+                                                className={classes.fieldRoot}
+                                                label="AWB Number"
+                                                variant="outlined"
+                                                name="reference"
+                                                value={formikShipped.values.reference}
+                                                onChange={formikShipped.handleChange}
+                                                error={!!(formikShipped.touched.reference && formikShipped.errors.reference)}
+                                                helperText={(formikShipped.touched.reference && formikShipped.errors.reference) || ''}
+                                                InputProps={{
+                                                    className: classes.fieldInput,
+                                                }}
+                                            />
+                                            <div className={classes.formFieldButton2}>
+                                                <Button
+                                                    className={classes.btn}
+                                                    onClick={formikShipped.handleSubmit}
+                                                    variant="contained"
+                                                >
+                                                    Order Shipped
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {homeDelivery.statusValue === 'ready_for_ship' && (
+                            <>
+                                <div className={classes.formFieldButton}>
+                                    <Button
+                                        className={classes.btn}
+                                        onClick={formikCourier.handleSubmit}
+                                        variant="contained"
+                                    >
+                                        Book Courier
+                                    </Button>
+                                </div>
                                 <div>
                                     <span className={classes.spanText}>Or enter shipping and tracking information</span>
                                     <Autocomplete
@@ -393,12 +604,177 @@ const HomeDeliveryEditContent = (props) => {
                                             onClick={formikShipped.handleSubmit}
                                             variant="contained"
                                         >
-                                            Shipped
+                                            Order Shipped
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div className={classes.formFieldButton}>
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {homeDelivery.statusValue === 'shipment_booked' && (
+                            <div>
+                                <span className={classes.spanText}>Or enter shipping and tracking information</span>
+                                <Autocomplete
+                                    className={classes.autocompleteRoot}
+                                    mode="lazy"
+                                    value={formikShipped.values.carrier}
+                                    onChange={(e) => formikShipped.setFieldValue('carrier', e)}
+                                    loading={getCourierOptionRes.loading}
+                                    options={
+                                        getCourierOptionRes
+                                            && getCourierOptionRes.data
+                                            && getCourierOptionRes.data.getCourierOption
+                                    }
+                                    getOptions={getCourierOption}
+                                    error={!!(formikShipped.touched.carrier && formikShipped.errors.carrier)}
+                                    helperText={(formikShipped.touched.carrier && formikShipped.errors.carrier) || ''}
+                                    primaryKey="value"
+                                    labelKey="label"
+                                />
+                                <TextField
+                                    className={clsx(classes.fieldRoot, 'fieldCenter')}
+                                    label="Name"
+                                    variant="outlined"
+                                    name="name"
+                                    value={formikShipped.values.name}
+                                    onChange={formikShipped.handleChange}
+                                    error={!!(formikShipped.touched.name && formikShipped.errors.name)}
+                                    helperText={(formikShipped.touched.name && formikShipped.errors.name) || ''}
+                                    InputProps={{
+                                        className: classes.fieldInput,
+                                    }}
+                                />
+                                <TextField
+                                    className={classes.fieldRoot}
+                                    label="AWB Number"
+                                    variant="outlined"
+                                    name="reference"
+                                    value={formikShipped.values.reference}
+                                    onChange={formikShipped.handleChange}
+                                    error={!!(formikShipped.touched.reference && formikShipped.errors.reference)}
+                                    helperText={(formikShipped.touched.reference && formikShipped.errors.reference) || ''}
+                                    InputProps={{
+                                        className: classes.fieldInput,
+                                    }}
+                                />
+                                <div className={classes.formFieldButton2}>
+                                    <Button
+                                        className={classes.btn}
+                                        onClick={formikShipped.handleSubmit}
+                                        variant="contained"
+                                    >
+                                        Order Shipped
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        {homeDelivery.statusValue === 'gosend_rejected' && (
+                            <>
+                                <div className={classes.formFieldButton}>
+                                    <Button
+                                        className={classes.btn}
+                                        onClick={formikCourier.handleSubmit}
+                                        variant="contained"
+                                    >
+                                        Book Courier
+                                    </Button>
+                                </div>
+                                <div>
+                                    <span className={classes.spanText}>Or enter shipping and tracking information</span>
+                                    <Autocomplete
+                                        className={classes.autocompleteRoot}
+                                        mode="lazy"
+                                        value={formikShipped.values.carrier}
+                                        onChange={(e) => formikShipped.setFieldValue('carrier', e)}
+                                        loading={getCourierOptionRes.loading}
+                                        options={
+                                            getCourierOptionRes
+                                            && getCourierOptionRes.data
+                                            && getCourierOptionRes.data.getCourierOption
+                                        }
+                                        getOptions={getCourierOption}
+                                        error={!!(formikShipped.touched.carrier && formikShipped.errors.carrier)}
+                                        helperText={(formikShipped.touched.carrier && formikShipped.errors.carrier) || ''}
+                                        primaryKey="value"
+                                        labelKey="label"
+                                    />
+                                    <TextField
+                                        className={clsx(classes.fieldRoot, 'fieldCenter')}
+                                        label="Name"
+                                        variant="outlined"
+                                        name="name"
+                                        value={formikShipped.values.name}
+                                        onChange={formikShipped.handleChange}
+                                        error={!!(formikShipped.touched.name && formikShipped.errors.name)}
+                                        helperText={(formikShipped.touched.name && formikShipped.errors.name) || ''}
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                    />
+                                    <TextField
+                                        className={classes.fieldRoot}
+                                        label="AWB Number"
+                                        variant="outlined"
+                                        name="reference"
+                                        value={formikShipped.values.reference}
+                                        onChange={formikShipped.handleChange}
+                                        error={!!(formikShipped.touched.reference && formikShipped.errors.reference)}
+                                        helperText={(formikShipped.touched.reference && formikShipped.errors.reference) || ''}
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                    />
+                                    <div className={classes.formFieldButton2}>
+                                        <Button
+                                            className={classes.btn}
+                                            onClick={formikShipped.handleSubmit}
+                                            variant="contained"
+                                        >
+                                            Order Shipped
                                         </Button>
                                     </div>
                                 </div>
                             </>
                         )}
+
                         {(homeDelivery.statusValue === 'order_shipped') && (
                             <>
                                 {(homeDelivery.awb) ? (
