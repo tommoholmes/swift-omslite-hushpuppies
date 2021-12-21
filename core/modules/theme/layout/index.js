@@ -483,6 +483,12 @@ const Layout = (props) => {
                     url: '/vendorportal/managepromotion',
                 },
                 {
+                    aclCode: 'vendor_manage_iris',
+                    key: 'vendoririspayout',
+                    label: 'Disbursement',
+                    url: '/vendorportal/vendoririspayout',
+                },
+                {
                     aclCode: 'oms_lite_vendor_iris',
                     key: 'irispayoutapproval',
                     label: 'Iris Payout Approval',
