@@ -10,6 +10,7 @@ const Core = (props) => {
     const [getVirtualStockQuantityList, { data, loading }] = gqlService.getVirtualStockQuantityList();
 
     const [multideleteVirtualStockQuantity] = gqlService.multideleteVirtualStockQuantity();
+    const [deleteAllVirtualStock] = gqlService.deleteAllVirtualStock();
 
     const router = useRouter();
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
@@ -29,6 +30,7 @@ const Core = (props) => {
         data,
         loading,
         multideleteVirtualStockQuantity,
+        deleteAllVirtualStock,
     };
 
     return (
