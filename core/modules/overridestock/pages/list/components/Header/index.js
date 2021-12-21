@@ -6,8 +6,7 @@ import { useRouter } from 'next/router';
 import useStyles from '@modules/overridestock/pages/list/components/Header/style';
 import gqlService from '@modules/overridestock/services/graphql';
 
-const HeaderContent = (props) => {
-    const { deleteAllStock } = props;
+const HeaderContent = () => {
     const [getActivity, getActivityRes] = gqlService.getActivity({
         variables: {
             code: 'sync_vs_qty_to_cnx',
@@ -44,9 +43,6 @@ const HeaderContent = (props) => {
                 </Button>
                 <Button className={classes.buttonAdd} onClick={() => router.push('/cataloginventory/overridestock/import')}>
                     Import Stock
-                </Button>
-                <Button className={classes.buttonAdd} onClick={() => deleteAllStock()}>
-                    Delete All Stock
                 </Button>
             </div>
         </>
