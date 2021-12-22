@@ -87,6 +87,10 @@ export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const bulkPortCodeUpload = (variables) => useMutation(Schema.bulkPortCodeUpload, {
+    variables, ...context,
+});
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -107,4 +111,5 @@ export default {
     getActivity,
     getShipmentStatusByType,
     getStoreConfig,
+    bulkPortCodeUpload,
 };
