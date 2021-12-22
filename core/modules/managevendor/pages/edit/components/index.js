@@ -66,52 +66,75 @@ const ManageVendorEditContent = (props) => {
                 />
             </div>
             <Paper className={classes.container}>
-                {!isVendor
-                    && (
-                        <div className={classes.content}>
-                            <h5 className={classes.titleSmall}>Upload Logo Vendor</h5>
+                <div className={classes.content}>
+                    <h5 className={classes.titleSmall}>
+                        {isVendor ? 'Upload ' : ''}
+                        Logo Vendor
+                    </h5>
+                    {isVendor
+                        && (
                             <DropFile
                                 error={formik.errors.logo && formik.touched.logo}
                                 getBase64={(file) => handleDropFile('logo', file)}
                                 formatFile=".jpg, .jpeg, .png, .gif"
                             />
-                            {formik.values.logo
-                                ? (
-                                    <img
-                                        className="logo"
-                                        alt="logo"
-                                        src={formik.values.logo}
-                                        style={{ height: 128, width: 'auto', marginLeft: 20 }}
-                                        onError={(event) => event.target.style.display = 'none'}
-                                    />
-                                ) : null}
-                        </div>
-                    )}
+                        )}
+                    {formik.values.logo
+                        ? (
+                            <img
+                                className="logo"
+                                alt="logo"
+                                src={formik.values.logo}
+                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
+                        ) : (
+                            <img
+                                className="logo"
+                                alt="logo"
+                                src="/assets/img/placeholder_image.jpg"
+                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
+                        )}
+                </div>
 
-                {!isVendor
-                    && (
-                        <div className={classes.content}>
-                            <h5 className={classes.titleSmall}>Upload Promotion Banner</h5>
+                <div className={classes.content}>
+                    <h5 className={classes.titleSmall}>
+                        {isVendor ? 'Upload ' : ''}
+                        Promotion Banner
+                    </h5>
+                    {isVendor
+                        && (
                             <DropFile
                                 error={formik.errors.promotion_banner && formik.touched.promotion_banner}
                                 getBase64={(file) => handleDropFile('promotion_banner', file)}
                                 formatFile=".jpg, .jpeg, .png, .gif"
                             />
-                            {formik.values.promotion_banner
-                                ? (
-                                    <img
-                                        className="promotion_banner"
-                                        alt="promotion_banner"
-                                        src={formik.values.promotion_banner}
-                                        style={{ height: 128, width: 'auto', marginLeft: 20 }}
-                                        onError={(event) => event.target.style.display = 'none'}
-                                    />
-                                ) : null}
-                        </div>
-                    )}
+                        )}
+
+                    {formik.values.promotion_banner
+                        ? (
+                            <img
+                                className="promotion_banner"
+                                alt="promotion_banner"
+                                src={formik.values.promotion_banner}
+                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
+                        ) : (
+                            <img
+                                className="logo"
+                                alt="logo"
+                                src="/assets/img/placeholder_image.jpg"
+                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
+                                onError={(event) => event.target.style.display = 'none'}
+                            />
+                        )}
+                </div>
 
                 <div className={classes.content}>
-                    <h5 className={classes.titleSmall}>Companny</h5>
+                    <h5 className={classes.titleSmall}>Companny Information</h5>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Vendor Code</span>
@@ -119,7 +142,7 @@ const ManageVendorEditContent = (props) => {
                         <TextField
                             className={classes.fieldRoot}
                             variant="outlined"
-                            disabled={isVendor}
+                            disabled={!isVendor}
                             name="company_code"
                             value={formik.values.company_code}
                             onChange={formik.handleChange}
@@ -138,7 +161,7 @@ const ManageVendorEditContent = (props) => {
                             className={classes.fieldRoot}
                             variant="outlined"
                             name="company_name"
-                            disabled={isVendor}
+                            disabled={!isVendor}
                             value={formik.values.company_name}
                             onChange={formik.handleChange}
                             error={!!(formik.touched.company_name && formik.errors.company_name)}
@@ -148,73 +171,78 @@ const ManageVendorEditContent = (props) => {
                             }}
                         />
                     </div>
-                    <div className={classes.formField}>
-                        <div className={classes.divLabel}>
-                            <span className={classes.label}>New Product</span>
-                        </div>
-                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
-                            <TextField
-                                style={{ width: '100%' }}
-                                variant="outlined"
-                                select
-                                name="is_new_product"
-                                value={formik.values.is_new_product}
-                                onChange={formik.handleChange}
-                                helperText="Can upload new product"
-                                InputProps={{
-                                    className: classes.fieldInput,
-                                }}
-                            >
-                                {option.map((item, index) => (
-                                    <MenuItem value={item.value} key={index}>{item.name}</MenuItem>
-                                ))}
-                            </TextField>
-                        </div>
-                    </div>
-                    <div className={classes.formField}>
-                        <div className={classes.divLabel}>
-                            <span className={classes.label}>Margin</span>
-                        </div>
-                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
-                            <TextField
-                                style={{ width: '100%' }}
-                                variant="outlined"
-                                name="company_margin"
-                                value={formik.values.company_margin}
-                                onChange={formik.handleChange}
-                                type="number"
-                                error={!!(formik.touched.company_margin && formik.errors.company_margin)}
-                                helperText={(formik.touched.company_margin && formik.errors.company_margin) || ''}
-                                InputProps={{
-                                    className: classes.fieldInput,
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <div className={classes.formField}>
-                        <div className={classes.divLabel}>
-                            <span className={classes.label}>Product Auto Approval</span>
-                        </div>
-                        <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
-                            <TextField
-                                style={{ width: '100%' }}
-                                variant="outlined"
-                                select
-                                name="is_product_approval"
-                                value={formik.values.is_product_approval}
-                                onChange={formik.handleChange}
-                                error={!!(formik.touched.is_product_approval && formik.errors.is_product_approval)}
-                                helperText="Can auto approve product"
-                                InputProps={{
-                                    className: classes.fieldInput,
-                                }}
-                            >
-                                {option.map((item, index) => (
-                                    <MenuItem value={item.value} key={index}>{item.name}</MenuItem>
-                                ))}
-                            </TextField>
-                        </div>
-                    </div>
+                    {!isVendor
+                        && (
+                            <>
+                                <div className={classes.formField}>
+                                    <div className={classes.divLabel}>
+                                        <span className={classes.label}>New Product</span>
+                                    </div>
+                                    <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                                        <TextField
+                                            style={{ width: '100%' }}
+                                            variant="outlined"
+                                            select
+                                            name="is_new_product"
+                                            value={formik.values.is_new_product}
+                                            onChange={formik.handleChange}
+                                            helperText="Can upload new product"
+                                            InputProps={{
+                                                className: classes.fieldInput,
+                                            }}
+                                        >
+                                            {option.map((item, index) => (
+                                                <MenuItem value={item.value} key={index}>{item.name}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                </div>
+
+                                <div className={classes.formField}>
+                                    <div className={classes.divLabel}>
+                                        <span className={classes.label}>Margin</span>
+                                    </div>
+                                    <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                                        <TextField
+                                            style={{ width: '100%' }}
+                                            variant="outlined"
+                                            name="company_margin"
+                                            value={formik.values.company_margin}
+                                            onChange={formik.handleChange}
+                                            error={!!(formik.touched.company_margin && formik.errors.company_margin)}
+                                            helperText={(formik.touched.company_margin && formik.errors.company_margin) || ''}
+                                            InputProps={{
+                                                className: classes.fieldInput,
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={classes.formField}>
+                                    <div className={classes.divLabel}>
+                                        <span className={classes.label}>Product Auto Approval</span>
+                                    </div>
+                                    <div className={clsx(classes.fieldRoot, classes.fieldRootDesc)} style={{ display: 'inline-block' }}>
+                                        <TextField
+                                            style={{ width: '100%' }}
+                                            variant="outlined"
+                                            select
+                                            name="is_product_approval"
+                                            value={formik.values.is_product_approval}
+                                            onChange={formik.handleChange}
+                                            error={!!(formik.touched.is_product_approval && formik.errors.is_product_approval)}
+                                            helperText="Can auto approve product"
+                                            InputProps={{
+                                                className: classes.fieldInput,
+                                            }}
+                                        >
+                                            {option.map((item, index) => (
+                                                <MenuItem value={item.value} key={index}>{item.name}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                 </div>
 
                 <div className={classes.content}>
