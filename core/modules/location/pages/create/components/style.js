@@ -3,11 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
+const colorGray = '#B1BCDB';
 
 const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 0',
         borderRadius: 16,
+        margin: '20px 0',
     },
     btnBack: {
         display: 'inline-block',
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: 16,
     },
     formFieldButton: {
-        padding: '24px 29px 30px 22px',
+        padding: '15px 29px 40px 22px',
     },
     btn: {
         borderRadius: 20,
@@ -68,6 +70,9 @@ const useStyles = makeStyles((theme) => ({
     content: {
         borderBottom: '3px solid #F5F7FB',
         padding: '10px 29px 12px 22px',
+    },
+    contentWithoutBorder: {
+        padding: '0px 29px 0px 22px',
     },
     fieldRoot: {
         width: 'calc(100% - 300px)',
@@ -104,6 +109,15 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 140px)',
         },
+    },
+    titleSmall: {
+        fontFamily: font,
+        color: colorGray,
+        fontSize: 12,
+        textTransform: 'uppercase',
+        margin: 0,
+        marginBottom: 8,
+        marginTop: 18,
     },
 }));
 
