@@ -46,7 +46,7 @@ const OverrideStockListContent = (props) => {
     const handleDelete = async (dataVar) => {
         if (dataVar?.variables?.id?.length === 0) {
             isDeleteAll.current = true;
-            // await deleteAllVirtualStock();
+            await deleteAllVirtualStock();
             return;
         }
         isDeleteAll.current = false;
