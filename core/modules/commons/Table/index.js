@@ -85,6 +85,9 @@ const CustomTable = (props) => {
         getRows,
         deleteRows,
         deleteLabel = 'Delete',
+        deleteMessage = 'Are you sure you want to delete?',
+        deleteEnableConfirm = false,
+        allowActionZeroSelected = false,
         loading,
         filters: initialFilters = [],
         initialPage = 0,
@@ -203,7 +206,8 @@ const CustomTable = (props) => {
         const toolbarActions = actions || [
             {
                 label: deleteLabel,
-                message: 'Are you sure you want to delete?',
+                message: deleteMessage,
+                confirmDialog: deleteEnableConfirm,
                 onClick: async (_checkedRows) => {
                     const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
                     await deleteRows({ variables });
@@ -230,12 +234,15 @@ const CustomTable = (props) => {
                                 open={openConfirmDialog}
                                 onCancel={() => cancelDeleteRowNotif()}
                                 onConfirm={async () => {
-                                    if (checkedRows && checkedRows.length) {
+                                    window.backdropLoader(true);
+                                    if ((checkedRows && checkedRows.length) || allowActionZeroSelected) {
+                                        setOpenConfirmDialog(false);
                                         await activeAction.onClick(checkedRows);
                                         fetchRows();
                                     }
                                     setCheckedRows([]);
                                     setOpenConfirmDialog(false);
+                                    window.backdropLoader(false);
                                 }}
                                 message={activeAction && activeAction.message}
                             />

@@ -12,6 +12,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
         refetch,
+        pickPackEnable,
     } = props;
     const homedelivery = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
@@ -399,6 +400,7 @@ const ContentWrapper = (props) => {
         formikShipped,
         formikDelivered,
         formikNotes,
+        pickPackEnable,
     };
 
     return (
@@ -413,6 +415,10 @@ const Core = (props) => {
         title: `Home Delivery #${router.query?.id}`,
     };
 
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
+        path: 'swiftoms_shipment/general/pick_and_pack',
+    });
+
     const { loading, data, refetch } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
@@ -421,7 +427,7 @@ const Core = (props) => {
         acl_code: 'shipment_delivery_dashboard',
     });
 
-    if (loading || aclCheckLoading) {
+    if (loading || aclCheckLoading || loadingConfig) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -451,7 +457,12 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper data={data} {...props} refetch={refetch} />
+            <ContentWrapper
+                pickPackEnable={dataConfig.getStoreConfig === '1'}
+                data={data}
+                {...props}
+                refetch={refetch}
+            />
         </Layout>
     );
 };

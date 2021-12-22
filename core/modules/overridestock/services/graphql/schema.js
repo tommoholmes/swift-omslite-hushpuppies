@@ -139,6 +139,12 @@ export const multideleteVirtualStockQuantity = gql`
     }
 `;
 
+export const deleteAllVirtualStock = gql`
+    mutation {
+        deleteAllVirtualStock
+    }
+`;
+
 export default {
     getVirtualStockQuantityList,
     getVirtualStockQuantityById,
@@ -149,4 +155,5 @@ export default {
     getActivity,
     syncOverrideStockToMarketplace,
     multideleteVirtualStockQuantity,
+    deleteAllVirtualStock,
 };

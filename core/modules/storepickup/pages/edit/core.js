@@ -12,6 +12,7 @@ const ContentWrapper = (props) => {
         data,
         Content,
         refetch,
+        pickPackEnable,
     } = props;
     const storepickup = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
@@ -20,6 +21,7 @@ const ContentWrapper = (props) => {
     const [packShipment] = gqlService.packShipment();
     const [pickedupShipment] = gqlService.pickedupShipment();
     const [saveShipmentNotes] = gqlService.saveShipmentNotes();
+    const [canceledShipment] = gqlService.canceledShipment();
 
     const handleConfirm = () => {
         const variables = {
@@ -179,6 +181,34 @@ const ContentWrapper = (props) => {
         });
     };
 
+    const handleCanceled = ({
+        reason,
+    }) => {
+        const variables = {
+            id: storepickup.id,
+            cancel_reason_id: reason.value,
+        };
+        window.backdropLoader(true);
+        canceledShipment({
+            variables,
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Order was canceled',
+                variant: 'success',
+            });
+            setTimeout(() => refetch(), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
+    };
+
     const storePickup = {
         id: storepickup.entity_id,
         shipmentNumber: storepickup.increment_id,
@@ -242,6 +272,19 @@ const ContentWrapper = (props) => {
         },
     });
 
+    const formikCanceled = useFormik({
+        initialValues: {
+            id: storepickup.entity_id,
+            reason: '',
+        },
+        validationSchema: Yup.object().shape({
+            reason: Yup.string().required('Required!'),
+        }),
+        onSubmit: (values) => {
+            handleCanceled(values);
+        },
+    });
+
     const formikPickedUp = useFormik({
         initialValues: {
             id: storepickup.entity_id,
@@ -278,6 +321,8 @@ const ContentWrapper = (props) => {
         formikPacked,
         formikPickedUp,
         formikNotes,
+        pickPackEnable,
+        formikCanceled,
     };
 
     return (
@@ -292,6 +337,10 @@ const Core = (props) => {
         title: `Store Pickup #${router.query?.id}`,
     };
 
+    const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
+        path: 'swiftoms_shipment/general/pick_and_pack',
+    });
+
     const { loading, data, refetch } = gqlService.getShipmentById({
         id: router && router.query && Number(router.query.id),
     });
@@ -300,7 +349,7 @@ const Core = (props) => {
         acl_code: 'shipment_pickup_dashboard',
     });
 
-    if (loading || aclCheckLoading) {
+    if (loading || aclCheckLoading || loadingConfig) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -329,7 +378,12 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper data={data} {...props} refetch={refetch} />
+            <ContentWrapper
+                pickPackEnable={dataConfig.getStoreConfig === '1'}
+                data={data}
+                {...props}
+                refetch={refetch}
+            />
         </Layout>
     );
 };

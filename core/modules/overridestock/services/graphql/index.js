@@ -57,6 +57,11 @@ export const multideleteVirtualStockQuantity = (variables) => useMutation(Schema
     ...context,
 });
 
+export const deleteAllVirtualStock = (variables) => useMutation(Schema.deleteAllVirtualStock, {
+    variables,
+    ...context,
+});
+
 export default {
     getVirtualStockQuantityList,
     getVirtualStockQuantityById,
@@ -67,4 +72,5 @@ export default {
     getActivity,
     syncOverrideStockToMarketplace,
     multideleteVirtualStockQuantity,
+    deleteAllVirtualStock,
 };
