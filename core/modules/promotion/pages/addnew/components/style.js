@@ -110,6 +110,15 @@ const useStyles = makeStyles((theme) => ({
             borderColor,
         },
     },
+    fieldInputMultiple: {
+        border: '1px solid',
+        borderColor: colorText,
+        borderRadius: '20px !important',
+        padding: '10px 10px',
+        '&.disabled': {
+            borderColor,
+        },
+    },
     selectControl: {
         margin: '8px 0px',
     },

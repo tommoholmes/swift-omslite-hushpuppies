@@ -29,16 +29,36 @@ export const getCompanyOptions = (variables) => useQuery(Schema.getCompanyOption
     variables, ...context, ...fetchPolicy,
 });
 
-export const getLocationOptions = (variables) => useQuery(Schema.getLocationOptions, {
-    variables, ...context, ...fetchPolicy,
-});
-
-export const getChannelOptions = (variables) => useQuery(Schema.getChannelOptions, {
-    variables, ...context, ...fetchPolicy,
+export const getLocationList = (options) => useLazyQuery(Schema.getLocationList, {
+    ...options, ...context, ...fetchPolicy,
 });
 
 export const addPromotion = (variables) => useMutation(Schema.addPromotion, {
     variables, ...context,
+});
+
+export const massDeletePromotion = (variables) => useMutation(Schema.massDeletePromotion, {
+    variables, ...context,
+});
+
+export const exportPromotion = (options) => useMutation(Schema.exportPromotion, {
+    ...options, ...context,
+});
+
+export const savePromotion = (variables) => useMutation(Schema.savePromotion, {
+    variables, ...context,
+});
+
+export const getPromotionById = (options) => useQuery(Schema.getPromotionById, {
+    ...options, ...context, ...fetchPolicy,
+});
+
+export const isPromotionSkuExist = (options) => useLazyQuery(Schema.isPromotionSkuExist, {
+    ...options, ...context, ...fetchPolicy,
+});
+
+export const getPromotionChannelsByLocId = (options) => useLazyQuery(Schema.getPromotionChannelsByLocId, {
+    ...options, ...context, ...fetchPolicy,
 });
 
 export default {
@@ -47,7 +67,12 @@ export default {
     downloadSampleCsv,
     importPromotion,
     getCompanyOptions,
-    getLocationOptions,
-    getChannelOptions,
+    getLocationList,
     addPromotion,
+    massDeletePromotion,
+    exportPromotion,
+    savePromotion,
+    getPromotionById,
+    isPromotionSkuExist,
+    getPromotionChannelsByLocId,
 };
