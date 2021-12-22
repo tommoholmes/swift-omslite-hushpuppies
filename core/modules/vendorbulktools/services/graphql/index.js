@@ -25,7 +25,27 @@ export const vendorCategoryUpload = (variables) => useMutation(Schema.vendorCate
     ...context,
 });
 
+export const vendorProductConfigurableUpload = (variables) => useMutation(Schema.vendorProductConfigurableUpload, {
+    variables,
+    ...context,
+});
+export const vendorProductBundleUpload = (variables) => useMutation(Schema.vendorProductBundleUpload, {
+    variables,
+    ...context,
+});
+export const vendorProductGroupedUpload = (variables) => useMutation(Schema.vendorProductGroupedUpload, {
+    variables,
+    ...context,
+});
+export const vendorProductPriceUpload = (variables) => useMutation(Schema.vendorProductPriceUpload, {
+    variables,
+    ...context,
+});
 export const vendorProductUpload = (variables) => useMutation(Schema.vendorProductUpload, {
+    variables,
+    ...context,
+});
+export const vendorProductPriceLocationUpload = (variables) => useMutation(Schema.vendorProductPriceLocationUpload, {
     variables,
     ...context,
 });
@@ -42,4 +62,9 @@ export default {
     vendorCategoryUpload,
     vendorProductUpload,
     isAccessAllowedLazy,
+    vendorProductConfigurableUpload,
+    vendorProductBundleUpload,
+    vendorProductGroupedUpload,
+    vendorProductPriceUpload,
+    vendorProductPriceLocationUpload,
 };

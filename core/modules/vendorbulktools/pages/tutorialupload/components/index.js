@@ -1,42 +1,41 @@
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import useStyles from '@modules/vendorbulktools/pages/default/components/style';
+import React, { useEffect, useState } from 'react';
+import gqlService from '@modules/vendorbulktools/services/graphql';
+import { useRouter } from 'next/router';
+import { tutorialOptions } from '@modules/vendorbulktools/helpers/tutorialOptions';
 
-const TutorialUploadContent = ({ urlDownload }) => {
-    const classes = useStyles();
+const TutorialUploadContent = () => {
+    const [urlDownload, setUrlDownload] = useState('');
+    const [downloadSampleCsv] = gqlService.downloadSampleCsv();
+    const router = useRouter();
+    const { code } = router.query;
+
+    const tutorial = tutorialOptions.find((item) => item.code === code);
+
+    useEffect(async () => {
+        if (tutorial) {
+            try {
+                const variables = {
+                    type: tutorial.sample,
+                };
+                const res = await downloadSampleCsv({
+                    variables,
+                });
+                setUrlDownload(res && res.data && res.data.downloadSampleCsv);
+                // eslint-disable-next-line no-empty
+            } catch (error) {}
+        }
+    }, [tutorial]);
+
+    useEffect(() => {
+        if (!code || !tutorial) {
+            router.push('/vendorportal/bulktools');
+        }
+    }, [code]);
+
     return (
         <>
-            <h2 className={classes.titleTop}>Tutorial Upload Product</h2>
-            <Paper>
-                <div className={classes.contentWithoutBorder}>
-                    <p>Ikuti instruksi berikut untuk mengunggah data produk</p>
-                    <ol>
-                        <li>
-                            Siapkan berkas csv untuk mengunggah data produk, unduh contoh berkas csv yang berisi persyaratan data yang dibutuhkan
-                            {' '}
-                            <a href={urlDownload} className="link-button">
-                                Klik Disini
-                            </a>
-                        </li>
-                        <li>
-                            <p>Buka contoh berkas csv yang telah diunduh. Anda dapat membukanya dengan aplikasi apapun seperti Microsoft Excel</p>
-                            <p>
-                                kolom dalam contoh berkas csv adalah syarat minimal untuk unggah produk. Anda bisa menambahkan kolom yang sudah
-                                terdaftar di atribut produk
-                            </p>
-                            <img style={{ width: '100%' }} src="/assets/img/product-upload-excel.png" alt="excel-example" />
-                            <p>Harap pastikan bahwa berkas csv yang akan diunggah sudah benar. Anda dapat memeriksa ulang dengan berkas csv anda</p>
-                            <p>Ini merupakan contoh data csv yang salah yang akan menyebabkan kegagalan dalam pengunggahan</p>
-                            <img style={{ width: '100%' }} src="/assets/img/incorrect-product-upload.png" alt="incorrect-example" />
-                        </li>
-                        <li>
-                            <p>pilih bulk type &quot;Product Upload Master&quot;</p>
-                            <p>Lampirkan berkas csv dengan mengklik tombol &quot;Choose File&quot;</p>
-                            <img style={{ width: '50%', height: '250px' }} src="/assets/img/product-upload-button.png" alt="excel-example" />
-                        </li>
-                    </ol>
-                </div>
-            </Paper>
+            {tutorial
+                && React.cloneElement(tutorial.component, { urlDownload, tutorialName: tutorial.name, excelImageUrl: tutorial.excel_image_url })}
         </>
     );
 };
