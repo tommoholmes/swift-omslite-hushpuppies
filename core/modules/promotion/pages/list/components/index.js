@@ -9,7 +9,8 @@ import Header from '@modules/promotion/pages/list/components/Header';
 
 const ManageRmaListContent = (props) => {
     const classes = useStyles();
-    const { data, loading, getPromotionList, updateStatusPromotion } = props;
+    const { data, loading, getPromotionList, updateStatusPromotion,
+        massDeletePromotion, exportPromotion } = props;
 
     const promotionList = (data && data.getPromotionList && data.getPromotionList.items) || [];
     const promotionTotal = (data && data.getPromotionList && data.getPromotionList.total_count) || 0;
@@ -30,8 +31,8 @@ const ManageRmaListContent = (props) => {
         { field: 'type', name: 'type', type: 'like', label: 'Type', initialValue: '' },
         { field: 'name', name: 'name', type: 'like', label: 'Name', initialValue: '' },
         {
-            field: 'stattus',
-            name: 'stattus',
+            field: 'status',
+            name: 'status',
             type: 'like',
             label: 'Status',
             initialValue: '',
@@ -71,31 +72,36 @@ const ManageRmaListContent = (props) => {
         {
             label: 'Enable Promotion',
             message: 'Are you sure to confirm ?',
-            onClick: async (checkedRows) => {
+            onClick: (checkedRows) => {
                 const variables = checkedRows.map((checkedRow) => ({ id: Number(checkedRow.id), status: 1 }));
-                await updateStatusPromotion({ variables: { data: variables } });
+                updateStatusPromotion({ variables: { data: variables } });
             },
+            showMessage: true,
         },
         {
             label: 'Disable Promotion',
             message: 'Are you ready for pack?',
-            onClick: async (checkedRows) => {
+            onClick: (checkedRows) => {
                 const variables = checkedRows.map((checkedRow) => ({ id: Number(checkedRow.id), status: 0 }));
-                await updateStatusPromotion({ variables: { data: variables } });
+                updateStatusPromotion({ variables: { data: variables } });
             },
+            showMessage: true,
         },
         {
             label: 'Delete Promotion',
             message: 'Are you sure to picked up this order?',
-            onClick: async (checkedRows) => {
-                const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
+            onClick: (checkedRows) => {
+                const id = checkedRows.map((checkedRow) => checkedRow.id);
+                massDeletePromotion({ variables: { id } });
             },
+            showMessage: true,
         },
         {
             label: 'Export Promotion',
             message: 'ready for print?',
             onClick: (checkedRows) => {
-                const idPrint = checkedRows.map((checkedRow) => checkedRow.id);
+                const id = checkedRows.map((checkedRow) => checkedRow.id);
+                exportPromotion({ variables: { id } });
             },
         },
     ];

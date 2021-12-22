@@ -7,11 +7,31 @@ const Core = (props) => {
     const {
         Content,
     } = props;
+    const router = useRouter();
 
     const [getPromotionList, { data, loading }] = gqlService.getPromotionList();
     const [updateStatusPromotion] = gqlService.updateStatusPromotion();
+    const [massDeletePromotion] = gqlService.massDeletePromotion();
+    const [exportPromotion] = gqlService.exportPromotion({
+        onCompleted: (res) => {
+            window.backdropLoader(false);
+            router.push(res.exportPromotion);
+            window.toastMessage({
+                open: true,
+                text: 'Success export Shipments',
+                variant: 'success',
+            });
+        },
+        onError: (e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        },
+    });
 
-    const router = useRouter();
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
         acl_code: 'oms_lite_promotion',
     });
@@ -29,6 +49,8 @@ const Core = (props) => {
         data,
         loading,
         updateStatusPromotion,
+        massDeletePromotion,
+        exportPromotion,
     };
 
     return (

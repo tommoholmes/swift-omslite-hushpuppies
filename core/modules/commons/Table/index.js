@@ -173,6 +173,7 @@ const CustomTable = (props) => {
             setVarExport(variablesExport);
         }
         getRows({ variables });
+        setCheckedRows([]);
     };
 
     // effects

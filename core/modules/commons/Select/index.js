@@ -40,6 +40,8 @@ const CustomTextField = ({
     error = false,
     errorMessage = 'This is a Required field.',
     fullWidth = false,
+    loading = false,
+    multiple = false,
     ...other
 }) => {
     const classes = useStyles();
@@ -57,17 +59,24 @@ const CustomTextField = ({
                 value={value}
                 onChange={onChange}
                 inputProps={inputProps}
-                disabled={disabled}
+                disabled={disabled || loading}
+                multiple={multiple}
                 {...other}
             >
-                {enableEmpty
+                {loading ? <option aria-label="None" value="">Loading...</option>
+                    : (
+                        <>
+                            {dataOptions.length === 0 && multiple ? <option aria-label="None" value="">{emptyText}</option> : null}
+                            {enableEmpty && !multiple
                     && <option aria-label="None" value="">{emptyText}</option>}
-                {dataOptions.map((option) => (
-                    <>
-                        <option value={option[valueToMap]}>{option[labelToMap]}</option>
-                    </>
+                            {dataOptions.map((option) => (
+                                <>
+                                    <option value={option[valueToMap]}>{option[labelToMap]}</option>
+                                </>
 
-                ))}
+                            ))}
+                        </>
+                    )}
             </Select>
             {error
                 && <FormHelperText>{errorMessage}</FormHelperText>}
