@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
+const colorGray = '#B1BCDB';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -93,6 +94,14 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 115px)',
         },
+    },
+    titleSmall: {
+        fontFamily: font,
+        color: colorGray,
+        fontSize: 14,
+        margin: 0,
+        marginBottom: 18,
+        marginTop: 18,
     },
 }));
 
