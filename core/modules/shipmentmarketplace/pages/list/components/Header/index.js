@@ -14,6 +14,12 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Marketplace Dashboard</h2>
             <Button
                 className={classes.buttonAdd}
+                onClick={() => router.push('/shipment/shipmentmarketplace/portcode')}
+            >
+                Bulk Port Code
+            </Button>
+            <Button
+                className={clsx(classes.buttonAdd, 'left')}
                 onClick={() => router.push('/shipment/shipmentmarketplace/import')}
             >
                 Bulk Shipment

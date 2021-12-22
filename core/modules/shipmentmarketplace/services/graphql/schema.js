@@ -320,6 +320,21 @@ export const getStoreConfig = gql`
   }
 `;
 
+export const bulkPortCodeUpload = gql`
+    mutation bulkPortCodeUpload(
+        $binary: String!,
+    ){
+        bulkPortCodeUpload(
+            input: {
+                binary: $binary,
+            }
+        ){
+            is_success
+            attachment_url
+        }
+    }
+`;
+
 export default {
     getStoreShipmentList,
     getStoreShipmentById,
@@ -340,4 +355,5 @@ export default {
     getActivity,
     getShipmentStatusByType,
     getStoreConfig,
+    bulkPortCodeUpload,
 };
