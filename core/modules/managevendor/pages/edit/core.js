@@ -54,8 +54,8 @@ const ContentWrapper = (props) => {
             is_new_product: vendor.is_new_product,
             company_margin: vendor.company_margin,
             is_product_approval: vendor.is_product_approval,
-            logo: '',
-            promotion_banner: '',
+            logo: vendor.logo,
+            promotion_banner: vendor.promotion_banner,
             shipper_shipping: vendor.shipper_shipping?.length
                 ? vendor.shipper_shipping.map((code) => (dataShipper.find((ship) => ship.value === code)))
                 : [],
@@ -67,11 +67,14 @@ const ContentWrapper = (props) => {
             company_code: Yup.string().required('Required!'),
         }),
         onSubmit: (values) => {
-            const { shipper_shipping, vendor_shipping, ...restValues } = values;
+            const {
+                shipper_shipping, vendor_shipping, company_margin, ...restValues
+            } = values;
             const valuesToSubmit = {
                 ...restValues,
                 shipper_shipping: shipper_shipping?.map((ship) => ship.value),
                 vendor_shipping: vendor_shipping?.map((ship) => ship.value),
+                company_margin: company_margin ? Number(company_margin) : 0,
             };
             handleSubmit(valuesToSubmit);
         },
