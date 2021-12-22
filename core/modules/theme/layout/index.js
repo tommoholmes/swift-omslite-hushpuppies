@@ -269,6 +269,12 @@ const Layout = (props) => {
             label: 'Product',
             children: [
                 {
+                    aclCode: 'product_category_by_channel',
+                    key: 'categorybychannel',
+                    label: 'Category by Channel',
+                    url: '/product/categorybychannel',
+                },
+                {
                     aclCode: 'oms_lite_product_list',
                     key: 'productlist',
                     label: 'Products',
