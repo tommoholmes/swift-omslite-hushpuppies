@@ -273,13 +273,18 @@ const CustomTable = (props) => {
                                 menuItems={toolbarActions.map((action) => ({
                                     label: action.label,
                                     onClick: () => {
-                                        setActiveAction(action);
-                                        if (action.showMessage !== null) {
-                                            setShowMessageActions(action.showMessage);
+                                        const tempAction = { ...action };
+
+                                        if (allowActionZeroSelected && checkedRows?.length === 0) {
+                                            tempAction.confirmDialog = true;
+                                        }
+                                        setActiveAction(tempAction);
+                                        if (tempAction.showMessage !== null) {
+                                            setShowMessageActions(tempAction.showMessage);
                                         } else {
                                             setShowMessageActions(false);
                                         }
-                                        if (action.confirmDialog) {
+                                        if (tempAction.confirmDialog) {
                                             setOpenConfirmDialog(true);
                                         } else {
                                             setTimeout(() => {

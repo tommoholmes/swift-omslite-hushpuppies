@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Header from '@modules/overridestock/pages/list/components/Header';
@@ -41,15 +41,15 @@ const OverrideStockListContent = (props) => {
     }));
 
     const isDeleteAll = useRef(false);
+    const [isDeleteAllState, setIsDeleteAllState] = useState(false);
 
     const handleDelete = async (dataVar) => {
-        isDeleteAll.current = false;
         if (dataVar?.variables?.id?.length === 0) {
             isDeleteAll.current = true;
             await deleteAllVirtualStock();
             return;
         }
-
+        isDeleteAll.current = false;
         await multideleteVirtualStockQuantity({ ...dataVar });
     };
 
@@ -58,7 +58,6 @@ const OverrideStockListContent = (props) => {
             <Header />
             <Table
                 deleteMessage="Are you sure want to delete all override stock?"
-                deleteEnableConfirm={virtualStockQuantityTotal > 0 && isDeleteAll.current}
                 filters={filters}
                 rows={rows}
                 getRows={getVirtualStockQuantityList}
