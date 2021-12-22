@@ -201,8 +201,8 @@ const Sidebar = ({
                                             <List component="div" disablePadding>
                                                 {menu.children.map((menuChild) => (
                                                     <div key={menuChild.key}>
-                                                        {(((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode)) || menuChild.notInAcl)
-                                                            || menu.key === 'vendor') && (!menuChild.hide) && (
+                                                        {((aclDetail[0] && aclDetail[0].acl_code.includes(menuChild.aclCode)) || menuChild.notInAcl)
+                                                            && (!menuChild.hide) && (
                                                             <>
                                                                 {(menu.key === 'pickpack') && (
                                                                     <>
