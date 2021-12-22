@@ -1,50 +1,52 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable indent */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/no-danger */
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import Button from '@common_button';
+import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
-import DropFile from '@common_dropfile';
 import clsx from 'clsx';
 import useStyles from '@modules/vendorbulktools/pages/default/components/style';
-import CancelIcon from '@material-ui/icons/Cancel';
 import Head from 'next/head';
 import Autocomplete from '@common_autocomplete';
-import Progressbar from '@common_progressbar';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
-import { useRouter } from 'next/router';
-import gqlChannel from '@modules/channel/services/graphql';
-import Link from 'next/link';
+import gqlService from '@modules/vendorbulktools/services/graphql';
 
 const VendorBulkToolsContent = (props) => {
-    const {
-        formik,
-        urlDownload,
-        handleDropFile,
-        errorHtml,
-        bulkToolsOptionsState,
-        setBulkType,
-        bulkType,
-        activityState,
-        showProgress,
-        finishedAfterSubmit,
-        selectedChannel,
-        setSelectedChannel,
-    } = props;
+    const { bulkToolsOptionsState, setBulkType, bulkType } = props;
     const classes = useStyles();
-    const router = useRouter();
-    const [getChannelList, getChannelListRes] = gqlChannel.getChannelList();
+    const [downloadSampleCsv] = gqlService.downloadSampleCsv();
+    const [urlDownload, setUrlDownload] = useState('');
 
-    const isCategoryUpload = bulkType?.sample === 'vendor_category';
-    const isProductUpload = bulkType?.sample === 'vendor_product';
+    useEffect(async () => {
+        if (bulkType?.sample) {
+            try {
+                const variables = {
+                    type: bulkType?.sample,
+                };
+                const res = await downloadSampleCsv({
+                    variables,
+                });
+                setUrlDownload(res && res.data && res.data.downloadSampleCsv);
+                // eslint-disable-next-line no-empty
+            } catch (error) {}
+        }
+    }, [bulkType]);
+
+    const handleSubmit = async (variables, uploader) => {
+        window.backdropLoader(true);
+
+        try {
+            await uploader({ variables });
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: `${bulkType?.name} Success`,
+                variant: 'success',
+            });
+        } catch (error) {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: error.message,
+                variant: 'error',
+            });
+        }
+    };
 
     return (
         <>
@@ -54,12 +56,6 @@ const VendorBulkToolsContent = (props) => {
             <h2 className={classes.titleTop}>Bulk Tools</h2>
             <Paper className={classes.container}>
                 <span className={clsx(classes.textAttach, classes.label)}>ATTACH FILE</span>
-                {errorHtml && (
-                    <div className={classes.errorHtml}>
-                        <CancelIcon />
-                        <div style={{ paddingLeft: 5 }} dangerouslySetInnerHTML={{ __html: errorHtml }} />
-                    </div>
-                )}
                 <div className={classes.contentWithoutBorder}>
                     <div className={clsx(classes.formField, classes.textLeft)}>
                         <div className={classes.divLabel}>
@@ -73,136 +69,20 @@ const VendorBulkToolsContent = (props) => {
                             }}
                             defaultValue={{ loc_name: 'select', loc_code: 0 }}
                             options={bulkToolsOptionsState}
-                            primaryKey="acl"
+                            primaryKey="code"
                             labelKey="name"
                         />
                     </div>
-                    {isCategoryUpload && (
-                        <div className={clsx(classes.formField, classes.textLeft)}>
-                            <div className={classes.divLabel}>
-                                <span className={[classes.label, classes.labelRequired].join(' ')}>Select Channel</span>
-                            </div>
-                            <Autocomplete
-                                mode="lazy"
-                                value={selectedChannel}
-                                className={classes.autocompleteRoot}
-                                onChange={(e) => {
-                                    setSelectedChannel(e);
-                                }}
-                                loading={getChannelListRes?.loading}
-                                defaultValue={{ loc_name: 'select', loc_code: 0 }}
-                                options={
-                                    getChannelListRes
-                                    && getChannelListRes.data
-                                    && getChannelListRes.data.getChannelList
-                                    && getChannelListRes.data.getChannelList.items
-                                }
-                                getOptions={getChannelList}
-                                primaryKey="channel_code"
-                                labelKey="channel_name"
-                            />
-                        </div>
-                    )}
                 </div>
-
-                <div className={classes.content}>
-                    <div className={classes.formField}>
-                        {bulkType && (
-                            <>
-                                <span className={classes.label}>
-                                    <a href={urlDownload} className={classes.linkDownload}>
-                                        Download the Sample CSV
-                                    </a>
-                                    <br />
-                                    {isProductUpload && (
-                                        <Link href="/vendorportal/tutorialupload">
-                                            <a className={classes.linkDownload}>Tutorial Upload Product</a>
-                                        </Link>
-                                    )}
-                                </span>
-                            </>
-                        )}
-                    </div>
-                    <div className={clsx(classes.formField, classes.textLeft)}>
-                        <DropFile
-                            title="Please select the file : "
-                            error={formik.errors.binary && formik.touched.binary}
-                            getBase64={handleDropFile}
-                        />
-                    </div>
-                </div>
-                <div className={classes.formFieldButton}>
-                    <Button className={classes.btn} onClick={formik.handleSubmit} variant="contained" disabled={bulkType === null}>
-                        Submit
-                    </Button>
-                </div>
-                {activityState && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress) ? (
-                    <div className={classes.progressContainer}>
-                        <Progressbar total={activityState?.data_total} value={activityState?.data_processed} title="Progress" />
-                    </div>
-                ) : null}
-                {activityState
-                    && activityState.run_status
-                    && (activityState.run_status === 'running' || activityState.run_status === 'pending ' || showProgress)
-                    && finishedAfterSubmit && (
-                        <div className={classes.formFieldButton}>
-                            {activityState.run_status !== 'running' && showProgress ? (
-                                activityState.error_message ? (
-                                    <div className={clsx(classes.status, 'error')}>ERROR</div>
-                                ) : (
-                                    <div className={clsx(classes.status, 'success')}>SUCCESS</div>
-                                )
-                            ) : null}
-
-                            <TableContainer component={Paper}>
-                                <Table>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell className={classes.leftColumn}>Status :</TableCell>
-                                            <TableCell className={clsx(classes.rightColumn, 'capitalize')}>{activityState.run_status}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className={classes.leftColumn}>Started At :</TableCell>
-                                            <TableCell className={classes.rightColumn}>
-                                                {new Date(activityState.started_at).toLocaleString('en-US', {
-                                                    day: 'numeric',
-                                                    year: 'numeric',
-                                                    month: 'short',
-                                                    hour: 'numeric',
-                                                    minute: 'numeric',
-                                                    second: 'numeric',
-                                                })}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className={classes.leftColumn}>Run By :</TableCell>
-                                            <TableCell className={classes.rightColumn}>{activityState.run_by}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className={classes.leftColumn}>Error Message :</TableCell>
-                                            <TableCell className={classes.rightColumn} style={{ color: 'red' }}>
-                                                {activityState.error_message || '-'}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className={classes.leftColumn}>Attachment :</TableCell>
-                                            <TableCell className={classes.rightColumn}>
-                                                <a
-                                                    onClick={() => (activityState.attachment ? router.push(activityState.attachment) : null)}
-                                                    style={{
-                                                        color: '#BE1F93',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    {activityState.attachment ? 'Download' : '-'}
-                                                </a>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </div>
-                    )}
+                {bulkType?.component
+                    ? React.cloneElement(bulkType?.component, {
+                        gqlUpload: bulkType?.gqlUpload,
+                        urlDownload,
+                        handleSubmit,
+                        toolName: bulkType?.name,
+                        code: bulkType?.code,
+                    })
+                    : null}
             </Paper>
         </>
     );

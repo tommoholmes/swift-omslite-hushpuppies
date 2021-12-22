@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '24px 29px 30px 22px',
     },
     btn: {
-        borderRadius: 20,
+        borderRadius: '20px !important',
     },
     label: {
         color: colorText,

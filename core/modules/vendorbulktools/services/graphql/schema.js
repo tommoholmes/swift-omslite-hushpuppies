@@ -47,6 +47,57 @@ export const vendorProductUpload = gql`
     }
 `;
 
+export const vendorProductConfigurableUpload = gql`
+    mutation vendorProductConfigurableUpload($binary: String!) {
+        vendorProductConfigurableUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+export const vendorProductBundleUpload = gql`
+    mutation vendorProductBundleUpload($binary: String!) {
+        vendorProductBundleUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+export const vendorProductGroupedUpload = gql`
+    mutation vendorProductGroupedUpload($binary: String!) {
+        vendorProductGroupedUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+export const vendorProductPriceUpload = gql`
+    mutation vendorProductPriceUpload($binary: String!) {
+        vendorProductPriceUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+export const vendorProductPriceLocationUpload = gql`
+    mutation vendorProductPriceLocationUpload($binary: String!) {
+        vendorProductPriceLocationUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+
 export const isAccessAllowed = gql`
     query isAccessAllowed($acl_code: String!) {
         isAccessAllowed(acl_code: $acl_code)
@@ -59,4 +110,9 @@ export default {
     vendorCategoryUpload,
     vendorProductUpload,
     isAccessAllowed,
+    vendorProductConfigurableUpload,
+    vendorProductBundleUpload,
+    vendorProductGroupedUpload,
+    vendorProductPriceUpload,
+    vendorProductPriceLocationUpload,
 };
