@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/location/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import { optionsQtyBuffer, optionsYesNo } from '@modules/location/helpers';
+import userGqlService from '@modules/dashboard/services/graphql';
 
 const Core = (props) => {
     const { Content } = props;
@@ -123,7 +124,7 @@ const Core = (props) => {
             postcode: Yup.string().required('Required!'),
             longitude: Yup.string().required('Required!'),
             latitude: Yup.string().required('Required!'),
-            zone: Yup.object().required('Required!'),
+            zone: Yup.object().nullable(),
             warehouse: Yup.object().nullable(),
             useFrontend: Yup.object().nullable(),
             sircloWarehouse: Yup.object().nullable(),
@@ -144,7 +145,9 @@ const Core = (props) => {
         acl_code: 'oms_lite_location',
     });
 
-    if (aclCheckLoading) {
+    const { data: customerData, loading: customerLoading } = userGqlService.getCustomer();
+
+    if (aclCheckLoading || customerLoading) {
         return <Layout>Loading...</Layout>;
     }
 
@@ -154,6 +157,7 @@ const Core = (props) => {
 
     const contentProps = {
         formik,
+        customer: customerData?.customer,
     };
 
     return (

@@ -1,20 +1,21 @@
 import { gql } from '@apollo/client';
 
 export const getCustomer = gql`
-    query{
-        customer{
+    query {
+        customer {
             email
             firstname
             lastname
             customer_loc_code
             channel_code
+            customer_company_code
         }
     }
 `;
 
 export const getDashboardData = gql`
-    query{
-        getDashboardData{
+    query {
+        getDashboardData {
             order_new
             order_no_allocation
             order_failed
@@ -29,19 +30,17 @@ export const getDashboardData = gql`
 `;
 
 export const getChannelList = gql`
-    query{
-        getChannelList(
-            pageSize: null
-        ){
-            items{
+    query {
+        getChannelList(pageSize: null) {
+            items {
                 channel_id
                 channel_code
                 channel_name
                 framework
                 virtual_stock_list
                 location_list
-           }
-           total_count
+            }
+            total_count
             page_info {
                 page_size
                 current_page
@@ -52,14 +51,8 @@ export const getChannelList = gql`
 `;
 
 export const changePassword = gql`
-    mutation changeCustomerPassword(
-        $currentPassword: String!,
-        $newPassword: String!
-    ){
-        changeCustomerPassword(
-            currentPassword: $currentPassword,
-            newPassword: $newPassword
-        ){
+    mutation changeCustomerPassword($currentPassword: String!, $newPassword: String!) {
+        changeCustomerPassword(currentPassword: $currentPassword, newPassword: $newPassword) {
             email
             firstname
             lastname
@@ -68,17 +61,9 @@ export const changePassword = gql`
 `;
 
 export const changeEmail = gql`
-    mutation updateCustomer(
-        $email: String,
-        $password: String
-    ){
-        updateCustomer(
-            input:{
-                email: $email,
-                password: $password
-            }
-        ){
-            customer{
+    mutation updateCustomer($email: String, $password: String) {
+        updateCustomer(input: { email: $email, password: $password }) {
+            customer {
                 id
                 firstname
                 email
@@ -88,17 +73,9 @@ export const changeEmail = gql`
 `;
 
 export const changeName = gql`
-    mutation updateCustomer(
-        $firstname: String,
-        $lastname: String
-    ){
-        updateCustomer(
-            input:{
-                firstname: $firstname,
-                lastname: $lastname
-            }
-        ){
-            customer{
+    mutation updateCustomer($firstname: String, $lastname: String) {
+        updateCustomer(input: { firstname: $firstname, lastname: $lastname }) {
+            customer {
                 id
                 firstname
                 lastname
