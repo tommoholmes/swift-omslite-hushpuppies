@@ -76,11 +76,8 @@ const useStyles = makeStyles((theme) => ({
     },
     btn: {
         borderRadius: 20,
-        [theme.breakpoints.up('sm')]: {
-            fontSize: 18,
-        },
         boxShadow: 'none',
-        border: '2px solid',
+        border: '1px solid',
         borderColor: colorPurple,
         letterSpacing: 0,
         textTransform: 'capitalize',
@@ -89,7 +86,6 @@ const useStyles = makeStyles((theme) => ({
         '&.print': {
             background: '#FFFFFF',
             color: colorPurple,
-            marginTop: 0,
         },
         '&.Mui-disabled': {
             borderColor: 'rgba(0, 0, 0, 0.12)',
