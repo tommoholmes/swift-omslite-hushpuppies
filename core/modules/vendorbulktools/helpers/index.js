@@ -1,18 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import gqlService from '@modules/vendorbulktools/services/graphql';
-import CategoryUpload from '@modules/vendorbulktools/pages/default/components/categoryUpload';
 import BaseProductUpload from '@modules/vendorbulktools/pages/default/components/baseProductUpload';
 
 export const bulkToolsOptions = [
-    {
-        name: 'Category Upload',
-        code: 'category_upload',
-        acl: 'oms_lite_vendor_product_upload_master',
-        sample: 'vendor_category',
-        activity: null,
-        gqlUpload: gqlService.vendorCategoryUpload,
-        component: <CategoryUpload />,
-    },
     {
         name: 'Product Upload Master',
         code: 'product_upload_master',
