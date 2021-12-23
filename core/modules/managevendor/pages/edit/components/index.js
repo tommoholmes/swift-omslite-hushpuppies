@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-unused-vars */
@@ -18,6 +20,8 @@ import useStyles from '@modules/managevendor/pages/edit/components/style';
 const ManageVendorEditContent = (props) => {
     const {
         formik, isVendor, vendor, handleDropFile, dataCourier, dataShipper,
+        getCountries, getCountriesRes, getCountry, getCountryRes,
+        getCityKecByRegionCode, getCityKecByRegionCodeRes,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -57,13 +61,6 @@ const ManageVendorEditContent = (props) => {
                         {formik.values.company_name}
                     </h2>
                 </div>
-                <img
-                    className="logo"
-                    alt="logo"
-                    src={vendor.logo}
-                    style={{ width: 128, height: 'auto' }}
-                    onError={(event) => event.target.style.display = 'none'}
-                />
             </div>
             <Paper className={classes.container}>
                 <div className={classes.content}>
@@ -86,17 +83,9 @@ const ManageVendorEditContent = (props) => {
                                 alt="logo"
                                 src={formik.values.logo}
                                 style={{ height: 128, width: 'auto', marginLeft: 20 }}
-                                onError={(event) => event.target.style.display = 'none'}
                             />
-                        ) : (
-                            <img
-                                className="logo"
-                                alt="logo"
-                                src="/assets/img/placeholder_image.jpg"
-                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
-                                onError={(event) => event.target.style.display = 'none'}
-                            />
-                        )}
+                        ) : null}
+
                 </div>
 
                 <div className={classes.content}>
@@ -115,26 +104,33 @@ const ManageVendorEditContent = (props) => {
 
                     {formik.values.promotion_banner
                         ? (
+                            <>
+                                <img
+                                    className="promotion_banner"
+                                    alt="promotion_banner"
+                                    src={formik.values.promotion_banner}
+                                    style={{ height: 128, width: 'auto', marginLeft: 20 }}
+                                />
+                                {isVendor
+                        && (
                             <img
-                                className="promotion_banner"
-                                alt="promotion_banner"
-                                src={formik.values.promotion_banner}
-                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
-                                onError={(event) => event.target.style.display = 'none'}
-                            />
-                        ) : (
-                            <img
-                                className="logo"
-                                alt="logo"
-                                src="/assets/img/placeholder_image.jpg"
-                                style={{ height: 128, width: 'auto', marginLeft: 20 }}
-                                onError={(event) => event.target.style.display = 'none'}
+                                src="/assets/img/trash.svg"
+                                alt="delete"
+                                style={{
+                                    height: 25, width: 'auto', cursor: 'pointer', marginLeft: 5,
+                                }}
+                                onClick={() => formik.setFieldValue('promotion_banner', '')}
                             />
                         )}
+                            </>
+                        ) : (
+                            null
+                        )}
+
                 </div>
 
                 <div className={classes.content}>
-                    <h5 className={classes.titleSmall}>Companny Information</h5>
+                    <h5 className={classes.titleSmall}>Company Information</h5>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Vendor Code</span>
@@ -166,6 +162,99 @@ const ManageVendorEditContent = (props) => {
                             onChange={formik.handleChange}
                             error={!!(formik.touched.company_name && formik.errors.company_name)}
                             helperText={(formik.touched.company_name && formik.errors.company_name) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label)}>Address</span>
+                        </div>
+                        <TextField
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="company_street"
+                            disabled={!isVendor}
+                            value={formik.values.company_street}
+                            onChange={formik.handleChange}
+                            error={!!(formik.touched.company_street && formik.errors.company_street)}
+                            helperText={(formik.touched.company_street && formik.errors.company_street) || ''}
+                            InputProps={{
+                                className: classes.fieldInput,
+                            }}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label)}>Country</span>
+                        </div>
+                        <Autocomplete
+                            disabled={!isVendor}
+                            className={classes.autocompleteRoot}
+                            value={formik.values.company_country_id}
+                            onChange={(e) => formik.setFieldValue('company_country_id', e)}
+                            options={(getCountriesRes && getCountriesRes.data && getCountriesRes.data.countries) || []}
+                            loading={getCountriesRes.loading}
+                            primaryKey="id"
+                            labelKey="full_name_english"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label)}>Province</span>
+                        </div>
+                        <Autocomplete
+                            disabled={!(formik.values.company_country_id) || !isVendor}
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
+                            value={formik.values.company_region}
+                            onChange={(e) => formik.setFieldValue('company_region', e)}
+                            loading={getCountryRes.loading}
+                            options={
+                                getCountryRes && getCountryRes.data && getCountryRes.data.country && getCountryRes.data.country.available_regions
+                            }
+                            getOptions={getCountry}
+                            getOptionsVariables={{ variables: { id: formik.values.company_country_id && formik.values.company_country_id.id } }}
+                            primaryKey="id"
+                            labelKey="name"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label)}>City</span>
+                        </div>
+                        <Autocomplete
+                            disabled={!(formik.values.company_region && formik.values.company_region.id) || !isVendor}
+                            className={classes.autocompleteRoot}
+                            mode="lazy"
+                            value={formik.values.company_city}
+                            onChange={(e) => formik.setFieldValue('company_city', e)}
+                            loading={getCityKecByRegionCodeRes.loading}
+                            options={
+                                getCityKecByRegionCodeRes && getCityKecByRegionCodeRes.data && getCityKecByRegionCodeRes.data.getCityKecByRegionCode
+                            }
+                            getOptions={getCityKecByRegionCode}
+                            getOptionsVariables={{
+                                variables: {
+                                    region_code: formik.values.company_region && formik.values.company_region.code,
+                                },
+                            }}
+                            primaryKey="value"
+                            labelKey="label"
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Telephone</span>
+                        </div>
+                        <TextField
+                            disabled={!isVendor}
+                            className={classes.fieldRoot}
+                            variant="outlined"
+                            name="no_telephone"
+                            value={formik.values.no_telephone}
+                            onChange={formik.handleChange}
                             InputProps={{
                                 className: classes.fieldInput,
                             }}
@@ -246,12 +335,13 @@ const ManageVendorEditContent = (props) => {
                 </div>
 
                 <div className={classes.content}>
-                    <h5 className={classes.titleSmall}>Shipping</h5>
+                    <h5 className={classes.titleSmall}>Shipping Method</h5>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
                             <span className={classes.label}>Shipper Shipping</span>
                         </div>
                         <Autocomplete
+                            disabled={!isVendor}
                             multiple
                             className={classes.autocompleteRoot}
                             name="shipper_shipping"
@@ -269,6 +359,7 @@ const ManageVendorEditContent = (props) => {
                             <span className={classes.label}>Vendor Shipping</span>
                         </div>
                         <Autocomplete
+                            disabled={!isVendor}
                             multiple
                             className={classes.autocompleteRoot}
                             name="vendor_shipping"
