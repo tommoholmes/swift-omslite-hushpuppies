@@ -39,12 +39,14 @@ const CategoryImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Category Upload</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
-                    <div className={classes.formField}>
-                        <span className={classes.label}><a href={urlDownload} className={classes.linkDownload}>Download the Sample CSV</a></span>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
+                    <div className={clsx(classes.formField, 'textRight')}>
+                        <span className={classes.label}>
+                            <a href={urlDownload} className={classes.linkDownload}>Download the Sample CSV</a>
+                        </span>
                     </div>
-                    <div className={clsx(classes.formField, classes.textLeft)}>
+                    <div className={clsx(classes.formField, 'textLeft')}>
                         <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Select Channel</span>
                         </div>
@@ -68,8 +70,8 @@ const CategoryImport = (props) => {
                             error={!!(formik.touched.channelCode && formik.errors.channelCode)}
                             helperText={(formik.touched.channelCode && formik.errors.channelCode) || ''}
                         />
-                    </div>
-                    <div className={classes.formField} style={{ marginTop: 12 }}>
+                        <br />
+                        <br />
                         <DropFile
                             title="Please select the file : "
                             error={(
@@ -84,6 +86,7 @@ const CategoryImport = (props) => {
                         className={classes.btn}
                         onClick={formik.handleSubmit}
                         variant="contained"
+                        disabled={!formik.values.binary}
                     >
                         Submit
                     </Button>

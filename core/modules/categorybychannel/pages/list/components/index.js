@@ -22,7 +22,6 @@ const CategoryByChannelContent = (props) => {
         { field: 'entity_id', name: 'id_to', type: 'to', label: 'ID To', initialValue: '' },
         { field: 'channel_code', name: 'channel_code', type: 'like', label: 'Channel Code', initialValue: '' },
         { field: 'name', name: 'name', type: 'like', label: 'Name', initialValue: '' },
-        { field: 'path', name: 'path', type: 'like', label: 'Path', initialValue: '' },
     ];
 
     const rows = categoryByChannelList.map((categorybychannel) => ({
