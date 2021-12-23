@@ -265,7 +265,7 @@ const OrderQueueEditContent = (props) => {
                                                         Price
                                                     </th>
                                                     <th className={classes.th} style={{ textAlign: 'center' }}>
-                                                        qty
+                                                        Qty
                                                     </th>
                                                     <th className={classes.th} style={{ textAlign: 'center' }}>
                                                         Discount Amount
