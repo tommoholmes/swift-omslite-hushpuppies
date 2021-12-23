@@ -1,12 +1,32 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import useStyles from '@modules/vendorbulktools/pages/default/components/style';
+import Button from '@common_button';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { useRouter } from 'node_modules/next/router';
 
 const ProductMasterUpload = ({ urlDownload }) => {
     const classes = useStyles();
+    const router = useRouter();
 
     return (
         <>
+            <Button
+                className={classes.btnBack}
+                onClick={() => router.push('/vendorportal/bulktools')}
+                variant="contained"
+                style={{ marginRight: 16 }}
+            >
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
+                />
+            </Button>
             <h2 className={classes.titleTop}>Tutorial Upload Product</h2>
             <Paper>
                 <div className={classes.contentWithoutBorder}>

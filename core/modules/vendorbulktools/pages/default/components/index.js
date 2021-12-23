@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import clsx from 'clsx';
 import useStyles from '@modules/vendorbulktools/pages/default/components/style';
-import Head from 'next/head';
 import Autocomplete from '@common_autocomplete';
 import gqlService from '@modules/vendorbulktools/services/graphql';
 
@@ -50,10 +49,7 @@ const VendorBulkToolsContent = (props) => {
 
     return (
         <>
-            <Head>
-                <title>Bulk Tools</title>
-            </Head>
-            <h2 className={classes.titleTop}>Bulk Tools</h2>
+            <h2 className={classes.titleTop}>Product Bulk Tools</h2>
             <Paper className={classes.container}>
                 <span className={clsx(classes.textAttach, classes.label)}>ATTACH FILE</span>
                 <div className={classes.contentWithoutBorder}>

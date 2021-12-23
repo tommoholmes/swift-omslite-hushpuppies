@@ -473,7 +473,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'vendor_bulk_tools',
                     key: 'vendorbulktools',
-                    label: 'Bulk Tools',
+                    label: 'Product Bulk Tools',
                     url: '/vendorportal/bulktools',
                 },
                 {

@@ -33,7 +33,7 @@ export const tutorialOptions = [
         name: 'Grouped Product',
         code: 'product_upload_grouped',
         sample: 'vendor_product_grouped',
-        excel_image_url: '/assets/img/grouped-excel.png',
+        excel_image_url: '/assets/img/group-excel.png',
         component: <BaseTutorialUpload />,
     },
     {
