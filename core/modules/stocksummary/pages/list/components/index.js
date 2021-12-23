@@ -82,7 +82,7 @@ const StockSummaryList = (props) => {
         {
             field: 'channel_code',
             name: 'channel_code',
-            type: 'like',
+            type: 'eq',
             label: 'Channel',
             initialValue: '',
             component: ({ filterValue, setFilterValue }) => {
