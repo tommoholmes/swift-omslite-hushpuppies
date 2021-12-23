@@ -66,7 +66,17 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 18,
     },
     formFieldButton: {
-        marginBottom: 10,
+        margin: '0px 0 10px 0',
+        '& .btnFormDialog': {
+            borderRadius: 20,
+            boxShadow: 'none',
+            border: '1px solid',
+            borderColor: colorPurple,
+            letterSpacing: 0,
+            textTransform: 'capitalize',
+            padding: '5px 25px',
+            marginTop: 15,
+        },
     },
     formFieldButton2: {
         margin: 0,
@@ -321,6 +331,42 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: 10,
         [theme.breakpoints.down('xs')]: {
             fontSize: 14,
+        },
+    },
+    spanLabel: {
+        display: 'inline-block',
+        margin: '0 0 10px 0',
+        position: 'relative',
+    },
+    labelRequired: {
+        '&::after': {
+            content: "'*'",
+            display: 'block',
+            position: 'absolute',
+            top: -9,
+            right: -9,
+            color: colorPurple,
+            fontSize: 20,
+        },
+    },
+    autocompleteRoot: {
+        maxWidth: 200,
+        width: '100%',
+        verticalAlign: 'middle',
+        marginBottom: 10,
+        display: 'inline-flex',
+        '&.popup': {
+            display: 'block',
+            maxWidth: 'unset',
+        },
+        '& .MuiOutlinedInput-root': {
+            borderColor: colorText,
+            border: '1px solid',
+            height: 36,
+            padding: '0 9px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 'calc(100% - 140px)',
         },
     },
 }));
