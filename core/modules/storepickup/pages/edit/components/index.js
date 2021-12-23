@@ -333,7 +333,6 @@ const StorePickupEditContent = (props) => {
                                                 >
                                                     Print Pack List
                                                 </Button>
-                                                <br />
                                                 <Button
                                                     className={classes.btn}
                                                     onClick={formikPacked.handleSubmit}
