@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/managevendor/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import locationGqlService from '@modules/location/services/graphql';
 import Cookies from 'js-cookie';
 
 const ContentWrapper = (props) => {
@@ -13,10 +14,16 @@ const ContentWrapper = (props) => {
         dataCourier,
         dataShipper,
         Content,
+        getCountries,
+        getCountriesRes,
     } = props;
     const router = useRouter();
     const vendor = data.getVendorById;
     const [vendorUpdate] = gqlService.vendorUpdate();
+    const [getCountry, getCountryRes] = locationGqlService.getCountry();
+    const [getCityKecByRegionCode, getCityKecByRegionCodeRes] = locationGqlService.getCityKecByRegionCode();
+    const [firstRender, setFirstRender] = React.useState(true);
+
     const isVendor = JSON.parse(Cookies.get('cdt'))?.customer_company_code !== null;
 
     const handleSubmit = (input) => {
@@ -47,9 +54,9 @@ const ContentWrapper = (props) => {
             company_code: vendor.company_code,
             company_name: vendor.company_name,
             company_street: vendor.company_street,
-            company_country_id: vendor.company_country_id,
-            company_region: vendor.company_region,
-            company_city: vendor.copany_city,
+            company_country_id: getCountriesRes.data?.countries.find((country) => country.id === vendor.company_country_id),
+            company_region: '',
+            company_city: { label: vendor.company_city, value: vendor.company_city },
             no_telephone: vendor.no_telephone,
             is_new_product: vendor.is_new_product,
             company_margin: vendor.company_margin,
@@ -68,14 +75,37 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             const {
-                shipper_shipping, vendor_shipping, company_margin, ...restValues
+                shipper_shipping, vendor_shipping, logo,
+                company_country_id, company_region, company_city, promotion_banner,
+                is_new_product, company_margin, is_product_approval,
+                ...restValues
             } = values;
-            const valuesToSubmit = {
-                ...restValues,
-                shipper_shipping: shipper_shipping?.map((ship) => ship.value),
-                vendor_shipping: vendor_shipping?.map((ship) => ship.value),
-                company_margin: company_margin ? Number(company_margin) : 0,
-            };
+            let valuesToSubmit = {};
+            if (isVendor) {
+                valuesToSubmit = {
+                    ...restValues,
+                    shipper_shipping: shipper_shipping?.map((ship) => ship.value),
+                    vendor_shipping: vendor_shipping?.map((ship) => ship.value),
+                    company_country_id: company_country_id?.id || '',
+                    company_region: company_region?.code || '',
+                    company_city: company_city?.value || '',
+                };
+                if (logo !== vendor.logo) {
+                    valuesToSubmit.logo = logo;
+                }
+                if (promotion_banner && promotion_banner !== vendor.promotion_banner) {
+                    valuesToSubmit.promotion_banner = promotion_banner;
+                }
+                if (vendor.promotion_banner && !promotion_banner) {
+                    valuesToSubmit.promotion_banner_deleted = 'true';
+                }
+            } else {
+                valuesToSubmit = {
+                    is_new_product,
+                    company_margin: company_margin ? Number(company_margin) : 0,
+                    is_product_approval,
+                };
+            }
             handleSubmit(valuesToSubmit);
         },
     });
@@ -84,6 +114,35 @@ const ContentWrapper = (props) => {
         const { baseCode } = files[0];
         formik.setFieldValue(name, baseCode);
     };
+
+    React.useEffect(() => {
+        if (vendor.company_country_id) {
+            getCountry({
+                variables: {
+                    id: vendor.company_country_id,
+                },
+            });
+        }
+    }, []);
+
+    React.useEffect(() => {
+        if (firstRender && getCountryRes.data) {
+            const currentRegion = getCountryRes.data?.country.available_regions.find((val) => val.code === vendor.company_region);
+            formik.setFieldValue('company_region', currentRegion);
+            setFirstRender(false);
+        }
+    }, [getCountryRes.data]);
+
+    React.useEffect(() => {
+        if (vendor.company_region) {
+            getCityKecByRegionCode({
+                variables: {
+                    region_code: vendor.company_region,
+                },
+            });
+        }
+    }, []);
+
     const contentProps = {
         formik,
         isVendor,
@@ -91,6 +150,12 @@ const ContentWrapper = (props) => {
         dataCourier,
         dataShipper,
         handleDropFile,
+        getCountries,
+        getCountriesRes,
+        getCountry,
+        getCountryRes,
+        getCityKecByRegionCode,
+        getCityKecByRegionCodeRes,
     };
 
     return (
@@ -104,6 +169,7 @@ const Core = (props) => {
         acl_code: 'manageVendor',
     });
 
+    const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const { loading: loadingCourier, data: dataCourier } = gqlService.getCourierOption();
     const { loading: shipperLoading, data: dataShipper } = gqlService.getShipperMethodOption();
     const { loading, data } = gqlService.getVendorById({
@@ -114,7 +180,11 @@ const Core = (props) => {
         title: `Manage Vendor ${data && data.getVendorById && data.getVendorById.company_name ? data.getVendorById.company_name : ''}`,
     };
 
-    if (loading || loadingCourier || shipperLoading || aclCheckLoading) {
+    React.useEffect(() => {
+        getCountries();
+    }, []);
+
+    if (loading || loadingCourier || shipperLoading || aclCheckLoading || getCountriesRes.loading) {
         return (
             <Layout pageConfig={pageConfig}>Loading...</Layout>
         );
@@ -134,6 +204,8 @@ const Core = (props) => {
         data,
         dataCourier: dataCourier.getCourierOption,
         dataShipper: dataShipper.getShipperMethodOption,
+        getCountries,
+        getCountriesRes,
     };
 
     return (
