@@ -30,6 +30,24 @@ const useStyles = makeStyles((theme) => ({
     formField: {
         padding: 0,
         paddingBottom: 16,
+        textAlign: 'center',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+            textAlign: 'left ',
+        },
+        '&.textLeft': {
+            textAlign: 'left',
+            width: '60%',
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
+        },
+        '&.textRight': {
+            width: '40%',
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
+        },
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',
@@ -43,8 +61,15 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     content: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         borderBottom: '3px solid #F5F7FB',
         padding: '10px 29px 12px 22px',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     linkDownload: {
         color: colorBlue,
@@ -54,7 +79,9 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     textAttach: {
+        fontWeight: 'bold',
         display: 'block',
+        padding: '10px 29px 12px 22px',
     },
     inputCsv: {
         marginLeft: 5,
