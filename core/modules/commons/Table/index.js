@@ -85,7 +85,8 @@ const CustomTable = (props) => {
         getRows,
         deleteRows,
         deleteLabel = 'Delete',
-        deleteMessage = 'Are you sure you want to delete?',
+        deleteTitle = 'Confirmation',
+        deleteMessage = 'Are you sure want to delete selected items?',
         deleteEnableConfirm = false,
         allowActionZeroSelected = false,
         loading,
@@ -205,6 +206,7 @@ const CustomTable = (props) => {
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
             {
+                title: deleteTitle,
                 label: deleteLabel,
                 message: deleteMessage,
                 confirmDialog: deleteEnableConfirm,
@@ -251,7 +253,7 @@ const CustomTable = (props) => {
                                     setOpenConfirmDialog(false);
                                     window.backdropLoader(false);
                                 }}
-                                title={activeAction && activeAction.label}
+                                title={activeAction && activeAction.title}
                                 message={activeAction && activeAction.message}
                                 records={checkedRows.length}
                             />
