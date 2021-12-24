@@ -84,7 +84,7 @@ const ManagePromotionEditContent = (props) => {
                             onChange={formik.handleChange}
                             error={!!(formik.touched.fromDate && formik.errors.fromDate)}
                             helperText={(formik.touched.fromDate && formik.errors.fromDate) || ''}
-                            className={classes.fieldRoot}
+                            className={clsx(classes.fieldRoot, 'field-date')}
                             InputLabelProps={{
                                 shrink: true,
                             }}
@@ -105,7 +105,7 @@ const ManagePromotionEditContent = (props) => {
                             onChange={formik.handleChange}
                             error={!!(formik.touched.toDate && formik.errors.toDate)}
                             helperText={(formik.touched.toDate && formik.errors.toDate) || ''}
-                            className={classes.fieldRoot}
+                            className={clsx(classes.fieldRoot, 'field-date')}
                             InputLabelProps={{
                                 shrink: true,
                             }}
