@@ -230,6 +230,7 @@ const HomeDeliveryEditContent = (props) => {
                                         onClick={formikCantFullfill.handleSubmit}
                                         variant="contained"
                                         buttonType="outlined-rounded"
+                                        style={{ marginRight: 10 }}
                                     >
                                         <CloseIcon style={{ marginRight: 10 }} />
                                         Cannot Fullfill
@@ -543,9 +544,45 @@ const HomeDeliveryEditContent = (props) => {
                                         className={classes.btn}
                                         onClick={formikCourier.handleSubmit}
                                         variant="contained"
+                                        style={{ marginRight: 10 }}
                                     >
                                         Book Courier
                                     </Button>
+                                    <FormDialog
+                                        labelButton="Canceled"
+                                        titleDialog="Cancel Reason"
+                                        message={(
+                                            <>
+                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
+                                                <Autocomplete
+                                                    className={clsx(classes.autocompleteRoot, 'popup')}
+                                                    mode="lazy"
+                                                    value={formikCanceled.values.reason}
+                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
+                                                    loading={getShipmentCancelReasonRes.loading}
+                                                    options={
+                                                        getShipmentCancelReasonRes
+                                                                    && getShipmentCancelReasonRes.data
+                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                    }
+                                                    getOptions={getShipmentCancelReason}
+                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
+                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
+                                                    primaryKey="value"
+                                                    labelKey="label"
+                                                />
+                                                <div className={classes.formFieldButton}>
+                                                    <Button
+                                                        className={classes.btn}
+                                                        onClick={formikCanceled.handleSubmit}
+                                                        variant="contained"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    />
                                 </div>
                                 <div>
                                     <span className={classes.spanText}>Or enter shipping and tracking information</span>
@@ -601,43 +638,6 @@ const HomeDeliveryEditContent = (props) => {
                                             Order Shipped
                                         </Button>
                                     </div>
-                                </div>
-                                <div className={classes.formFieldButton}>
-                                    <FormDialog
-                                        labelButton="Canceled"
-                                        titleDialog="Cancel Reason"
-                                        message={(
-                                            <>
-                                                <span className={clsx(classes.spanLabel, classes.labelRequired)}>Cancel Reason</span>
-                                                <Autocomplete
-                                                    className={clsx(classes.autocompleteRoot, 'popup')}
-                                                    mode="lazy"
-                                                    value={formikCanceled.values.reason}
-                                                    onChange={(e) => formikCanceled.setFieldValue('reason', e)}
-                                                    loading={getShipmentCancelReasonRes.loading}
-                                                    options={
-                                                        getShipmentCancelReasonRes
-                                                                    && getShipmentCancelReasonRes.data
-                                                                    && getShipmentCancelReasonRes.data.getShipmentCancelReason
-                                                    }
-                                                    getOptions={getShipmentCancelReason}
-                                                    error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
-                                                    helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
-                                                    primaryKey="value"
-                                                    labelKey="label"
-                                                />
-                                                <div className={classes.formFieldButton}>
-                                                    <Button
-                                                        className={classes.btn}
-                                                        onClick={formikCanceled.handleSubmit}
-                                                        variant="contained"
-                                                    >
-                                                        Submit
-                                                    </Button>
-                                                </div>
-                                            </>
-                                        )}
-                                    />
                                 </div>
                             </>
                         )}
