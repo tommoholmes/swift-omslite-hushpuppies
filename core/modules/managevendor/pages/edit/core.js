@@ -97,7 +97,7 @@ const ContentWrapper = (props) => {
                     valuesToSubmit.promotion_banner = promotion_banner;
                 }
                 if (vendor.promotion_banner && !promotion_banner) {
-                    valuesToSubmit.promotion_banner_deleted = 'true';
+                    valuesToSubmit.promotion_banner_deleted = true;
                 }
             } else {
                 valuesToSubmit = {
