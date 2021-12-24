@@ -216,6 +216,7 @@ const ContentWrapper = (props) => {
         orderNumber: shipmentmarketplace.marketplace_order_number,
         statusLabel: shipmentmarketplace.status.label,
         statusValue: shipmentmarketplace.status.value,
+        marketplaceOrderStatus: shipmentmarketplace.marketplace_order_status,
         allocation: shipmentmarketplace.allocation_status,
         date: shipmentmarketplace.channel_order_date,
         location: shipmentmarketplace.location.loc_name,
