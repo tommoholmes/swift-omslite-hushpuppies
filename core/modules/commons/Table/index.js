@@ -239,12 +239,21 @@ const CustomTable = (props) => {
                                         setOpenConfirmDialog(false);
                                         await activeAction.onClick(checkedRows);
                                         fetchRows();
+                                        if (showMessageActions) {
+                                            window.toastMessage({
+                                                open: true,
+                                                text: 'Success!',
+                                                variant: 'success',
+                                            });
+                                        }
                                     }
                                     setCheckedRows([]);
                                     setOpenConfirmDialog(false);
                                     window.backdropLoader(false);
                                 }}
+                                title={activeAction && activeAction.label}
                                 message={activeAction && activeAction.message}
+                                records={checkedRows.length}
                             />
                             <button
                                 id="clickConfirm"
