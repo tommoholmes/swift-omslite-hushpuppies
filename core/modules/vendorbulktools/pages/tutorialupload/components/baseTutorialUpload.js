@@ -1,12 +1,33 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
+
+import Button from '@common_button';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/vendorbulktools/pages/default/components/style';
+import { useRouter } from 'node_modules/next/router';
 
 const BaseTutorialUpload = ({ urlDownload, tutorialName, excelImageUrl }) => {
     const classes = useStyles();
+    const router = useRouter();
 
     return (
         <>
+            <Button
+                className={classes.btnBack}
+                onClick={() => router.push('/vendorportal/bulktools')}
+                variant="contained"
+                style={{ marginRight: 16 }}
+            >
+                <ChevronLeftIcon
+                    style={{
+                        fontSize: 30,
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
+                />
+            </Button>
             <h2 className={classes.titleTop}>Tutorial Upload Product</h2>
             <Paper>
                 <div className={classes.contentWithoutBorder}>
@@ -19,8 +40,7 @@ const BaseTutorialUpload = ({ urlDownload, tutorialName, excelImageUrl }) => {
                         <li>
                             Siapkan berkas csv untuk mengunggah data &quot;
                             {tutorialName}
-                            &quot;, unduh contoh berkas csv yang berisi persyaratan data
-                            yang dibutuhkan
+                            &quot;, unduh contoh berkas csv yang berisi persyaratan data yang dibutuhkan
                             {' '}
                             <a href={urlDownload} className="link-button">
                                 Klik Disini

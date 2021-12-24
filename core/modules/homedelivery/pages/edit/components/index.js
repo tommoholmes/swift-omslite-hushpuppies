@@ -98,12 +98,6 @@ const HomeDeliveryEditContent = (props) => {
                         </h5>
                         <span className="spanHeader">{homeDelivery.location}</span>
                     </div>
-                    <div className="divHeader">
-                        <h5 className="titleHeader">
-                            Shipping Method
-                        </h5>
-                        <span className="spanHeader">{homeDelivery.shipping || '-'}</span>
-                    </div>
                 </div>
                 <div className={classes.content}>
                     {/* <h5 className={classes.title}>
@@ -847,6 +841,10 @@ const HomeDeliveryEditContent = (props) => {
                             <span className={classes.orderLabel}>
                                 {`${homeDelivery.shipping_address.region}, ${homeDelivery.shipping_address.postcode}, ${homeDelivery.shipping_address.country_name}`}
                             </span>
+                        </div>
+                        <div className="grid-child" style={{ gridColumn: 3 }}>
+                            <h5 className={classes.titleSmall}>Shipping Method</h5>
+                            <span className={classes.orderLabel}>{homeDelivery.shipping || '-'}</span>
                         </div>
                     </div>
                     <div>

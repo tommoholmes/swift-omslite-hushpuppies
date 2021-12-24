@@ -22,7 +22,7 @@ const HeaderContent = () => {
     const router = useRouter();
     return (
         <>
-            {getActivityRes.data && getActivityRes.data.getActivity && (
+            {getActivityRes.data && getActivityRes.data.getActivity && getActivityRes.data.getActivity?.activity_id && (
                 <p style={{ textAlign: 'right', fontSize: 'semibold' }}>
                     Last Sync To MP by
                     {' '}

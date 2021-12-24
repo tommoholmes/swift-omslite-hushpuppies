@@ -30,6 +30,13 @@ const useStyles = makeStyles((theme) => ({
     formField: {
         padding: 0,
         paddingBottom: 16,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+            alignItems: 'start',
+        },
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',
@@ -38,10 +45,10 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 20,
     },
     divLabel: {
-        width: 300,
-        display: 'inline-block',
+        width: '15%',
         [theme.breakpoints.down('xs')]: {
-            width: 140,
+            width: '100%',
+            margin: '10px 0',
         },
     },
     label: {
@@ -65,10 +72,13 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px 29px 12px 22px',
     },
     fieldRoot: {
-        width: 'calc(100% - 300px)',
+        width: '35%',
         verticalAlign: 'middle',
+        [theme.breakpoints.down('md')]: {
+            width: '60%',
+        },
         [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
+            width: '100%',
         },
     },
     fieldInput: {
@@ -102,6 +112,30 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
         marginBottom: 18,
         marginTop: 18,
+    },
+    progressContainer: {
+        padding: '0px 29px 0px 22px',
+    },
+    leftColumn: {
+        backgroundColor: colorPurple,
+        color: 'white !important',
+        fontWeight: 'bold !important',
+        maxWidth: 200,
+        width: 200,
+    },
+    rightColumn: {
+        '&.capitalize': { textTransform: 'capitalize !important' },
+    },
+    status: {
+        '&.error': {
+            color: 'red !important',
+        },
+        '&.success': {
+            color: 'green !important',
+        },
+        fontWeight: 'bold !important',
+        marginBottom: 20,
+        fontSize: 18,
     },
 }));
 

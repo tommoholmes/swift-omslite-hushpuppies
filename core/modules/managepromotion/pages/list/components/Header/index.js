@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Promotion List</h2>
+            <h2 className={classes.title}>Manage Promotion</h2>
             <Button
                 className={classes.buttonAdd}
                 onClick={() => router.push('/vendorportal/managepromotion/create')}

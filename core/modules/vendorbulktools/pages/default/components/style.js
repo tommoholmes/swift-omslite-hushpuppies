@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     },
     btnBack: {
         display: 'inline-block',
-        borderRadius: '10px 0px 0px 10px',
-        minWidth: 'unset',
+        borderRadius: '10px 0px 0px 10px !important',
+        minWidth: 'unset !important',
         height: 36,
-        width: 42,
+        width: '36px !important',
         marginBottom: 6,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 18,
