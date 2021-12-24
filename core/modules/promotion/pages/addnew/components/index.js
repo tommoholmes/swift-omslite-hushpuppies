@@ -63,7 +63,7 @@ const ProductListEditContent = (props) => {
             <h2 className={classes.titleTop}>Add New Promotion</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    <div>
+                    <div className={classes.gridAttribute}>
                         <div
                             className={classes.divLabel}
                         >
@@ -85,7 +85,7 @@ const ProductListEditContent = (props) => {
                             fullWidth
                         />
                     </div>
-                    <div>
+                    <div className={classes.gridAttribute}>
                         <div
                             className={classes.divLabel}
                         >
@@ -151,16 +151,16 @@ const ProductListEditContent = (props) => {
                             onChange={formik.handleChange}
                             error={!!(formik.touched.from_date && formik.errors.from_date)}
                             helperText={(formik.touched.from_date && formik.errors.from_date) || ''}
-                            className={classes.textField}
+                            className={classes.dateField}
                             InputLabelProps={{
                                 shrink: true,
                             }}
                             InputProps={{
                                 className: classes.fieldInputFilter,
                             }}
-                            fullWidth
                         />
                     </div>
+                    <div />
                     <div className={classes.gridAttribute}>
                         <div
                             className={classes.divLabel}
@@ -177,14 +177,14 @@ const ProductListEditContent = (props) => {
                             onChange={formik.handleChange}
                             error={!!(formik.touched.to_date && formik.errors.to_date)}
                             helperText={(formik.touched.to_date && formik.errors.to_date) || ''}
-                            className={classes.textField}
+                            className={classes.dateField}
+                            dateField
                             InputLabelProps={{
                                 shrink: true,
                             }}
                             InputProps={{
                                 className: classes.fieldInputFilter,
                             }}
-                            fullWidth
                         />
                     </div>
                     <div className={classes.gridAttribute}>
@@ -329,10 +329,7 @@ const ProductListEditContent = (props) => {
                                 <Checkbox
                                     name="all_product"
                                     checked={formik.values.all_product}
-                                    onChange={(ev) => {
-                                        formik.handleChange(ev);
-                                        formik.setFieldValue('all_product_qty', 0);
-                                    }}
+                                    onChange={formik.handleChange}
                                 />
                             )}
                             className={classes.controlLabel}
@@ -357,6 +354,8 @@ const ProductListEditContent = (props) => {
                                         className: classes.fieldInputFilter,
                                     }}
                                     fullWidth
+                                    error={!!(formik.touched.all_product_qty && formik.errors.all_product_qty)}
+                                    helperText={(formik.touched.all_product_qty && formik.errors.all_product_qty) || ''}
                                 />
                             </div>
                         )
@@ -380,6 +379,7 @@ const ProductListEditContent = (props) => {
                             label="Multiple Total Price"
                         />
                     </div>
+                    <br />
                     {formik.values.multiple_price
                         ? null : (
                             <div className={classes.gridAttribute}>
@@ -420,7 +420,7 @@ const ProductListEditContent = (props) => {
                                         color="secondary"
                                         onClick={() => {
                                             setPromotionItems(promotionItems + 1);
-                                            formik.values.promotion_items.push({ sku: '', qty: '' });
+                                            formik.setFieldValue('promotion_items', [...formik.values.promotion_items, { sku: '', qty: '' }]);
                                         }}
                                     >
                                         <AddIcon />
@@ -430,9 +430,11 @@ const ProductListEditContent = (props) => {
                                         variant="contained"
                                         color="secondary"
                                         onClick={() => {
-                                            if (promotionItems > 0) {
+                                            if (promotionItems > 1) {
                                                 setPromotionItems(promotionItems - 1);
-                                                formik.values.promotion_items.pop();
+                                                const temp = [...formik.values.promotion_items];
+                                                temp.pop();
+                                                formik.setFieldValue('promotion_items', temp);
                                             }
                                         }}
                                     >
@@ -512,7 +514,10 @@ const ProductListEditContent = (props) => {
                                 className={classes.buttonCount}
                                 variant="contained"
                                 color="secondary"
-                                onClick={() => setPromotionFree(promotionFree + 1)}
+                                onClick={() => {
+                                    setPromotionFree(promotionFree + 1);
+                                    formik.setFieldValue('promotion_free_items', [...formik.values.promotion_free_items, { sku: '', qty: '' }]);
+                                }}
                             >
                                 <AddIcon />
                             </Button>
@@ -520,7 +525,14 @@ const ProductListEditContent = (props) => {
                                 className={classes.buttonCount}
                                 variant="contained"
                                 color="secondary"
-                                onClick={() => (promotionFree > 0 ? setPromotionFree(promotionFree - 1) : null)}
+                                onClick={() => {
+                                    if (promotionFree > 1) {
+                                        setPromotionFree(promotionFree - 1);
+                                        const temp = [...formik.values.promotion_free_items];
+                                        temp.pop();
+                                        formik.setFieldValue('promotion_free_items', temp);
+                                    }
+                                }}
                             >
                                 <RemoveIcon />
                             </Button>
@@ -567,13 +579,13 @@ const ProductListEditContent = (props) => {
                                                 className: classes.fieldInputFilter,
                                             }}
                                             error={formik.touched.promotion_free_items
-                                            && formik.touched.promotion_free_items[idx]?.sku
-                                            && formik.values.promotion_free_items[idx]?.sku
-                                            && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)}
+                                                && formik.touched.promotion_free_items[idx]?.sku
+                                                && formik.values.promotion_free_items[idx]?.sku
+                                                && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)}
                                             helperText={formik.touched.promotion_free_items
-                                            && formik.touched.promotion_free_items[idx]?.sku
-                                            && formik.values.promotion_free_items[idx]?.sku
-                                            && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)
+                                                && formik.touched.promotion_free_items[idx]?.sku
+                                                && formik.values.promotion_free_items[idx]?.sku
+                                                && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)
                                                 ? 'SKU Product is not found' : ''}
                                         />
                                         <TextField
@@ -672,13 +684,13 @@ const ProductListEditContent = (props) => {
                                                 className: classes.fieldInputFilter,
                                             }}
                                             error={formik.touched.promotion_free_items
-                                            && formik.touched.promotion_free_items[idx]?.sku
-                                            && formik.values.promotion_free_items[idx]?.sku
-                                            && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)}
+                                                && formik.touched.promotion_free_items[idx]?.sku
+                                                && formik.values.promotion_free_items[idx]?.sku
+                                                && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)}
                                             helperText={formik.touched.promotion_free_items
-                                            && formik.touched.promotion_free_items[idx]?.sku
-                                            && formik.values.promotion_free_items[idx]?.sku
-                                            && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)
+                                                && formik.touched.promotion_free_items[idx]?.sku
+                                                && formik.values.promotion_free_items[idx]?.sku
+                                                && !skuCheck.includes(formik.values.promotion_free_items[idx]?.sku)
                                                 ? 'SKU Product is not found' : ''}
                                         />
                                         <TextField
@@ -707,7 +719,8 @@ const ProductListEditContent = (props) => {
                             </div>
                         )}
                     <Button
-                        className={classes.btn}
+                        disabled={loadingChannel || loadingLocation}
+                        className={classes.btnSubmit}
                         onClick={formik.handleSubmit}
                         variant="contained"
                     >

@@ -37,7 +37,7 @@ const ProductListImport = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Bulk Import</h2>
+            <h2 className={classes.titleTop}>Promotion Import</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     {errorHtml
@@ -60,9 +60,9 @@ const ProductListImport = (props) => {
                                 getBase64={handleDropFile}
                             />
                         </div>
-                        {/* <div className={classes.formField} style={{ textAlign: 'right' }}>
+                        <div className={classes.formField} style={{ textAlign: 'right' }}>
                             <span className={classes.label}><a href={urlDownload} className={classes.linkDownload}>Download the Sample CSV</a></span>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
                 <div className={classes.formFieldButton}>

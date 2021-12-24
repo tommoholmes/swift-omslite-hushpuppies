@@ -146,19 +146,6 @@ const Layout = (props) => {
             ],
         },
         {
-            aclCode: 'header_marketing',
-            key: 'marketing',
-            label: 'Marketing',
-            children: [
-                {
-                    aclCode: 'oms_lite_promotion',
-                    key: 'promotion',
-                    label: 'Promotion',
-                    url: '/marketing/promotion',
-                },
-            ],
-        },
-        {
             aclCode: 'header_pick_pack',
             key: 'pickpack',
             label: 'Pick and Pack',
@@ -395,6 +382,19 @@ const Layout = (props) => {
                     key: 'prioritylocation',
                     label: 'Priority Location',
                     url: '/oms/prioritylocation',
+                },
+            ],
+        },
+        {
+            aclCode: 'header_marketing',
+            key: 'marketing',
+            label: 'Marketing',
+            children: [
+                {
+                    aclCode: 'promotion',
+                    key: 'promotion',
+                    label: 'Promotion',
+                    url: '/marketing/promotion',
                 },
             ],
         },

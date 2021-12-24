@@ -33,10 +33,18 @@ const Core = (props) => {
     });
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'oms_lite_promotion',
+        acl_code: 'promotion',
     });
 
-    if (aclCheckLoading) {
+    const { loading: aclCheckCreateLoading, data: aclCheckCreateData } = aclService.isAccessAllowed({
+        acl_code: 'promotion_create',
+    });
+
+    const { loading: aclCheckEditLoading, data: aclCheckEditData } = aclService.isAccessAllowed({
+        acl_code: 'promotion_modify',
+    });
+
+    if (aclCheckLoading || aclCheckCreateLoading || aclCheckEditLoading) {
         return <Layout>Loading...</Layout>;
     }
 
@@ -51,6 +59,8 @@ const Core = (props) => {
         updateStatusPromotion,
         massDeletePromotion,
         exportPromotion,
+        canCreate: aclCheckCreateData?.isAccessAllowed,
+        canEdit: aclCheckEditData?.isAccessAllowed,
     };
 
     return (

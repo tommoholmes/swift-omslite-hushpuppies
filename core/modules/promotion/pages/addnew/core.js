@@ -58,7 +58,7 @@ const ContentWrapper = (props) => {
             } = data;
             return {
                 ...restData,
-                all_product: !product_lines.length,
+                all_product: !!(!product_lines.length || data.all_product_qty),
                 from_date: data.from_date?.replace(' ', 'T'),
                 to_date: data.to_date?.replace(' ', 'T'),
                 company: locationSelected?.length && locationSelected[0]?.company_id,
@@ -69,7 +69,6 @@ const ContentWrapper = (props) => {
             };
         }
         return {
-            all_product_qty: 0,
             max_promotion: 0,
             method: 0,
             status: 0,
@@ -84,7 +83,10 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: initialValues(),
         validationSchema: Yup.object().shape({
-            all_product: Yup.boolean().required('Required!'),
+            all_product_qty: Yup.number().integer().when('all_product', {
+                is: true,
+                then: Yup.number().integer().min(1).required('Value must be more than 0!'),
+            }),
             from_date: Yup.string().required('Required!'),
             to_date: Yup.string().required('Required!'),
             name: Yup.string().required('Required!'),
@@ -109,6 +111,7 @@ const ContentWrapper = (props) => {
         onSubmit: (values) => {
             const {
                 company, oms_channel_id, promotion_free_items, promotion_items, single_total_price,
+                all_product_qty,
                 ...restValues
             } = values;
             const freeItems = promotion_free_items.map(({
@@ -142,7 +145,6 @@ const ContentWrapper = (props) => {
             );
             const valuesToSubmit = {
                 ...restValues,
-                all_product_qty: Number(restValues.all_product_qty),
                 max_promotion: Number(restValues.max_promotion),
                 method: Number(restValues.method),
                 oms_channel_id: oms_channel_id.map((ch) => Number(ch)),
@@ -155,8 +157,11 @@ const ContentWrapper = (props) => {
             if (freeItems.length) {
                 valuesToSubmit.promotion_free_items = freeItems;
             }
-            if (items.length) {
+            if (items.length && !restValues.all_product) {
                 valuesToSubmit.promotion_items = items;
+            }
+            if (restValues.all_product) {
+                valuesToSubmit.all_product_qty = all_product_qty ? Number(all_product_qty) : 0;
             }
             handleSubmit(valuesToSubmit);
         },
@@ -232,7 +237,7 @@ const Core = (props) => {
     const id = router && router.query && Number(router.query.id);
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'oms_lite_promotion',
+        acl_code: 'promotion_create',
     });
 
     const { loading, data } = gqlService.getPromotionById({

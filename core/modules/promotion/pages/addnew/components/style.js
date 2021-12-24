@@ -26,15 +26,21 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
-    btnBack: {
+    titleTop: {
+        fontSize: 24,
+        color: colorPurple,
+        fontFamily: font,
         display: 'inline-block',
-        borderRadius: '10px 0px 0px 10px',
-        minWidth: 'unset',
-        height: 36,
-        width: 42,
-        marginBottom: 6,
+    },
+    btnBack: {
+        display: 'inline-block !important',
+        borderRadius: '10px 0px 0px 10px  !important',
+        minWidth: 'unset  !important',
+        height: '36px !important',
+        width: '42px !important',
+        marginBottom: '6px !important',
         [theme.breakpoints.down('xs')]: {
-            marginLeft: 18,
+            marginLeft: '18px !important',
         },
     },
     content: {
@@ -50,12 +56,6 @@ const useStyles = makeStyles((theme) => ({
             height: 1,
         },
     },
-    titleTop: {
-        fontSize: 24,
-        color: colorPurple,
-        fontFamily: font,
-        display: 'inline-block',
-    },
     title: {
         fontFamily: font,
         color: colorText,
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     formFieldButton: {
         padding: '16px 0 30px 0px',
     },
-    btn: {
+    btnSubmit: {
         borderRadius: 20,
     },
     divLabel: {
@@ -136,12 +136,13 @@ const useStyles = makeStyles((theme) => ({
 
     //
     gridAttribute: {
-        // display: 'grid',
-        // gridTemplateColumns: '30% 60% 10%',
-        // [theme.breakpoints.down('xs')]: {
-        //     gridTemplateColumns: '40% 60%',
-        // },
+        display: 'grid',
+        gridTemplateColumns: '20% 70% 10%',
+        [theme.breakpoints.down('sm')]: {
+            gridTemplateColumns: '40% 60%',
+        },
         marginBottom: 15,
+        textAlign: 'right',
     },
     asterisk: {
         color: colorPurple,
@@ -167,6 +168,14 @@ const useStyles = makeStyles((theme) => ({
     textField: {
         '& .MuiOutlinedInput-root': {
             borderRadius: 20,
+        },
+    },
+    dateField: {
+        '& .MuiOutlinedInput-root': {
+            borderRadius: 20,
+            [theme.breakpoints.up('sm')]: {
+                width: 'fit-content',
+            },
         },
     },
     controlLabel: {

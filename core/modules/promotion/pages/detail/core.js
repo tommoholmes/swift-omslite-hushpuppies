@@ -9,7 +9,7 @@ const Core = (props) => {
     const router = useRouter();
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'oms_lite_promotion',
+        acl_code: 'promotion_modify',
     });
     const { loading, data } = gqlService.getPromotionById({
         variables: { id: router && router.query && Number(router.query.id) },

@@ -28,6 +28,7 @@ export const getPromotionList = gql`
                 to_date
                 type
                 updated_at
+                promotion_applied
             }
             page_info {
                 current_page
@@ -41,10 +42,10 @@ export const getPromotionList = gql`
 
 export const updateStatusPromotion = gql`
     mutation updateStatusPromotion(
-        $data: [promotionId!]!
+        $input: PromotionUpdateStatus!
     ){
         updateStatusPromotion(
-            data: $data
+            input: $input
         )
     }
 `;

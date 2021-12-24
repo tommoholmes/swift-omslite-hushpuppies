@@ -12,15 +12,19 @@ const Core = (props) => {
     const {
         Content,
     } = props;
+    const pageConfig = {
+        title: 'Promotion Import',
+    };
+
     const [importPromotion] = gqlService.importPromotion();
-    // const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'promotion' });
+    const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'promotion_sample' });
     const [errorHtml, setErrorHtml] = React.useState('');
 
-    // useEffect(() => {
-    //     downloadList();
-    // }, []);
+    useEffect(() => {
+        downloadList();
+    }, []);
 
-    // const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
+    const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
 
     const handleSubmit = ({
         binary,
@@ -83,11 +87,11 @@ const Core = (props) => {
     };
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'oms_lite_promotion',
+        acl_code: 'promotion_create',
     });
 
     if (aclCheckLoading) {
-        return <Layout>Loading...</Layout>;
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -96,13 +100,13 @@ const Core = (props) => {
 
     const contentProps = {
         formik,
-        // urlDownload,
+        urlDownload,
         handleDropFile,
         errorHtml,
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

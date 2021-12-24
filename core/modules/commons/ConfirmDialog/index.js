@@ -13,6 +13,7 @@ const ConfirmationDialog = (props) => {
         onCancel,
         title,
         message,
+        records,
     } = props;
     return (
         <Dialog
@@ -25,6 +26,12 @@ const ConfirmationDialog = (props) => {
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {message}
+                    {records ? (
+                        <>
+                            {' '}
+                            {`(${records} record)`}
+                        </>
+                    ) : null}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
