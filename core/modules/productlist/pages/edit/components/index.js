@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-unused-vars */
 import React from 'react';
@@ -20,6 +22,12 @@ import Select from '@common_select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DropFile from '@common_dropfile';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const IOSSwitch = withStyles((theme) => ({
     root: {
@@ -74,7 +82,7 @@ const IOSSwitch = withStyles((theme) => ({
 
 const AttributeComponents = ({
     formik, handleDropFile, attribute_code, attribute_options, images,
-    is_readonly, frontend_input,
+    is_readonly, frontend_input, setImgConfig,
 }) => {
     const classes = useStyles();
     switch (frontend_input) {
@@ -179,21 +187,55 @@ const AttributeComponents = ({
                 label={formik.values[attribute_code] ? 'Yes' : 'No'}
             />
         );
-    case 'media_image':
+    case 'image':
         return (
             <div>
                 <DropFile
                     formatFile=".jpg, .jpeg, .png, .gif"
                     getBase64={handleDropFile}
+                    showFiles={false}
                 />
-                {images && images.length
+                {formik && formik.values && formik.values.input_image?.length
                     ? (
-                        <>
-                            <br />
-                            {images.map((image) => (
-                                <img className={classes.img} key={image} src={image} alt="media_img" />
+                        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                            {formik.values.input_image.map((image, idx) => (
+                                <div className={classes.imgGroup} style={{ display: image.is_deleted ? 'none' : 'unset' }}>
+                                    <div className={classes.imgContainer}>
+                                        <img
+                                            key={image.position}
+                                            className={classes.img}
+                                            src={image.id ? image.url : image.binary}
+                                            alt="media_img"
+                                            onClick={() => setImgConfig({ open: true, data: { ...image }, index: idx })}
+                                        />
+                                        <img
+                                            src="/assets/img/trash.svg"
+                                            alt="delete"
+                                            className={classes.trashIcon}
+                                            onClick={() => {
+                                                if (image.id) {
+                                                    formik.setFieldValue(`input_image[${idx}].is_deleted`, true);
+                                                } else {
+                                                    const temp = formik.values.input_image;
+                                                    temp.splice(idx, 1);
+                                                    formik.setFieldValue('input_image', temp);
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={classes.typeContainer}>
+                                        {image.types?.map((type) => (
+                                            <div className={classes.labelType}>{type?.split('_').join(' ')}</div>
+                                        ))}
+                                    </div>
+                                </div>
                             ))}
-                        </>
+                            {/* {formik.values.input_image?.map((image, i) => (
+                                <div className={classes.imgContainer}>
+                                    <img key={i} className={classes.img} src={image} alt="media_img" />
+                                </div>
+                            ))} */}
+                        </div>
                     )
                     : null}
             </div>
@@ -211,11 +253,46 @@ const ProductListEditContent = (props) => {
     const router = useRouter();
 
     const [expanded, setExpanded] = React.useState('');
+    const [imgConfig, setImgConfig] = React.useState({ open: false, data: {}, index: null });
     const [selected, setSelected] = React.useState(productDetail.vendor_price?.map((vend) => (vend.price[0].location.loc_id)));
     const handleChangeAccordion = (e) => (event, isExpanded) => {
         setExpanded(isExpanded ? e : false);
     };
     const groupDetails = productDetail.groups.find((obj) => obj.attribute_group_code === 'product-details');
+    const typeOptions = [
+        { label: 'Base', value: 'image' },
+        { label: 'Small', value: 'small_image' },
+        { label: 'Swatch', value: 'swatch_image' },
+        { label: 'Thumbnail', value: 'thumbnail' },
+    ];
+
+    const handleChangeMultiple = (event) => {
+        const { options } = event.target;
+        const value = [];
+        for (let i = 0, l = options.length; i < l; i += 1) {
+            if (options[i].selected) {
+                value.push(options[i].value);
+            }
+        }
+        setImgConfig({ ...imgConfig, data: { ...imgConfig.data, types: value } });
+    };
+
+    const handleSaveImage = () => {
+        let temp = [...formik.values.input_image];
+        temp = temp.map((input, idx) => {
+            if (idx === imgConfig.index) {
+                return imgConfig.data;
+            }
+            return {
+                ...input,
+                types: input.types.filter((type) => (
+                    !imgConfig.data.types.includes(type)
+                )),
+            };
+        });
+        formik.setFieldValue('input_image', temp);
+        setImgConfig({ open: false, data: {}, index: null });
+    };
 
     return (
         <>
@@ -249,11 +326,11 @@ const ProductListEditContent = (props) => {
                 </div>
             </div>
             {Object.keys(formik.errors).length !== 0
-                        && (
-                            <div className={classes.errorHtml}>
-                                <div style={{ paddingLeft: 5 }}>Please make sure all required field is filled!</div>
-                            </div>
-                        )}
+                && (
+                    <div className={classes.errorHtml}>
+                        <div style={{ paddingLeft: 5 }}>Please make sure all required field is filled!</div>
+                    </div>
+                )}
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.gridAttribute}>
@@ -304,17 +381,20 @@ const ProductListEditContent = (props) => {
                                 </AccordionSummary>
                                 <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
                                     {attGroup.attributes.map((att, attIdx) => (
-                                        <div className={classes.gridAttribute} key={attIdx}>
-                                            <div
-                                                className={classes.divLabel}
-                                            >
-                                                <span className={clsx(classes.label, att.is_required && classes.labelRequired)}>
-                                                    {att.frontend_label}
-
-                                                </span>
-                                            </div>
-                                            <AttributeComponents {...props} {...att} />
-                                        </div>
+                                        attGroup.attribute_group_code === 'image-management'
+                                            ? <AttributeComponents {...props} {...att} setImgConfig={setImgConfig} />
+                                            : (
+                                                <div className={classes.gridAttribute} key={attIdx}>
+                                                    <div
+                                                        className={classes.divLabel}
+                                                    >
+                                                        <span className={clsx(classes.label, att.is_required && classes.labelRequired)}>
+                                                            {att.frontend_label}
+                                                        </span>
+                                                    </div>
+                                                    <AttributeComponents {...props} {...att} />
+                                                </div>
+                                            )
                                     ))}
                                 </AccordionDetails>
                             </Accordion>
@@ -425,6 +505,50 @@ const ProductListEditContent = (props) => {
                     ) : null}
 
             </Paper>
+            <Dialog
+                open={imgConfig.open}
+                // onClose={onCancel}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Product Image Configuration</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <img
+                            className={classes.img}
+                            src={imgConfig.data?.id ? imgConfig.data?.url : imgConfig.data?.binary}
+                            alt="configImg"
+                        />
+                    </DialogContentText>
+                </DialogContent>
+                <DialogContent>
+                    <Select
+                        multiple
+                        value={imgConfig.data?.types}
+                        onChange={handleChangeMultiple}
+                        dataOptions={typeOptions}
+                        selectClasses={classes.fieldInputMultiple}
+                        fullWidth
+                    />
+                    <Select
+                        value={imgConfig.data?.position}
+                        dataOptions={Array.from(Array(formik.values.input_image.length + 1).keys()).map((e) => (
+                            { value: e, label: e }
+                        ))}
+                        onChange={(e) => setImgConfig({ ...imgConfig, data: { ...imgConfig.data, position: Number(e.target.value) } })}
+                        fullWidth
+                        enableEmpty={false}
+                    />
+                    <div style={{ margin: '10px 0' }}>
+                        <Button onClick={handleSaveImage} color="primary" style={{ marginRight: 10 }}>
+                            OK
+                        </Button>
+                        <Button onClick={() => setImgConfig({ open: false, data: {}, index: null })} buttonType="outlined" color="primary" autoFocus>
+                            Cancel
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };

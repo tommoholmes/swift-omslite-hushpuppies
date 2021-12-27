@@ -81,7 +81,7 @@ export const updateProduct = gql`
     mutation updateProduct(
         $id: Int!,
         $input: [ProductInput],
-        $input_image: [String],
+        $input_image: [ProductImageInput],
     ){
         updateProduct(
             id: $id,
@@ -158,7 +158,13 @@ query getProductAttributes($id: Int!, $attribute_set_id: Int){
             value
             label
           }
-          images
+          images{
+            file
+            id
+            position
+            types
+            url
+          }
         }
       }
       sourcing{

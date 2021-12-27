@@ -178,10 +178,51 @@ const useStyles = makeStyles((theme) => ({
     accordionDetailRoot: {
         display: 'block !important',
     },
+    imgGroup: {
+        margin: 10,
+        padding: '10px 0',
+        textAlign: 'center',
+    },
+    imgContainer: {
+        position: 'relative',
+        border: '1px solid',
+        borderColor,
+        padding: 0,
+        width: 210,
+        height: 210,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     img: {
-        height: 100,
+        width: 200,
+        height: 'fit-content',
+        cursor: 'pointer',
+    },
+    trashIcon: {
+        position: 'absolute',
+        height: 25,
         width: 'auto',
-        marginRight: 20,
+        cursor: 'pointer',
+        right: '5%',
+        bottom: '5%',
+    },
+    typeContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        marginTop: 10,
+        paddingRight: '10%',
+        width: 200,
+    },
+    labelType: {
+        backgroundColor: borderColor,
+        borderRadius: 20,
+        marginBottom: 10,
+        marginRight: 10,
+        padding: '5px 10px',
+        width: 'fit-content',
+        fontSize: 12,
+        textTransform: 'capitalize',
     },
     asterisk: {
         color: colorPurple,
@@ -197,6 +238,10 @@ const useStyles = makeStyles((theme) => ({
         '& a': {
             color: '#408AC0',
         },
+    },
+    fieldInputMultiple: {
+        border: '1px solid',
+        borderColor,
     },
 }));
 
