@@ -7,10 +7,11 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useStyles from '@modules/marketplacebrand/pages/mpdetail/components/style';
+import Select from '@common_select';
 
 const AdminStoreCreateContent = (props) => {
     const {
-        data,
+        data, dataOptions, loadingOptions, formik,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -32,7 +33,11 @@ const AdminStoreCreateContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Manage Marketplace</h2>
+            <h2 className={classes.titleTop}>
+                Manage Marketplace  -
+                {' '}
+                {data && data.length && data[0].marketplace_name}
+            </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     {data.map((field) => (
@@ -40,17 +45,45 @@ const AdminStoreCreateContent = (props) => {
                             <div className={classes.divLabel}>
                                 <span className={clsx(classes.label, classes.labelRequired)}>{field.type.split('_').join(' ')}</span>
                             </div>
-                            <TextField
-                                className={classes.fieldRoot}
-                                variant="outlined"
-                                name={field.type}
-                                value={field.value}
-                                InputProps={{
-                                    className: classes.fieldInput,
-                                }}
-                            />
+                            {field.type === 'default_shipping_method'
+                                ? (
+                                    <Select
+                                        name={field.type}
+                                        value={formik.values[field.type]}
+                                        onChange={formik.handleChange}
+                                        dataOptions={dataOptions && dataOptions.getMarketplaceDefaultShippingMethods}
+                                        selectClasses={classes.fieldInput}
+                                        formControlClasses={classes.selectControl}
+                                        loading={loadingOptions}
+                                        fullWidth
+                                        error={!!(formik.touched[field.type] && formik.errors[field.type])}
+                                        helperText={(formik.touched[field.type] && formik.errors[field.type]) || ''}
+                                    />
+                                ) : (
+                                    <TextField
+                                        name={field.type}
+                                        value={formik.values[field.type]}
+                                        onChange={formik.handleChange}
+                                        className={classes.fieldRoot}
+                                        variant="outlined"
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                        error={!!(formik.touched[field.type] && formik.errors[field.type])}
+                                        helperText={(formik.touched[field.type] && formik.errors[field.type]) || ''}
+                                    />
+                                )}
                         </div>
                     ))}
+                </div>
+                <div className={classes.formFieldButton}>
+                    <Button
+                        className={classes.btn}
+                        onClick={formik.handleSubmit}
+                        variant="contained"
+                    >
+                        Submit
+                    </Button>
                 </div>
             </Paper>
         </>

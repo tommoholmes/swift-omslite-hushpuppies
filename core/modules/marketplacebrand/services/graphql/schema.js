@@ -160,12 +160,33 @@ export const getMarketplaceCredentials = gql`
         getMarketplaceCredentials(store_detail_id: $store_detail_id){
             data_type
             id
+            marketplace_code
+            marketplace_name
             store_detail_id
             type
             value
         }
     }
 `;
+
+export const getMarketplaceDefaultShippingMethods = gql`
+    query getMarketplaceDefaultShippingMethods($marketplace_code: String!){
+        getMarketplaceDefaultShippingMethods(marketplace_code: $marketplace_code){
+            label
+            value
+        }
+    }
+`;
+
+export const saveMarketplaceCredentials = gql`
+mutation saveMarketplaceCredentials($store_detail_id: Int!, $input: [MarketplaceCredentialsInput!]!){
+        saveMarketplaceCredentials(store_detail_id: $store_detail_id, input: $input){
+            label
+            value
+        }
+    }
+`;
+
 export default {
     getStoreList,
     registerMarketplaceBrand,
@@ -177,4 +198,5 @@ export default {
     updateMarketplaceLocation,
     getMarketplaceCredentials,
     updateConnectedMarketplace,
+    saveMarketplaceCredentials,
 };
