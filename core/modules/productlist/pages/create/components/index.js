@@ -6,7 +6,7 @@ import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
-import useStyles from '@modules/productlist/pages/edit/components/style';
+import useStyles from '@modules/productlist/pages/create/components/style';
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -79,8 +79,8 @@ const IOSSwitch = withStyles((theme) => ({
 ));
 
 const AttributeComponents = ({
-    formik, handleDropFile, attribute_code, attribute_options,
-    is_readonly, frontend_input, setImgConfig,
+    formik, attribute_code, attribute_options,
+    frontend_input,
 }) => {
     const classes = useStyles();
     switch (frontend_input) {
@@ -90,14 +90,14 @@ const AttributeComponents = ({
         return (
             <TextField
                 name={attribute_code}
-                disabled={is_readonly}
                 className={classes.fieldRoot}
                 variant="outlined"
                 value={formik.values[attribute_code]}
                 onChange={formik.handleChange}
                 InputProps={{
-                    className: clsx(classes.fieldInput, is_readonly && 'disabled'),
+                    className: clsx(classes.fieldInput),
                 }}
+                autoComplete="off"
                 error={!!(formik.touched[attribute_code] && formik.errors[attribute_code])}
                 helperText={(formik.touched[attribute_code] && formik.errors[attribute_code]) || ''}
                 fullWidth
@@ -107,13 +107,12 @@ const AttributeComponents = ({
         return (
             <TextField
                 name={attribute_code}
-                disabled={is_readonly}
                 className={classes.fieldRoot}
                 variant="outlined"
                 value={formik.values[attribute_code]}
                 onChange={formik.handleChange}
                 InputProps={{
-                    className: clsx(classes.fieldRootNote, is_readonly && 'disabled'),
+                    className: clsx(classes.fieldRootNote),
                 }}
                 error={!!(formik.touched[attribute_code] && formik.errors[attribute_code])}
                 multiline
@@ -125,7 +124,6 @@ const AttributeComponents = ({
         return (
             <Select
                 name={attribute_code}
-                disabled={is_readonly}
                 value={formik.values[attribute_code]}
                 onChange={formik.handleChange}
                 dataOptions={attribute_options}
@@ -141,7 +139,6 @@ const AttributeComponents = ({
                 multiple
                 className={classes.autocompleteRoot}
                 name={attribute_code}
-                disabled={is_readonly}
                 value={typeof formik.values[attribute_code] === 'object' ? formik.values[attribute_code]
                     : [formik.values[attribute_code]]}
                 onChange={(e) => formik.setFieldValue(attribute_code, e)}
@@ -157,14 +154,13 @@ const AttributeComponents = ({
         return (
             <TextField
                 name={attribute_code}
-                disabled={is_readonly}
                 className={classes.fieldRoot}
                 variant="outlined"
                 type="date"
                 value={formik.values[attribute_code]}
                 onChange={formik.handleChange}
                 InputProps={{
-                    className: clsx(classes.fieldInput, is_readonly && 'disabled'),
+                    className: clsx(classes.fieldInput),
                 }}
                 error={!!(formik.touched[attribute_code] && formik.errors[attribute_code])}
                 fullWidth
@@ -176,7 +172,6 @@ const AttributeComponents = ({
                 control={(
                     <IOSSwitch
                         name={attribute_code}
-                        disabled={is_readonly}
                         checked={formik.values[attribute_code]}
                         onChange={formik.handleChange}
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
@@ -185,73 +180,81 @@ const AttributeComponents = ({
                 label={formik.values[attribute_code] ? 'Yes' : 'No'}
             />
         );
-    case 'image':
-        return (
-            <div>
-                <DropFile
-                    formatFile=".jpg, .jpeg, .png, .gif"
-                    getBase64={handleDropFile}
-                    showFiles={false}
-                />
-                {formik && formik.values && formik.values.input_image?.length
-                    ? (
-                        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            {formik.values.input_image.map((image, idx) => (
-                                <div className={classes.imgGroup} style={{ display: image.is_deleted ? 'none' : 'unset' }}>
-                                    <div className={classes.imgContainer}>
-                                        <img
-                                            key={image.position}
-                                            className={classes.img}
-                                            src={image.id ? image.url : image.binary}
-                                            alt="media_img"
-                                            onClick={() => setImgConfig({ open: true, data: { ...image }, index: idx })}
-                                        />
-                                        <img
-                                            src="/assets/img/trash.svg"
-                                            alt="delete"
-                                            className={classes.trashIcon}
-                                            onClick={() => {
-                                                if (image.id) {
-                                                    formik.setFieldValue(`input_image[${idx}].is_deleted`, true);
-                                                } else {
-                                                    const temp = formik.values.input_image;
-                                                    temp.splice(idx, 1);
-                                                    formik.setFieldValue('input_image', temp);
-                                                }
-                                            }}
-                                        />
-                                    </div>
-                                    <div className={classes.typeContainer}>
-                                        {image.types?.map((type) => (
-                                            <div className={classes.labelType}>{type?.split('_').join(' ')}</div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )
-                    : null}
-            </div>
-        );
     default:
         return null;
     }
 };
 
-const ProductListEditContent = (props) => {
+const ImageManagement = ({ handleDropFile, setImgConfig, formik }) => {
+    const classes = useStyles();
+    return (
+        <div>
+            <DropFile
+                formatFile=".jpg, .jpeg, .png, .gif"
+                getBase64={handleDropFile}
+                showFiles={false}
+            />
+            {formik && formik.values && formik.values.input_image?.length
+                ? (
+                    <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {formik.values.input_image.map((image, idx) => (
+                            <div className={classes.imgGroup} style={{ display: image.is_deleted ? 'none' : 'unset' }}>
+                                <div className={classes.imgContainer}>
+                                    <img
+                                        key={image.position}
+                                        className={classes.img}
+                                        src={image.id ? image.url : image.binary}
+                                        alt="media_img"
+                                        onClick={() => setImgConfig({ open: true, data: { ...image }, index: idx })}
+                                    />
+                                    <img
+                                        src="/assets/img/trash.svg"
+                                        alt="delete"
+                                        className={classes.trashIcon}
+                                        onClick={() => {
+                                            if (image.id) {
+                                                formik.setFieldValue(`input_image[${idx}].is_deleted`, true);
+                                            } else {
+                                                const temp = formik.values.input_image;
+                                                temp.splice(idx, 1);
+                                                formik.setFieldValue('input_image', temp);
+                                            }
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ width: 200, textAlign: 'left' }}>
+                                    {`${image.name} - ${image.size}`}
+                                </div>
+                                <div className={classes.typeContainer}>
+                                    {image.types?.map((type) => (
+                                        <div className={classes.labelType}>{type?.split('_').join(' ')}</div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )
+                : null}
+        </div>
+    );
+};
+const ProductCreateContent = (props) => {
     const {
-        productDetail, attribute_set_id, onChangeAttribute, formik,
+        formik,
+        attributeToMap,
+        attribute_set_id,
+        onChangeAttribute,
+        attributeOptions,
     } = props;
     const classes = useStyles();
     const router = useRouter();
 
     const [expanded, setExpanded] = React.useState('');
     const [imgConfig, setImgConfig] = React.useState({ open: false, data: {}, index: null });
-    const [selected, setSelected] = React.useState(productDetail.vendor_price?.map((vend) => (vend.price[0].location.loc_id)));
     const handleChangeAccordion = (e) => (event, isExpanded) => {
         setExpanded(isExpanded ? e : false);
     };
-    const groupDetails = productDetail.groups.find((obj) => obj.attribute_group_code === 'product-details');
+    const groupDetails = attributeToMap.groups.find((obj) => obj.attribute_group_code === 'product-details');
     const typeOptions = [
         { label: 'Base', value: 'image' },
         { label: 'Small', value: 'small_image' },
@@ -337,7 +340,7 @@ const ProductListEditContent = (props) => {
                         <Select
                             value={attribute_set_id}
                             onChange={(e) => onChangeAttribute(e)}
-                            dataOptions={productDetail.attribute_set_options}
+                            dataOptions={attributeOptions}
                             selectClasses={classes.fieldInput}
                             formControlClasses={classes.selectControl}
                             enableEmpty={false}
@@ -357,7 +360,7 @@ const ProductListEditContent = (props) => {
                         </div>
                     ))}
                 </div>
-                {productDetail.groups.map((attGroup, attGroupIdx) => (attGroup.attribute_group_code !== 'product-details')
+                {attributeToMap.groups.map((attGroup, attGroupIdx) => (attGroup.attribute_group_code !== 'product-details')
                     && (
                         <div className={classes.content} key={attGroupIdx}>
                             <Accordion
@@ -373,129 +376,27 @@ const ProductListEditContent = (props) => {
                                     </h5>
                                 </AccordionSummary>
                                 <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
-                                    {attGroup.attributes.map((att, attIdx) => (
+                                    {
                                         attGroup.attribute_group_code === 'image-management'
-                                            ? <AttributeComponents {...props} {...att} setImgConfig={setImgConfig} />
+                                            ? <ImageManagement {...props} {...attGroup} setImgConfig={setImgConfig} />
                                             : (
-                                                <div className={classes.gridAttribute} key={attIdx}>
-                                                    <div
-                                                        className={classes.divLabel}
-                                                    >
-                                                        <span className={clsx(classes.label, att.is_required && classes.labelRequired)}>
-                                                            {att.frontend_label}
-                                                        </span>
+                                                attGroup.attributes.map((att, attIdx) => (
+                                                    <div className={classes.gridAttribute} key={attIdx}>
+                                                        <div
+                                                            className={classes.divLabel}
+                                                        >
+                                                            <span className={clsx(classes.label, att.is_required && classes.labelRequired)}>
+                                                                {att.frontend_label}
+                                                            </span>
+                                                        </div>
+                                                        <AttributeComponents {...props} {...att} />
                                                     </div>
-                                                    <AttributeComponents {...props} {...att} />
-                                                </div>
-                                            )
-                                    ))}
+                                                )))
+                                    }
                                 </AccordionDetails>
                             </Accordion>
                         </div>
                     ))}
-
-                <div className={classes.content}>
-                    <Accordion
-                        elevation={0}
-                        expanded={expanded === 'stocklist'}
-                        onChange={handleChangeAccordion('stocklist')}
-                    >
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.accordion}>
-                            <h2 className={classes.title}>Stock List</h2>
-
-                        </AccordionSummary>
-                        <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
-                            <div className={classes.formField}>
-                                <table className={classes.table}>
-                                    <tbody>
-                                        <tr className={classes.tr}>
-                                            <th className={classes.th}>Location</th>
-                                            <th className={classes.th}>Qty Total</th>
-                                            <th className={classes.th}>Qty Reserved</th>
-                                            <th className={classes.th}>Qty Saleable</th>
-                                        </tr>
-                                        {productDetail.sourcing.map((e, i) => (
-                                            <tr key={i}>
-                                                <td className={classes.td}>{e.loc_name}</td>
-                                                <td className={classes.td}>{e.qty_total}</td>
-                                                <td className={classes.td}>{e.qty_reserved}</td>
-                                                <td className={classes.td}>{e.qty_saleable}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </AccordionDetails>
-                    </Accordion>
-                </div>
-
-                {productDetail.vendor_price && productDetail.vendor_price.length
-                    ? (
-                        <div className={classes.content}>
-                            <Accordion
-                                elevation={0}
-                                expanded={expanded === 'vendor_price'}
-                                onChange={handleChangeAccordion('vendor_price')}
-                            >
-                                <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.accordion}>
-                                    <h2 className={classes.title}>Vendor Price List</h2>
-
-                                </AccordionSummary>
-                                <AccordionDetails classes={{ root: classes.accordionDetailRoot }}>
-                                    <div className={classes.formField}>
-                                        <table className={classes.table}>
-                                            <tbody>
-                                                <tr className={classes.tr}>
-                                                    <th className={classes.th}>Vendor</th>
-                                                    <th className={classes.th}>Location</th>
-                                                    <th className={classes.th}>Price</th>
-                                                </tr>
-                                                {productDetail.vendor_price.map((e, i) => {
-                                                    const optionsVendor = e.price.map((p) => ({
-                                                        label: p.location.loc_name,
-                                                        value: p.location.loc_id,
-                                                    }));
-                                                    return (
-                                                        <tr key={i}>
-                                                            <td className={classes.td}>{e.vendor.company_name}</td>
-                                                            <td className={classes.td}>
-                                                                <Select
-                                                                    value={selected[i]}
-                                                                    onChange={(ev) => {
-                                                                        const temp = [...selected];
-                                                                        temp[i] = Number(ev.target.value);
-                                                                        setSelected(temp);
-                                                                    }}
-                                                                    dataOptions={optionsVendor}
-                                                                    enableEmpty={false}
-                                                                />
-                                                            </td>
-                                                            <td className={classes.td}>
-                                                                <span style={{ fontWeight: 'bold' }}>Price :</span>
-                                                                <span>
-                                                                    {
-                                                                        ` IDR${e.price.find((vp) => (vp.location.loc_id === selected[i]))?.price}`
-                                                                    }
-                                                                </span>
-                                                                <br />
-                                                                <span style={{ fontWeight: 'bold' }}>Special Price :</span>
-                                                                <span>
-                                                                    {
-                                                                        ` IDR${e.price.find((vp) => (
-                                                                            vp.location.loc_id === selected[i]))?.special_price}`
-                                                                    }
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div>
-                    ) : null}
 
             </Paper>
             <Dialog
@@ -546,4 +447,4 @@ const ProductListEditContent = (props) => {
     );
 };
 
-export default ProductListEditContent;
+export default ProductCreateContent;

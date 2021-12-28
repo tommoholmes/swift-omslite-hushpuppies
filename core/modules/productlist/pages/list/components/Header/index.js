@@ -26,6 +26,13 @@ const HeaderContent = (props) => {
             >
                 Product Fetch
             </Button>
+            <Button
+                className={classes.buttonAdd}
+                onClick={() => router.push('/product/productlist/create')}
+                style={{ marginRight: 10 }}
+            >
+                Create Product
+            </Button>
         </div>
     );
 };

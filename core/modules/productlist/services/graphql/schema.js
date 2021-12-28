@@ -81,7 +81,7 @@ export const updateProduct = gql`
     mutation updateProduct(
         $id: Int!,
         $input: [ProductInput],
-        $input_image: [String],
+        $input_image: [ProductImageInput],
     ){
         updateProduct(
             id: $id,
@@ -158,7 +158,13 @@ query getProductAttributes($id: Int!, $attribute_set_id: Int){
             value
             label
           }
-          images
+          images{
+            file
+            id
+            position
+            types
+            url
+          }
         }
       }
       sourcing{
@@ -199,6 +205,59 @@ export const productFetchManual = gql`
   }
 `;
 
+export const getProductAttributeSetOptions = gql`
+  query {
+    getProductAttributeSetOptions {
+        label
+        value
+    }
+  }
+`;
+
+export const getNewProductAttributes = gql`
+query getNewProductAttributes($attribute_set_id: Int!) {
+    getNewProductAttributes(attribute_set_id: $attribute_set_id) {
+      attribute_set_id
+      attribute_set_options {
+        label
+        value
+      }
+      groups {
+        attribute_group_code
+        attribute_group_id
+        attribute_group_name
+        attributes {
+          attribute_code
+          attribute_options {
+            label
+            value
+          }
+          attribute_value
+          frontend_input
+          frontend_label
+          images {
+            file
+            id
+            position
+            types
+            url
+          }
+          is_readonly
+          is_required
+        }
+        sort_order
+      }
+    }
+  }
+  
+`;
+
+export const createProduct = gql`
+mutation createProduct($input: [ProductInput], $input_image: [ProductImageInput]){
+    createProduct(input: $input, input_image: $input_image)
+  }
+`;
+
 export default {
     getProductList,
     getProductById,
@@ -208,4 +267,7 @@ export default {
     getProductListBySku,
     getProductAttributes,
     productFetchManual,
+    getProductAttributeSetOptions,
+    getNewProductAttributes,
+    createProduct,
 };

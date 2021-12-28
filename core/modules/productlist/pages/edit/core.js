@@ -27,32 +27,46 @@ const ContentWrapper = (props) => {
     const initValue = () => {
         const init = [];
         const valid = [];
+        const input_image = [];
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < productDetail.groups.length; i++) {
             const group = productDetail.groups[i];
-            group.attributes
-                .filter((att) => att.frontend_input !== 'media_image')
-                .map((attribute) => {
-                    if (attribute.is_required) {
-                        valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
-                    }
-                    if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
-                        const values = [];
-                        attribute.attribute_value.split(',').forEach((item) => {
-                            values.push(attribute.attribute_options.find((o) => o.value === item));
-                        });
-                        return init.push([attribute.attribute_code, values]);
-                    }
-                    if (attribute.frontend_input === 'boolean') {
-                        const values = attribute.attribute_value === '1';
-                        return init.push([attribute.attribute_code, values]);
-                    }
-                    return init.push([attribute.attribute_code, attribute.attribute_value]);
-                });
+            group.attributes.filter((att) => att.frontend_input !== 'image').map((attribute) => {
+                if (attribute.is_required) {
+                    valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
+                }
+                if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
+                    const values = [];
+                    attribute.attribute_value.split(',').forEach((item) => {
+                        values.push(attribute.attribute_options.find((o) => o.value === item));
+                    });
+                    return init.push([attribute.attribute_code, values]);
+                }
+                if (attribute.frontend_input === 'boolean') {
+                    const values = attribute.attribute_value === '1';
+                    return init.push([attribute.attribute_code, values]);
+                }
+                return (
+                    init.push([attribute.attribute_code, attribute.attribute_value])
+                );
+            });
+            group.attributes.filter((att) => att.frontend_input === 'image').map((attribute) => (
+                attribute.images.map((image) => (
+                    input_image.push({
+                        id: image.id,
+                        url: image.url,
+                        binary: '',
+                        position: image.position,
+                        types: image.types,
+                        is_deleted: false,
+                    })
+                ))
+            ));
         }
         return {
             init: Object.fromEntries(init),
             valid: Object.fromEntries(valid),
+            image: input_image,
         };
     };
 
@@ -86,7 +100,7 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: {
             ...initValue().init,
-            input_image: [],
+            input_image: initValue().image,
         },
         validationSchema: Yup.object().shape({
             ...initValue().valid,
@@ -110,16 +124,28 @@ const ContentWrapper = (props) => {
             };
             valueToSubmit.input = [{ attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) }, ...valueToSubmit.input];
             if (input_image && input_image.length) {
-                valueToSubmit.input_image = input_image;
+                valueToSubmit.input_image = input_image.map((input) => {
+                    const {
+                        url, name, size, ...restInput
+                    } = input;
+                    return restInput;
+                });
             }
             handleSubmit(valueToSubmit);
         },
     });
 
     const handleDropFile = (files) => {
-        const { baseCode } = files[0];
+        const { baseCode, file } = files[0];
         const input = formik.values.input_image;
-        input.push(baseCode);
+        input.push({
+            binary: baseCode,
+            types: [],
+            position: 0,
+            is_deleted: false,
+            name: file.name,
+            size: `${(file.size / 1000)} KB`,
+        });
         formik.setFieldValue('input_image', input);
     };
 
