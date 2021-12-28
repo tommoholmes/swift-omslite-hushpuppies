@@ -14,15 +14,7 @@ const ContentWrapper = (props) => {
     const [saveVendorPromotion] = gqlService.saveVendorPromotion();
 
     const handleSubmit = ({
-        name,
-        description,
-        fromDate,
-        toDate,
-        simpleAction,
-        discountAmount,
-        discountStep,
-        maxY,
-        couponCode,
+        name, description, fromDate, toDate, simpleAction, discountAmount, discountStep, maxY, couponCode,
     }) => {
         const variables = {
             rule_id: promotion.rule_id,
@@ -39,15 +31,16 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveVendorPromotion({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success create new promotion',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/vendorportal/managepromotion'), 250);
         })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success create new promotion',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/vendorportal/managepromotion'), 250);
+            })
             .catch((e) => {
                 window.backdropLoader(false);
                 window.toastMessage({
@@ -105,7 +98,29 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return <Layout>Data not found!</Layout>;
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/vendorportal/managepromotion');
+        }, 1000);
+        return (
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
+        );
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

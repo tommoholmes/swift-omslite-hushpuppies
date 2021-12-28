@@ -7,19 +7,13 @@ import gqlService from '@modules/overridestock/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const overrideStock = data.getVirtualStockQuantityById;
     const [updateVirtualStockQuantity] = gqlService.updateVirtualStockQuantity();
 
     const handleSubmit = ({
-        virtualStock,
-        sku,
-        qty,
-        reason,
+        virtualStock, sku, qty, reason,
     }) => {
         const variables = {
             id: overrideStock.entity_id,
@@ -31,22 +25,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateVirtualStockQuantity({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Override Stock!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Override Stock!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/cataloginventory/overridestock'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/cataloginventory/overridestock'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -73,9 +69,7 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -89,14 +83,32 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/cataloginventory/overridestock');
+        }, 1000);
         return (
-            <Layout>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 

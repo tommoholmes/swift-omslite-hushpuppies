@@ -194,7 +194,19 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return <Layout pageConfig={pageConfig}>Data not found!</Layout>;
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            if (router.query.tab_status) {
+                router.push(`/order/${router.query.tab_status}`);
+                return;
+            }
+            router.push('/order/allorder');
+        }, 1000);
+        return <Layout pageConfig={pageConfig} />;
     }
 
     return (

@@ -10,12 +10,7 @@ import Cookies from 'js-cookie';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        dataCourier,
-        dataShipper,
-        Content,
-        getCountries,
-        getCountriesRes,
+        data, dataCourier, dataShipper, Content, getCountries, getCountriesRes,
     } = props;
     const router = useRouter();
     const vendor = data.getVendorById;
@@ -30,22 +25,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         vendorUpdate({
             variables: { input },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Vendor!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Vendor!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/vendorportal/managevendor'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/vendorportal/managevendor'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -64,10 +61,10 @@ const ContentWrapper = (props) => {
             logo: vendor.logo,
             promotion_banner: vendor.promotion_banner,
             shipper_shipping: vendor.shipper_shipping?.length
-                ? vendor.shipper_shipping.map((code) => (dataShipper.find((ship) => ship.value === code)))
+                ? vendor.shipper_shipping.map((code) => dataShipper.find((ship) => ship.value === code))
                 : [],
             vendor_shipping: vendor.vendor_shipping?.length
-                ? vendor.vendor_shipping.map((code) => (dataCourier.find((ship) => ship.value === code)))
+                ? vendor.vendor_shipping.map((code) => dataCourier.find((ship) => ship.value === code))
                 : [],
         },
         validationSchema: Yup.object().shape({
@@ -75,9 +72,16 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             const {
-                shipper_shipping, vendor_shipping, logo,
-                company_country_id, company_region, company_city, promotion_banner,
-                is_new_product, company_margin, is_product_approval,
+                shipper_shipping,
+                vendor_shipping,
+                logo,
+                company_country_id,
+                company_region,
+                company_city,
+                promotion_banner,
+                is_new_product,
+                company_margin,
+                is_product_approval,
                 ...restValues
             } = values;
             let valuesToSubmit = {};
@@ -158,9 +162,7 @@ const ContentWrapper = (props) => {
         getCityKecByRegionCodeRes,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -185,9 +187,7 @@ const Core = (props) => {
     }, []);
 
     if (loading || loadingCourier || shipperLoading || aclCheckLoading || getCountriesRes.loading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -195,8 +195,28 @@ const Core = (props) => {
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/vendorportal/managevendor');
+        }, 1000);
         return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
+            <Layout pageConfig={pageConfig}>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 
