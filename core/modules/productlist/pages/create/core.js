@@ -8,21 +8,20 @@ import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
         Content,
-        getProductAttributes,
+        attributeOptions,
+        attributeToMap,
+        getNewProductAttributes,
     } = props;
     const router = useRouter();
-    const [updateProduct] = gqlService.updateProduct();
-    const productDetail = data.getProductAttributes;
-    const [attribute_set_id, set_attribute_set_id] = React.useState(productDetail.attribute_set_id);
+    const [createProduct] = gqlService.createProduct();
+    const [attribute_set_id, set_attribute_set_id] = React.useState(attributeToMap.attribute_set_id);
 
     const onChangeAttribute = (e) => {
         const { value } = e.target;
         set_attribute_set_id(value);
-        getProductAttributes({
+        getNewProductAttributes({
             variables: {
-                id: router && router.query && Number(router.query.id),
                 attribute_set_id: Number(value),
             },
         });
@@ -31,56 +30,34 @@ const ContentWrapper = (props) => {
     const initValue = () => {
         const init = [];
         const valid = [];
-        const input_image = [];
         // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < productDetail.groups.length; i++) {
-            const group = productDetail.groups[i];
+        for (let i = 0; i < attributeToMap.groups.length; i++) {
+            const group = attributeToMap.groups[i];
             group.attributes.filter((att) => att.frontend_input !== 'image').map((attribute) => {
                 if (attribute.is_required) {
                     valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
                 }
-                if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
-                    const values = [];
-                    attribute.attribute_value.split(',').forEach((item) => {
-                        values.push(attribute.attribute_options.find((o) => o.value === item));
-                    });
-                    return init.push([attribute.attribute_code, values]);
+                if (attribute.frontend_input === 'multiselect') {
+                    return init.push([attribute.attribute_code, []]);
                 }
                 if (attribute.frontend_input === 'boolean') {
-                    const values = attribute.attribute_value === '1';
-                    return init.push([attribute.attribute_code, values]);
+                    return init.push([attribute.attribute_code, false]);
                 }
                 return (
-                    init.push([attribute.attribute_code, attribute.attribute_value])
+                    init.push([attribute.attribute_code, ''])
                 );
             });
-            group.attributes.filter((att) => att.frontend_input === 'image').map((attribute) => (
-                attribute.images.map((image) => (
-                    input_image.push({
-                        id: image.id,
-                        url: image.url,
-                        binary: '',
-                        position: image.position,
-                        types: image.types,
-                        is_deleted: false,
-                    })
-                ))
-            ));
         }
         return {
             init: Object.fromEntries(init),
             valid: Object.fromEntries(valid),
-            image: input_image,
         };
     };
 
     const handleSubmit = (value) => {
-        const variables = {
-            ...value,
-        };
         window.backdropLoader(true);
-        updateProduct({
-            variables,
+        createProduct({
+            variables: { ...value },
         }).then(() => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -102,7 +79,7 @@ const ContentWrapper = (props) => {
     const formik = useFormik({
         initialValues: {
             ...initValue().init,
-            input_image: initValue().image,
+            input_image: [],
         },
         validationSchema: Yup.object().shape({
             ...initValue().valid,
@@ -110,26 +87,26 @@ const ContentWrapper = (props) => {
         onSubmit: (values) => {
             const { input_image, ...restValues } = values;
             const valueToSubmit = {
-                id: router && router.query && Number(router.query.id),
                 input: Object.keys(restValues).map((key) => {
                     let attribute_value = restValues[key] || '';
-                    if (typeof restValues[key] === 'object') {
-                        attribute_value = restValues[key]?.map((val) => (val.value)).join(',') || '';
-                    } else if (typeof restValues[key] === 'boolean') {
-                        attribute_value = restValues[key] ? '1' : '0';
+                    if (restValues[key] && restValues[key] !== '') {
+                        if (typeof restValues[key] === 'object') {
+                            attribute_value = restValues[key]?.map((val) => (val.value)).join(',') || '';
+                        } else if (typeof restValues[key] === 'boolean') {
+                            attribute_value = restValues[key] ? '1' : '0';
+                        }
+                        return ({
+                            attribute_code: key,
+                            attribute_value,
+                        });
                     }
-                    return ({
-                        attribute_code: key,
-                        attribute_value,
-                    });
-                }),
+                    return false;
+                }).filter((val) => !!val && val?.attribute_value !== ''),
             };
             valueToSubmit.input = [{ attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) }, ...valueToSubmit.input];
             if (input_image && input_image.length) {
                 valueToSubmit.input_image = input_image.map((input) => {
-                    const {
-                        url, name, size, ...restInput
-                    } = input;
+                    const { name, size, ...restInput } = input;
                     return restInput;
                 });
             }
@@ -144,7 +121,6 @@ const ContentWrapper = (props) => {
             binary: baseCode,
             types: [],
             position: 0,
-            is_deleted: false,
             name: file.name,
             size: `${(file.size / 1000)} KB`,
         });
@@ -153,10 +129,11 @@ const ContentWrapper = (props) => {
 
     const contentProps = {
         formik,
-        productDetail,
+        attributeToMap,
         handleDropFile,
         attribute_set_id,
         onChangeAttribute,
+        attributeOptions,
     };
 
     return (
@@ -168,23 +145,22 @@ const Core = (props) => {
     const router = useRouter();
 
     const pageConfig = {
-        title: `Product Detail #${router?.query?.id}`,
+        title: 'Create Product',
     };
-
-    const [getProductAttributes, productAttributes] = gqlService.getProductAttributes();
-    const { loading, data, called } = productAttributes;
-
-    React.useEffect(() => {
-        getProductAttributes({
-            variables: { id: router && router.query && Number(router.query.id) },
-        });
-    }, []);
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
         acl_code: 'oms_lite_product_list',
     });
+    const { loading, data } = gqlService.getProductAttributeSetOptions();
+    const [getNewProductAttributes, getNewProductAttributesRes] = gqlService.getNewProductAttributes();
 
-    if (loading || !called || aclCheckLoading) {
+    React.useEffect(() => {
+        getNewProductAttributes({
+            variables: { attribute_set_id: 4 },
+        });
+    }, []);
+
+    if (loading || aclCheckLoading || getNewProductAttributesRes.loading) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -201,7 +177,11 @@ const Core = (props) => {
         );
     }
 
-    if (called && !data) {
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+        router.push('/');
+    }
+
+    if (!data || !getNewProductAttributesRes.data) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
@@ -218,13 +198,15 @@ const Core = (props) => {
         );
     }
 
-    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
-        router.push('/');
-    }
+    const contentProps = {
+        attributeOptions: data.getProductAttributeSetOptions,
+        attributeToMap: getNewProductAttributesRes.data.getNewProductAttributes,
+        getNewProductAttributes,
+    };
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper data={data} getProductAttributes={getProductAttributes} {...props} />
+            <ContentWrapper {...contentProps} {...props} />
         </Layout>
     );
 };
