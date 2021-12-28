@@ -8,23 +8,13 @@ import gqlService from '@modules/virtualstock/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const virtualStock = data.getVirtualStockById;
     const [updateVirtualStock] = gqlService.updateVirtualStock();
 
     const handleSubmit = ({
-        name,
-        notes,
-        priorityEnable,
-        priorityType,
-        channelPriority,
-        frameworkPriority,
-        minStock,
-        location,
+        name, notes, priorityEnable, priorityType, channelPriority, frameworkPriority, minStock, location,
     }) => {
         const variables = {
             id: virtualStock.vs_id,
@@ -40,22 +30,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateVirtualStock({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit VirtualStock',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit VirtualStock',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/cataloginventory/virtualstock'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/cataloginventory/virtualstock'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -89,9 +81,7 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -105,14 +95,32 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/cataloginventory/virtualstock');
+        }, 1000);
         return (
-            <Layout>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 

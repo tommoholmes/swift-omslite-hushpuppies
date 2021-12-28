@@ -22,13 +22,14 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -38,6 +39,32 @@ const Core = (props) => {
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
         router.push('/');
+    }
+
+    if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/marketing/promotion');
+        }, 1000);
+        return (
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
+        );
     }
 
     const contentProps = {
