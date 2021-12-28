@@ -182,6 +182,14 @@ const Core = (props) => {
     }
 
     if (!data || !getNewProductAttributesRes.data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/product/productlist');
+        }, 1000);
         return (
             <Layout pageConfig={pageConfig}>
                 <div style={{
