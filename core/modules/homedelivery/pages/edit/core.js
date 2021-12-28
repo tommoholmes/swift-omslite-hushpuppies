@@ -9,10 +9,7 @@ import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        refetch,
-        pickPackEnable,
+        data, Content, refetch, pickPackEnable,
     } = props;
     const homedelivery = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
@@ -32,22 +29,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         confirmShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleCantFulfill = () => {
@@ -57,22 +56,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         cantFulfillShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePicked = () => {
@@ -82,27 +83,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         pickShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Picked',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Picked',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleCanceled = ({
-        reason,
-    }) => {
+    const handleCanceled = ({ reason }) => {
         const variables = {
             id: homeDelivery.id,
             cancel_reason_id: reason.value,
@@ -110,22 +111,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         cancelDelivery({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was canceled',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was canceled',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePacked = () => {
@@ -135,22 +138,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         packShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Packaged',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Packaged',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleCourier = () => {
@@ -160,29 +165,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         bookCourier({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Booked',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Booked',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleShipped = ({
-        carrier,
-        name,
-        reference,
-    }) => {
+    const handleShipped = ({ carrier, name, reference }) => {
         const variables = {
             id: homeDelivery.id,
             carrier: carrier.value,
@@ -192,22 +195,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         shipDelivery({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Shipped',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Shipped',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleDelivered = () => {
@@ -217,27 +222,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         deliveredShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Delivered',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Delivered',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleNotes = ({
-        notes,
-    }) => {
+    const handleNotes = ({ notes }) => {
         const variables = {
             id: homeDelivery.id,
             notes,
@@ -245,22 +250,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveShipmentNotes({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'notes has been saved',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'notes has been saved',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const homeDelivery = {
@@ -403,9 +410,7 @@ const ContentWrapper = (props) => {
         pickPackEnable,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -430,25 +435,31 @@ const Core = (props) => {
     if (loading || aclCheckLoading || loadingConfig) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
-
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/shipment/homedelivery');
+        }, 1000);
+        return <Layout pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -457,12 +468,7 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper
-                pickPackEnable={dataConfig.getStoreConfig === '1'}
-                data={data}
-                {...props}
-                refetch={refetch}
-            />
+            <ContentWrapper pickPackEnable={dataConfig.getStoreConfig === '1'} data={data} {...props} refetch={refetch} />
         </Layout>
     );
 };

@@ -7,11 +7,7 @@ import gqlService from '@modules/productlist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-        getProductAttributes,
-    } = props;
+    const { data, Content, getProductAttributes } = props;
     const router = useRouter();
     const [updateProduct] = gqlService.updateProduct();
     const productDetail = data.getProductAttributes;
@@ -34,25 +30,25 @@ const ContentWrapper = (props) => {
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < productDetail.groups.length; i++) {
             const group = productDetail.groups[i];
-            group.attributes.filter((att) => att.frontend_input !== 'media_image').map((attribute) => {
-                if (attribute.is_required) {
-                    valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
-                }
-                if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
-                    const values = [];
-                    attribute.attribute_value.split(',').forEach((item) => {
-                        values.push(attribute.attribute_options.find((o) => o.value === item));
-                    });
-                    return init.push([attribute.attribute_code, values]);
-                }
-                if (attribute.frontend_input === 'boolean') {
-                    const values = attribute.attribute_value === '1';
-                    return init.push([attribute.attribute_code, values]);
-                }
-                return (
-                    init.push([attribute.attribute_code, attribute.attribute_value])
-                );
-            });
+            group.attributes
+                .filter((att) => att.frontend_input !== 'media_image')
+                .map((attribute) => {
+                    if (attribute.is_required) {
+                        valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
+                    }
+                    if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
+                        const values = [];
+                        attribute.attribute_value.split(',').forEach((item) => {
+                            values.push(attribute.attribute_options.find((o) => o.value === item));
+                        });
+                        return init.push([attribute.attribute_code, values]);
+                    }
+                    if (attribute.frontend_input === 'boolean') {
+                        const values = attribute.attribute_value === '1';
+                        return init.push([attribute.attribute_code, values]);
+                    }
+                    return init.push([attribute.attribute_code, attribute.attribute_value]);
+                });
         }
         return {
             init: Object.fromEntries(init),
@@ -67,22 +63,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateProduct({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Update Product!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Update Product!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/product/productlist'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/product/productlist'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -100,14 +98,14 @@ const ContentWrapper = (props) => {
                 input: Object.keys(restValues).map((key) => {
                     let attribute_value = restValues[key] || '';
                     if (typeof restValues[key] === 'object') {
-                        attribute_value = restValues[key]?.map((val) => (val.value)).join(',') || '';
+                        attribute_value = restValues[key]?.map((val) => val.value).join(',') || '';
                     } else if (typeof restValues[key] === 'boolean') {
                         attribute_value = restValues[key] ? '1' : '0';
                     }
-                    return ({
+                    return {
                         attribute_code: key,
                         attribute_value,
-                    });
+                    };
                 }),
             };
             valueToSubmit.input = [{ attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) }, ...valueToSubmit.input];
@@ -133,9 +131,7 @@ const ContentWrapper = (props) => {
         onChangeAttribute,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -161,13 +157,14 @@ const Core = (props) => {
     if (loading || !called || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -176,15 +173,24 @@ const Core = (props) => {
     }
 
     if (called && !data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/product/productlist');
+        }, 1000);
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Data not found!
                 </div>

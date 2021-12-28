@@ -9,10 +9,7 @@ import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        refetch,
-        pickPackEnable,
+        data, Content, refetch, pickPackEnable,
     } = props;
     const storepickup = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
@@ -30,22 +27,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         confirmShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleCantFulfill = () => {
@@ -55,22 +54,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         cantFulfillShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePicked = () => {
@@ -80,22 +81,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         pickShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Picked',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Picked',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePacked = () => {
@@ -105,28 +108,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         packShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Packaged',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Packaged',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handlePickedUpShipment = ({
-        name,
-        reference,
-    }) => {
+    const handlePickedUpShipment = ({ name, reference }) => {
         const variables = {
             id: storePickup.id,
             name,
@@ -135,27 +137,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         pickedupShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Pick Up Completed!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Pick Up Completed!',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleSaveNotes = ({
-        notes,
-    }) => {
+    const handleSaveNotes = ({ notes }) => {
         const variables = {
             id: storePickup.id,
             notes,
@@ -163,27 +165,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveShipmentNotes({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Notes saved',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Notes saved',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleCanceled = ({
-        reason,
-    }) => {
+    const handleCanceled = ({ reason }) => {
         const variables = {
             id: storepickup.id,
             cancel_reason_id: reason.value,
@@ -191,22 +193,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         canceledShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was canceled',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was canceled',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const storePickup = {
@@ -325,9 +329,7 @@ const ContentWrapper = (props) => {
         formikCanceled,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -352,13 +354,14 @@ const Core = (props) => {
     if (loading || aclCheckLoading || loadingConfig) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -367,9 +370,15 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/shipment/storepickup');
+        }, 1000);
+        return <Layout pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -378,12 +387,7 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper
-                pickPackEnable={dataConfig.getStoreConfig === '1'}
-                data={data}
-                {...props}
-                refetch={refetch}
-            />
+            <ContentWrapper pickPackEnable={dataConfig.getStoreConfig === '1'} data={data} {...props} refetch={refetch} />
         </Layout>
     );
 };

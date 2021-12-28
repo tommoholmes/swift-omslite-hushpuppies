@@ -7,10 +7,7 @@ import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/batchpack/pages/detail/components/style';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const [showModal, setShowModal] = React.useState(false);
     const [nextShipment, setNextShipment] = React.useState(null);
     const packlist = data.getPackList.data[0];
@@ -83,9 +80,7 @@ const ContentWrapper = (props) => {
         nextShipment,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -107,21 +102,21 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div className={classes.loadingFetch}>
-                    Loading . . .
-                </div>
+                <div className={classes.loadingFetch}>Loading . . .</div>
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div className={classes.loadingFetch}>
-                    No records to display
-                </div>
-            </Layout>
-        );
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/pickpack/batchpack');
+        }, 1000);
+        return <Layout pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
