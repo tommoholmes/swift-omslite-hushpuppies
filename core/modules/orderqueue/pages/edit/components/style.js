@@ -460,10 +460,6 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiInputBase-root': {
             height: 'auto',
         },
-        '& .MuiAutocomplete-endAdornment': {
-            top: 'auto',
-            bottom: 0,
-        },
     },
     titleSmallBlack: {
         textAlign: 'left',

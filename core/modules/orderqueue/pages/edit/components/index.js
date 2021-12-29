@@ -11,17 +11,17 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Autocomplete from '@common_autocomplete';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
 import clsx from 'clsx';
 import { formatPriceNumber } from '@helper_currency';
-import { Formik, FieldArray, Field } from 'formik';
+import { Formik, FieldArray } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
+import Item from '@modules/orderqueue/pages/edit/components/Item';
 import gqlLocation from '@modules/orderqueue/services/graphql';
 
 const OrderQueueEditContent = (props) => {
@@ -87,35 +87,11 @@ const OrderQueueEditContent = (props) => {
         setIsModalOpen(true);
     };
 
-    const [getLocationOptions, { data: dataLoc, loading: LoadingLoc }] = gqlLocation.getLocationOptions();
-    const firstRenderGetLoc = useRef(true);
-    const [initialLocation, setInitialLocation] = useState([]);
+    const [getLocationOptions, { data: dataLoc }] = gqlLocation.getLocationOptions();
 
     useEffect(() => {
         getLocationOptions();
     }, []);
-
-    useEffect(() => {
-        if (firstRenderGetLoc.current && dataLoc && dataLoc.getLocationOptions) {
-            const uniqueLocCodeBefore = initialValueEditItem?.order_items?.reduce((newList, current) => {
-                const currentLoc = current?.loc_code?.split(',').map((item) => item);
-                currentLoc?.forEach((loc) => {
-                    if (!newList.some((x) => x === loc)) {
-                        newList.push(loc);
-                    }
-                });
-
-                return newList;
-            }, []);
-
-            const locCodes = new Set(uniqueLocCodeBefore);
-
-            const fixInitialLoc = dataLoc.getLocationOptions.filter((d) => locCodes.has(d.value));
-
-            setInitialLocation(fixInitialLoc);
-            firstRenderGetLoc.current = false;
-        }
-    }, [dataLoc]);
 
     return (
         <>
@@ -320,101 +296,20 @@ const OrderQueueEditContent = (props) => {
                                                     {({ remove }) => (
                                                         <>
                                                             {values.order_items.map((e, idx) => (
-                                                                <tr key={idx}>
-                                                                    <td className={classes.td} style={{ paddingLeft: 0 }}>
-                                                                        {e.sku}
-                                                                    </td>
-                                                                    <td className={classes.td}>{e.name}</td>
-                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                        {typeof e?.base_price === 'string'
-                                                                            ? e?.base_price
-                                                                            : formatPriceNumber(e?.base_price)}
-                                                                    </td>
-                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                        {isModeEdit ? (
-                                                                            <Field
-                                                                                type="number"
-                                                                                className={classes.fieldQty}
-                                                                                name={`order_items.[${idx}].qty`}
-                                                                            />
-                                                                        ) : (
-                                                                            e?.qty
-                                                                        )}
-                                                                    </td>
-                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                        {e.discount_amount}
-                                                                    </td>
-                                                                    {/* <td className={classes.td}>{e.loc_code || '-'}</td> */}
-                                                                    <td className={classes.td} style={{ width: `${isModeEdit ? '300px' : 'auto'}` }}>
-                                                                        {!isModeEdit ? (
-                                                                            <td className={classes.td}>{e.loc_code || '-'}</td>
-                                                                        ) : (
-                                                                            <Autocomplete
-                                                                                multiple
-                                                                                className={classes.autocompleteRoot}
-                                                                                name={`order_items.[${idx}].loc_code`}
-                                                                                value={(() => {
-                                                                                    if (typeof e.loc_code === 'string') {
-                                                                                        const currentLoc = e.loc_code.split(',').map((item) => item);
-
-                                                                                        const fixInitialLoc = currentLoc?.map((d) => initialLocation.find((loc) => loc?.value === d));
-                                                                                        return fixInitialLoc;
-                                                                                    }
-                                                                                    return e.loc_code;
-                                                                                })()}
-                                                                                onChange={(val) => {
-                                                                                    if (Array.isArray(val)) {
-                                                                                        setFieldValue(`order_items.[${idx}].loc_code`, val);
-                                                                                    }
-                                                                                }}
-                                                                                primaryKey="value"
-                                                                                labelKey="label"
-                                                                                options={dataLoc && dataLoc.getLocationOptions}
-                                                                                loading={LoadingLoc}
-                                                                                error={!!(touched.location && errors.location)}
-                                                                                helperText={(touched.location && errors.location) || ''}
-                                                                                fullWidth
-                                                                            />
-                                                                        )}
-                                                                    </td>
-                                                                    <td className={classes.td}>{e.pickup_name || '-'}</td>
-                                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
-                                                                        <td className={classes.td}>{e.replacement_for || '-'}</td>
-                                                                    )}
-                                                                    {isModeEdit && (
-                                                                        <td
-                                                                            className={classes.td}
-                                                                            style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}
-                                                                        >
-                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
-                                                                                <img src="/assets/img/replace.svg" alt="replace" />
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={`link-button ${classes.btnClear}`}
-                                                                                    onClick={() => handleOpenModal(idx)}
-                                                                                >
-                                                                                    replace
-                                                                                </button>
-                                                                            </div>
-                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
-                                                                                <img src="/assets/img/trash.svg" alt="delete" />
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={`link-button ${classes.btnClear}`}
-                                                                                    onClick={() => {
-                                                                                        const tempDeletedItems = [...values.deleted_items];
-                                                                                        tempDeletedItems.push(values.order_items[idx]);
-
-                                                                                        setFieldValue('deleted_items', tempDeletedItems);
-                                                                                        remove(idx);
-                                                                                    }}
-                                                                                >
-                                                                                    delete
-                                                                                </button>
-                                                                            </div>
-                                                                        </td>
-                                                                    )}
-                                                                </tr>
+                                                                <Item
+                                                                    idx={idx}
+                                                                    aclCheckData={aclCheckData}
+                                                                    classes={classes}
+                                                                    setFieldValue={setFieldValue}
+                                                                    remove={remove}
+                                                                    isModeEdit={isModeEdit}
+                                                                    item={e}
+                                                                    values={values}
+                                                                    errors={errors}
+                                                                    touched={touched}
+                                                                    handleOpenModal={handleOpenModal}
+                                                                    listLocation={dataLoc && dataLoc?.getLocationOptions}
+                                                                />
                                                             ))}
                                                         </>
                                                     )}

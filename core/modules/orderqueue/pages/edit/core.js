@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable indent */
 import React from 'react';
 import Layout from '@layout';
@@ -129,23 +130,23 @@ const ContentWrapper = (props) => {
         const mergedValues = [...values.order_items, ...values.deleted_items.map((item) => ({ ...item, qty: 0 }))];
         const fixValues = {
             order_id: values.order_id,
-            order_items: mergedValues.map((item) => ({
+            order_items: mergedValues.map((item, idx) => ({
                 id: item?.id ?? null,
                 qty: item.qty,
                 replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
                 item_id_replacement: item.item_id_replacement,
                 sku: item.name?.sku ?? item.sku,
-                loc_code: !Array.isArray(item?.loc_code)
-                    ? null
-                    : (() => {
-                          const newLoc = item?.loc_code.map((loc) => loc?.value).join(',');
-                          const result = initialValueEditItem.order_items.find((initItem) => initItem.loc_code === newLoc);
-                          if (result) return null;
-                          return newLoc;
-                      })(),
+                loc_code:
+                    typeof item?.loc_code === 'string'
+                        ? null
+                        : orderqueue.order_item[idx].loc_code === item?.loc_code?.loc_code
+                        ? null
+                        : item?.loc_code?.loc_code ?? null,
             })),
         };
+
         console.log(fixValues);
+
         window.backdropLoader(true);
         editOrderItem({
             variables: {
