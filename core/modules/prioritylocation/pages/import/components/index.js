@@ -36,12 +36,16 @@ const PriorityLocationImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Priority Location Upload</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
                     <div className={classes.formField}>
-                        <span className={classes.label}><a href={urlDownload} className={classes.linkDownload}>Download the Sample CSV</a></span>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
+                        <span className={classes.label}>
+                            <a href={urlDownload} className={classes.linkDownload}>
+                                Download the Sample CSV
+                            </a>
+                        </span>
                     </div>
-                    <div className={classes.formField}>
+                    <div className={clsx(classes.formField, classes.textLeft)}>
                         <DropFile
                             title="Please select the file : "
                             error={(

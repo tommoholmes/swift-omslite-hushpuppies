@@ -30,6 +30,12 @@ const useStyles = makeStyles((theme) => ({
     formField: {
         padding: 0,
         paddingBottom: 16,
+        width: '50%',
+        textAlign: 'right',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+            textAlign: 'left ',
+        },
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',
@@ -43,8 +49,14 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     content: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
         borderBottom: '3px solid #F5F7FB',
         padding: '10px 29px 12px 22px',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     linkDownload: {
         color: colorBlue,
@@ -54,34 +66,15 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     textAttach: {
+        fontWeight: 'bold',
         display: 'block',
+        padding: '10px 29px 12px 22px',
     },
     inputCsv: {
         marginLeft: 5,
     },
-    progressContainer: {
-        padding: '0px 29px 0px 22px',
-    },
-    leftColumn: {
-        backgroundColor: colorPurple,
-        color: 'white !important',
-        fontWeight: 'bold !important',
-        maxWidth: 200,
-        width: 200,
-    },
-    rightColumn: {
-        '&.capitalize': { textTransform: 'capitalize !important' },
-    },
-    status: {
-        '&.error': {
-            color: 'red !important',
-        },
-        '&.success': {
-            color: 'green !important',
-        },
-        fontWeight: 'bold !important',
-        marginBottom: 20,
-        fontSize: 18,
+    textLeft: {
+        textAlign: 'left !important',
     },
 }));
 

@@ -48,10 +48,8 @@ const HomeDeliveryImport = (props) => {
             </Button>
             <h2 className={classes.titleTop}>Bulk Confirmed</h2>
             <Paper className={classes.container}>
+                <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
                 <div className={classes.content}>
-                    <div className={classes.formField}>
-                        <span className={clsx(classes.textAttach, classes.label)}>Attach File </span>
-                    </div>
                     <div className={classes.formField}>
                         <DropFile
                             title="Please select the file : "
@@ -61,12 +59,13 @@ const HomeDeliveryImport = (props) => {
                             getBase64={handleDropFile}
                         />
                     </div>
+                </div>
 
+                <div className={classes.formFieldButton}>
                     <Button
                         className={classes.btn}
                         onClick={formik.handleSubmit}
                         variant="contained"
-                        disabled={!formik.values.binary || (activityState && activityState.run_status === 'running') || firstLoad}
                     >
                         Submit
                     </Button>
