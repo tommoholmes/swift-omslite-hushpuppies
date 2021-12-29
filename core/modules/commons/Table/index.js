@@ -30,6 +30,7 @@ import useStyles from '@common_table/style';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PublishIcon from '@material-ui/icons/Publish';
+import { breakPointsUp } from '@helper_theme';
 
 // helpers
 const getComponentOrString = (param) => (typeof param === 'function' ? param() : param);
@@ -61,6 +62,18 @@ const useColumns = (initialColumns) => {
         );
     };
 
+    const applyHiddenColumnsMobile = () => {
+        const mobileHiddenColumns = columns.map((column) => ({ ...column, hidden: column.hiddenMobile || column.hidden || false }));
+        setHiddenColumns(mobileHiddenColumns);
+        setColumns(mobileHiddenColumns);
+    };
+
+    const applyHiddenColumnsDesktop = () => {
+        const desktopiddenColumns = _initialColumns.map((column) => ({ ...column, hidden: column.hidden || false }));
+        setHiddenColumns(desktopiddenColumns);
+        setColumns(desktopiddenColumns);
+    };
+
     const resetHiddenColumn = () => {
         const resetedHiddenColumns = columns.map((column) => ({ ...column, hidden: false }));
         setHiddenColumns(resetedHiddenColumns);
@@ -72,6 +85,8 @@ const useColumns = (initialColumns) => {
         hiddenColumns,
         setHiddenColumn,
         applyHiddenColumns,
+        applyHiddenColumnsDesktop,
+        applyHiddenColumnsMobile,
         resetHiddenColumn,
     };
 };
@@ -110,6 +125,7 @@ const CustomTable = (props) => {
     } = props;
 
     // hooks
+    const desktop = breakPointsUp('sm');
     const classes = useStyles();
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
@@ -118,7 +134,8 @@ const CustomTable = (props) => {
     const [showMessageActions, setShowMessageActions] = React.useState(true);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn } = useColumns(props.columns);
+    const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns,
+        applyHiddenColumnsDesktop, applyHiddenColumnsMobile, resetHiddenColumn } = useColumns(props.columns);
     const [filters, setFilters] = React.useState(initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })));
     const [sorts, setSorts] = React.useState(
         props.columns.filter((column) => column.sortable).map(({ field, initialSort }) => ({ field, value: initialSort || undefined })),
@@ -180,6 +197,14 @@ const CustomTable = (props) => {
         setCheckedRows([]);
     };
 
+    const setHiddenResponsive = () => {
+        if (!desktop) {
+            applyHiddenColumnsMobile();
+        } else {
+            applyHiddenColumnsDesktop();
+        }
+    };
+
     // effects
     React.useEffect(() => {
         fetchRows();
@@ -202,6 +227,10 @@ const CustomTable = (props) => {
             setVarExport(prevState);
         }
     }, [checkedRows]);
+
+    React.useEffect(() => {
+        setHiddenResponsive();
+    }, [desktop]);
 
     const renderTableToolbar = () => {
         const toolbarActions = actions || [

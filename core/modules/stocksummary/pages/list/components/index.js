@@ -25,6 +25,7 @@ const StockSummaryList = (props) => {
             headerName: 'Name',
             hideable: 'true',
             sortable: true,
+            hiddenMobile: true,
         },
         {
             field: 'channel_name',
@@ -43,12 +44,14 @@ const StockSummaryList = (props) => {
             headerName: 'Updated At',
             hideable: 'true',
             sortable: true,
+            hiddenMobile: true,
         },
         {
             field: 'last_sync_at',
             headerName: 'Last Sync at',
             hideable: 'true',
             sortable: true,
+            hiddenMobile: true,
         },
         {
             field: 'sync_status_label',
@@ -61,6 +64,7 @@ const StockSummaryList = (props) => {
             headerName: 'Sync Message',
             hideable: 'true',
             sortable: true,
+            hiddenMobile: true,
         },
     ];
 
