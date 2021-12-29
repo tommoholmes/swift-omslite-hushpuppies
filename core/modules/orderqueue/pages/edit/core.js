@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable indent */
 import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
@@ -7,8 +9,8 @@ import gqlService from '@modules/orderqueue/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data, Content, parent, aclCheckData, refetchOrderQueue,
-    } = props;
+ data, Content, parent, aclCheckData, refetchOrderQueue,
+} = props;
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
     const [editOrderItem] = gqlService.editOrderItem();
@@ -128,14 +130,23 @@ const ContentWrapper = (props) => {
         const mergedValues = [...values.order_items, ...values.deleted_items.map((item) => ({ ...item, qty: 0 }))];
         const fixValues = {
             order_id: values.order_id,
-            order_items: mergedValues.map((item) => ({
+            order_items: mergedValues.map((item, idx) => ({
                 id: item?.id ?? null,
                 qty: item.qty,
                 replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
                 item_id_replacement: item.item_id_replacement,
                 sku: item.name?.sku ?? item.sku,
+                loc_code:
+                    typeof item?.loc_code === 'string'
+                        ? null
+                        : orderqueue.order_item[idx].loc_code === item?.loc_code?.loc_code
+                        ? null
+                        : item?.loc_code?.loc_code ?? null,
             })),
         };
+
+        console.log(fixValues);
+
         window.backdropLoader(true);
         editOrderItem({
             variables: {
