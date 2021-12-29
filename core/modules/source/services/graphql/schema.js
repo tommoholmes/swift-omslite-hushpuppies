@@ -5,6 +5,7 @@ export const getSourceList = gql`
         getSourceList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort, search: $search) {
             items {
                 source_id
+                loc_id
                 loc_name
                 sku
                 qty_total

@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     contentCounter: {
         margin: '20px auto',
@@ -111,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('xs')]: {
             width: '100%',
+            margin: '10px auto',
         },
     },
     btnClear: {

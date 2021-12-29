@@ -53,7 +53,7 @@ const ModalFindProduct = (props) => {
                         pageSize: 20,
                         currentPage: 1,
                         filter: {
-                            product_name: {
+                            sku: {
                                 like: searchSKU,
                             },
                         },
@@ -79,7 +79,7 @@ const ModalFindProduct = (props) => {
     }, [getProductListRes.data]);
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth="true" classes={{ paper: classes.paper }}>
+        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth classes={{ paper: classes.paper }}>
             <div className={classes.textTitle}>
                 <div>
                     Replace Product For
@@ -115,7 +115,7 @@ const ModalFindProduct = (props) => {
                             }}
                             getOptions={getProductList}
                             primaryKey="sku"
-                            labelKey="product_name"
+                            labelKey="sku"
                             onInputChange={(e) => setSearchSKU(e && e.target && e.target.value)}
                         />
                         <div style={{ margin: '0px 15px' }}>

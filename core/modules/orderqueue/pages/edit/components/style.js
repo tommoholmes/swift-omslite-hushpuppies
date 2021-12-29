@@ -269,7 +269,7 @@ const useStyles = makeStyles((theme) => ({
     table: {
         borderCollapse: 'collapse',
         width: '100%',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             width: '1500px',
         },
     },
@@ -443,7 +443,6 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     autocompleteRoot: {
-        maxWidth: 200,
         width: '100%',
         verticalAlign: 'middle',
         marginBottom: 10,
@@ -458,8 +457,8 @@ const useStyles = makeStyles((theme) => ({
             height: 36,
             padding: '0 9px',
         },
-        [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
+        '& .MuiInputBase-root': {
+            height: 'auto',
         },
     },
     titleSmallBlack: {
