@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import clsx from 'clsx';
 import Button from '@common_button';
 import useStyles from '@modules/orderqueue/pages/edit/components/modalFindProduct/style';
-import gqlProduct from '@modules/productlist/services/graphql';
+import gqlService from '@modules/orderqueue/services/graphql';
 
 const ModalFindProduct = (props) => {
     const {
@@ -17,12 +17,13 @@ const ModalFindProduct = (props) => {
     const [optionsSKU, setOptionsSKU] = useState([]);
     const [selectedSKU, setSelectedSKU] = useState(null);
 
-    const [getProductList, getProductListRes] = gqlProduct.getProductList();
+    const [getUniqueProductFromSource, getUniqueProductFromSourceRes] = gqlService.getUniqueProductFromSource();
 
     const handleSubmit = () => {
         setFieldValue(`order_items.${idx}.sku`, selectedSKU?.sku ?? '');
         setFieldValue(`order_items.${idx}.base_price`, selectedSKU?.product_price ?? 0);
         setFieldValue(`order_items.${idx}.name`, selectedSKU?.product_name ?? '');
+        setFieldValue(`order_items.${idx}.loc_code`, null);
         if (values.order_items[idx]?.replacement_for) {
             setFieldValue(`order_items.${idx}.replacement_for`, values.order_items[idx].replacement_for);
         } else {
@@ -48,7 +49,7 @@ const ModalFindProduct = (props) => {
         const onChangeTimeOut = setTimeout(() => {
             const isExist = searchSKU && optionsSKU.filter((elm) => elm?.sku?.toLowerCase().includes(searchSKU?.toLowerCase()));
             if (searchSKU && isExist.length <= 3) {
-                getProductList({
+                getUniqueProductFromSource({
                     variables: {
                         pageSize: 20,
                         currentPage: 1,
@@ -68,21 +69,26 @@ const ModalFindProduct = (props) => {
     }, [searchSKU]);
 
     useEffect(() => {
-        if (getProductListRes && getProductListRes.data && getProductListRes.data.getProductList && getProductListRes.data.getProductList.items) {
+        if (
+            getUniqueProductFromSourceRes
+            && getUniqueProductFromSourceRes.data
+            && getUniqueProductFromSourceRes.data.getUniqueProductFromSource
+            && getUniqueProductFromSourceRes.data.getUniqueProductFromSource.items
+        ) {
             const sku = new Set(optionsSKU.map((d) => d.sku));
             if (optionsSKU.length > 100) {
-                setOptionsSKU(getProductListRes.data.getProductList.items);
+                setOptionsSKU(getUniqueProductFromSourceRes.data.getUniqueProductFromSource.items);
             } else {
-                setOptionsSKU([...optionsSKU, ...getProductListRes.data.getProductList.items.filter((d) => !sku.has(d.sku))]);
+                setOptionsSKU([...optionsSKU, ...getUniqueProductFromSourceRes.data.getUniqueProductFromSource.items.filter((d) => !sku.has(d.sku))]);
             }
         }
-    }, [getProductListRes.data]);
+    }, [getUniqueProductFromSourceRes.data]);
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth classes={{ paper: classes.paper }}>
             <div className={classes.textTitle}>
                 <div>
-                    Replace Product For
+                    Replace Product For SKU
                     {' '}
                     {values.order_items[idx]?.replacement_for || values.order_items[idx]?.name || values.order_items[idx]?.sku}
                 </div>
@@ -104,7 +110,7 @@ const ModalFindProduct = (props) => {
                             onChange={(e) => {
                                 setSelectedSKU(e);
                             }}
-                            loading={getProductListRes.loading}
+                            loading={getUniqueProductFromSourceRes.loading}
                             options={optionsSKU}
                             getOptionsVariables={{
                                 variables: {
@@ -113,7 +119,7 @@ const ModalFindProduct = (props) => {
                                     currentPage: 1,
                                 },
                             }}
-                            getOptions={getProductList}
+                            getOptions={getUniqueProductFromSource}
                             primaryKey="sku"
                             labelKey="sku"
                             onInputChange={(e) => setSearchSKU(e && e.target && e.target.value)}

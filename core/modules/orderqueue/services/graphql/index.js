@@ -91,6 +91,12 @@ export const getLocationOptions = (options) => useLazyQuery(Schema.getLocationOp
     ...fetchPolicy,
 });
 
+export const getUniqueProductFromSource = (variables) => useLazyQuery(Schema.getUniqueProductFromSource, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -107,4 +113,5 @@ export default {
     editOrderItem,
     cancelOrder,
     getLocationOptions,
+    getUniqueProductFromSource,
 };
