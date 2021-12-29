@@ -48,7 +48,6 @@ const Item = (props) => {
     const firstRender = useRef(true);
 
     useEffect(() => {
-        console.log('firstRender', firstRender.current);
         if (firstRender.current) {
             firstRender.current = false;
             return;

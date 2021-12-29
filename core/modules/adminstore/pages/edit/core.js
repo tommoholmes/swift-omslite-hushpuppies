@@ -8,11 +8,7 @@ import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        dataCompany,
-        dataLocation,
-        dataGroup,
-        Content,
+        data, dataCompany, dataLocation, dataGroup, Content,
     } = props;
     const router = useRouter();
     const admin = data.getAdminStoreById;
@@ -23,22 +19,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateAdminStore({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit user!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit user!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/userdata/adminstore'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/userdata/adminstore'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -47,7 +45,8 @@ const ContentWrapper = (props) => {
             lastname: admin.lastname,
             email: admin.email,
             customer_loc_code: admin.customer_loc_code?.length
-                ? admin.customer_loc_code.map((code) => (dataLocation.getLocationOptions.find((loc) => loc.value === code))) : [],
+                ? admin.customer_loc_code.map((code) => dataLocation.getLocationOptions.find((loc) => loc.value === code))
+                : [],
             company: admin.customer_company_code
                 ? dataCompany.getCompanyOptions.find((loc) => Number(loc.value) === Number(admin.customer_company_code))
                 : '',
@@ -65,9 +64,7 @@ const ContentWrapper = (props) => {
             } = values;
             const valueToSubmit = {
                 ...restValues,
-                customer_loc_code: customer_loc_code?.map((loc) => (
-                    String(loc.value)
-                )),
+                customer_loc_code: customer_loc_code?.map((loc) => String(loc.value)),
                 group_id: Number(group.value),
                 customer_company_code: company?.value ? String(company.value) : '',
             };
@@ -82,9 +79,7 @@ const ContentWrapper = (props) => {
         dataGroup: dataGroup.getCustomerGroupOptions,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -106,14 +101,32 @@ const Core = (props) => {
     });
 
     if (loading || loadingCompany || loadingLocation || loadingGroup || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/userdata/adminstore');
+        }, 1000);
         return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 

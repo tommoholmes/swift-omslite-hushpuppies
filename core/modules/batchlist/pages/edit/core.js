@@ -7,10 +7,7 @@ import gqlService from '@modules/batchlist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const batchlist = data.getPickByBatchById.pick_by_batch;
     const [startPickByBatchPicklist] = gqlService.startPickByBatchPicklist();
@@ -25,22 +22,24 @@ const ContentWrapper = (props) => {
             window.backdropLoader(true);
             startPickByBatchPicklist({
                 variables,
-            }).then(() => {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    text: 'PickList in Progress',
-                    variant: 'success',
+            })
+                .then(() => {
+                    window.backdropLoader(false);
+                    window.toastMessage({
+                        open: true,
+                        text: 'PickList in Progress',
+                        variant: 'success',
+                    });
+                    router.push(`/pickpack/batchlist/edit/picklist/${id}`);
+                })
+                .catch((e) => {
+                    window.backdropLoader(false);
+                    window.toastMessage({
+                        open: true,
+                        text: e.message,
+                        variant: 'error',
+                    });
                 });
-                router.push(`/pickpack/batchlist/edit/picklist/${id}`);
-            }).catch((e) => {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    text: e.message,
-                    variant: 'error',
-                });
-            });
         } else {
             router.push(`/pickpack/batchlist/edit/picklist/${id}`);
         }
@@ -53,22 +52,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         startSortingPickByBatch({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Start Sorting',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Start Sorting',
+                    variant: 'success',
+                });
+                router.push(`/pickpack/batchlist/edit/sorting/${batchList.id}`);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            router.push(`/pickpack/batchlist/edit/sorting/${batchList.id}`);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const batchList = {
@@ -96,9 +97,7 @@ const ContentWrapper = (props) => {
         formikStartSorting,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -116,14 +115,32 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/pickpack/batchlist');
+        }, 1000);
         return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 

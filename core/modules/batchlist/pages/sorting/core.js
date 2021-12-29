@@ -222,7 +222,29 @@ const Core = (props) => {
     }
 
     if (!data || !dataConfig) {
-        return <Layout pageConfig={pageConfig}>Data not found!</Layout>;
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/pickpack/batchlist');
+        }, 1000);
+        return (
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
+        );
     }
 
     return (
