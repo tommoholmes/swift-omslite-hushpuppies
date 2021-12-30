@@ -606,6 +606,12 @@ const Layout = (props) => {
                     label: 'Marketplace Feature',
                     url: '/configurations/marketplacefeature',
                 },
+                {
+                    aclCode: 'oms_lite_manage_courier',
+                    key: 'netsuitecourier',
+                    label: 'Netsuite Courier',
+                    url: '/configurations/netsuitecourier',
+                },
             ],
         },
         {
