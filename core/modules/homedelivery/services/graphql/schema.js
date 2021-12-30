@@ -1,18 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const getStoreShipmentList = gql`
-    query getStoreShipmentList(
-        $pageSize: Int!,
-        $currentPage: Int!,
-        $filter: ShipmentFilterInput,
-        $sort: ShipmentSortInput,
-    ){
-        getStoreShipmentList(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
-            filter: $filter,
-            sort: $sort,
-        ){
+    query getStoreShipmentList($pageSize: Int!, $currentPage: Int!, $filter: ShipmentFilterInput, $sort: ShipmentSortInput) {
+        getStoreShipmentList(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 entity_id
                 increment_id
@@ -22,12 +12,12 @@ export const getStoreShipmentList = gql`
                 location {
                     loc_name
                 }
-                status{
+                status {
                     value
                     label
                 }
                 track_number
-                channel{
+                channel {
                     channel_name
                 }
                 shipping_name
@@ -45,12 +35,8 @@ export const getStoreShipmentList = gql`
 `;
 
 export const getStoreShipmentById = gql`
-    query getStoreShipmentById(
-        $id: Int!
-    ){
-        getStoreShipmentById(
-            id: $id
-        ){
+    query getStoreShipmentById($id: Int!) {
+        getStoreShipmentById(id: $id) {
             entity_id
             increment_id
             channel_order_increment_id
@@ -60,14 +46,14 @@ export const getStoreShipmentById = gql`
             }
             allocation_status
             channel_order_date
-            location{
+            location {
                 loc_name
             }
             customer_name
             shipping_telephone
             shipping_email
             updated_at
-            all_track{
+            all_track {
                 created_at
                 title
                 track_number
@@ -83,7 +69,7 @@ export const getStoreShipmentById = gql`
                 telephone
                 country_name
             }
-           shipping_address {
+            shipping_address {
                 firstname
                 lastname
                 street
@@ -120,122 +106,68 @@ export const getStoreShipmentById = gql`
 `;
 
 export const confirmShipment = gql`
-    mutation confirmShipment(
-        $id: [Int!],
-    ){
-        confirmShipment(
-            id: $id
-        )
+    mutation confirmShipment($id: [Int!]) {
+        confirmShipment(id: $id)
     }
 `;
 
 export const cantFulfillShipment = gql`
-    mutation cantFulfillShipment(
-        $id: [Int!],
-    ){
-        cantFulfillShipment(
-            id: $id
-        )
+    mutation cantFulfillShipment($id: [Int!]) {
+        cantFulfillShipment(id: $id)
     }
 `;
 
 export const pickShipment = gql`
-    mutation pickShipment(
-        $id: [Int!],
-    ){
-        pickShipment(
-            id: $id
-        )
+    mutation pickShipment($id: [Int!]) {
+        pickShipment(id: $id)
     }
 `;
 
 export const cancelDelivery = gql`
-    mutation cancelDelivery(
-        $id: Int!,
-        $cancel_reason_id: String,
-    ){
-        cancelDelivery(
-            id: $id
-            cancel_reason_id: $cancel_reason_id,
-        )
+    mutation cancelDelivery($id: Int!, $cancel_reason_id: String!) {
+        cancelDelivery(id: $id, cancel_reason_id: $cancel_reason_id)
     }
 `;
 
 export const packShipment = gql`
-    mutation packShipment(
-        $id: [Int!],
-    ){
-        packShipment(
-            id: $id
-        )
+    mutation packShipment($id: [Int!]) {
+        packShipment(id: $id)
     }
 `;
 
 export const bookCourier = gql`
-    mutation bookCourier(
-        $id: [Int!],
-    ){
-        bookCourier(
-            id: $id
-        )
+    mutation bookCourier($id: [Int!]) {
+        bookCourier(id: $id)
     }
 `;
 
 export const shipDelivery = gql`
-    mutation shipDelivery(
-        $id: Int!,
-        $carrier: String!,
-        $name: String!,
-        $reference: String!,
-    ){
-        shipDelivery(
-            id: $id,
-            carrier: $carrier,
-            name: $name,
-            reference: $reference,
-        )
+    mutation shipDelivery($id: Int!, $carrier: String!, $name: String!, $reference: String!) {
+        shipDelivery(id: $id, carrier: $carrier, name: $name, reference: $reference)
     }
 `;
 
 export const deliveredShipment = gql`
-    mutation deliveredShipment(
-        $id: [Int!],
-    ){
-        deliveredShipment(
-            id: $id
-        )
+    mutation deliveredShipment($id: [Int!]) {
+        deliveredShipment(id: $id)
     }
 `;
 
 export const exportStoreShipmentToCsv = gql`
-    query exportStoreShipmentToCsv(
-        $type: String!,
-        $filter: ShipmentFilterInput,
-        $sort: ShipmentSortInput,
-    ){
-        exportStoreShipmentToCsv(
-            type: $type,
-            filter: $filter,
-            sort: $sort,
-        )
+    query exportStoreShipmentToCsv($type: String!, $filter: ShipmentFilterInput, $sort: ShipmentSortInput) {
+        exportStoreShipmentToCsv(type: $type, filter: $filter, sort: $sort)
     }
 `;
 
 export const saveShipmentNotes = gql`
-    mutation saveShipmentNotes(
-        $id: Int!,
-        $notes: String!,
-    ){
-        saveShipmentNotes(
-            id: $id,
-            notes: $notes,
-        )
+    mutation saveShipmentNotes($id: Int!, $notes: String!) {
+        saveShipmentNotes(id: $id, notes: $notes)
     }
 `;
 
 export const getCourierOption = gql`
-    query{
-        getCourierOption{
+    query {
+        getCourierOption {
             label
             value
         }
@@ -243,8 +175,8 @@ export const getCourierOption = gql`
 `;
 
 export const getShipmentCancelReason = gql`
-    query{
-        getShipmentCancelReason{
+    query {
+        getShipmentCancelReason {
             label
             value
         }
@@ -252,14 +184,8 @@ export const getShipmentCancelReason = gql`
 `;
 
 export const bulkShipment = gql`
-    mutation bulkShipment(
-        $binary: String!,
-    ){
-        bulkShipment(
-            input: {
-                binary: $binary,
-            }
-        ){
+    mutation bulkShipment($binary: String!) {
+        bulkShipment(input: { binary: $binary }) {
             is_success
             attachment_url
         }
@@ -267,27 +193,27 @@ export const bulkShipment = gql`
 `;
 
 export const getActivity = gql`
-    query{
-        getActivity(code: "import_bulkshipment", by_session: true){
-        activity_id
-        activity_code
-        run_status
-        data_total
-        data_processed
-        started_at
-        snapshot_at
-        finished_at
-        run_by
-        run_type
-        attachment
-        error_message
+    query {
+        getActivity(code: "import_bulkshipment", by_session: true) {
+            activity_id
+            activity_code
+            run_status
+            data_total
+            data_processed
+            started_at
+            snapshot_at
+            finished_at
+            run_by
+            run_type
+            attachment
+            error_message
         }
     }
 `;
 
 export const getShipmentStatusByType = gql`
-    query{
-        getShipmentStatusByType(type: "home_delivery"){
+    query {
+        getShipmentStatusByType(type: "home_delivery") {
             label
             value
         }
@@ -295,9 +221,9 @@ export const getShipmentStatusByType = gql`
 `;
 
 export const getStoreConfig = gql`
-  query getStoreConfig($path: String!){
-    getStoreConfig(path: $path)
-  }
+    query getStoreConfig($path: String!) {
+        getStoreConfig(path: $path)
+    }
 `;
 
 export default {
