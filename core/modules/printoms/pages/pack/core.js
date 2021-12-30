@@ -4,10 +4,7 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/printoms/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const packlist = data.getPackList;
 
     const packList = {
@@ -18,16 +15,13 @@ const ContentWrapper = (props) => {
         approvedBy: packlist.approved_by,
         receivedBy: packlist.received_by,
         slot: ['10', '22', '55'],
-
     };
 
     const contentProps = {
         packList,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -37,20 +31,36 @@ const Core = (props) => {
     });
 
     if (loading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/');
+        }, 1000);
         return (
-            <Layout>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 
-    return (
-        <ContentWrapper data={data} {...props} />
-    );
+    return <ContentWrapper data={data} {...props} />;
 };
 
 export default Core;

@@ -8,10 +8,7 @@ import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        dataLocation,
-        refetch,
+        data, Content, dataLocation, refetch,
     } = props;
     const router = useRouter();
     const mpData = data.getAvailableMpToConnect;
@@ -33,10 +30,13 @@ const ContentWrapper = (props) => {
         if (mpActive?.credentials?.type === 'oauth2') {
             return initialValue;
         }
-        return mpActive?.credentials?.fields?.reduce((obj, item) => ({
-            ...obj,
-            [item.name]: schemaType === 'validation' ? type[item.type] : '',
-        }), initialValue);
+        return mpActive?.credentials?.fields?.reduce(
+            (obj, item) => ({
+                ...obj,
+                [item.name]: schemaType === 'validation' ? type[item.type] : '',
+            }),
+            initialValue,
+        );
     };
 
     const handleSubmit = (input) => {
@@ -44,44 +44,48 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         registerMarketplaceChannel({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success register marketplace!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success register marketplace!',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleUpdateLocation = (variables) => {
         window.backdropLoader(true);
         updateMarketplaceLocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success register marketplace!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success register marketplace!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push(mpActive.credentials?.url), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push(mpActive.credentials?.url), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleDisconnect = (mp) => {
@@ -93,22 +97,24 @@ const ContentWrapper = (props) => {
                     marketplace_code: mp.marketplace_code,
                 },
             },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success disconnect to marketplace!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success disconnect to marketplace!',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleReconnect = (mp) => {
@@ -120,22 +126,24 @@ const ContentWrapper = (props) => {
                     marketplace_code: mp.marketplace_code,
                 },
             },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success reconnect to marketplace!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success reconnect to marketplace!',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -144,19 +152,14 @@ const ContentWrapper = (props) => {
             ...schemaObj(),
         },
         validationSchema: Yup.object().shape({
-            location: Yup.array()
-                .of(
-                    Yup.object(),
-                )
-                .min(1)
-                .required('Required!'),
+            location: Yup.array().of(Yup.object()).min(1).required('Required!'),
             ...schemaObj('validation'),
         }),
         onSubmit: (values) => {
             const { location, ...restValues } = values;
             const valueToSubmit = {
                 brand_id: mpData.brand_id,
-                loc_id: location.map((loc) => (Number(loc.loc_id))),
+                loc_id: location.map((loc) => Number(loc.loc_id)),
                 marketplace_code: mpActive.marketplace_code,
             };
             if (mpActive?.credentials?.type === 'oauth2') {
@@ -193,9 +196,7 @@ const ContentWrapper = (props) => {
         handleReconnect,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -226,13 +227,14 @@ const Core = (props) => {
     if (loading || loadingMp || loadingLocation || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading get Marketplaces . . .
                 </div>
@@ -241,15 +243,24 @@ const Core = (props) => {
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/configurations/marketplacebrand');
+        }, 1000);
         return (
-            <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Data not found!
                 </div>

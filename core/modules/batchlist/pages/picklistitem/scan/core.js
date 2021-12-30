@@ -8,10 +8,7 @@ import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        allowManualConfirm,
-        useCamera,
+        data, Content, allowManualConfirm, useCamera,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByBatchItemById.pick_by_batch_item;
@@ -28,22 +25,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updatePickByBatchItem({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success update qty!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success update qty!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push(`/pickpack/batchlist/edit/picklist/${pickList.parentId}`), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push(`/pickpack/batchlist/edit/picklist/${pickList.parentId}`), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const incrementCount = () => {
@@ -92,9 +91,7 @@ const ContentWrapper = (props) => {
         useCamera,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -120,14 +117,32 @@ const Core = (props) => {
     });
 
     if (loading || loadingConfig || loadingConfigCamera || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/pickpack/batchlist');
+        }, 1000);
         return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 
