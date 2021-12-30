@@ -74,10 +74,10 @@ const Login = (props) => {
                 <div className={classes.headerLogin}>
                     <img alt="" src="/assets/img/swiftoms_logo_expanded.png" />
                 </div>
+                <Typography variant="h6" gutterBottom className={classes.textTitle}>
+                    Request New Vendor
+                </Typography>
                 <div className={classes.loginContent}>
-                    <Typography variant="h6" gutterBottom className={classes.textTitle}>
-                        Request New Vendor
-                    </Typography>
                     <form>
                         <div className="row center-xs start-sm">
                             <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>

@@ -41,6 +41,16 @@ const useStyles = makeStyles((theme) => ({
             float: 'left',
             marginTop: 26,
             marginLeft: 21,
+            height: '115vmin',
+            overflow: 'scroll',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                width: 0,
+                background: 'transparent',
+            },
+        },
+        [theme.breakpoints.up('md')]: {
+            height: '97vmin',
         },
     },
     containRight: {
