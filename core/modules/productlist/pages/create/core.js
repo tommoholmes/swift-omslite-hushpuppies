@@ -5,13 +5,11 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/productlist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        Content,
-        attributeOptions,
-        attributeToMap,
-        getNewProductAttributes,
+        Content, attributeOptions, attributeToMap, getNewProductAttributes,
     } = props;
     const router = useRouter();
     const [createProduct] = gqlService.createProduct();
@@ -33,20 +31,20 @@ const ContentWrapper = (props) => {
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < attributeToMap.groups.length; i++) {
             const group = attributeToMap.groups[i];
-            group.attributes.filter((att) => att.frontend_input !== 'image').map((attribute) => {
-                if (attribute.is_required) {
-                    valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
-                }
-                if (attribute.frontend_input === 'multiselect') {
-                    return init.push([attribute.attribute_code, []]);
-                }
-                if (attribute.frontend_input === 'boolean') {
-                    return init.push([attribute.attribute_code, false]);
-                }
-                return (
-                    init.push([attribute.attribute_code, ''])
-                );
-            });
+            group.attributes
+                .filter((att) => att.frontend_input !== 'image')
+                .map((attribute) => {
+                    if (attribute.is_required) {
+                        valid.push([attribute.attribute_code, Yup.string().required('This field is Required!')]);
+                    }
+                    if (attribute.frontend_input === 'multiselect') {
+                        return init.push([attribute.attribute_code, []]);
+                    }
+                    if (attribute.frontend_input === 'boolean') {
+                        return init.push([attribute.attribute_code, false]);
+                    }
+                    return init.push([attribute.attribute_code, '']);
+                });
         }
         return {
             init: Object.fromEntries(init),
@@ -58,22 +56,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         createProduct({
             variables: { ...value },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Update Product!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Update Product!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/product/productlist'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/product/productlist'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -87,21 +87,23 @@ const ContentWrapper = (props) => {
         onSubmit: (values) => {
             const { input_image, ...restValues } = values;
             const valueToSubmit = {
-                input: Object.keys(restValues).map((key) => {
-                    let attribute_value = restValues[key] || '';
-                    if (restValues[key] && restValues[key] !== '') {
-                        if (typeof restValues[key] === 'object') {
-                            attribute_value = restValues[key]?.map((val) => (val.value)).join(',') || '';
-                        } else if (typeof restValues[key] === 'boolean') {
-                            attribute_value = restValues[key] ? '1' : '0';
+                input: Object.keys(restValues)
+                    .map((key) => {
+                        let attribute_value = restValues[key] || '';
+                        if (restValues[key] && restValues[key] !== '') {
+                            if (typeof restValues[key] === 'object') {
+                                attribute_value = restValues[key]?.map((val) => val.value).join(',') || '';
+                            } else if (typeof restValues[key] === 'boolean') {
+                                attribute_value = restValues[key] ? '1' : '0';
+                            }
+                            return {
+                                attribute_code: key,
+                                attribute_value,
+                            };
                         }
-                        return ({
-                            attribute_code: key,
-                            attribute_value,
-                        });
-                    }
-                    return false;
-                }).filter((val) => !!val && val?.attribute_value !== ''),
+                        return false;
+                    })
+                    .filter((val) => !!val && val?.attribute_value !== ''),
             };
             valueToSubmit.input = [{ attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) }, ...valueToSubmit.input];
             if (input_image && input_image.length) {
@@ -122,7 +124,7 @@ const ContentWrapper = (props) => {
             types: [],
             position: 0,
             name: file.name,
-            size: `${(file.size / 1000)} KB`,
+            size: `${file.size / 1000} KB`,
         });
         formik.setFieldValue('input_image', input);
     };
@@ -136,9 +138,7 @@ const ContentWrapper = (props) => {
         attributeOptions,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -151,7 +151,7 @@ const Core = (props) => {
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
         acl_code: 'oms_lite_product_list',
     });
-    const { loading, data } = gqlService.getProductAttributeSetOptions();
+    const { loading, data, error } = gqlService.getProductAttributeSetOptions();
     const [getNewProductAttributes, getNewProductAttributesRes] = gqlService.getNewProductAttributes();
 
     React.useEffect(() => {
@@ -163,13 +163,14 @@ const Core = (props) => {
     if (loading || aclCheckLoading || getNewProductAttributesRes.loading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -182,28 +183,9 @@ const Core = (props) => {
     }
 
     if (!data || !getNewProductAttributesRes.data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/product/productlist');
-        }, 1000);
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? getNewProductAttributesRes?.error?.message ?? 'Data not found!';
+        const redirect = '/product/productlist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     const contentProps = {

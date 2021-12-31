@@ -40,12 +40,6 @@ const ProductStatusListContent = (props) => {
         updated_at: formatDate(company.updated_at, 'MMM D, YYYY h:mm:ss A'),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />

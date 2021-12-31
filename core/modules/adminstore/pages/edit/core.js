@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/adminstore/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -89,9 +90,10 @@ const Core = (props) => {
         title: `Edit User #${router?.query?.id}`,
     };
 
-    const { loading, data } = gqlService.getAdminStoreById({
+    const { loading, data, error } = gqlService.getAdminStoreById({
         id: router && router.query && Number(router.query.id),
     });
+
     const { loading: loadingCompany, data: dataCompany } = gqlService.getCompanyOptions();
     const { loading: loadingLocation, data: dataLocation } = gqlService.getLocationOptions();
     const { loading: loadingGroup, data: dataGroup } = gqlService.getCustomerGroupOptions();
@@ -105,29 +107,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/userdata/adminstore');
-        }, 1000);
-        return (
-            <Layout>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/userdata/adminstore';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { optionsInItem, optionsEmailCustomer, optionsEmailAdmin } from '@modules/rmastatuses/helpers';
 import gqlService from '@modules/rmastatuses/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { Content, data } = props;
@@ -87,7 +88,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getRmaStatusByCode({
+    const { loading, data, error } = gqlService.getRmaStatusByCode({
         status_code: router && router.query && String(router.query.id),
     });
 
@@ -100,29 +101,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/sales/rmastatuses');
-        }, 1000);
-        return (
-            <Layout>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/rmastatuses';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

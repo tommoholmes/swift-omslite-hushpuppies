@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/shipmentmarketplace/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -344,7 +345,9 @@ const Core = (props) => {
     const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
         path: 'swiftoms_shipment/general/pick_and_pack',
     });
-    const { loading, data, refetch } = gqlService.getStoreShipmentById({
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -371,15 +374,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/shipment/shipmentmarketplace');
-        }, 1000);
-        return <Layout pageConfig={pageConfig} />;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/shipment/shipmentmarketplace';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

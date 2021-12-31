@@ -37,23 +37,10 @@ const StoreListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
-            <Table
-                filters={filters}
-                rows={rows}
-                getRows={getStoreList}
-                loading={loading}
-                columns={columns}
-                count={storeTotal}
-            />
+            <Table filters={filters} rows={rows} getRows={getStoreList} loading={loading} columns={columns} count={storeTotal} />
         </>
     );
 };

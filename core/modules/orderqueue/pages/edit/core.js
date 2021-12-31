@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/orderqueue/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -145,8 +146,6 @@ const ContentWrapper = (props) => {
             })),
         };
 
-        console.log(fixValues);
-
         window.backdropLoader(true);
         editOrderItem({
             variables: {
@@ -188,7 +187,9 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data, refetch: refetchOrderQueue } = gqlService.getOrderQueueById({
+    const {
+ loading, data, error, refetch: refetchOrderQueue,
+} = gqlService.getOrderQueueById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -205,19 +206,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            if (router.query.tab_status) {
-                router.push(`/order/${router.query.tab_status}`);
-                return;
-            }
-            router.push('/order/allorder');
-        }, 1000);
-        return <Layout pageConfig={pageConfig} />;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = router.query.tab_status ? `/order/${router.query.tab_status}` : '/order/allorder';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     return (

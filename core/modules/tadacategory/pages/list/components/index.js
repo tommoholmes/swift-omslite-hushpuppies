@@ -31,12 +31,6 @@ const CategoryTadaListContent = (props) => {
         ...categoryTada,
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />

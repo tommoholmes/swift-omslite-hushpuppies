@@ -34,12 +34,6 @@ const CompanyListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />

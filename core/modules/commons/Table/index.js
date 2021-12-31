@@ -134,8 +134,15 @@ const CustomTable = (props) => {
     const [showMessageActions, setShowMessageActions] = React.useState(true);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns,
-        applyHiddenColumnsDesktop, applyHiddenColumnsMobile, resetHiddenColumn } = useColumns(props.columns);
+    const {
+        columns,
+        hiddenColumns,
+        setHiddenColumn,
+        applyHiddenColumns,
+        applyHiddenColumnsDesktop,
+        applyHiddenColumnsMobile,
+        resetHiddenColumn,
+    } = useColumns(props.columns);
     const [filters, setFilters] = React.useState(initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })));
     const [sorts, setSorts] = React.useState(
         props.columns.filter((column) => column.sortable).map(({ field, initialSort }) => ({ field, value: initialSort || undefined })),
@@ -552,6 +559,7 @@ const CustomTable = (props) => {
                 <TableFooter>
                     <TableRow>
                         <TablePagination
+                            className={classes.tablePagination}
                             rowsPerPageOptions={[5, 10, 25, 100]}
                             count={count}
                             rowsPerPage={rowsPerPage}
@@ -560,8 +568,8 @@ const CustomTable = (props) => {
                                 inputProps: { 'aria-label': 'rows per page' },
                                 native: true,
                             }}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
                             ActionsComponent={TablePaginationActions}
                         />
                     </TableRow>
@@ -585,7 +593,7 @@ const CustomTable = (props) => {
                     <div className={classes.loading}>No records to display</div>
                 )}
             </div>
-            {!hideFooter && renderTableFooter()}
+            <Table size="small">{!hideFooter && renderTableFooter()}</Table>
         </TableContainer>
     );
 };

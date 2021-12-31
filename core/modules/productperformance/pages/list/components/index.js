@@ -29,12 +29,6 @@ const ProductPerformanceContent = (props) => {
         id: company.company_id,
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
@@ -54,13 +48,7 @@ const ProductPerformanceContent = (props) => {
                     </tbody>
                 </table>
             </div>
-            <Table
-                rows={rows}
-                getRows={getCompanyList}
-                loading={loading}
-                columns={columns}
-                count={companyTotal}
-            />
+            <Table rows={rows} getRows={getCompanyList} loading={loading} columns={columns} count={companyTotal} />
         </>
     );
 };

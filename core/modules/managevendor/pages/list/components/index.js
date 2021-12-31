@@ -33,24 +33,10 @@ const ManageVendorListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
-            <Table
-                rows={rows}
-                getRows={getCompanyList}
-                loading={loading}
-                columns={columns}
-                count={vendorTotal}
-                filters={filters}
-                hideActions
-            />
+            <Table rows={rows} getRows={getCompanyList} loading={loading} columns={columns} count={vendorTotal} filters={filters} hideActions />
         </>
     );
 };

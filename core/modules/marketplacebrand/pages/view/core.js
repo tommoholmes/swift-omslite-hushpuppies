@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/marketplacebrand/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -206,7 +207,9 @@ const Core = (props) => {
     };
     const [updateConnectedMarketplace, { loading }] = gqlService.updateConnectedMarketplace({});
     const [getLocationList, { loading: loadingLocation, data: dataLocation }] = gqlService.getLocationList();
-    const [getAvailableMpToConnect, { loading: loadingMp, data, refetch }] = gqlService.getAvailableMpToConnect({
+    const [getAvailableMpToConnect, {
+        loading: loadingMp, data, refetch, error,
+    }] = gqlService.getAvailableMpToConnect({
         store_id: router && router.query && Number(router.query.id),
         callback_url: router && router.asPath,
     });
@@ -243,29 +246,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/configurations/marketplacebrand');
-        }, 1000);
-        return (
-            <Layout>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/configurations/marketplacebrand';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

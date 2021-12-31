@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/batchpack/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/batchpack/pages/detail/components/style';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -90,7 +91,7 @@ const Core = (props) => {
         title: `Pack by Batch ID ${router.query?.id}`,
     };
 
-    const { loading, data } = gqlService.getPackList({
+    const { loading, data, error } = gqlService.getPackList({
         id: [router && router.query && Number(router.query.id)],
     });
     const classes = useStyles();
@@ -108,15 +109,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/pickpack/batchpack');
-        }, 1000);
-        return <Layout pageConfig={pageConfig} />;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/batchpack';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
