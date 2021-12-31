@@ -4,7 +4,7 @@ import BaseProductUpload from '@modules/vendorbulktools/pages/default/components
 
 export const bulkToolsOptions = [
     {
-        name: 'Product Upload Master',
+        name: 'Product Master Upload',
         code: 'product_upload_master',
         acl: 'oms_lite_vendor_product_upload_master',
         sample: 'vendor_product',
@@ -13,7 +13,7 @@ export const bulkToolsOptions = [
         component: <BaseProductUpload />,
     },
     {
-        name: 'Product Upload Configurable',
+        name: 'Product Configurable Upload',
         code: 'product_upload_configurable',
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_configurable',
@@ -22,7 +22,7 @@ export const bulkToolsOptions = [
         component: <BaseProductUpload />,
     },
     {
-        name: 'Product Upload Bundle',
+        name: 'Product Bundle Upload',
         code: 'product_upload_bundle',
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_bundle',
@@ -31,7 +31,7 @@ export const bulkToolsOptions = [
         component: <BaseProductUpload />,
     },
     {
-        name: 'Product Upload Grouped',
+        name: 'Product Grouped Upload',
         code: 'product_upload_grouped',
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_grouped',
@@ -40,7 +40,7 @@ export const bulkToolsOptions = [
         component: <BaseProductUpload />,
     },
     {
-        name: 'Product Upload Price',
+        name: 'Product Price Upload',
         code: 'product_upload_price',
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_configurable',
@@ -49,7 +49,7 @@ export const bulkToolsOptions = [
         component: <BaseProductUpload />,
     },
     {
-        name: 'Product Upload Price By Location',
+        name: 'Product By Location Upload',
         code: 'product_upload_price_by_location',
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_price_location',
@@ -63,7 +63,7 @@ export const bulkToolsOptions = [
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_image',
         activity: null,
-        gqlUpload: gqlService.vendorProductPriceLocationUpload,
+        gqlUpload: gqlService.vendorProductImageUpload,
         component: <BaseProductUpload />,
     },
     {
@@ -72,7 +72,7 @@ export const bulkToolsOptions = [
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_product_simplify',
         activity: null,
-        gqlUpload: gqlService.vendorProductPriceLocationUpload,
+        gqlUpload: gqlService.vendorProductSimplifyUpload,
         component: <BaseProductUpload />,
     },
     {
@@ -81,7 +81,17 @@ export const bulkToolsOptions = [
         acl: 'vendor_manage_product_upload',
         sample: 'vendor_category_assignation',
         activity: null,
-        gqlUpload: gqlService.vendorProductPriceLocationUpload,
+        gqlUpload: gqlService.vendorCategoryAssignationUpload,
         component: <BaseProductUpload />,
+    },
+    {
+        name: 'Product Stock Upload',
+        code: 'vendor_stock_upload',
+        acl: 'vendor_manage_product_upload',
+        sample: gqlService.getVendorStockUploadSampleCsv,
+        activity: null,
+        gqlUpload: gqlService.vendorProductStockUpload,
+        component: <BaseProductUpload />,
+        is_no_tutorial: true,
     },
 ];

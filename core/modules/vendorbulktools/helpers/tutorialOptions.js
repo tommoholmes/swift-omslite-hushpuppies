@@ -4,12 +4,6 @@ import BaseTutorialUpload from '@root/core/modules/vendorbulktools/pages/tutoria
 
 export const tutorialOptions = [
     {
-        name: 'Category Upload',
-        code: 'category_upload',
-        sample: 'vendor_category',
-        component: <ProductMasterUpload />,
-    },
-    {
         name: 'Product Upload Master',
         code: 'product_upload_master',
         sample: 'vendor_product',
