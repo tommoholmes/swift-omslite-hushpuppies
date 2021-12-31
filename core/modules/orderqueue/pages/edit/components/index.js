@@ -23,13 +23,15 @@ import { Formik, FieldArray } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
 import Item from '@modules/orderqueue/pages/edit/components/Item';
 import gqlLocation from '@modules/orderqueue/services/graphql';
+import ConfirmDialog from '@common_confirmdialog';
 
 const OrderQueueEditContent = (props) => {
     const {
- formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
-} = props;
+        formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
+    } = props;
     const classes = useStyles();
     const router = useRouter();
+    const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
 
     const getClassByStatus = (status) => {
         if (status === 'failed') {
@@ -151,8 +153,8 @@ const OrderQueueEditContent = (props) => {
                         <div style={{ textAlign: 'center', marginBottom: 10 }}>
                             <div className={classes.orderLabel}>
                                 Order status is
-{' '}
-<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                                {' '}
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
                             <Button
                                 className={classes.btn}
@@ -166,7 +168,7 @@ const OrderQueueEditContent = (props) => {
                             <Button
                                 className={clsx(classes.btn, 'btn-cancel')}
                                 type="submit"
-                                onClick={handleCancel}
+                                onClick={() => setOpenConfirmDialog(true)}
                                 variant="contained"
                                 buttonType="primary-rounded"
                             >
@@ -181,8 +183,8 @@ const OrderQueueEditContent = (props) => {
                         <div style={{ textAlign: 'center', marginBottom: 10 }}>
                             <div>
                                 Order status is
-{' '}
-<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                                {' '}
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
                             <Button
                                 className={classes.btn}
@@ -254,8 +256,8 @@ const OrderQueueEditContent = (props) => {
                         </div>
                         <Formik initialValues={initialValueEditItem}>
                             {({
- values, setFieldValue, setValues, touched, errors,
-}) => (
+                                values, setFieldValue, setValues, touched, errors,
+                            }) => (
                                 <>
                                     <ModalFindProduct
                                         open={isModalOpen}
@@ -402,6 +404,16 @@ const OrderQueueEditContent = (props) => {
                     </div> */}
                 </div>
             </Paper>
+            <ConfirmDialog
+                open={openConfirmDialog}
+                onCancel={() => setOpenConfirmDialog(false)}
+                onConfirm={async () => {
+                    await handleCancel();
+                    setOpenConfirmDialog(false);
+                }}
+                title="Cancel Order"
+                message="Are you sure want to cancel this order?"
+            />
         </>
     );
 };

@@ -79,6 +79,7 @@
             "@common_manualscanner": ["src/modules/commons/BarcodeScanner/manualscanner", "core/modules/commons/BarcodeScanner/manualscanner"],
             "@common_select": ["src/modules/commons/Select", "core/modules/commons/Select"],
             "@common_errorredirect": ["src/modules/commons/ErrorRedirect", "core/modules/commons/ErrorRedirect"],
+            "@common_confirmdialog": ["src/modules/commons/ConfirmDialog","core/modules/commons/ConfirmDialog"],
 
             "@common_autocomplete/*": ["src/modules/commons/Autocomplete/*", "core/modules/commons/Autocomplete/*"],
             "@common_textfield/*": ["src/modules/commons/TextField/*", "core/modules/commons/TextField/*"],
@@ -97,6 +98,7 @@
             "@common_barcodescanner/*": ["src/modules/commons/BarcodeScanner/*", "core/modules/commons/BarcodeScanner/*"],
             "@common_select/*": ["src/modules/commons/Select/*", "core/modules/commons/Select/*"],
             "@common_errorredirect/*": ["src/modules/commons/ErrorRedirect/*", "core/modules/commons/ErrorRedirect/*"],
+            "@common_confirmdialog/*": ["src/modules/commons/ConfirmDialog/*","core/modules/commons/ConfirmDialog/*"],
 
             // for example
             "@common_buttonqty": ["swift-pwa-core/core/modules/commons/ButtonQty"]
