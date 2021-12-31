@@ -98,9 +98,59 @@ export const vendorProductPriceLocationUpload = gql`
     }
 `;
 
+export const vendorProductSimplifyUpload = gql`
+    mutation vendorProductSimplifyUpload($binary: String!) {
+        vendorProductSimplifyUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+
+export const vendorProductStockUpload = gql`
+    mutation vendorProductStockUpload($binary: String!) {
+        vendorProductStockUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+
+export const vendorCategoryAssignationUpload = gql`
+    mutation vendorCategoryAssignationUpload($binary: String!) {
+        vendorCategoryAssignationUpload(binary: $binary) {
+            attachment_url
+            is_success
+            message
+            status
+        }
+    }
+`;
+
+export const vendorProductImageUpload = gql`
+    mutation vendorProductImageUpload($binary: String!) {
+        vendorProductImageUpload(binary: $binary) {
+            message_cpi
+            message_pdi
+            status_cpi
+            status_pdi
+        }
+    }
+`;
+
 export const isAccessAllowed = gql`
     query isAccessAllowed($acl_code: String!) {
         isAccessAllowed(acl_code: $acl_code)
+    }
+`;
+
+export const getVendorStockUploadSampleCsv = gql`
+    mutation {
+        getVendorStockUploadSampleCsv
     }
 `;
 
@@ -115,4 +165,9 @@ export default {
     vendorProductGroupedUpload,
     vendorProductPriceUpload,
     vendorProductPriceLocationUpload,
+    vendorProductStockUpload,
+    getVendorStockUploadSampleCsv,
+    vendorProductSimplifyUpload,
+    vendorCategoryAssignationUpload,
+    vendorProductImageUpload,
 };

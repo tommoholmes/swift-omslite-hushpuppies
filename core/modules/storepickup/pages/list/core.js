@@ -2,17 +2,25 @@ import Layout from '@layout';
 import gqlService from '@modules/storepickup/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
 
     const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
-    const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
+    const [getStoreShipmentList, { data, loading, error }] = gqlService.getStoreShipmentList();
     const [confirmShipment] = gqlService.confirmShipment();
     const [pickShipment] = gqlService.pickShipment();
     const [packShipment] = gqlService.packShipment();
+    useEffect(() => {
+        if (error) {
+            window.toastMessage({
+                open: true,
+                text: error.message,
+                variant: 'error',
+            });
+        }
+    }, [error]);
 
     const router = useRouter();
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
@@ -22,13 +30,14 @@ const Core = (props) => {
     if (loadingOptionStatus || aclCheckLoading) {
         return (
             <Layout useBreadcrumbs={false}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading
                 </div>

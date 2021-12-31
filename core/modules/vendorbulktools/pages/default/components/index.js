@@ -5,6 +5,27 @@ import useStyles from '@modules/vendorbulktools/pages/default/components/style';
 import Autocomplete from '@common_autocomplete';
 import gqlService from '@modules/vendorbulktools/services/graphql';
 
+const GqlDownloadSampleCsv = (props) => {
+    const { gqlSampleDownloader, setUrlDownload } = props;
+    const [downloadSampleCsv] = gqlSampleDownloader();
+    useEffect(async () => {
+        try {
+            const gqlName = gqlSampleDownloader.name;
+            const res = await downloadSampleCsv();
+            setUrlDownload(res && res.data && res.data[gqlName]);
+            // eslint-disable-next-line no-empty
+        } catch (error) {
+            setUrlDownload(null);
+            window.toastMessage({
+                open: true,
+                text: `Sample CSV : ${error.message}`,
+                variant: 'error',
+            });
+        }
+    }, []);
+    return null;
+};
+
 const VendorBulkToolsContent = (props) => {
     const { bulkToolsOptionsState, setBulkType, bulkType } = props;
     const classes = useStyles();
@@ -12,7 +33,7 @@ const VendorBulkToolsContent = (props) => {
     const [urlDownload, setUrlDownload] = useState('');
 
     useEffect(async () => {
-        if (bulkType?.sample) {
+        if (bulkType?.sample && typeof bulkType?.sample === 'string') {
             try {
                 const variables = {
                     type: bulkType?.sample,
@@ -77,8 +98,12 @@ const VendorBulkToolsContent = (props) => {
                         handleSubmit,
                         toolName: bulkType?.name,
                         code: bulkType?.code,
+                        isNoTutorial: bulkType?.is_no_tutorial,
                     })
                     : null}
+                {bulkType?.sample && typeof bulkType?.sample === 'function' && bulkType?.sample && (
+                    <GqlDownloadSampleCsv gqlSampleDownloader={bulkType?.sample} setUrlDownload={setUrlDownload} />
+                )}
             </Paper>
         </>
     );
