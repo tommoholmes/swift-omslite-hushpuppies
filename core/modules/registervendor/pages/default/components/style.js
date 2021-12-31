@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: '48%',
             float: 'left',
-            marginTop: 26,
+            paddingTop: 26,
             marginLeft: 21,
             height: '115vmin',
             overflow: 'scroll',
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
             },
         },
         [theme.breakpoints.up('md')]: {
-            height: '97vmin',
+            height: '100vh',
         },
     },
     containRight: {
