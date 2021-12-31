@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/managerma/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -169,7 +170,9 @@ const Core = (props) => {
     const { loading: loadingReason, data: dataReason } = gqlService.getStoreConfig({
         path: 'swiftoms_rma/rma_request/reason',
     });
-    const { loading, data, refetch } = gqlService.getRmaById({
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getRmaById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -182,29 +185,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/sales/managerma');
-        }, 1000);
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/managerma';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

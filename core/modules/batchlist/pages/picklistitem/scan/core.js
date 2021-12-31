@@ -5,6 +5,7 @@ import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/batchlist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -108,7 +109,7 @@ const Core = (props) => {
         path: 'swiftoms_pickpack/batch/use_camera_to_scan',
     });
 
-    const { loading, data } = gqlService.getPickByBatchItemById({
+    const { loading, data, error } = gqlService.getPickByBatchItemById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -121,29 +122,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/pickpack/batchlist');
-        }, 1000);
-        return (
-            <Layout>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/batchlist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

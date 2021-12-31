@@ -55,12 +55,6 @@ const ProductCategoryListContent = (props) => {
         id: productCategory.entity_id,
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
@@ -68,10 +62,12 @@ const ProductCategoryListContent = (props) => {
                 <MuiAlert icon={false} severity="success" style={{ marginBottom: '1rem' }}>
                     Process is in progress, please wait. Check the progress
                     {' '}
-                    <a style={{ color: '#007bdb' }} href="/tools/clitools">here</a>
+                    <a style={{ color: '#007bdb' }} href="/tools/clitools">
+                        here
+                    </a>
                     .
                 </MuiAlert>
-            ) }
+            )}
             <Table
                 filters={filters}
                 rows={rows}

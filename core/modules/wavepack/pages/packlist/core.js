@@ -5,12 +5,10 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/wavepack/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/wavepack/pages/packlist/components/style';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const packlist = data.getPickByWavePacklist.pick_by_wave;
     const [startPickByWavePacking] = gqlService.startPickByWavePacking();
@@ -37,22 +35,24 @@ const ContentWrapper = (props) => {
                 variables: {
                     id: packlist.entity_id,
                 },
-            }).then(() => {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    text: 'Start your packing process!',
-                    variant: 'success',
+            })
+                .then(() => {
+                    window.backdropLoader(false);
+                    window.toastMessage({
+                        open: true,
+                        text: 'Start your packing process!',
+                        variant: 'success',
+                    });
+                    router.push(`/pickpack/wavepack/packlist/detail/${id}`);
+                })
+                .catch((e) => {
+                    window.backdropLoader(false);
+                    window.toastMessage({
+                        open: true,
+                        text: e.message,
+                        variant: 'error',
+                    });
                 });
-                router.push(`/pickpack/wavepack/packlist/detail/${id}`);
-            }).catch((e) => {
-                window.backdropLoader(false);
-                window.toastMessage({
-                    open: true,
-                    text: e.message,
-                    variant: 'error',
-                });
-            });
         }
     };
     const contentProps = {
@@ -60,14 +60,12 @@ const ContentWrapper = (props) => {
         handleClick,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPickByWavePacklist({
+    const { loading, data, error } = gqlService.getPickByWavePacklist({
         id: router && router.query && Number(router.query.id),
     });
     const classes = useStyles();
@@ -83,21 +81,15 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
-                <div className={classes.loadingFetch}>
-                    Loading . . .
-                </div>
+                <div className={classes.loadingFetch}>Loading . . .</div>
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
-                <div className={classes.loadingFetch}>
-                    No records to display
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/wavelist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

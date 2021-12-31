@@ -6,12 +6,10 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/wavelist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/wavelist/pages/picklist/components/style';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
 
     const wavelist = data.getPickByWaveById.pick_by_wave;
     const router = useRouter();
@@ -37,22 +35,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         donePickByWave({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Picklist was done',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Picklist was done',
+                    variant: 'success',
+                });
+                router.push('/pickpack/wavelist');
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            router.push('/pickpack/wavelist');
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formikDone = useFormik({
@@ -69,14 +69,12 @@ const ContentWrapper = (props) => {
         formikDone,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPickByWaveById({
+    const { loading, data, error } = gqlService.getPickByWaveById({
         id: router && router.query && Number(router.query.id),
     });
     const classes = useStyles();
@@ -92,21 +90,15 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div className={classes.loadingFetch}>
-                    Loading . . .
-                </div>
+                <div className={classes.loadingFetch}>Loading . . .</div>
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div className={classes.loadingFetch}>
-                    No records to display
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/wavelist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

@@ -3,6 +3,7 @@ import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/creditmemos/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -47,7 +48,7 @@ const Core = (props) => {
         title: `View Memo #${router?.query?.id}`,
     };
 
-    const { loading, data } = gqlService.getCreditMemoById({
+    const { loading, data, error } = gqlService.getCreditMemoById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -60,29 +61,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/sales/creditmemos');
-        }, 1000);
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/creditmemos';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

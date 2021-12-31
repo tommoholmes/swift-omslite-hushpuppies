@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/printoms/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -21,7 +22,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPickList({
+    const { loading, data, error } = gqlService.getPickList({
         id: router && router.query && router.query.slug.map((e) => Number(e)),
     });
 
@@ -30,29 +31,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/');
-        }, 1000);
-        return (
-            <Layout>
-                <div
-                    style={{
-                        display: 'flex',
-                        color: '#435179',
-                        fontWeight: 600,
-                        justifyContent: 'center',
-                        padding: '20px 0',
-                    }}
-                >
-                    Data not found!
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     return <ContentWrapper data={data} {...props} />;

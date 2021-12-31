@@ -5,6 +5,7 @@ import gqlService from '@modules/shipment/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
@@ -246,7 +247,9 @@ const Core = (props) => {
         shipment_id: router && router.query && Number(router.query.id),
     });
 
-    const { loading, data, refetch } = gqlService.getShipmentById({
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -259,15 +262,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        window.toastMessage({
-            open: true,
-            text: 'Data not found!',
-            variant: 'error',
-        });
-        setTimeout(() => {
-            router.push('/sales/shipment');
-        }, 1000);
-        return <Layout pageConfig={pageConfig} />;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/shipment';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
