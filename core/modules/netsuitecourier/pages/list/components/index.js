@@ -11,35 +11,68 @@ const NetsuiteCourierList = (props) => {
 
     const columns = [
         {
-            field: 'entity_id', headerName: 'ID', sortable: true, hideable: true,
+            field: 'entity_id',
+            headerName: 'ID',
+            sortable: true,
+            hideable: true,
+            initialSort: 'ASC',
         },
         {
-            field: 'code', headerName: 'Code', sortable: true, hideable: true,
+            field: 'code',
+            headerName: 'Code',
+            sortable: true,
+            hideable: true,
         },
         {
-            field: 'courier', headerName: 'Raw Courier', sortable: true, hideable: true,
+            field: 'courier',
+            headerName: 'Raw Courier',
+            sortable: true,
+            hideable: true,
         },
         {
-            field: 'delivery_method', headerName: 'Delivery Method', sortable: true, hideable: true,
+            field: 'delivery_method',
+            headerName: 'Delivery Method',
+            sortable: true,
+            hideable: true,
         },
         { field: 'actions', headerName: 'Actions', hideable: true },
     ];
 
     const filters = [
         {
-            field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID From', initialValue: '',
+            field: 'entity_id',
+            name: 'entity_id_from',
+            type: 'from',
+            label: 'ID From',
+            initialValue: '',
         },
         {
-            field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID To ', initialValue: '',
+            field: 'entity_id',
+            name: 'entity_id_to',
+            type: 'to',
+            label: 'ID To ',
+            initialValue: '',
         },
         {
-            field: 'code', name: 'code', type: 'like', label: 'Code', initialValue: '',
+            field: 'code',
+            name: 'code',
+            type: 'like',
+            label: 'Code',
+            initialValue: '',
         },
         {
-            field: 'courier', name: 'courier', type: 'like', label: 'Courier', initialValue: '',
+            field: 'courier',
+            name: 'courier',
+            type: 'like',
+            label: 'Raw Courier',
+            initialValue: '',
         },
         {
-            field: 'delivery_method', name: 'delivery_method', type: 'like', label: 'Delivery Method', initialValue: '',
+            field: 'delivery_method',
+            name: 'delivery_method',
+            type: 'like',
+            label: 'Delivery Method',
+            initialValue: '',
         },
     ];
 
