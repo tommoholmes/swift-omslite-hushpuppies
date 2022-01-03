@@ -568,7 +568,12 @@ const Layout = (props) => {
                     label: 'Top 10 Best Performing SKUs',
                     url: '/reports/bestperformingskus',
                 },
-                // { aclCode: 'orderReport', label: 'Order Report', url: '/reports/orderreport' },
+                {
+                    aclCode: 'oms_lite_order_report',
+                    key: 'orderreport',
+                    label: 'Order Report',
+                    url: '/reports/orderreport',
+                },
             ],
         },
         {

@@ -1,14 +1,23 @@
-import { useMutation } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import * as Schema from '@modules/orderreport/services/graphql/schema';
 
 const context = {
     context: { request: 'internal' },
 };
 
-export const createCompany = (variables) => useMutation(Schema.createCompany, {
-    variables, ...context,
+const fetchPolicy = {
+    fetchPolicy: 'cache-and-network',
+};
+
+export const getOrderReportCsv = (options) => useLazyQuery(Schema.getOrderReportCsv, {
+    ...options, ...context, ...fetchPolicy,
+});
+
+export const getOrderReportPdf = (options) => useLazyQuery(Schema.getOrderReportPdf, {
+    ...options, ...context, ...fetchPolicy,
 });
 
 export default {
-    createCompany,
+    getOrderReportCsv,
+    getOrderReportPdf,
 };

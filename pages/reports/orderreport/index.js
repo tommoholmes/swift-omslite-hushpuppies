@@ -1,3 +1,3 @@
-import Page from '@modules/orderreport/pages/create';
+import Page from '@modules/orderreport/pages/default';
 
 export default Page;
