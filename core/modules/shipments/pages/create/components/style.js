@@ -50,8 +50,14 @@ const useStyles = makeStyles((theme) => ({
     divLabel: {
         width: 300,
         display: 'inline-block',
+        textAlign: 'end',
+        paddingRight: 30,
+        [theme.breakpoints.down('sm')]: {
+            width: 200,
+        },
         [theme.breakpoints.down('xs')]: {
             width: 140,
+            paddingRight: 10,
         },
     },
     label: {
