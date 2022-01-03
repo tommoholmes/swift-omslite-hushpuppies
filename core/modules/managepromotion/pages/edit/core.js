@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/managepromotion/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import { optionsRuleAction } from '@modules/managepromotion/helpers';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -14,15 +15,7 @@ const ContentWrapper = (props) => {
     const [saveVendorPromotion] = gqlService.saveVendorPromotion();
 
     const handleSubmit = ({
-        name,
-        description,
-        fromDate,
-        toDate,
-        simpleAction,
-        discountAmount,
-        discountStep,
-        maxY,
-        couponCode,
+        name, description, fromDate, toDate, simpleAction, discountAmount, discountStep, maxY, couponCode,
     }) => {
         const variables = {
             rule_id: promotion.rule_id,
@@ -39,15 +32,16 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveVendorPromotion({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success create new promotion',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/vendorportal/managepromotion'), 250);
         })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success create new promotion',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/vendorportal/managepromotion'), 250);
+            })
             .catch((e) => {
                 window.backdropLoader(false);
                 window.toastMessage({
@@ -92,7 +86,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getVendorPromotionById({
+    const { loading, data, error } = gqlService.getVendorPromotionById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -105,7 +99,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return <Layout>Data not found!</Layout>;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/vendorportal/managepromotion';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

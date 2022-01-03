@@ -5,14 +5,11 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/adminstore/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        dataCompany,
-        dataLocation,
-        dataGroup,
-        Content,
+        data, dataCompany, dataLocation, dataGroup, Content,
     } = props;
     const router = useRouter();
     const admin = data.getAdminStoreById;
@@ -23,22 +20,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateAdminStore({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit user!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit user!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/userdata/adminstore'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/userdata/adminstore'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -47,7 +46,8 @@ const ContentWrapper = (props) => {
             lastname: admin.lastname,
             email: admin.email,
             customer_loc_code: admin.customer_loc_code?.length
-                ? admin.customer_loc_code.map((code) => (dataLocation.getLocationOptions.find((loc) => loc.value === code))) : [],
+                ? admin.customer_loc_code.map((code) => dataLocation.getLocationOptions.find((loc) => loc.value === code))
+                : [],
             company: admin.customer_company_code
                 ? dataCompany.getCompanyOptions.find((loc) => Number(loc.value) === Number(admin.customer_company_code))
                 : '',
@@ -65,9 +65,7 @@ const ContentWrapper = (props) => {
             } = values;
             const valueToSubmit = {
                 ...restValues,
-                customer_loc_code: customer_loc_code?.map((loc) => (
-                    String(loc.value)
-                )),
+                customer_loc_code: customer_loc_code?.map((loc) => String(loc.value)),
                 group_id: Number(group.value),
                 customer_company_code: company?.value ? String(company.value) : '',
             };
@@ -82,9 +80,7 @@ const ContentWrapper = (props) => {
         dataGroup: dataGroup.getCustomerGroupOptions,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -94,9 +90,10 @@ const Core = (props) => {
         title: `Edit User #${router?.query?.id}`,
     };
 
-    const { loading, data } = gqlService.getAdminStoreById({
+    const { loading, data, error } = gqlService.getAdminStoreById({
         id: router && router.query && Number(router.query.id),
     });
+
     const { loading: loadingCompany, data: dataCompany } = gqlService.getCompanyOptions();
     const { loading: loadingLocation, data: dataLocation } = gqlService.getLocationOptions();
     const { loading: loadingGroup, data: dataGroup } = gqlService.getCustomerGroupOptions();
@@ -106,15 +103,13 @@ const Core = (props) => {
     });
 
     if (loading || loadingCompany || loadingLocation || loadingGroup || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/userdata/adminstore';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

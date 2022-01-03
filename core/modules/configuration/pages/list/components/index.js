@@ -26,7 +26,8 @@ const ConfigurationTadaListContent = (props) => {
     const filters = [
         { field: 'id', name: 'id_from', type: 'from', label: 'ID From', initialValue: '' },
         { field: 'id', name: 'id_to', type: 'to', label: 'ID To', initialValue: '' },
-        { field: 'channel_name',
+        {
+            field: 'channel_name',
             name: 'channel_name',
             type: 'eq',
             label: 'Sales Channel',
@@ -34,9 +35,10 @@ const ConfigurationTadaListContent = (props) => {
             component: ({ filterValue, setFilterValue }) => {
                 const [getChannelList, getChannelListRes] = channelGqlService.getChannelList();
                 const channelOptions = (getChannelListRes
-                    && getChannelListRes.data
-                    && getChannelListRes.data.getChannelList
-                    && getChannelListRes.data.getChannelList.items) || [];
+                        && getChannelListRes.data
+                        && getChannelListRes.data.getChannelList
+                        && getChannelListRes.data.getChannelList.items)
+                    || [];
                 const primaryKey = 'channel_name';
                 const labelKey = 'channel_name';
                 return (
@@ -47,14 +49,12 @@ const ConfigurationTadaListContent = (props) => {
                         value={channelOptions.find((e) => e[primaryKey] === filterValue)}
                         onChange={(newValue) => setFilterValue(newValue && newValue[primaryKey])}
                         options={channelOptions}
-                        getOptionsVariables={
-                            {
-                                variables: {
-                                    pageSize: null,
-                                    currentPage: 1,
-                                },
-                            }
-                        }
+                        getOptionsVariables={{
+                            variables: {
+                                pageSize: null,
+                                currentPage: 1,
+                            },
+                        }}
                         primaryKey={primaryKey}
                         labelKey={labelKey}
                     />
@@ -77,12 +77,6 @@ const ConfigurationTadaListContent = (props) => {
             </Link>
         ),
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>

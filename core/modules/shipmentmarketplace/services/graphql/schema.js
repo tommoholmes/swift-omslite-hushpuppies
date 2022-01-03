@@ -24,6 +24,8 @@ export const getStoreShipmentList = gql`
                     value
                     label
                 }
+                marketplace_order_status
+                port
                 track_number
                 channel{
                     channel_name
@@ -32,7 +34,6 @@ export const getStoreShipmentList = gql`
                 shipping_name
                 shipping_email
                 shipping_telephone
-                connexi_order_status
                 channel_order_date
                 location {
                     loc_name
@@ -67,6 +68,7 @@ export const getStoreShipmentById = gql`
                 label
                 value
             }
+            marketplace_order_status
             allocation_status
             channel_order_date
             location{

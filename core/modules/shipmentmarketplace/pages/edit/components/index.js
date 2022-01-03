@@ -144,9 +144,9 @@ const ShipmentMarketplaceEditContent = (props) => {
                     </div>
                     <div className="divHeader">
                         <h5 className="titleHeader">
-                            Shipping Method
+                            Marketplace Order
                         </h5>
-                        <span className="spanHeader">{shipmentMarketplace.method}</span>
+                        <span className="spanHeader">{shipmentMarketplace.marketplaceOrderStatus}</span>
                     </div>
                 </div>
                 <div className={classes.content}>
@@ -521,6 +521,10 @@ const ShipmentMarketplaceEditContent = (props) => {
                             <span className={classes.orderLabel}>
                                 {`${shipmentMarketplace.shippingAddress.region}, ${shipmentMarketplace.shippingAddress.postcode}, ${shipmentMarketplace.shippingAddress.country_name}`}
                             </span>
+                        </div>
+                        <div className="grid-child" style={{ gridColumn: 3 }}>
+                            <h5 className={classes.titleSmall}>Shipping Method</h5>
+                            <span className={classes.orderLabel}>{`${shipmentMarketplace.method} (AWB Source) : ${shipmentMarketplace.awbSource}`}</span>
                         </div>
                     </div>
                     <div>

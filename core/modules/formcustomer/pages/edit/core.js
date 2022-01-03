@@ -1,23 +1,18 @@
 import React, { useEffect } from 'react';
-// import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import gqlService from '../../services/graphql';
+import gqlService from '@modules/formcustomer/services/graphql';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const formData = data.getFormDataCurbPickup;
     const [addCurbPickupInfo] = gqlService.addCurbPickupInfo();
-    // const [open, setOpen] = React.useState(false);
     const [backdropLoader, setBackdropLoader] = React.useState(false);
     const [toastMessage, setToastMessage] = React.useState({
         open: false,
@@ -37,12 +32,7 @@ const ContentWrapper = (props) => {
     }, []);
 
     const handleSubmit = ({
-        nameInput,
-        phone,
-        location,
-        vehicle,
-        vehicleDesc,
-        notes,
+        nameInput, phone, location, vehicle, vehicleDesc, notes,
     }) => {
         const variables = {
             id: router.query.id,
@@ -56,21 +46,23 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         addCurbPickupInfo({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Submit form!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Submit form!',
+                    variant: 'success',
+                });
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -110,12 +102,7 @@ const ContentWrapper = (props) => {
         <>
             <Loading open={backdropLoader} />
             <Content {...contentProps} />
-            <Message
-                open={toastMessage.open}
-                variant={toastMessage.variant}
-                setOpen={handleCloseMessage}
-                message={toastMessage.text}
-            />
+            <Message open={toastMessage.open} variant={toastMessage.variant} setOpen={handleCloseMessage} message={toastMessage.text} />
         </>
     );
 };
@@ -127,21 +114,16 @@ const Core = (props) => {
     });
 
     if (loading) {
-        return (
-            <>Loading...</>
-        );
+        return <>Loading...</>;
     }
 
     if (!data) {
-        return (
-            <>Data not found!</>
-        );
+        return <>Data not found!</>;
     }
 
     return (
         <>
             <ContentWrapper data={data} {...props} />
-            {/* <ContentWrapper {...props} /> */}
         </>
     );
 };

@@ -7,22 +7,13 @@ import gqlService from '@modules/configuration/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const configurationTada = data.getConfigurationTadaById;
     const [updateConfigurationTada] = gqlService.updateConfigurationTada();
 
     const handleSubmit = ({
-        channel,
-        username,
-        password,
-        apiKey,
-        apiSecret,
-        programId,
-        catalogId,
+        channel, username, password, apiKey, apiSecret, programId, catalogId,
     }) => {
         const variables = {
             id: configurationTada.id,
@@ -37,22 +28,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateConfigurationTada({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Configuration TADA!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Configuration TADA!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/tada/configuration'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/tada/configuration'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -85,9 +78,7 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -101,14 +92,32 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
+        window.toastMessage({
+            open: true,
+            text: 'Data not found!',
+            variant: 'error',
+        });
+        setTimeout(() => {
+            router.push('/tada/configuration');
+        }, 1000);
         return (
-            <Layout>Data not found!</Layout>
+            <Layout>
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
+                >
+                    Data not found!
+                </div>
+            </Layout>
         );
     }
 

@@ -5,12 +5,10 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/wavepack/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/wavepack/pages/packdetail/components/style';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const [showModal, setShowModal] = React.useState(false);
     const [nextShipment, setNextShipment] = React.useState(null);
     const packlist = data.getPackList.data[0];
@@ -78,14 +76,12 @@ const ContentWrapper = (props) => {
         nextShipment,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPackList({
+    const { loading, data, error } = gqlService.getPackList({
         id: [router && router.query && Number(router.query.id)],
     });
     const classes = useStyles();
@@ -101,21 +97,15 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
-                <div className={classes.loadingFetch}>
-                    Loading . . .
-                </div>
+                <div className={classes.loadingFetch}>Loading . . .</div>
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig} useBreadcrumbs={false}>
-                <div className={classes.loadingFetch}>
-                    No records to display
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/wavelist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

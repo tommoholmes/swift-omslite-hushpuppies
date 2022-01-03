@@ -22,13 +22,6 @@ const MarketplaceListContent = (props) => {
     const rows = marketplaceList.map((marketplace) => ({
         ...marketplace,
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />

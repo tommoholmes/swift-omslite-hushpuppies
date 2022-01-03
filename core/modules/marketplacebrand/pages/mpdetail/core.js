@@ -5,6 +5,7 @@ import gqlService from '@modules/marketplacebrand/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { Content, data } = props;
@@ -84,7 +85,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getMarketplaceCredentials({
+    const { loading, data, error } = gqlService.getMarketplaceCredentials({
         store_detail_id: router && router.query && Number(router.query.store_id),
     });
     const pageConfig = {
@@ -96,15 +97,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data || !(data && data.getMarketplaceCredentials && data.getMarketplaceCredentials.length)) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/configurations/marketplacebrand';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

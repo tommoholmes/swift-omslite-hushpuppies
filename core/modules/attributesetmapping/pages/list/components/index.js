@@ -21,23 +21,10 @@ const AttributeMappingListContent = (props) => {
         id: company.company_id,
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
             <Header />
-            <Table
-                rows={rows}
-                getRows={getCompanyList}
-                loading={loading}
-                columns={columns}
-                count={companyTotal}
-                showCheckbox
-            />
+            <Table rows={rows} getRows={getCompanyList} loading={loading} columns={columns} count={companyTotal} showCheckbox />
         </>
     );
 };

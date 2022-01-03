@@ -54,7 +54,9 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     textAttach: {
+        fontWeight: 'bold',
         display: 'block',
+        padding: '10px 29px 12px 22px',
     },
     inputCsv: {
         marginLeft: 5,

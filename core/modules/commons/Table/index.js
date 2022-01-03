@@ -30,6 +30,7 @@ import useStyles from '@common_table/style';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PublishIcon from '@material-ui/icons/Publish';
+import { breakPointsUp } from '@helper_theme';
 
 // helpers
 const getComponentOrString = (param) => (typeof param === 'function' ? param() : param);
@@ -61,6 +62,18 @@ const useColumns = (initialColumns) => {
         );
     };
 
+    const applyHiddenColumnsMobile = () => {
+        const mobileHiddenColumns = columns.map((column) => ({ ...column, hidden: column.hiddenMobile || column.hidden || false }));
+        setHiddenColumns(mobileHiddenColumns);
+        setColumns(mobileHiddenColumns);
+    };
+
+    const applyHiddenColumnsDesktop = () => {
+        const desktopiddenColumns = _initialColumns.map((column) => ({ ...column, hidden: column.hidden || false }));
+        setHiddenColumns(desktopiddenColumns);
+        setColumns(desktopiddenColumns);
+    };
+
     const resetHiddenColumn = () => {
         const resetedHiddenColumns = columns.map((column) => ({ ...column, hidden: false }));
         setHiddenColumns(resetedHiddenColumns);
@@ -72,6 +85,8 @@ const useColumns = (initialColumns) => {
         hiddenColumns,
         setHiddenColumn,
         applyHiddenColumns,
+        applyHiddenColumnsDesktop,
+        applyHiddenColumnsMobile,
         resetHiddenColumn,
     };
 };
@@ -85,7 +100,8 @@ const CustomTable = (props) => {
         getRows,
         deleteRows,
         deleteLabel = 'Delete',
-        deleteMessage = 'Are you sure you want to delete?',
+        deleteTitle = 'Confirmation',
+        deleteMessage = 'Are you sure want to delete selected items?',
         deleteEnableConfirm = false,
         allowActionZeroSelected = false,
         loading,
@@ -109,6 +125,7 @@ const CustomTable = (props) => {
     } = props;
 
     // hooks
+    const desktop = breakPointsUp('sm');
     const classes = useStyles();
     const [page, setPage] = React.useState(initialPage);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
@@ -117,7 +134,15 @@ const CustomTable = (props) => {
     const [showMessageActions, setShowMessageActions] = React.useState(true);
     const [checkedRows, setCheckedRows] = React.useState([]);
     const [expandedToolbar, setExpandedToolbar] = React.useState();
-    const { columns, hiddenColumns, setHiddenColumn, applyHiddenColumns, resetHiddenColumn } = useColumns(props.columns);
+    const {
+        columns,
+        hiddenColumns,
+        setHiddenColumn,
+        applyHiddenColumns,
+        applyHiddenColumnsDesktop,
+        applyHiddenColumnsMobile,
+        resetHiddenColumn,
+    } = useColumns(props.columns);
     const [filters, setFilters] = React.useState(initialFilters.map((filter) => ({ ...filter, value: filter.initialValue })));
     const [sorts, setSorts] = React.useState(
         props.columns.filter((column) => column.sortable).map(({ field, initialSort }) => ({ field, value: initialSort || undefined })),
@@ -179,6 +204,14 @@ const CustomTable = (props) => {
         setCheckedRows([]);
     };
 
+    const setHiddenResponsive = () => {
+        if (!desktop) {
+            applyHiddenColumnsMobile();
+        } else {
+            applyHiddenColumnsDesktop();
+        }
+    };
+
     // effects
     React.useEffect(() => {
         fetchRows();
@@ -202,9 +235,14 @@ const CustomTable = (props) => {
         }
     }, [checkedRows]);
 
+    React.useEffect(() => {
+        setHiddenResponsive();
+    }, [desktop]);
+
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
             {
+                title: deleteTitle,
                 label: deleteLabel,
                 message: deleteMessage,
                 confirmDialog: deleteEnableConfirm,
@@ -251,7 +289,7 @@ const CustomTable = (props) => {
                                     setOpenConfirmDialog(false);
                                     window.backdropLoader(false);
                                 }}
-                                title={activeAction && activeAction.label}
+                                title={activeAction && activeAction.title}
                                 message={activeAction && activeAction.message}
                                 records={checkedRows.length}
                             />
@@ -521,6 +559,7 @@ const CustomTable = (props) => {
                 <TableFooter>
                     <TableRow>
                         <TablePagination
+                            className={classes.tablePagination}
                             rowsPerPageOptions={[5, 10, 25, 100]}
                             count={count}
                             rowsPerPage={rowsPerPage}
@@ -529,8 +568,8 @@ const CustomTable = (props) => {
                                 inputProps: { 'aria-label': 'rows per page' },
                                 native: true,
                             }}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
                             ActionsComponent={TablePaginationActions}
                         />
                     </TableRow>
@@ -554,7 +593,7 @@ const CustomTable = (props) => {
                     <div className={classes.loading}>No records to display</div>
                 )}
             </div>
-            {!hideFooter && renderTableFooter()}
+            <Table size="small">{!hideFooter && renderTableFooter()}</Table>
         </TableContainer>
     );
 };

@@ -5,12 +5,10 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/curbpickup/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const curbpickup = data.getStoreShipmentById;
     const [confirmShipment] = gqlService.confirmShipment();
     const [cantFulfillShipment] = gqlService.cantFulfillShipment();
@@ -25,22 +23,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         confirmShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => window.location.reload(true), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleCantFulfill = () => {
@@ -50,22 +50,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         cantFulfillShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => window.location.reload(true), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePicked = () => {
@@ -75,22 +77,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         pickShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Packaged',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Packaged',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => window.location.reload(true), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePacked = () => {
@@ -100,28 +104,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         packShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Packaged',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Packaged',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => window.location.reload(true), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleComplete = ({
-        name,
-        reference,
-    }) => {
+    const handleComplete = ({ name, reference }) => {
         const variables = {
             id: curbPickup.id,
             name,
@@ -130,22 +133,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         pickedupShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Customer Was Picked up',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Customer Was Picked up',
+                    variant: 'success',
+                });
+                setTimeout(() => window.location.reload(true), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => window.location.reload(true), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const curbPickup = {
@@ -170,7 +175,6 @@ const ContentWrapper = (props) => {
         locName: curbpickup.loc_code,
         order: curbpickup.items,
         total: curbpickup.subtotal,
-
     };
 
     const formikConfirm = useFormik({
@@ -229,9 +233,7 @@ const ContentWrapper = (props) => {
         formikComplete,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -241,7 +243,7 @@ const Core = (props) => {
         title: `Curbside Pickup #${router.query?.id}`,
     };
 
-    const { loading, data } = gqlService.getStoreShipmentById({
+    const { loading, data, error } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -250,15 +252,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/shipment/curbpickup';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

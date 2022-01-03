@@ -6,13 +6,11 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/shipmentmarketplace/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        refetch,
-        dataConfig,
+        data, Content, refetch, dataConfig,
     } = props;
     const shipmentmarketplace = data.getStoreShipmentById;
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
@@ -30,22 +28,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         confirmMarketplaceShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Confirm',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Confirm',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePicked = () => {
@@ -55,27 +55,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         pickShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Picked',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Picked',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleCanceled = ({
-        reason,
-    }) => {
+    const handleCanceled = ({ reason }) => {
         const variables = {
             id: shipmentMarketplace.id,
             cancel_reason_id: reason.value,
@@ -83,22 +83,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         canceledMarketplaceShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was canceled',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was canceled',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handlePacked = () => {
@@ -108,27 +110,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         packShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Packaged',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Packaged',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleShipped = ({
-        awb,
-    }) => {
+    const handleShipped = ({ awb }) => {
         const variables = {
             id: shipmentMarketplace.id,
             track_number: awb,
@@ -136,22 +138,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         shippedMarketplaceShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Shipped',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Shipped',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleDelivered = () => {
@@ -161,27 +165,27 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         deliveredShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Delivered',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Delivered',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
-    const handleNotes = ({
-        notes,
-    }) => {
+    const handleNotes = ({ notes }) => {
         const variables = {
             id: shipmentMarketplace.id,
             notes,
@@ -189,22 +193,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveShipmentNotes({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'notes has been saved',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'notes has been saved',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const shipmentMarketplace = {
@@ -216,6 +222,7 @@ const ContentWrapper = (props) => {
         orderNumber: shipmentmarketplace.marketplace_order_number,
         statusLabel: shipmentmarketplace.status.label,
         statusValue: shipmentmarketplace.status.value,
+        marketplaceOrderStatus: shipmentmarketplace.marketplace_order_status,
         allocation: shipmentmarketplace.allocation_status,
         date: shipmentmarketplace.channel_order_date,
         location: shipmentmarketplace.location.loc_name,
@@ -325,9 +332,7 @@ const ContentWrapper = (props) => {
         dataConfig,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -340,7 +345,9 @@ const Core = (props) => {
     const { loading: loadingConfig, data: dataConfig } = gqlService.getStoreConfig({
         path: 'swiftoms_shipment/general/pick_and_pack',
     });
-    const { loading, data, refetch } = gqlService.getStoreShipmentById({
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getStoreShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -351,13 +358,14 @@ const Core = (props) => {
     if (loading || loadingConfig || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -366,9 +374,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/shipment/shipmentmarketplace';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -377,12 +385,7 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper
-                dataConfig={dataConfig.getStoreConfig === '1'}
-                data={data}
-                {...props}
-                refetch={refetch}
-            />
+            <ContentWrapper dataConfig={dataConfig.getStoreConfig === '1'} data={data} {...props} refetch={refetch} />
         </Layout>
     );
 };

@@ -4,20 +4,15 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/orderreallocation/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const orderReallocation = data.getOrderReallocationById;
     const [updateReallocation] = gqlService.updateReallocation();
 
-    const handleSubmit = ({
-        company,
-        location,
-    }) => {
+    const handleSubmit = ({ company, location }) => {
         const variables = {
             id: orderReallocation.entity_id,
             company_id: company.company_id,
@@ -26,22 +21,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateReallocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit reallocation!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit reallocation!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/sales/orderreallocation'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/sales/orderreallocation'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -70,14 +67,12 @@ const ContentWrapper = (props) => {
         reallocationDetail,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getOrderReallocationById({
+    const { loading, data, error } = gqlService.getOrderReallocationById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -86,15 +81,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/orderreallocation';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

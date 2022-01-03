@@ -6,13 +6,11 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/wavelist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import useStyles from '@modules/wavelist/pages/pickitem/components/style';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        allowManualConfirm,
-        useCamera,
+        data, Content, allowManualConfirm, useCamera,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByWaveItemById.pick_by_wave_item;
@@ -29,22 +27,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updatePickByWaveItem({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success update qty!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success update qty!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push(`/pickpack/wavelist/picklist/${picklist.parent_id}`), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push(`/pickpack/wavelist/picklist/${picklist.parent_id}`), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const incrementCount = () => {
@@ -95,9 +95,7 @@ const ContentWrapper = (props) => {
         useCamera,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -110,7 +108,7 @@ const Core = (props) => {
         path: 'swiftoms_pickpack/wave/use_camera_to_scan',
     });
 
-    const { loading, data } = gqlService.getPickByWaveItemById({
+    const { loading, data, error } = gqlService.getPickByWaveItemById({
         item_id: router && router.query && Number(router.query.id),
     });
     const classes = useStyles();
@@ -126,21 +124,15 @@ const Core = (props) => {
     if (loading || loadingConfig || loadingConfigCamera || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div className={classes.loadingFetch}>
-                    Loading . . .
-                </div>
+                <div className={classes.loadingFetch}>Loading . . .</div>
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div className={classes.loadingFetch}>
-                    No records to display
-                </div>
-            </Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/wavelist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

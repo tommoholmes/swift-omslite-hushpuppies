@@ -1,14 +1,17 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable indent */
 import React from 'react';
 import Layout from '@layout';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/orderqueue/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data, Content, parent, aclCheckData, refetchOrderQueue,
-    } = props;
+ data, Content, parent, aclCheckData, refetchOrderQueue,
+} = props;
     const orderqueue = data.getOrderQueueById;
     const [setReallocation] = gqlService.setReallocation();
     const [editOrderItem] = gqlService.editOrderItem();
@@ -128,14 +131,21 @@ const ContentWrapper = (props) => {
         const mergedValues = [...values.order_items, ...values.deleted_items.map((item) => ({ ...item, qty: 0 }))];
         const fixValues = {
             order_id: values.order_id,
-            order_items: mergedValues.map((item) => ({
+            order_items: mergedValues.map((item, idx) => ({
                 id: item?.id ?? null,
                 qty: item.qty,
                 replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
                 item_id_replacement: item.item_id_replacement,
                 sku: item.name?.sku ?? item.sku,
+                loc_code:
+                    typeof item?.loc_code === 'string'
+                        ? null
+                        : orderqueue.order_item[idx].loc_code === item?.loc_code?.loc_code
+                        ? null
+                        : item?.loc_code?.loc_code ?? null,
             })),
         };
+
         window.backdropLoader(true);
         editOrderItem({
             variables: {
@@ -177,7 +187,9 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data, refetch: refetchOrderQueue } = gqlService.getOrderQueueById({
+    const {
+ loading, data, error, refetch: refetchOrderQueue,
+} = gqlService.getOrderQueueById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -194,7 +206,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return <Layout pageConfig={pageConfig}>Data not found!</Layout>;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = router.query.tab_status ? `/order/${router.query.tab_status}` : '/order/allorder';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     return (

@@ -3,6 +3,7 @@ import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/promotion/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const Core = (props) => {
     const { Content } = props;
@@ -11,7 +12,7 @@ const Core = (props) => {
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
         acl_code: 'promotion_modify',
     });
-    const { loading, data } = gqlService.getPromotionById({
+    const { loading, data, error } = gqlService.getPromotionById({
         variables: { id: router && router.query && Number(router.query.id) },
     });
 
@@ -22,13 +23,14 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -38,6 +40,12 @@ const Core = (props) => {
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
         router.push('/');
+    }
+
+    if (!data) {
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/marketing/promotion';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     const contentProps = {

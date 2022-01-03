@@ -35,14 +35,7 @@ const WarehouseListContent = (props) => {
                 <a className="link-button">Edit</a>
             </Link>
         ),
-
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>

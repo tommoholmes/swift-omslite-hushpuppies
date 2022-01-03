@@ -8,6 +8,7 @@ import aclService from '@modules/theme/services/graphql';
 import {
     optionsYesNo, optionsActive, optionsZone, optionsQtyBuffer,
 } from '@modules/location/helpers';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -162,7 +163,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getLocationById({
+    const { loading, data, error } = gqlService.getLocationById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -175,7 +176,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return <Layout>Data not found!</Layout>;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/oms/location';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

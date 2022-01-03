@@ -5,12 +5,10 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/logistixprovider/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const logistixDetail = data.getLogistixProviderById;
     const [saveLogistixProvider] = gqlService.saveLogistixProvider();
@@ -19,22 +17,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveLogistixProvider({
             variables: { input },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Logistix Provider!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Logistix Provider!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/configurations/logistixprovider'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/configurations/logistixprovider'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -59,9 +59,7 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -69,7 +67,7 @@ const Core = (props) => {
     const pageConfig = {
         title: `Logistix Provider #${router?.query?.id}`,
     };
-    const { loading, data } = gqlService.getLogistixProviderById({
+    const { loading, data, error } = gqlService.getLogistixProviderById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -80,27 +78,26 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
-
             </Layout>
         );
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/configurations/logistixprovider';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
-
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
         router.push('/');
     }

@@ -5,13 +5,11 @@ import gqlService from '@modules/shipment/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        dataCompany,
-        refetch,
+        data, Content, dataCompany, refetch,
     } = props;
 
     const [companyId, setCompanyId] = React.useState();
@@ -39,22 +37,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         confirmShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order Confirmed',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order Confirmed',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleCantFulfill = () => {
@@ -64,22 +64,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         cantFulfillShipment({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order Confirmed',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order Confirmed',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleRellocation = ({ loc_code }) => {
@@ -90,22 +92,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         shipmentRellocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Rellocation Completed',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Rellocation Completed',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleCheckAvailabilty = async (sku) => {
@@ -119,9 +123,7 @@ const ContentWrapper = (props) => {
         setShowModal(true);
     };
 
-    const handleNotes = ({
-        notes,
-    }) => {
+    const handleNotes = ({ notes }) => {
         const variables = {
             id: shipment.entity_id,
             notes,
@@ -129,22 +131,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveShipmentNotes({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Notes has been saved',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Notes has been saved',
+                    variant: 'success',
+                });
+                setTimeout(() => refetch(), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => refetch(), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const shipmentDetail = {
@@ -229,9 +233,7 @@ const ContentWrapper = (props) => {
         loadingLocationSku,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -245,7 +247,9 @@ const Core = (props) => {
         shipment_id: router && router.query && Number(router.query.id),
     });
 
-    const { loading, data, refetch } = gqlService.getShipmentById({
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getShipmentById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -254,15 +258,13 @@ const Core = (props) => {
     });
 
     if (loading || loadingCompany || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/shipment';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

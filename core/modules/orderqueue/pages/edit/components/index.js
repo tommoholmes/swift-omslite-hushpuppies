@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-param-reassign */
@@ -10,7 +11,7 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
@@ -18,15 +19,19 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useStyles from '@modules/orderqueue/pages/edit/components/style';
 import clsx from 'clsx';
 import { formatPriceNumber } from '@helper_currency';
-import { Formik, FieldArray, Field } from 'formik';
+import { Formik, FieldArray } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
+import Item from '@modules/orderqueue/pages/edit/components/Item';
+import gqlLocation from '@modules/orderqueue/services/graphql';
+import ConfirmDialog from '@common_confirmdialog';
 
 const OrderQueueEditContent = (props) => {
     const {
- formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
-} = props;
+        formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
+    } = props;
     const classes = useStyles();
     const router = useRouter();
+    const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
 
     const getClassByStatus = (status) => {
         if (status === 'failed') {
@@ -83,6 +88,12 @@ const OrderQueueEditContent = (props) => {
         setIdxOpendModal(idx);
         setIsModalOpen(true);
     };
+
+    const [getLocationOptions, { data: dataLoc }] = gqlLocation.getLocationOptions();
+
+    useEffect(() => {
+        getLocationOptions();
+    }, []);
 
     return (
         <>
@@ -142,8 +153,8 @@ const OrderQueueEditContent = (props) => {
                         <div style={{ textAlign: 'center', marginBottom: 10 }}>
                             <div className={classes.orderLabel}>
                                 Order status is
-{' '}
-<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                                {' '}
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
                             <Button
                                 className={classes.btn}
@@ -157,7 +168,7 @@ const OrderQueueEditContent = (props) => {
                             <Button
                                 className={clsx(classes.btn, 'btn-cancel')}
                                 type="submit"
-                                onClick={handleCancel}
+                                onClick={() => setOpenConfirmDialog(true)}
                                 variant="contained"
                                 buttonType="primary-rounded"
                             >
@@ -172,8 +183,8 @@ const OrderQueueEditContent = (props) => {
                         <div style={{ textAlign: 'center', marginBottom: 10 }}>
                             <div>
                                 Order status is
-{' '}
-<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+                                {' '}
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
                             <Button
                                 className={classes.btn}
@@ -237,14 +248,16 @@ const OrderQueueEditContent = (props) => {
                         </div>
                     </div>
                     <br />
-                    <div>
+                    <div style={{ width: '100%' }}>
                         <div>
                             <div>
                                 <h5 className={classes.titleSmall}>Items Ordered</h5>
                             </div>
                         </div>
                         <Formik initialValues={initialValueEditItem}>
-                            {({ values, setFieldValue, setValues }) => (
+                            {({
+                                values, setFieldValue, setValues, touched, errors,
+                            }) => (
                                 <>
                                     <ModalFindProduct
                                         open={isModalOpen}
@@ -253,7 +266,7 @@ const OrderQueueEditContent = (props) => {
                                         values={values}
                                         setFieldValue={setFieldValue}
                                     />
-                                    <div style={{ overflowX: 'auto' }}>
+                                    <div style={{ overflowX: 'auto', overflowY: 'hidden' }}>
                                         <table className={classes.table}>
                                             <tbody>
                                                 <tr className={classes.tr}>
@@ -285,69 +298,20 @@ const OrderQueueEditContent = (props) => {
                                                     {({ remove }) => (
                                                         <>
                                                             {values.order_items.map((e, idx) => (
-                                                                <tr key={idx}>
-                                                                    <td className={classes.td} style={{ paddingLeft: 0 }}>
-                                                                        {e.sku}
-                                                                    </td>
-                                                                    <td className={classes.td}>{e.name}</td>
-                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                        {typeof e?.base_price === 'string'
-                                                                            ? e?.base_price
-                                                                            : formatPriceNumber(e?.base_price)}
-                                                                    </td>
-                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                        {isModeEdit ? (
-                                                                            <Field
-                                                                                type="number"
-                                                                                className={classes.fieldQty}
-                                                                                name={`order_items.[${idx}].qty`}
-                                                                            />
-                                                                        ) : (
-                                                                            e?.qty
-                                                                        )}
-                                                                    </td>
-                                                                    <td className={classes.td} style={{ textAlign: 'center' }}>
-                                                                        {e.discount_amount}
-                                                                    </td>
-                                                                    <td className={classes.td}>{e.loc_code || '-'}</td>
-                                                                    <td className={classes.td}>{e.pickup_name || '-'}</td>
-                                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
-                                                                        <td className={classes.td}>{e.replacement_for || '-'}</td>
-                                                                    )}
-                                                                    {isModeEdit && (
-                                                                        <td
-                                                                            className={classes.td}
-                                                                            style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}
-                                                                        >
-                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
-                                                                                <img src="/assets/img/replace.svg" alt="replace" />
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={`link-button ${classes.btnClear}`}
-                                                                                    onClick={() => handleOpenModal(idx)}
-                                                                                >
-                                                                                    replace
-                                                                                </button>
-                                                                            </div>
-                                                                            <div style={{ margin: 'auto 5px', display: 'flex' }}>
-                                                                                <img src="/assets/img/trash.svg" alt="delete" />
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className={`link-button ${classes.btnClear}`}
-                                                                                    onClick={() => {
-                                                                                        const tempDeletedItems = [...values.deleted_items];
-                                                                                        tempDeletedItems.push(values.order_items[idx]);
-
-                                                                                        setFieldValue('deleted_items', tempDeletedItems);
-                                                                                        remove(idx);
-                                                                                    }}
-                                                                                >
-                                                                                    delete
-                                                                                </button>
-                                                                            </div>
-                                                                        </td>
-                                                                    )}
-                                                                </tr>
+                                                                <Item
+                                                                    idx={idx}
+                                                                    aclCheckData={aclCheckData}
+                                                                    classes={classes}
+                                                                    setFieldValue={setFieldValue}
+                                                                    remove={remove}
+                                                                    isModeEdit={isModeEdit}
+                                                                    item={e}
+                                                                    values={values}
+                                                                    errors={errors}
+                                                                    touched={touched}
+                                                                    handleOpenModal={handleOpenModal}
+                                                                    listLocation={dataLoc && dataLoc?.getLocationOptions}
+                                                                />
                                                             ))}
                                                         </>
                                                     )}
@@ -440,6 +404,16 @@ const OrderQueueEditContent = (props) => {
                     </div> */}
                 </div>
             </Paper>
+            <ConfirmDialog
+                open={openConfirmDialog}
+                onCancel={() => setOpenConfirmDialog(false)}
+                onConfirm={async () => {
+                    await handleCancel();
+                    setOpenConfirmDialog(false);
+                }}
+                title="Cancel Order"
+                message="Are you sure want to cancel this order?"
+            />
         </>
     );
 };

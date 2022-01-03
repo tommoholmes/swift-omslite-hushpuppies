@@ -75,6 +75,11 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 140px)',
         },
+        '&.field-date': {
+            [theme.breakpoints.up('sm')]: {
+                width: 170,
+            },
+        },
     },
     fieldInput: {
         border: '1px solid',

@@ -7,15 +7,11 @@ import gqlService from '@modules/managevendor/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import locationGqlService from '@modules/location/services/graphql';
 import Cookies from 'js-cookie';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        dataCourier,
-        dataShipper,
-        Content,
-        getCountries,
-        getCountriesRes,
+        data, dataCourier, dataShipper, Content, getCountries, getCountriesRes,
     } = props;
     const router = useRouter();
     const vendor = data.getVendorById;
@@ -30,22 +26,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         vendorUpdate({
             variables: { input },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Vendor!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Vendor!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/vendorportal/managevendor'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/vendorportal/managevendor'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -64,10 +62,10 @@ const ContentWrapper = (props) => {
             logo: vendor.logo,
             promotion_banner: vendor.promotion_banner,
             shipper_shipping: vendor.shipper_shipping?.length
-                ? vendor.shipper_shipping.map((code) => (dataShipper.find((ship) => ship.value === code)))
+                ? vendor.shipper_shipping.map((code) => dataShipper.find((ship) => ship.value === code))
                 : [],
             vendor_shipping: vendor.vendor_shipping?.length
-                ? vendor.vendor_shipping.map((code) => (dataCourier.find((ship) => ship.value === code)))
+                ? vendor.vendor_shipping.map((code) => dataCourier.find((ship) => ship.value === code))
                 : [],
         },
         validationSchema: Yup.object().shape({
@@ -75,9 +73,16 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             const {
-                shipper_shipping, vendor_shipping, logo,
-                company_country_id, company_region, company_city, promotion_banner,
-                is_new_product, company_margin, is_product_approval,
+                shipper_shipping,
+                vendor_shipping,
+                logo,
+                company_country_id,
+                company_region,
+                company_city,
+                promotion_banner,
+                is_new_product,
+                company_margin,
+                is_product_approval,
                 ...restValues
             } = values;
             let valuesToSubmit = {};
@@ -158,9 +163,7 @@ const ContentWrapper = (props) => {
         getCityKecByRegionCodeRes,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -172,7 +175,7 @@ const Core = (props) => {
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
     const { loading: loadingCourier, data: dataCourier } = gqlService.getCourierOption();
     const { loading: shipperLoading, data: dataShipper } = gqlService.getShipperMethodOption();
-    const { loading, data } = gqlService.getVendorById({
+    const { loading, data, error } = gqlService.getVendorById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -185,9 +188,7 @@ const Core = (props) => {
     }, []);
 
     if (loading || loadingCourier || shipperLoading || aclCheckLoading || getCountriesRes.loading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -195,9 +196,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/vendorportal/managevendor';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     const contentProps = {

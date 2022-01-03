@@ -38,26 +38,10 @@ const ProductListContent = (props) => {
         ),
     }));
 
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
-
     return (
         <>
-            <Header
-                handleFetchManual={handleFetchManual}
-            />
-            <Table
-                filters={filters}
-                rows={rows}
-                getRows={getProductList}
-                loading={loading}
-                columns={columns}
-                count={productTotal}
-                hideActions
-            />
+            <Header handleFetchManual={handleFetchManual} />
+            <Table filters={filters} rows={rows} getRows={getProductList} loading={loading} columns={columns} count={productTotal} hideActions />
         </>
     );
 };

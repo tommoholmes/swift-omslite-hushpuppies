@@ -162,8 +162,35 @@ export const editOrderItem = gql`
 
 export const cancelOrder = gql`
     mutation cancelOrder($id: Int!) {
-        cancelOrder(id: $id){
+        cancelOrder(id: $id) {
             status
+        }
+    }
+`;
+export const getLocationOptions = gql`
+    query {
+        getLocationOptions {
+            label
+            value
+        }
+    }
+`;
+
+export const getUniqueProductFromSource = gql`
+    query getUniqueProductFromSource($pageSize: Int!, $currentPage: Int!, $filter: SourceFilterInput, $sort: SourceSortInput, $search: String) {
+        getUniqueProductFromSource(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort, search: $search) {
+            items {
+                source_id
+                loc_id
+                loc_name
+                sku
+            }
+            total_count
+            page_info {
+                page_size
+                current_page
+                total_pages
+            }
         }
     }
 `;
@@ -182,4 +209,6 @@ export default {
     marketplaceFetchOrder,
     editOrderItem,
     cancelOrder,
+    getLocationOptions,
+    getUniqueProductFromSource,
 };

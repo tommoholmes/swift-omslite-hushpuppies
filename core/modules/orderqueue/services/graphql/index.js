@@ -85,6 +85,18 @@ export const cancelOrder = (variables) => useMutation(Schema.cancelOrder, {
     ...context,
 });
 
+export const getLocationOptions = (options) => useLazyQuery(Schema.getLocationOptions, {
+    ...options,
+    ...context,
+    ...fetchPolicy,
+});
+
+export const getUniqueProductFromSource = (variables) => useLazyQuery(Schema.getUniqueProductFromSource, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -100,4 +112,6 @@ export default {
     marketplaceFetchOrder,
     editOrderItem,
     cancelOrder,
+    getLocationOptions,
+    getUniqueProductFromSource,
 };

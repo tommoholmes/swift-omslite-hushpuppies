@@ -5,16 +5,11 @@ import { useRouter } from 'next/router';
 import gqlService from '@modules/managerma/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import * as Yup from 'yup';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        refetch,
-        Content,
-        dataStatusItem,
-        dataReturnType,
-        dataPackageCondition,
-        dataReason,
+        data, refetch, Content, dataStatusItem, dataReturnType, dataPackageCondition, dataReason,
     } = props;
     const [refundRma] = gqlService.refundRma();
     const [saveRma] = gqlService.saveRma();
@@ -28,22 +23,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         refundRma({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Refund!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Refund!',
+                    variant: 'success',
+                });
+                refetch();
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            refetch();
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const rmaDetail = {
@@ -77,22 +74,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveRma({
             variables: { input },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Update RMA!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Update RMA!',
+                    variant: 'success',
+                });
+                refetch();
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            refetch();
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -108,15 +107,13 @@ const ContentWrapper = (props) => {
                 is_visible_on_front: false,
                 text: '',
             },
-            items: rma.rma_item?.map((item) => (
-                {
-                    item_id: item.id,
-                    package_condition: item.package_condition,
-                    reason: item.reason,
-                    status_code: item.status_code,
-                    return_stock: item.return_stock !== 0,
-                }
-            )),
+            items: rma.rma_item?.map((item) => ({
+                item_id: item.id,
+                package_condition: item.package_condition,
+                reason: item.reason,
+                status_code: item.status_code,
+                return_stock: item.return_stock !== 0,
+            })),
         },
         validationSchema: Yup.object().shape({
             status_code: Yup.string().required('Required!'),
@@ -127,15 +124,13 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             const { items, message, ...valueToSubmit } = values;
-            valueToSubmit.items = items.map((item) => (
-                {
-                    item_id: item.item_id,
-                    package_condition: item.package_condition,
-                    reason: item.reason,
-                    status_code: item.status_code,
-                    return_stock: item.return_stock ? 1 : 0,
-                }
-            ));
+            valueToSubmit.items = items.map((item) => ({
+                item_id: item.item_id,
+                package_condition: item.package_condition,
+                reason: item.reason,
+                status_code: item.status_code,
+                return_stock: item.return_stock ? 1 : 0,
+            }));
             valueToSubmit.message = {
                 is_customer_notified: message.is_customer_notified ? 1 : 0,
                 is_visible_on_front: message.is_visible_on_front ? 1 : 0,
@@ -155,9 +150,7 @@ const ContentWrapper = (props) => {
         handleRefund,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -177,7 +170,9 @@ const Core = (props) => {
     const { loading: loadingReason, data: dataReason } = gqlService.getStoreConfig({
         path: 'swiftoms_rma/rma_request/reason',
     });
-    const { loading, data, refetch } = gqlService.getRmaById({
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getRmaById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -186,15 +181,13 @@ const Core = (props) => {
     });
 
     if (loading || loadingStatus || loadingReturnType || loadingPackageCondition || loadingReason || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/managerma';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

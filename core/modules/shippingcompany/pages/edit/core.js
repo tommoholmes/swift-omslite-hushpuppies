@@ -6,21 +6,16 @@ import { useRouter } from 'next/router';
 import { optionsIsActive } from '@modules/shippingcompany/helpers';
 import gqlService from '@modules/shippingcompany/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const shippingCompany = data.getShippingCompanyById;
     const [updateShippingCompany] = gqlService.updateShippingCompany();
 
     const handleSubmit = ({
-        companyId,
-        brand,
-        shippingMethod,
-        isActive,
+        companyId, brand, shippingMethod, isActive,
     }) => {
         const variables = {
             id: shippingCompany.id,
@@ -32,22 +27,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateShippingCompany({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit shipping company!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit shipping company!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/tada/shippingcompany'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/tada/shippingcompany'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -73,14 +70,12 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getShippingCompanyById({
+    const { loading, data, error } = gqlService.getShippingCompanyById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -89,15 +84,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/tada/shippingcompany';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

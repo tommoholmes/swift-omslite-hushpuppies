@@ -4,12 +4,10 @@ import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/requestvendor/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const Vendor = data.getVendorRequestById;
     const [vendorRequestApprove] = gqlService.vendorRequestApprove();
@@ -22,22 +20,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         vendorRequestApprove({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Approved',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Approved',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/vendorportal/requestvendor'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/vendorportal/requestvendor'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const handleNotApprove = () => {
@@ -47,22 +47,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         vendorRequestNotApprove({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Order was Not Approved',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Order was Not Approved',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/vendorportal/requestvendor'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/vendorportal/requestvendor'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const vendor = {
@@ -88,14 +90,12 @@ const ContentWrapper = (props) => {
         handleNotApprove,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getVendorRequestById({
+    const { loading, data, error } = gqlService.getVendorRequestById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -104,15 +104,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/vendorportal/requestvendor';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

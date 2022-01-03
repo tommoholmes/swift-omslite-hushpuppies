@@ -3,6 +3,7 @@ import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/stocktransfer/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -72,7 +73,7 @@ const ContentWrapper = (props) => {
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getStockTransferById({
+    const { loading, data, error } = gqlService.getStockTransferById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -85,7 +86,9 @@ const Core = (props) => {
     }
 
     if (!data) {
-        return <Layout>Data not found!</Layout>;
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/cataloginventory/stocktransfer';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

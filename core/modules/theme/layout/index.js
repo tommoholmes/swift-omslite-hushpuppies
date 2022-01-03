@@ -595,6 +595,12 @@ const Layout = (props) => {
                     url: '/configurations/logistixprovider',
                 },
                 {
+                    aclCode: 'pick_pack_configuration',
+                    key: 'pickpack',
+                    label: 'Pick Pack',
+                    url: '/configurations/pickpack',
+                },
+                {
                     aclCode: 'oms_lite_header_mpadapter',
                     key: 'marketplacebrand',
                     label: 'Marketplace Brand',
@@ -605,6 +611,12 @@ const Layout = (props) => {
                     key: 'marketplacefeature',
                     label: 'Marketplace Feature',
                     url: '/configurations/marketplacefeature',
+                },
+                {
+                    aclCode: 'oms_lite_manage_courier',
+                    key: 'netsuitecourier',
+                    label: 'Netsuite Courier',
+                    url: '/configurations/netsuitecourier',
                 },
             ],
         },

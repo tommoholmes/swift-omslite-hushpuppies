@@ -39,8 +39,18 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: '48%',
             float: 'left',
-            marginTop: 26,
+            paddingTop: 26,
             marginLeft: 21,
+            height: '115vmin',
+            overflow: 'scroll',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                width: 0,
+                background: 'transparent',
+            },
+        },
+        [theme.breakpoints.up('md')]: {
+            height: '100vh',
         },
     },
     containRight: {

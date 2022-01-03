@@ -5,13 +5,11 @@ import Layout from '@layout';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/batchlist/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
     const {
-        data,
-        Content,
-        allowManualConfirm,
-        useCamera,
+        data, Content, allowManualConfirm, useCamera,
     } = props;
     const router = useRouter();
     const picklist = data.getPickByBatchItemById.pick_by_batch_item;
@@ -28,22 +26,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updatePickByBatchItem({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success update qty!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success update qty!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push(`/pickpack/batchlist/edit/picklist/${pickList.parentId}`), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push(`/pickpack/batchlist/edit/picklist/${pickList.parentId}`), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const incrementCount = () => {
@@ -92,9 +92,7 @@ const ContentWrapper = (props) => {
         useCamera,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -111,7 +109,7 @@ const Core = (props) => {
         path: 'swiftoms_pickpack/batch/use_camera_to_scan',
     });
 
-    const { loading, data } = gqlService.getPickByBatchItemById({
+    const { loading, data, error } = gqlService.getPickByBatchItemById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -120,15 +118,13 @@ const Core = (props) => {
     });
 
     if (loading || loadingConfig || loadingConfigCamera || aclCheckLoading) {
-        return (
-            <Layout pageConfig={pageConfig}>Loading...</Layout>
-        );
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout pageConfig={pageConfig}>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/pickpack/batchlist';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

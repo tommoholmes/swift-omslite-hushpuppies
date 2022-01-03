@@ -5,22 +5,16 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/prioritylocation/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const priorityLocation = data.getPriorityLocationById;
     const [updatePriorityLocation] = gqlService.updatePriorityLocation();
 
     const handleSubmit = ({
-        channelCode,
-        city,
-        locationCode,
-        priority,
-
+        channelCode, city, locationCode, priority,
     }) => {
         const variables = {
             id: priorityLocation.id,
@@ -32,22 +26,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updatePriorityLocation({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit priotiy location!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit priotiy location!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/oms/prioritylocation'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/oms/prioritylocation'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -72,14 +68,12 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getPriorityLocationById({
+    const { loading, data, error } = gqlService.getPriorityLocationById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -88,15 +82,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/oms/prioritylocation';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

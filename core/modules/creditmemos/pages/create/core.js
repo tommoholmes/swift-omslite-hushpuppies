@@ -5,13 +5,10 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import gqlService from '@modules/creditmemos/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-        parentId,
-    } = props;
+    const { data, Content, parentId } = props;
     const router = useRouter();
     const { creditmemo, order } = data.prepareNewMemo;
     const [grandTotal, setGrandTotal] = React.useState(creditmemo.grand_total);
@@ -37,40 +34,44 @@ const ContentWrapper = (props) => {
         };
         calculate({
             variables,
-        }).then(({ data: res }) => {
-            const { calculateCreditMemoTotals } = res;
-            setGrandTotal(calculateCreditMemoTotals.grand_total);
-            window.backdropLoader(false);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
+        })
+            .then(({ data: res }) => {
+                const { calculateCreditMemoTotals } = res;
+                setGrandTotal(calculateCreditMemoTotals.grand_total);
+                window.backdropLoader(false);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-        });
     };
 
     const handleSubmit = (variables) => {
         window.backdropLoader(true);
         createCreditMemo({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Creditmemo created',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Creditmemo created',
+                    variant: 'success',
+                });
+                router.push(`/sales/managerma/edit/${parentId}`);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            router.push(`/sales/managerma/edit/${parentId}`);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     // eslint-disable-next-line no-useless-escape
@@ -143,9 +144,7 @@ const ContentWrapper = (props) => {
         grandTotal,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
@@ -166,13 +165,14 @@ const Core = (props) => {
     if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading...
                 </div>
@@ -180,27 +180,10 @@ const Core = (props) => {
         );
     }
 
-    if (!data && error) {
-        window.toastMessage({
-            open: true,
-            text: error.message,
-            variant: 'error',
-        });
-        setTimeout(() => { router.push(`/sales/managerma/edit/${router && router.query && Number(router.query.request_id)}`); }, 1500);
-        return (
-            <Layout pageConfig={pageConfig}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
-                >
-                    Error
-                </div>
-            </Layout>
-        );
+    if (!data) {
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = `/sales/managerma/edit/${router && router.query && Number(router.query.request_id)}`;
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -209,11 +192,7 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper
-                parentId={router && router.query && Number(router.query.request_id)}
-                data={data}
-                {...props}
-            />
+            <ContentWrapper parentId={router && router.query && Number(router.query.request_id)} data={data} {...props} />
         </Layout>
     );
 };

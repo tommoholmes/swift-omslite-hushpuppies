@@ -45,7 +45,9 @@ const OrderReallocationListContent = (props) => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue.target.value);
+                    }}
                     InputProps={{
                         className: classes.fieldInput,
                     }}
@@ -67,7 +69,9 @@ const OrderReallocationListContent = (props) => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue.target.value);
+                    }}
                     InputProps={{
                         className: classes.fieldInput,
                     }}
@@ -109,12 +113,6 @@ const OrderReallocationListContent = (props) => {
             </Link>
         ),
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>

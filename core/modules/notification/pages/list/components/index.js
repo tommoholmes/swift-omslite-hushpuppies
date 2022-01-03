@@ -45,7 +45,9 @@ const NotificationListContent = (props) => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue.target.value);
+                    }}
                     InputProps={{
                         className: classes.fieldInput,
                     }}
@@ -68,7 +70,9 @@ const NotificationListContent = (props) => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(newValue) => { setFilterValue(newValue.target.value); }}
+                    onChange={(newValue) => {
+                        setFilterValue(newValue.target.value);
+                    }}
                     InputProps={{
                         className: classes.fieldInput,
                     }}
@@ -170,14 +174,14 @@ const NotificationListContent = (props) => {
     const rows = notificationList.map((notification) => ({
         ...notification,
         id: notification.id,
-        attachment: notification.attachment ? <a href={notification.attachment} style={{ color: '#BE1F93' }}>Download</a> : '-',
+        attachment: notification.attachment ? (
+            <a href={notification.attachment} style={{ color: '#BE1F93' }}>
+                Download
+            </a>
+        ) : (
+            '-'
+        ),
     }));
-
-    // if (!data || loading) {
-    //     return (
-    //         <div>Loading . . .</div>
-    //     );
-    // }
 
     return (
         <>

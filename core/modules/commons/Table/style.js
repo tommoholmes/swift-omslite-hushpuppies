@@ -106,6 +106,11 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         padding: '20px 0',
     },
+    tablePagination: {
+        '& .MuiTablePagination-spacer': {
+            display: 'none',
+        },
+    },
 }));
 
 export default useStyles;

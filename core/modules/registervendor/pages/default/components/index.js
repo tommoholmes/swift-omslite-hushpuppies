@@ -74,10 +74,10 @@ const Login = (props) => {
                 <div className={classes.headerLogin}>
                     <img alt="" src="/assets/img/swiftoms_logo_expanded.png" />
                 </div>
+                <Typography variant="h6" gutterBottom className={classes.textTitle}>
+                    Request New Vendor
+                </Typography>
                 <div className={classes.loginContent}>
-                    <Typography variant="h6" gutterBottom className={classes.textTitle}>
-                        Request New Vendor
-                    </Typography>
                     <form>
                         <div className="row center-xs start-sm">
                             <div className={clsx('col-xs-12 col-sm-12', classes.formField)}>
@@ -174,20 +174,15 @@ const Login = (props) => {
                                             width: '100%',
                                         }}
                                     >
-                                        <div style={{
-                                            height: 36, borderRadius: 20, width: '75%', backgroundColor: '#ECF0FB',
-                                        }}
-                                        >
+                                        <div style={{ height: 5, width: '75%', backgroundColor: '#a3a099' }}>
                                             <div
                                                 style={{
-                                                    height: 36,
+                                                    height: '100%',
                                                     width: getSize(passwordErrorStatus),
                                                     backgroundColor: getColor(passwordErrorStatus),
                                                     transition: 'background-color .2s, visisility .1s',
-                                                    borderRadius: 20,
                                                 }}
                                             />
-
                                         </div>
                                         <div style={{ padding: '0px 5px', color: getColor(passwordErrorStatus), fontSize: '0.75rem' }}>
                                             {passwordErrorStatus}

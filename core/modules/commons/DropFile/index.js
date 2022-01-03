@@ -5,7 +5,7 @@ import useStyles from '@common_dropfile/style';
 import Button from '@common_button';
 
 const DropFile = ({
-    title = '', textButton = 'Choose File', formatFile = '.csv', getBase64,
+    title = '', textButton = 'Choose File', formatFile = '.csv', getBase64, showFiles = true,
 }) => {
     const classes = useStyles();
     const toBase64 = (file) => new Promise((resolve, reject) => {
@@ -66,9 +66,12 @@ const DropFile = ({
                 </Button>
                 {files.length === 0 && <span className={classes.textNoFile}>No file chosen</span>}
             </div>
-            <aside>
-                <ul>{files}</ul>
-            </aside>
+            {showFiles
+            && (
+                <aside>
+                    <ul>{files}</ul>
+                </aside>
+            )}
         </div>
     );
 };

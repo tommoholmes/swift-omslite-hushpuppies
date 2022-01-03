@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 const ProductBundle = (props) => {
     const {
-        gqlUpload, urlDownload, handleSubmit, toolName, code,
+        gqlUpload, urlDownload, handleSubmit, toolName, code, isNoTutorial = false,
     } = props;
     const classes = useStyles();
     const [uploader] = gqlUpload();
@@ -47,12 +47,16 @@ const ProductBundle = (props) => {
                         <a href={urlDownload} className={classes.linkDownload}>
                             Download the Sample CSV
                         </a>
-                        <br />
-                        <Link href={`/vendorportal/tutorialupload?code=${code}`}>
-                            <a target="_blank" className={classes.linkDownload}>
-                                Tutorial {toolName ?? 'Upload'}
-                            </a>
-                        </Link>
+                        {!isNoTutorial && (
+                            <>
+                                <br />
+                                <Link href={`/vendorportal/tutorialupload?code=${code}`}>
+                                    <a target="_blank" className={classes.linkDownload}>
+                                        Tutorial {toolName ?? 'Upload'}
+                                    </a>
+                                </Link>
+                            </>
+                        )}
                     </span>
                 </div>
                 <div className={clsx(classes.formField, classes.textLeft)}>

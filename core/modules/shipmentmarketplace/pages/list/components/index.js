@@ -30,13 +30,14 @@ const ShipmentMarketplaceListContent = (props) => {
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
         { field: 'marketplace_order_number', headerName: 'Marketplace Order Number', hideable: true },
         { field: 'status', headerName: 'Status', sortable: true, hideable: true },
+        { field: 'marketplace_order_status', headerName: 'Marketplace Order Status', hideable: true },
+        { field: 'port', headerName: 'Port', hideable: true, hidden: true },
         { field: 'channel_order_date', headerName: 'Channel Order Date', hideable: true },
         { field: 'shipping_name', headerName: 'Recipient Name', hideable: true },
         { field: 'channel_name', headerName: 'Channel', sortable: true, hideable: true },
-        { field: 'location', headerName: 'Location', sortable: true, hideable: true },
+        { field: 'location', headerName: 'Location', hideable: true },
         { field: 'track_number', headerName: 'Airwaybill Number', hideable: true },
         { field: 'allocation_status', headerName: 'Allocation Status', sortable: true, hideable: true, hidden: true },
-        { field: 'connexi_order_status', headerName: 'Connexi Order Status', hideable: true, hidden: true },
         { field: 'action', headerName: 'Action', hideable: true },
     ];
 

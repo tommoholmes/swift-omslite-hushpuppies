@@ -29,23 +29,53 @@ export const vendorProductConfigurableUpload = (variables) => useMutation(Schema
     variables,
     ...context,
 });
+
 export const vendorProductBundleUpload = (variables) => useMutation(Schema.vendorProductBundleUpload, {
     variables,
     ...context,
 });
+
 export const vendorProductGroupedUpload = (variables) => useMutation(Schema.vendorProductGroupedUpload, {
     variables,
     ...context,
 });
+
 export const vendorProductPriceUpload = (variables) => useMutation(Schema.vendorProductPriceUpload, {
     variables,
     ...context,
 });
+
 export const vendorProductUpload = (variables) => useMutation(Schema.vendorProductUpload, {
     variables,
     ...context,
 });
+
 export const vendorProductPriceLocationUpload = (variables) => useMutation(Schema.vendorProductPriceLocationUpload, {
+    variables,
+    ...context,
+});
+
+export const vendorProductStockUpload = (variables) => useMutation(Schema.vendorProductStockUpload, {
+    variables,
+    ...context,
+});
+
+export const getVendorStockUploadSampleCsv = (variables) => useMutation(Schema.getVendorStockUploadSampleCsv, {
+    variables,
+    ...context,
+});
+
+export const vendorCategoryAssignationUpload = (variables) => useMutation(Schema.vendorCategoryAssignationUpload, {
+    variables,
+    ...context,
+});
+
+export const vendorProductSimplifyUpload = (variables) => useMutation(Schema.vendorProductSimplifyUpload, {
+    variables,
+    ...context,
+});
+
+export const vendorProductImageUpload = (variables) => useMutation(Schema.vendorProductImageUpload, {
     variables,
     ...context,
 });
@@ -67,4 +97,9 @@ export default {
     vendorProductGroupedUpload,
     vendorProductPriceUpload,
     vendorProductPriceLocationUpload,
+    vendorProductStockUpload,
+    getVendorStockUploadSampleCsv,
+    vendorProductSimplifyUpload,
+    vendorCategoryAssignationUpload,
+    vendorProductImageUpload,
 };

@@ -6,27 +6,17 @@ import { useRouter } from 'next/router';
 import { optionsInItem, optionsEmailCustomer, optionsEmailAdmin } from '@modules/rmastatuses/helpers';
 import gqlService from '@modules/rmastatuses/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        Content,
-        data,
-    } = props;
+    const { Content, data } = props;
 
     const router = useRouter();
     const rmastatuses = data.getRmaStatusByCode;
     const [updateRmaStatus] = gqlService.updateRmaStatus();
 
     const handleSubmit = ({
-        code,
-        label,
-        position,
-        inItem,
-        messageText,
-        emailCustomer,
-        customerText,
-        emailAdmin,
-        adminText,
+        code, label, position, inItem, messageText, emailCustomer, customerText, emailAdmin, adminText,
     }) => {
         const variables = {
             status_code: code,
@@ -42,22 +32,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateRmaStatus({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit Rma Status!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit Rma Status!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/sales/rmastatuses'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/sales/rmastatuses'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -91,14 +83,12 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getRmaStatusByCode({
+    const { loading, data, error } = gqlService.getRmaStatusByCode({
         status_code: router && router.query && String(router.query.id),
     });
 
@@ -107,15 +97,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/sales/rmastatuses';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {

@@ -2,11 +2,10 @@ import Layout from '@layout';
 import gqlService from '@modules/shipmentmarketplace/services/graphql';
 import aclService from '@modules/theme/services/graphql';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Core = (props) => {
-    const {
-        Content,
-    } = props;
+    const { Content } = props;
     const router = useRouter();
     const [varExport, setVarExport] = React.useState({});
 
@@ -14,11 +13,20 @@ const Core = (props) => {
         path: 'swiftoms_shipment/general/pick_and_pack',
     });
     const { data: optionsStatus, loading: loadingOptionStatus } = gqlService.getShipmentStatusByType();
-    const [getStoreShipmentList, { data, loading }] = gqlService.getStoreShipmentList();
+    const [getStoreShipmentList, { data, loading, error }] = gqlService.getStoreShipmentList();
+    useEffect(() => {
+        if (error) {
+            window.toastMessage({
+                open: true,
+                text: error.message,
+                variant: 'error',
+            });
+        }
+    }, [error]);
     const [confirmMarketplaceShipment] = gqlService.confirmMarketplaceShipment();
     const [getExportStatusHistory] = gqlService.getExportStatusHistory({
         onCompleted: (res) => {
-            router.push(`${res.getExportStatusHistory }.csv`);
+            router.push(`${res.getExportStatusHistory}.csv`);
         },
     });
     const [pickShipment] = gqlService.pickShipment();
@@ -50,13 +58,14 @@ const Core = (props) => {
     if (loadingOptionStatus || loadingConfig || aclCheckLoading) {
         return (
             <Layout useBreadcrumbs={false}>
-                <div style={{
-                    display: 'flex',
-                    color: '#435179',
-                    fontWeight: 600,
-                    justifyContent: 'center',
-                    padding: '20px 0',
-                }}
+                <div
+                    style={{
+                        display: 'flex',
+                        color: '#435179',
+                        fontWeight: 600,
+                        justifyContent: 'center',
+                        padding: '20px 0',
+                    }}
                 >
                     Loading
                 </div>

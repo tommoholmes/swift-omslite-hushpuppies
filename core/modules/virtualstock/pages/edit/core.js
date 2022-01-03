@@ -6,25 +6,16 @@ import { useRouter } from 'next/router';
 import { optionsPriorityEnable, optionsPriorityType, optionsFramework } from '@modules/virtualstock/helpers';
 import gqlService from '@modules/virtualstock/services/graphql';
 import aclService from '@modules/theme/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const {
-        data,
-        Content,
-    } = props;
+    const { data, Content } = props;
     const router = useRouter();
     const virtualStock = data.getVirtualStockById;
     const [updateVirtualStock] = gqlService.updateVirtualStock();
 
     const handleSubmit = ({
-        name,
-        notes,
-        priorityEnable,
-        priorityType,
-        channelPriority,
-        frameworkPriority,
-        minStock,
-        location,
+        name, notes, priorityEnable, priorityType, channelPriority, frameworkPriority, minStock, location,
     }) => {
         const variables = {
             id: virtualStock.vs_id,
@@ -40,22 +31,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         updateVirtualStock({
             variables,
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success edit VirtualStock',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success edit VirtualStock',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push('/cataloginventory/virtualstock'), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push('/cataloginventory/virtualstock'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -89,14 +82,12 @@ const ContentWrapper = (props) => {
         formik,
     };
 
-    return (
-        <Content {...contentProps} />
-    );
+    return <Content {...contentProps} />;
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { loading, data } = gqlService.getVirtualStockById({
+    const { loading, data, error } = gqlService.getVirtualStockById({
         id: router && router.query && Number(router.query.id),
     });
 
@@ -105,15 +96,13 @@ const Core = (props) => {
     });
 
     if (loading || aclCheckLoading) {
-        return (
-            <Layout>Loading...</Layout>
-        );
+        return <Layout>Loading...</Layout>;
     }
 
     if (!data) {
-        return (
-            <Layout>Data not found!</Layout>
-        );
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/cataloginventory/virtualstock';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
