@@ -40,7 +40,7 @@ const AdminStoreCreateContent = (props) => {
             </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    {data.map((field) => (
+                    {data.map((field, idx) => (
                         <div className={classes.formField} key={field.id}>
                             <div className={classes.divLabel}>
                                 <span className={clsx(classes.label, classes.labelRequired)}>{field.type.split('_').join(' ')}</span>
@@ -48,29 +48,32 @@ const AdminStoreCreateContent = (props) => {
                             {field.type === 'default_shipping_method'
                                 ? (
                                     <Select
-                                        name={field.type}
-                                        value={formik.values[field.type]}
+                                        name={`input[${idx}].value`}
+                                        value={formik.values.input[idx].value}
                                         onChange={formik.handleChange}
                                         dataOptions={dataOptions && dataOptions.getMarketplaceDefaultShippingMethods}
-                                        selectClasses={classes.fieldInput}
+                                        selectClasses={classes.fieldInputSelect}
                                         formControlClasses={classes.selectControl}
                                         loading={loadingOptions}
-                                        fullWidth
-                                        error={!!(formik.touched[field.type] && formik.errors[field.type])}
-                                        helperText={(formik.touched[field.type] && formik.errors[field.type]) || ''}
+                                        error={!!(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value)}
+                                        helperText={(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value) || ''}
                                     />
                                 ) : (
                                     <TextField
-                                        name={field.type}
-                                        value={formik.values[field.type]}
+                                        name={`input[${idx}].value`}
+                                        value={formik.values.input[idx].value}
                                         onChange={formik.handleChange}
                                         className={classes.fieldRoot}
                                         variant="outlined"
                                         InputProps={{
                                             className: classes.fieldInput,
                                         }}
-                                        error={!!(formik.touched[field.type] && formik.errors[field.type])}
-                                        helperText={(formik.touched[field.type] && formik.errors[field.type]) || ''}
+                                        error={!!(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value)}
+                                        helperText={(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value) || ''}
                                     />
                                 )}
                         </div>

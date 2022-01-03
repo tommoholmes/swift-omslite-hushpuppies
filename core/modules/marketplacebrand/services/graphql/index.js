@@ -49,7 +49,7 @@ export const getMarketplaceCredentials = (variables) => useQuery(Schema.getMarke
     variables, ...context, ...fetchPolicy,
 });
 
-export const getMarketplaceDefaultShippingMethods = (variables) => useLazyQuery(Schema.getMarketplaceDefaultShippingMethods, {
+export const getMarketplaceDefaultShippingMethods = (variables) => useQuery(Schema.getMarketplaceDefaultShippingMethods, {
     variables, ...context, ...fetchPolicy,
 });
 

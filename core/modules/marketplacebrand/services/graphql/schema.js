@@ -180,10 +180,7 @@ export const getMarketplaceDefaultShippingMethods = gql`
 
 export const saveMarketplaceCredentials = gql`
 mutation saveMarketplaceCredentials($store_detail_id: Int!, $input: [MarketplaceCredentialsInput!]!){
-        saveMarketplaceCredentials(store_detail_id: $store_detail_id, input: $input){
-            label
-            value
-        }
+        saveMarketplaceCredentials(store_detail_id: $store_detail_id, input: $input)
     }
 `;
 

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const colorPurple = '#BE1F93';
 const font = '"Roboto", "Helvetica", "Arial", sans-serif';
 const colorText = '#536777';
+const borderColor = '#DDE1EC';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -27,8 +28,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline-block',
     },
     formField: {
-        padding: 0,
-        paddingBottom: 16,
+        display: 'grid',
+        gridTemplateColumns: '30% 60% 10%',
+        [theme.breakpoints.down('xs')]: {
+            gridTemplateColumns: '40% 60%',
+        },
     },
     formFieldButton: {
         padding: '24px 29px 30px 22px',
@@ -37,11 +41,15 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 20,
     },
     divLabel: {
-        width: 300,
-        display: 'inline-block',
-        [theme.breakpoints.down('xs')]: {
-            width: 140,
+        display: 'flex',
+        [theme.breakpoints.down('sm')]: {
+            paddingRight: 10,
+            paddingLeft: 0,
+            justifyContent: 'start',
         },
+        paddingRight: 30,
+        justifyContent: 'end',
+        alignItems: 'center',
     },
     label: {
         color: colorText,
@@ -65,20 +73,33 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px 29px 12px 22px',
     },
     fieldRoot: {
-        width: 'calc(100% - 300px)',
         verticalAlign: 'middle',
-        [theme.breakpoints.down('xs')]: {
-            width: 'calc(100% - 140px)',
+    },
+    fieldInputSelect: {
+        border: '1px solid',
+        borderColor: colorText,
+        borderRadius: '20px !important',
+        height: 35,
+        '&.disabled': {
+            borderColor,
+        },
+        '& .MuiOutlinedInput-input': {
+            padding: '7px 14px',
         },
     },
     fieldInput: {
         border: '1px solid',
         borderColor: colorText,
         borderRadius: 20,
-        height: 40,
+        height: 35,
         '& .MuiOutlinedInput-input:-webkit-autofill': {
-            height: 0,
+            padding: '7px 14px',
         },
+        marginTop: 12,
+        marginBottom: 10,
+    },
+    selectControl: {
+        margin: '8px 0px',
     },
     autocompleteRoot: {
         width: 'calc(100% - 300px)',

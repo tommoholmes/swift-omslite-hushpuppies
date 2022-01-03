@@ -30,7 +30,7 @@ const ContentWrapper = (props) => {
                 text: 'Success Add New Promotion!',
                 variant: 'success',
             });
-            setTimeout(() => router.push('/marketing/promotion'), 250);
+            setTimeout(() => router.push(`/configurations/marketplacebrand/view/${router?.query?.id}`), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -51,24 +51,34 @@ const ContentWrapper = (props) => {
                 valid.push([cred.type, Yup.string().required('This field is Required!')]);
             }
             return (
-                init.push([cred.type, cred.value])
+                init.push({
+                    data_type: cred.data_type,
+                    type: cred.type,
+                    value: cred.value,
+                })
             );
         });
         return {
-            init: Object.fromEntries(init),
+            init,
             valid: Object.fromEntries(valid),
         };
     };
 
     const formik = useFormik({
         initialValues: {
-            ...initValues().init,
+            input: initValues().init,
         },
         validationSchema: Yup.object().shape({
-            ...initValues().valid,
+            input: Yup.array().of(Yup.object().shape({
+                data_type: Yup.string(),
+                type: Yup.string(),
+                value: Yup.string().required('This field is Required!'),
+            })).min(initValues().init.length),
         }),
         onSubmit: (values) => {
-            handleSubmit(values);
+            const { input } = values;
+            handleSubmit(input);
+            // console.log(input)
         },
     });
 
