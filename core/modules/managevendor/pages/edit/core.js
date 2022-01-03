@@ -169,7 +169,7 @@ const ContentWrapper = (props) => {
 const Core = (props) => {
     const router = useRouter();
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'manageVendor',
+        acl_code: 'oms_lite_vendor_manage',
     });
 
     const [getCountries, getCountriesRes] = locationGqlService.getCountries();
