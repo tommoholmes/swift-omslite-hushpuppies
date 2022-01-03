@@ -71,6 +71,19 @@ const LocationCreateContent = (props) => {
                     <h5 className={classes.titleSmall}>Location Information</h5>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
+                            <span className={classes.label}>Status</span>
+                        </div>
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
+                            value={formik.values.status}
+                            onChange={(e) => formik.setFieldValue('status', e)}
+                            options={optionsActive}
+                            error={!!(formik.touched.status && formik.errors.status)}
+                            helperText={(formik.touched.status && formik.errors.status) || ''}
+                        />
+                    </div>
+                    <div className={classes.formField}>
+                        <div className={classes.divLabel}>
                             <span className={clsx(classes.label, classes.labelRequired)}>Company</span>
                         </div>
                         <Autocomplete
@@ -356,19 +369,6 @@ const LocationCreateContent = (props) => {
                                 InputProps={{
                                     className: classes.fieldInput,
                                 }}
-                            />
-                        </div>
-                        <div className={classes.formField}>
-                            <div className={classes.divLabel}>
-                                <span className={classes.label}>Status</span>
-                            </div>
-                            <Autocomplete
-                                className={classes.autocompleteRoot}
-                                value={formik.values.status}
-                                onChange={(e) => formik.setFieldValue('status', e)}
-                                options={optionsActive}
-                                error={!!(formik.touched.status && formik.errors.status)}
-                                helperText={(formik.touched.status && formik.errors.status) || ''}
                             />
                         </div>
                         <div className={classes.formField}>
