@@ -237,7 +237,7 @@ const Core = (props) => {
     const id = router && router.query && Number(router.query.id);
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'promotion_create',
+        acl_code: id ? 'promotion_modify' : 'promotion_create',
     });
 
     const { loading, data } = gqlService.getPromotionById({
@@ -281,6 +281,9 @@ const Core = (props) => {
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
         router.push('/');
+        return (
+            <Layout pageConfig={{ title: 'Add New Promotion' }} />
+        );
     }
 
     const contentProps = {
