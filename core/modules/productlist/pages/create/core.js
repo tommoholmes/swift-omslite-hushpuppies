@@ -81,11 +81,11 @@ const ContentWrapper = (props) => {
             ...initValue().init,
             input_image: [],
         },
-        validationSchema: Yup.object().shape({
-            ...initValue().valid,
-        }),
+        // validationSchema: Yup.object().shape({
+        //     ...initValue().valid,
+        // }),
         onSubmit: (values) => {
-            const { input_image, ...restValues } = values;
+            const { input_image, status, ...restValues } = values;
             const valueToSubmit = {
                 input: Object.keys(restValues)
                     .map((key) => {
@@ -105,7 +105,11 @@ const ContentWrapper = (props) => {
                     })
                     .filter((val) => !!val && val?.attribute_value !== ''),
             };
-            valueToSubmit.input = [{ attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) }, ...valueToSubmit.input];
+            valueToSubmit.input = [
+                { attribute_code: 'status', attribute_value: status ? '1' : '0' },
+                { attribute_code: 'attribute_set_id', attribute_value: String(attribute_set_id) },
+                ...valueToSubmit.input,
+            ];
             if (input_image && input_image.length) {
                 valueToSubmit.input_image = input_image.map((input) => {
                     const { name, size, ...restInput } = input;
@@ -117,16 +121,15 @@ const ContentWrapper = (props) => {
     });
 
     const handleDropFile = (files) => {
-        const { baseCode, file } = files[0];
         const input = formik.values.input_image;
-        input.push({
-            binary: baseCode,
+        const dataToPush = files.map((item) => ({
+            binary: item.baseCode,
             types: [],
             position: 0,
-            name: file.name,
-            size: `${file.size / 1000} KB`,
-        });
-        formik.setFieldValue('input_image', input);
+            name: item.file.name,
+            size: `${item.file.size / 1000} KB`,
+        }));
+        formik.setFieldValue('input_image', input.concat(dataToPush));
     };
 
     const contentProps = {
