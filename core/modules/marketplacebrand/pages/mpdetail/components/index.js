@@ -7,10 +7,11 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useStyles from '@modules/marketplacebrand/pages/mpdetail/components/style';
+import Select from '@common_select';
 
 const AdminStoreCreateContent = (props) => {
     const {
-        data,
+        data, dataOptions, loadingOptions, formik,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -32,25 +33,60 @@ const AdminStoreCreateContent = (props) => {
                 }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Manage Marketplace</h2>
+            <h2 className={classes.titleTop}>
+                Manage Marketplace  -
+                {' '}
+                {data && data.length && data[0].marketplace_name}
+            </h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
-                    {data.map((field) => (
+                    {data.map((field, idx) => (
                         <div className={classes.formField} key={field.id}>
                             <div className={classes.divLabel}>
                                 <span className={clsx(classes.label, classes.labelRequired)}>{field.type.split('_').join(' ')}</span>
                             </div>
-                            <TextField
-                                className={classes.fieldRoot}
-                                variant="outlined"
-                                name={field.type}
-                                value={field.value}
-                                InputProps={{
-                                    className: classes.fieldInput,
-                                }}
-                            />
+                            {field.type === 'default_shipping_method'
+                                ? (
+                                    <Select
+                                        name={`input[${idx}].value`}
+                                        value={formik.values.input[idx].value}
+                                        onChange={formik.handleChange}
+                                        dataOptions={dataOptions && dataOptions.getMarketplaceDefaultShippingMethods}
+                                        selectClasses={classes.fieldInputSelect}
+                                        formControlClasses={classes.selectControl}
+                                        loading={loadingOptions}
+                                        error={!!(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value)}
+                                        helperText={(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value) || ''}
+                                    />
+                                ) : (
+                                    <TextField
+                                        name={`input[${idx}].value`}
+                                        value={formik.values.input[idx].value}
+                                        onChange={formik.handleChange}
+                                        className={classes.fieldRoot}
+                                        variant="outlined"
+                                        InputProps={{
+                                            className: classes.fieldInput,
+                                        }}
+                                        error={!!(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value)}
+                                        helperText={(formik.touched.input && formik.touched.input[idx]?.value
+                                            && formik.errors.input && formik.errors.input[idx]?.value) || ''}
+                                    />
+                                )}
                         </div>
                     ))}
+                </div>
+                <div className={classes.formFieldButton}>
+                    <Button
+                        className={classes.btn}
+                        onClick={formik.handleSubmit}
+                        variant="contained"
+                    >
+                        Submit
+                    </Button>
                 </div>
             </Paper>
         </>

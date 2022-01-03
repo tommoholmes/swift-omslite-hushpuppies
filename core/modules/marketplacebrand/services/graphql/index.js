@@ -49,6 +49,14 @@ export const getMarketplaceCredentials = (variables) => useQuery(Schema.getMarke
     variables, ...context, ...fetchPolicy,
 });
 
+export const getMarketplaceDefaultShippingMethods = (variables) => useQuery(Schema.getMarketplaceDefaultShippingMethods, {
+    variables, ...context, ...fetchPolicy,
+});
+
+export const saveMarketplaceCredentials = (variables) => useMutation(Schema.saveMarketplaceCredentials, {
+    variables, ...context,
+});
+
 export default {
     getStoreList,
     registerMarketplaceBrand,
@@ -60,4 +68,6 @@ export default {
     updateMarketplaceLocation,
     getMarketplaceCredentials,
     updateConnectedMarketplace,
+    getMarketplaceDefaultShippingMethods,
+    saveMarketplaceCredentials,
 };
