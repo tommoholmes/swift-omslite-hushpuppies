@@ -102,7 +102,8 @@ const CustomTable = (props) => {
         deleteLabel = 'Delete',
         deleteTitle = 'Confirmation',
         deleteMessage = 'Are you sure want to delete selected items?',
-        deleteEnableConfirm = false,
+        deleteMessageAll = 'Are you sure want to delete all items?',
+        deleteEnableConfirm = true,
         allowActionZeroSelected = false,
         loading,
         filters: initialFilters = [],
@@ -244,7 +245,7 @@ const CustomTable = (props) => {
             {
                 title: deleteTitle,
                 label: deleteLabel,
-                message: deleteMessage,
+                message: checkedRows.length ? deleteMessage : deleteMessageAll,
                 confirmDialog: deleteEnableConfirm,
                 onClick: async (_checkedRows) => {
                     const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
