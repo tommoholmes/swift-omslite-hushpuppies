@@ -9,6 +9,7 @@ import {
     optionsYesNo, optionsActive, optionsZone, optionsQtyBuffer,
 } from '@modules/location/helpers';
 import ErrorRedirect from '@common_errorredirect';
+import userGqlService from '@modules/dashboard/services/graphql';
 
 const ContentWrapper = (props) => {
     const { data, Content } = props;
@@ -53,16 +54,16 @@ const ContentWrapper = (props) => {
             loc_postcode: postcode,
             loc_long: longitude,
             loc_lat: latitude,
-            loc_zone: zone.name,
-            is_warehouse: warehouse.id,
-            use_in_frontend: useFrontend.id,
-            is_sirclo_warehouse: sircloWarehouse.id,
-            is_virtual_location: virtualLocation.id,
+            loc_zone: zone?.name ?? '',
+            is_warehouse: warehouse?.id,
+            use_in_frontend: useFrontend?.id,
+            is_sirclo_warehouse: sircloWarehouse?.id,
+            is_virtual_location: virtualLocation?.id,
             priority: Number(priority || null),
-            is_active: status.id,
-            qty_buffer: qty_buffer.id,
-            is_manage_stock: is_manage_stock.id,
-            is_shipment_auto_complete: is_shipment_auto_complete.id,
+            is_active: status?.id,
+            qty_buffer: qty_buffer?.id,
+            is_manage_stock: is_manage_stock?.id,
+            is_shipment_auto_complete: is_shipment_auto_complete?.id,
             shipper_id,
         };
         window.backdropLoader(true);
@@ -137,7 +138,7 @@ const ContentWrapper = (props) => {
             postcode: Yup.string().required('Required!'),
             longitude: Yup.string().required('Required!'),
             latitude: Yup.string().required('Required!'),
-            zone: Yup.object().required('Required!'),
+            zone: Yup.object().nullable(),
             warehouse: Yup.object().nullable(),
             useFrontend: Yup.object().nullable(),
             sircloWarehouse: Yup.object().nullable(),
@@ -154,8 +155,15 @@ const ContentWrapper = (props) => {
         },
     });
 
+    const { data: customerData, loading: customerLoading } = userGqlService.getCustomer();
+
+    if (customerLoading) {
+        return <Layout>Loading...</Layout>;
+    }
+
     const contentProps = {
         formik,
+        customer: customerData?.customer,
     };
 
     return <Content {...contentProps} />;
