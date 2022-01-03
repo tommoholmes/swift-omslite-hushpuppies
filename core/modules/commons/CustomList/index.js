@@ -73,6 +73,11 @@ const CustomList = (props) => {
         rows,
         getRows,
         deleteRows,
+        deleteLabel = 'Delete',
+        deleteTitle = 'Confirmation',
+        deleteMessage = 'Are you sure want to delete selected items?',
+        deleteMessageAll = 'Are you sure want to delete all items?',
+        deleteEnableConfirm = true,
         loading,
         filters: initialFilters = [],
         actions,
@@ -145,8 +150,10 @@ const CustomList = (props) => {
     const renderTableToolbar = () => {
         const toolbarActions = actions || [
             {
-                label: 'Delete',
-                message: 'Are you sure you want to delete?',
+                title: deleteTitle,
+                label: deleteLabel,
+                message: checkedRows.length ? deleteMessage : deleteMessageAll,
+                confirmDialog: deleteEnableConfirm,
                 onClick: async (_checkedRows) => {
                     const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
                     await deleteRows({ variables });
