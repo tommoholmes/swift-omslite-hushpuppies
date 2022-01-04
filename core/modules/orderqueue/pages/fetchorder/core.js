@@ -11,7 +11,7 @@ const Core = (props) => {
     const { Content } = props;
 
     const pageConfig = {
-        title: 'Fetch Order',
+        title: 'Fetch Marketplace Order',
     };
 
     const [finishedAfterSubmit, setFinishedAfterSubmit] = React.useState(false);
@@ -102,10 +102,12 @@ const Core = (props) => {
         }, 1000);
     };
 
+    const currentDate = new Date();
+
     const formik = useFormik({
         initialValues: {
-            start_date: '',
-            end_date: '',
+            start_date: currentDate.toISOString().split('T')[0],
+            end_date: currentDate.toISOString().split('T')[0],
         },
         validationSchema: Yup.object().shape({
             start_date: Yup.string().required('Required!'),
