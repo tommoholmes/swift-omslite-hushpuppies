@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 const productList = `
     items {
         entity_id
-        product_name
+        name
         sku
         product_price
         product_special_price

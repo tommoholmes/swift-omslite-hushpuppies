@@ -12,7 +12,7 @@ const ProductListContent = (props) => {
 
     const columns = [
         { field: 'entity_id', headerName: 'ID', hideable: true, sortable: true, initialSort: 'ASC' },
-        { field: 'product_name', headerName: 'Product Name', hideable: true, sortable: true },
+        { field: 'name', headerName: 'Product Name', hideable: true, sortable: true },
         { field: 'sku', headerName: 'SKU', hideable: true, sortable: true },
         { field: 'product_price', headerName: 'Price', hideable: true },
         { field: 'product_special_price', headerName: 'Special Price', hideable: true },
@@ -23,7 +23,7 @@ const ProductListContent = (props) => {
     const filters = [
         { field: 'entity_id', name: 'entity_id_from', type: 'from', label: 'ID From', initialValue: '' },
         { field: 'entity_id', name: 'entity_id_to', type: 'to', label: 'ID To', initialValue: '' },
-        { field: 'product_name', name: 'product_name', type: 'like', label: 'Product Name', initialValue: '' },
+        { field: 'name', name: 'name', type: 'like', label: 'Product Name', initialValue: '' },
         { field: 'sku', name: 'sku', type: 'like', label: 'SKU', initialValue: '' },
     ];
 
