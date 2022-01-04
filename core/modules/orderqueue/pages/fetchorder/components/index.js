@@ -50,16 +50,16 @@ const FetchOrderContent = (props) => {
                     }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Fetch Order</h2>
+            <h2 className={classes.titleTop}>Fetch Marketplace Order</h2>
 
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <h4 className={classes.titleSmall} style={{ color: 'black' }}>
-                        Please click the button below to fetch order manually
+                        Please click the button below to fetch marketplace order manually
                     </h4>
                     {getActivityRes.data && getActivityRes.data.getActivity && getActivityRes.data.getActivity?.activity_id && (
                         <h4 className={classes.titleSmall}>
-                            Last Fetch Order Manually By {getActivityRes.data.getActivity?.run_by_name ?? ' ... '} at{' '}
+                            Last Fetch Marketplace Order Manually By {getActivityRes.data.getActivity?.run_by_name ?? ' ... '} at{' '}
                             {getActivityRes.data.getActivity?.finished_at}
                         </h4>
                     )}
