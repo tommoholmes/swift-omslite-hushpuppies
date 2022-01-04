@@ -8,13 +8,16 @@ import aclService from '@modules/theme/services/graphql';
 import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const { data, Content, getProductAttributes } = props;
+    const {
+        data, Content, getProductAttributes, setLoadingState,
+    } = props;
     const router = useRouter();
     const [updateProduct] = gqlService.updateProduct();
     const productDetail = data.getProductAttributes;
     const [attribute_set_id, set_attribute_set_id] = React.useState(productDetail.attribute_set_id);
 
     const onChangeAttribute = (e) => {
+        setLoadingState(true);
         const { value } = e.target;
         set_attribute_set_id(value);
         getProductAttributes({
@@ -23,6 +26,7 @@ const ContentWrapper = (props) => {
                 attribute_set_id: Number(value),
             },
         });
+        setLoadingState(false);
     };
 
     const initValue = () => {
@@ -40,9 +44,11 @@ const ContentWrapper = (props) => {
                     }
                     if (attribute.frontend_input === 'multiselect' && attribute.attribute_value?.length) {
                         const values = [];
-                        attribute.attribute_value.split(',').forEach((item) => {
-                            values.push(attribute.attribute_options.find((o) => o.value === item));
-                        });
+                        if (attribute.attribute_value) {
+                            attribute.attribute_value.split(',').forEach((item) => {
+                                values.push(attribute.attribute_options.find((o) => o.value === item));
+                            });
+                        }
                         return init.push([attribute.attribute_code, values]);
                     }
                     if (attribute.frontend_input === 'boolean') {
@@ -166,6 +172,7 @@ const Core = (props) => {
         title: `Product Detail #${router?.query?.id}`,
     };
 
+    const [loadingState, setLoadingState] = React.useState(false);
     const [getProductAttributes, productAttributes] = gqlService.getProductAttributes();
     const {
         loading, data, called, error,
@@ -181,7 +188,7 @@ const Core = (props) => {
         acl_code: 'oms_lite_product_list',
     });
 
-    if (loading || !called || aclCheckLoading) {
+    if (loading || !called || aclCheckLoading || loadingState) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div
@@ -211,7 +218,12 @@ const Core = (props) => {
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper data={data} getProductAttributes={getProductAttributes} {...props} />
+            <ContentWrapper
+                data={data}
+                getProductAttributes={getProductAttributes}
+                setLoadingState={setLoadingState}
+                {...props}
+            />
         </Layout>
     );
 };
