@@ -3,6 +3,8 @@ import React from 'react';
 import TextField from '@common_textfield';
 import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Autocomplete from '@common_autocomplete';
+import gqlService from '@modules/vendoririspayout/services/graphql';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -12,6 +14,11 @@ const CompanyCreateContent = (props) => {
     const { formik } = props;
     const classes = useStyles();
     const router = useRouter();
+
+    const [getVendorIrisBeneficiariesList, getVendorIrisBeneficiariesListRes] = gqlService.getVendorIrisBeneficiariesList();
+    React.useEffect(() => {
+        getVendorIrisBeneficiariesList();
+    }, []);
 
     return (
         <>
@@ -36,19 +43,28 @@ const CompanyCreateContent = (props) => {
                 <div className={classes.content}>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>Beneficiary Id</span>
+                            <span className={clsx(classes.label, classes.labelRequired)}>Beneficiary</span>
                         </div>
-                        <TextField
-                            className={classes.fieldRoot}
-                            variant="outlined"
-                            name="beneficiaryId"
+                        <Autocomplete
+                            className={classes.autocompleteRoot}
                             value={formik.values.beneficiaryId}
-                            onChange={formik.handleChange}
+                            onChange={(e) => formik.setFieldValue('beneficiaryId', e)}
+                            options={[
+                                {
+                                    entity_id: getVendorIrisBeneficiariesListRes
+                                                && getVendorIrisBeneficiariesListRes.data
+                                                && getVendorIrisBeneficiariesListRes.data.getVendorIrisBeneficiariesList
+                                                && getVendorIrisBeneficiariesListRes.data.getVendorIrisBeneficiariesList.entity_id,
+                                    name: getVendorIrisBeneficiariesListRes
+                                                && getVendorIrisBeneficiariesListRes.data
+                                                && getVendorIrisBeneficiariesListRes.data.getVendorIrisBeneficiariesList
+                                                && getVendorIrisBeneficiariesListRes.data.getVendorIrisBeneficiariesList.name,
+                                },
+                            ]}
                             error={!!(formik.touched.beneficiaryId && formik.errors.beneficiaryId)}
                             helperText={(formik.touched.beneficiaryId && formik.errors.beneficiaryId) || ''}
-                            InputProps={{
-                                className: classes.fieldInput,
-                            }}
+                            primaryKey="entity_id"
+                            labelKey="name"
                         />
                     </div>
                     <div className={classes.formField}>

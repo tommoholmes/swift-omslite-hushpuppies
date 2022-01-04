@@ -17,21 +17,20 @@ const Core = (props) => {
         beneficiaryId, amount, notes,
     }) => {
         const variables = {
-            beneficiary_id: Number(beneficiaryId),
+            beneficiary_id: Number(beneficiaryId.entity_id),
             amount,
             notes,
         };
         window.backdropLoader(true);
         createVendorIrisPayout({
             variables,
-        }).then(() => {
+        }).then((res) => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success create Payout',
+                text: res.data.createVendorIrisPayout.message,
                 variant: 'success',
             });
-            setTimeout(() => router.push('/vendorportal/vendoririspayout'), 250);
         }).catch((e) => {
             window.backdropLoader(false);
             window.toastMessage({
@@ -44,12 +43,12 @@ const Core = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            beneficiaryId: null,
+            beneficiaryId: '',
             amount: '',
             notes: '',
         },
         validationSchema: Yup.object().shape({
-            beneficiaryId: Yup.number().required('Required'),
+            beneficiaryId: Yup.object().required('Required'),
             amount: Yup.string().required('Required'),
             notes: Yup.string().required('Required'),
         }),

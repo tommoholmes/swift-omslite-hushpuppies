@@ -48,6 +48,7 @@ const VendorIrisPayoutListContent = (props) => {
                 loading={loading}
                 columns={columns}
                 count={vendorIrisPayoutTotal}
+                hideActions
             />
         </>
     );

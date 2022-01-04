@@ -17,7 +17,12 @@ export const createVendorIrisPayout = (variables) => useMutation(Schema.createVe
     variables, ...context,
 });
 
+export const getVendorIrisBeneficiariesList = (variables) => useLazyQuery(Schema.getVendorIrisBeneficiariesList, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getVendorIrisPayoutHistory,
     createVendorIrisPayout,
+    getVendorIrisBeneficiariesList,
 };

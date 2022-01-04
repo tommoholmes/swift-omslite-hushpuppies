@@ -50,7 +50,23 @@ export const createVendorIrisPayout = gql`
     }
 `;
 
+export const getVendorIrisBeneficiariesList = gql`
+    query {
+        getVendorIrisBeneficiariesList{
+            entity_id
+            account
+            alias_name
+            bank
+            email
+            name
+            payout_schedule
+            vendor_id
+        }
+    }
+`;
+
 export default {
     getVendorIrisPayoutHistory,
     createVendorIrisPayout,
+    getVendorIrisBeneficiariesList,
 };
