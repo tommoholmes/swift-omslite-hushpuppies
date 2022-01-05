@@ -253,7 +253,7 @@ const HomeDeliveryListContent = (props) => {
             },
         },
         {
-            label: 'Mark Booking Complete (Shipper ID Only)',
+            label: 'Mark Booking Complete',
             message: 'Are you sure to confirm ?',
             onClick: async (checkedRows) => {
                 const variables = { id: checkedRows.map((checkedRow) => checkedRow.id) };
