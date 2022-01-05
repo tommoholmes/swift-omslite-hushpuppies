@@ -10,7 +10,7 @@ const Core = (props) => {
 
     const [getProductCategoryList, { data, loading }] = gqlService.getProductCategoryList();
     const [multidisableProductCategory] = gqlService.multidisableProductCategory();
-    const [pullProductCategory] = gqlService.pullProductCategory();
+    const [pullProductCategory, { data: dataPull }] = gqlService.pullProductCategory();
 
     const router = useRouter();
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
@@ -25,10 +25,27 @@ const Core = (props) => {
         router.push('/');
     }
 
+    const handlePull = () => {
+        window.backdropLoader(true);
+        pullProductCategory()
+            .then(() => {
+                window.backdropLoader(false);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
+            });
+    };
+
     const contentProps = {
         getProductCategoryList,
         multidisableProductCategory,
-        pullProductCategory,
+        handlePull,
+        dataPull,
         data,
         loading,
     };

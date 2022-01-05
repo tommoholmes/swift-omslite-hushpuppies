@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import useStyles from '@modules/productcategory/pages/list/components/Header/style';
 
 const HeaderContent = (props) => {
+    const { handlePull } = props;
     const classes = useStyles();
     const router = useRouter();
     return (
@@ -13,7 +14,7 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Marketplace Product Category</h2>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push('/marketplace/productcategory/pull')}
+                onClick={handlePull}
             >
                 Pull Categories
             </Button>
