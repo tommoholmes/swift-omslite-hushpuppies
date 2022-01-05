@@ -17,8 +17,8 @@ export const removeToken = () => useMutation(Schema.removeToken, {
     ...context,
 });
 
-export const getCustomer = () => useLazyQuery(Schema.getCustomer, {
-    ...context, fetchPolicy: 'no-cache',
+export const getCustomer = (options) => useLazyQuery(Schema.getCustomer, {
+    ...options, ...context, fetchPolicy: 'no-cache',
 });
 
 export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
