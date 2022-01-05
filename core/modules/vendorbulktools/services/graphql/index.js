@@ -45,7 +45,7 @@ export const vendorProductPriceUpload = (variables) => useMutation(Schema.vendor
     ...context,
 });
 
-export const vendorProductUpload = (variables) => useMutation(Schema.vendorProductUpload, {
+export const vendorProductMasterUpload = (variables) => useMutation(Schema.vendorProductMasterUpload, {
     variables,
     ...context,
 });
@@ -90,7 +90,7 @@ export default {
     downloadSampleCsv,
     getActivity,
     vendorCategoryUpload,
-    vendorProductUpload,
+    vendorProductMasterUpload,
     isAccessAllowedLazy,
     vendorProductConfigurableUpload,
     vendorProductBundleUpload,
