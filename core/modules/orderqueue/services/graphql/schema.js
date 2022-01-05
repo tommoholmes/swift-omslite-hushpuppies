@@ -6,6 +6,7 @@ export const getOrderQueueList = gql`
             items {
                 id
                 channel_order_increment_id
+                channel_order_id
                 created_at
                 channel_order_status
                 last_updated

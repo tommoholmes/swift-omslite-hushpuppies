@@ -17,6 +17,7 @@ const OrderQueueListContent = (props) => {
     const columns = [
         { field: 'id', headerName: 'ID', sortable: true, hidden: true },
         { field: 'channel_order_increment_id', headerName: 'Channel Order Number', sortable: true, hideable: true },
+        { field: 'channel_order_id', headerName: 'Marketplace Order Number', sortable: true, hideable: true, hidden: true },
         { field: 'created_at', headerName: 'Channel Order Date', sortable: true, hideable: true, initialSort: 'DESC' },
         { field: 'channel_order_status', headerName: 'Channel Order Status', sortable: true, hideable: true },
         { field: 'last_updated', headerName: 'Last Updated', sortable: true, hideable: true },
@@ -28,6 +29,7 @@ const OrderQueueListContent = (props) => {
 
     const filters = [
         { field: 'channel_order_increment_id', name: 'channel_order_increment_id', type: 'like', label: 'Channel Order Number', initialValue: '' },
+        { field: 'channel_order_id', name: 'channel_order_id', type: 'like', label: 'Marketplace Order Number', initialValue: '' },
         {
             field: 'channel_code',
             name: 'channel_code',
