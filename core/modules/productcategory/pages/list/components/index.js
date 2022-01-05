@@ -1,21 +1,11 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
-import React, { useState } from 'react';
+import React from 'react';
 import Table from '@common_table';
 import Header from '@modules/productcategory/pages/list/components/Header';
-import { useRouter } from '@root/node_modules/next/router';
-import { getCookies, removeCookies } from '@helper_cookies';
 import MuiAlert from '@material-ui/lab/Alert';
 
 const ProductCategoryListContent = (props) => {
-    const [isPull, setIsPull] = useState(null);
-    const cookie = getCookies('isPull');
-    if (isPull === null) {
-        setIsPull(cookie);
-    } else if (cookie) {
-        removeCookies('isPull');
-    }
-    const { data, loading, getProductCategoryList, multidisableProductCategory } = props;
+    const { data, loading, getProductCategoryList, multidisableProductCategory, handlePull, dataPull } = props;
     const productCategoryList = (data && data.getProductCategoryList && data.getProductCategoryList.items) || [];
     const productCategoryTotal = (data && data.getProductCategoryList && data.getProductCategoryList.total_count) || 0;
 
@@ -57,8 +47,8 @@ const ProductCategoryListContent = (props) => {
 
     return (
         <>
-            <Header />
-            {isPull && (
+            <Header handlePull={handlePull} />
+            {dataPull && dataPull.pullProductCategory && (
                 <MuiAlert icon={false} severity="success" style={{ marginBottom: '1rem' }}>
                     Process is in progress, please wait. Check the progress
                     {' '}
