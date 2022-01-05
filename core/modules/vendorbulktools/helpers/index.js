@@ -9,7 +9,7 @@ export const bulkToolsOptions = [
         acl: 'oms_lite_vendor_product_upload_master',
         sample: 'vendor_product',
         activity: null,
-        gqlUpload: gqlService.vendorProductUpload,
+        gqlUpload: gqlService.vendorProductMasterUpload,
         component: <BaseProductUpload />,
     },
     {

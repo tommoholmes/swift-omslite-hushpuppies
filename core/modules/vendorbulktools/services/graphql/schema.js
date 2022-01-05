@@ -36,9 +36,9 @@ export const vendorCategoryUpload = gql`
     }
 `;
 
-export const vendorProductUpload = gql`
-    mutation vendorProductUpload($binary: String!) {
-        vendorProductUpload(binary: $binary) {
+export const vendorProductMasterUpload = gql`
+    mutation vendorProductMasterUpload($binary: String!) {
+        vendorProductMasterUpload(binary: $binary) {
             attachment_url
             is_success
             message
@@ -158,7 +158,7 @@ export default {
     getActivity,
     downloadSampleCsv,
     vendorCategoryUpload,
-    vendorProductUpload,
+    vendorProductMasterUpload,
     isAccessAllowed,
     vendorProductConfigurableUpload,
     vendorProductBundleUpload,
