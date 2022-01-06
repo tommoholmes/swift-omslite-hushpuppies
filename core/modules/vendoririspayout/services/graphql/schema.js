@@ -2,17 +2,12 @@ import { gql } from '@apollo/client';
 
 export const getVendorIrisPayoutHistory = gql`
     query getVendorIrisPayoutHistory(
-        $pageSize: Int,
-        $currentPage: Int!,
-        $filter: VendorIrisPayoutHistoryFilterInput,
+        $pageSize: Int
+        $currentPage: Int!
+        $filter: VendorIrisPayoutHistoryFilterInput
         $sort: VendorIrisPayoutHistorySortInput
-    ){
-        getVendorIrisPayoutHistory(
-            pageSize: $pageSize,
-            currentPage: $currentPage,
-            filter: $filter,
-            sort: $sort
-        ){
+    ) {
+        getVendorIrisPayoutHistory(pageSize: $pageSize, currentPage: $currentPage, filter: $filter, sort: $sort) {
             items {
                 id
                 create_at
@@ -32,27 +27,14 @@ export const getVendorIrisPayoutHistory = gql`
 `;
 
 export const createVendorIrisPayout = gql`
-    mutation createVendorIrisPayout(
-        $beneficiary_id: Int!,
-        $amount: String!,
-        $notes: String!
-    ){
-        createVendorIrisPayout(
-            input: {
-                beneficiary_id: $beneficiary_id,
-                amount: $amount,
-                notes: $notes
-            }
-        ){
-            error
-            message
-        }
+    mutation createVendorIrisPayout($beneficiary_id: Int!, $amount: String!, $notes: String!) {
+        createVendorIrisPayout(input: { beneficiary_id: $beneficiary_id, amount: $amount, notes: $notes })
     }
 `;
 
 export const getVendorIrisBeneficiariesList = gql`
     query {
-        getVendorIrisBeneficiariesList{
+        getVendorIrisBeneficiariesList {
             entity_id
             account
             alias_name
