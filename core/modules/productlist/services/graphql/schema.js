@@ -38,12 +38,8 @@ export const getProductList = gql`
 `;
 
 export const getProductById = gql`
-    query getProductById(
-        $id: Int!,
-    ){
-        getProductById(
-            id: $id
-        ){
+    query getProductById($id: Int!) {
+        getProductById(id: $id) {
             id
             product_status {
                 value
@@ -53,8 +49,8 @@ export const getProductById = gql`
             name
             sku
             price_range {
-            maximum_price {
-                regular_price {
+                maximum_price {
+                    regular_price {
                         value
                     }
                 }
@@ -67,7 +63,7 @@ export const getProductById = gql`
             description {
                 html
             }
-            sourcing{
+            sourcing {
                 loc_name
                 qty_total
                 qty_reserved
@@ -78,38 +74,20 @@ export const getProductById = gql`
 `;
 
 export const updateProduct = gql`
-    mutation updateProduct(
-        $id: Int!,
-        $input: [ProductInput],
-        $input_image: [ProductImageInput],
-    ){
-        updateProduct(
-            id: $id,
-            input: $input,
-            input_image: $input_image,
-        )
+    mutation updateProduct($id: Int!, $input: [ProductInput], $input_image: [ProductImageInput]) {
+        updateProduct(id: $id, input: $input, input_image: $input_image)
     }
 `;
 
 export const uploadSource = gql`
-    mutation uploadSource(
-        $binary: String!,
-    ){
-        uploadSource(
-            input: {
-                binary: $binary,
-            }
-        )
+    mutation uploadSource($binary: String!) {
+        uploadSource(input: { binary: $binary })
     }
 `;
 
 export const downloadSampleCsv = gql`
-    mutation downloadSampleCsv(
-        $type: String!,
-    ){
-        downloadSampleCsv(
-            type: $type,
-        )
+    mutation downloadSampleCsv($type: String!) {
+        downloadSampleCsv(type: $type)
     }
 `;
 
@@ -134,128 +112,133 @@ export const getProductListBySku = gql`
 `;
 
 export const getProductAttributes = gql`
-query getProductAttributes($id: Int!, $attribute_set_id: Int){
-    getProductAttributes(id: $id, attribute_set_id: $attribute_set_id){
-      entity_id
-      attribute_set_id
-      attribute_set_options{
-        value
-        label
-      }
-      groups{
-        attribute_group_id
-        attribute_group_name
-        attribute_group_code
-        sort_order
-        attributes{
-          attribute_code
-          frontend_label
-          frontend_input
-          is_required
-          is_readonly
-          attribute_value
-          attribute_options{
-            value
-            label
-          }
-          images{
-            file
-            id
-            position
-            types
-            url
-          }
+    query getProductAttributes($id: Int!, $attribute_set_id: Int) {
+        getProductAttributes(id: $id, attribute_set_id: $attribute_set_id) {
+            entity_id
+            attribute_set_id
+            attribute_set_options {
+                value
+                label
+            }
+            groups {
+                attribute_group_id
+                attribute_group_name
+                attribute_group_code
+                sort_order
+                attributes {
+                    attribute_code
+                    frontend_label
+                    frontend_input
+                    is_required
+                    is_readonly
+                    attribute_value
+                    attribute_options {
+                        value
+                        label
+                    }
+                    images {
+                        file
+                        id
+                        position
+                        types
+                        url
+                    }
+                }
+            }
+            sourcing {
+                source_id
+                loc_id
+                loc_name
+                company_id
+                company_name
+                sku
+                qty_total
+                qty_reserved
+                qty_incoming
+                qty_saleable
+                qty_buffer
+                priority
+            }
+            vendor_price {
+                vendor {
+                    company_id
+                    company_name
+                }
+                price {
+                    location {
+                        loc_id
+                        loc_name
+                    }
+                    price
+                    special_price
+                }
+            }
         }
-      }
-      sourcing{
-        source_id
-        loc_id
-        loc_name
-        company_id
-        company_name
-        sku
-        qty_total
-        qty_reserved
-        qty_incoming
-        qty_saleable
-        qty_buffer
-        priority
-      }
-      vendor_price{
-        vendor{
-          company_id
-          company_name
-        }
-        price{
-          location{
-            loc_id
-            loc_name
-          }
-          price
-          special_price
-        }
-      }
     }
-  }
 `;
 
 export const productFetchManual = gql`
-  mutation productFetchManual{
-    productFetchManual
-  }
+    mutation productFetchManual {
+        productFetchManual
+    }
 `;
 
 export const getProductAttributeSetOptions = gql`
-  query {
-    getProductAttributeSetOptions {
-        label
-        value
+    query {
+        getProductAttributeSetOptions {
+            label
+            value
+        }
     }
-  }
 `;
 
 export const getNewProductAttributes = gql`
-query getNewProductAttributes($attribute_set_id: Int!) {
-    getNewProductAttributes(attribute_set_id: $attribute_set_id) {
-      attribute_set_id
-      attribute_set_options {
-        label
-        value
-      }
-      groups {
-        attribute_group_code
-        attribute_group_id
-        attribute_group_name
-        attributes {
-          attribute_code
-          attribute_options {
-            label
-            value
-          }
-          attribute_value
-          frontend_input
-          frontend_label
-          images {
-            file
-            id
-            position
-            types
-            url
-          }
-          is_readonly
-          is_required
+    query getNewProductAttributes($attribute_set_id: Int!) {
+        getNewProductAttributes(attribute_set_id: $attribute_set_id) {
+            attribute_set_id
+            attribute_set_options {
+                label
+                value
+            }
+            groups {
+                attribute_group_code
+                attribute_group_id
+                attribute_group_name
+                attributes {
+                    attribute_code
+                    attribute_options {
+                        label
+                        value
+                    }
+                    attribute_value
+                    frontend_input
+                    frontend_label
+                    images {
+                        file
+                        id
+                        position
+                        types
+                        url
+                    }
+                    is_readonly
+                    is_required
+                }
+                sort_order
+            }
         }
-        sort_order
-      }
     }
-  }
-  
 `;
 
 export const createProduct = gql`
-mutation createProduct($input: [ProductInput], $input_image: [ProductImageInput]){
-    createProduct(input: $input, input_image: $input_image)
-  }
+    mutation createProduct($input: [ProductInput], $input_image: [ProductImageInput]) {
+        createProduct(input: $input, input_image: $input_image)
+    }
+`;
+
+export const deleteProducts = gql`
+    mutation deleteProducts($id: [Int]!) {
+        deleteProducts(id: $id)
+    }
 `;
 
 export default {
@@ -270,4 +253,5 @@ export default {
     getProductAttributeSetOptions,
     getNewProductAttributes,
     createProduct,
+    deleteProducts,
 };

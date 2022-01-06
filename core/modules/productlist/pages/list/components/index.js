@@ -4,6 +4,7 @@ import React from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Header from '@modules/productlist/pages/list/components/Header';
+import gqlService from '@modules/productlist/services/graphql';
 
 const ProductListContent = (props) => {
     const { data, loading, getProductList, handleFetchManual } = props;
@@ -38,10 +39,21 @@ const ProductListContent = (props) => {
         ),
     }));
 
+    const [deleteProducts] = gqlService.deleteProducts();
+
     return (
         <>
             <Header handleFetchManual={handleFetchManual} />
-            <Table filters={filters} rows={rows} getRows={getProductList} loading={loading} columns={columns} count={productTotal} hideActions />
+            <Table
+                deleteRows={deleteProducts}
+                filters={filters}
+                rows={rows}
+                getRows={getProductList}
+                loading={loading}
+                columns={columns}
+                count={productTotal}
+                showCheckbox
+            />
         </>
     );
 };
