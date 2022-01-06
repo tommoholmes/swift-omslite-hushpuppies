@@ -73,11 +73,11 @@ const RightToolbar = ({ notificationRes }) => {
                     </Hidden>
                 </a>
                 <ul>
-                    <li>
+                    {/* <li>
                         <a className="linkOut" href="/myaccount">
                             My Account
                         </a>
-                    </li>
+                    </li> */}
                     <li>
                         <a className="linkOut" href="#" onClick={handleLogout}>
                             Sign Out
