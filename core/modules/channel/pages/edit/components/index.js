@@ -46,7 +46,8 @@ const ChannelEditContent = (props) => {
                 const isExist = searchVirtualStock
                     && virtualStockOptions.filter((elm) => elm?.vs_name?.toLowerCase().includes(searchVirtualStock?.toLowerCase()));
 
-                if (firstRenderVirtualStock.current || (searchVirtualStock && isExist.length === 0)) {
+                if (firstRenderVirtualStock.current || (searchVirtualStock && isExist.length < 3)) {
+                    firstRenderVirtualStock.current = false;
                     getVirtualStockList({
                         variables: {
                             filter,
@@ -54,7 +55,6 @@ const ChannelEditContent = (props) => {
                             currentPage: 1,
                         },
                     });
-                    firstRenderVirtualStock.current = false;
                 }
 
                 return null;
@@ -273,9 +273,16 @@ const ChannelEditContent = (props) => {
                             multiple
                             value={formik.values.virtualStock}
                             onChange={(e) => formik.setFieldValue('virtualStock', e)}
-                            loading={!firstRenderSetVirtualStock.current && getVirtualStockListRes.loading}
+                            loading={getVirtualStockListRes.loading}
                             options={virtualStockOptions}
                             getOptions={getVirtualStockList}
+                            getOptionsVariables={{
+                                variables: {
+                                    filter: {},
+                                    pageSize: 20,
+                                    currentPage: 1,
+                                },
+                            }}
                             primaryKey="vs_id"
                             labelKey="vs_name"
                             onInputChange={(e) => setSearchVirtualStock(e && e.target && e.target.value)}
