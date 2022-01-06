@@ -74,7 +74,7 @@ const AdminStoreCreateContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={clsx(classes.label, classes.labelRequired)}>New Password</span>
+                            <span className={classes.label}>New Password</span>
                         </div>
                         <TextField
                             name="password"
