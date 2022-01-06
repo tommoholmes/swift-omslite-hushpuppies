@@ -35,16 +35,6 @@ const SyncToMPContent = (props) => {
             variables: {
                 pageSize: 100,
                 currentPage: 1,
-                filter: {
-                    partner_id: {
-                        notnull: 'true',
-                        neq: '',
-                    },
-                    hash_key: {
-                        notnull: 'true',
-                        neq: '',
-                    },
-                },
             },
         });
     }, []);
