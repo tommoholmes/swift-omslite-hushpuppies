@@ -12,6 +12,7 @@ const ProductListImport = (props) => {
     const {
         formik,
         urlDownload,
+        urlDownloadUpdate,
         handleDropFile,
     } = props;
     const classes = useStyles();
@@ -41,7 +42,13 @@ const ProductListImport = (props) => {
                     <div className={classes.formField}>
                         <span className={classes.label}>
                             <a href={urlDownload} className={classes.linkDownload}>
-                                Download the Sample CSV
+                                Create Product Template
+                            </a>
+                        </span>
+                        <br />
+                        <span className={classes.label}>
+                            <a href={urlDownloadUpdate} className={classes.linkDownload}>
+                                Update Product Attributes Template
                             </a>
                         </span>
                     </div>
