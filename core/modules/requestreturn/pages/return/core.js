@@ -46,6 +46,7 @@ const ContentWrapper = (props) => {
         channel_code,
         customer_email,
         return_type,
+        replacement_order_type,
         message,
         items,
     }) => {
@@ -53,7 +54,7 @@ const ContentWrapper = (props) => {
             channel_order_increment_id,
             channel_code,
             customer_email,
-            return_type: return_type.code,
+            return_type,
             message,
             items: items.map((e) => (
                 {
@@ -69,25 +70,29 @@ const ContentWrapper = (props) => {
                 }
             )),
         };
-        window.backdropLoader(true);
-        saveRequestReturnSubmit({
-            variables: { input },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Return Order!',
-                variant: 'success',
-            });
-            setTimeout(() => router.push('/requestreturn'), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
+        if (return_type === 'replacement') {
+            input.replacement_order_type = replacement_order_type;
+        }
+        console.log({ input });
+        // window.backdropLoader(true);
+        // saveRequestReturnSubmit({
+        //     variables: { input },
+        // }).then(() => {
+        //     window.backdropLoader(false);
+        //     window.toastMessage({
+        //         open: true,
+        //         text: 'Success Return Order!',
+        //         variant: 'success',
+        //     });
+        //     setTimeout(() => router.push(router.asPath.replace('return/return?', 'request/request?')), 250);
+        // }).catch((e) => {
+        //     window.backdropLoader(false);
+        //     window.toastMessage({
+        //         open: true,
+        //         text: e.message,
+        //         variant: 'error',
+        //     });
+        // });
     };
 
     const formik = useFormik({
@@ -96,6 +101,7 @@ const ContentWrapper = (props) => {
             channel_code: queryChannel,
             customer_email: queryEmail,
             return_type: '',
+            replacement_order_type: '',
             message: '',
             items: requestreturn.map((e) => (
                 {
@@ -114,6 +120,10 @@ const ContentWrapper = (props) => {
         },
         validationSchema: Yup.object().shape({
             return_type: Yup.string().required('Required!'),
+            replacement_order_type: Yup.string().when('return_type', {
+                is: 'replacement',
+                then: Yup.string().required('Required!'),
+            }),
             items: Yup.array().of(
                 Yup.object().shape({
                     checked: Yup.boolean().required('required!'),
@@ -133,8 +143,10 @@ const ContentWrapper = (props) => {
                         otherwise: Yup.string(),
                     }),
                 }),
-            ),
-
+            ).test({
+                message: 'Please choose at least 1 item!',
+                test: (arr) => !!(arr?.filter((item) => item?.checked === true).length),
+            }),
         }),
         onSubmit: (values) => {
             const { items, ...valueToSubmit } = values;
