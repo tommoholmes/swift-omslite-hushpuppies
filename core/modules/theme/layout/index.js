@@ -623,6 +623,12 @@ const Layout = (props) => {
                     label: 'Netsuite Courier',
                     url: '/configurations/netsuitecourier',
                 },
+                {
+                    aclCode: 'configuration_region_mapping',
+                    key: 'regionmapping',
+                    label: 'Region Mapping',
+                    url: '/configurations/regionmapping',
+                },
             ],
         },
         {
