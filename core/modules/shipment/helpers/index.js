@@ -16,7 +16,8 @@ export const dataTab = [
 ];
 
 export const getIconByStatus = (status, label) => {
-    if (status === 'process_for_pack' || status === 'process_for_shipping') {
+    if (status === 'process_for_pack' || status === 'process_for_shipping'
+    || status === 'pick_in_progress') {
         if (label === 'Cannot Fulfill') {
             return '/assets/img/order_status/cannotfulfill.svg';
         }
@@ -25,7 +26,7 @@ export const getIconByStatus = (status, label) => {
     if (status === 'cannot_fulfill') {
         return '/assets/img/order_status/cannotfulfill.svg';
     }
-    if (status === 'ready_for_pack') {
+    if (status === 'ready_for_pack' || status === 'pick_uncomplete') {
         return '/assets/img/order_status/readyforpack.svg';
     }
     if (status === 'ready_for_pickup'
