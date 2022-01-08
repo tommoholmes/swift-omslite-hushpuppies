@@ -7,6 +7,7 @@
 import React from 'react';
 import { useRouter } from 'node_modules/next/router';
 import useStyles from '@modules/stockadjustment/pages/add/components/style';
+import ModalUpload from '@modules/stockadjustment/pages/add/components/modalUpload';
 import Button from '@common_button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Paper from '@material-ui/core/Paper';
@@ -105,12 +106,14 @@ const StockAdjustmentAdd = (props) => {
         items: Yup.array()
             .of(
                 Yup.object().shape({
-                    sku: Yup.object().required('Required!'),
+                    sku: Yup.mixed().required('Required!'),
                 }),
             )
             .min(1)
             .required('Required!'),
     });
+
+    const [isModalUploadOpen, setIsModalUploadOpen] = React.useState(false);
 
     return (
         <>
@@ -185,6 +188,13 @@ const StockAdjustmentAdd = (props) => {
                                     <FieldArray name="items">
                                         {({ remove, push }) => (
                                             <>
+                                                {React.cloneElement(<ModalUpload />, {
+                                                    open: isModalUploadOpen,
+                                                    handleClose: () => setIsModalUploadOpen(false),
+                                                    locationId:
+                                                        typeof values.loc_code === 'object' ? values.loc_code?.loc_id ?? null : values.loc_code,
+                                                    addProduct: push,
+                                                })}
                                                 {values.items.length > 0 && (
                                                     <table className={classes.table}>
                                                         <thead className={classes.th}>
@@ -199,7 +209,7 @@ const StockAdjustmentAdd = (props) => {
                                                             {values.items.map((item, idx) => (
                                                                 <tr key={idx}>
                                                                     <td className={classes.td}>
-                                                                        {!item.entity_id ? (
+                                                                        {!item?.entity_id && !item?.from_csv ? (
                                                                             <Autocomplete
                                                                                 name={`items.${idx}.sku`}
                                                                                 mode={baseSkuOption.length > 0 ? 'default' : 'lazy'}
@@ -258,6 +268,16 @@ const StockAdjustmentAdd = (props) => {
                                                 )}
                                                 <div className={`${classes.formFieldButton} ${classes.formFieldButtonRight}`}>
                                                     <Button
+                                                        style={{ marginRight: 10 }}
+                                                        disabled={values.loc_code === null}
+                                                        className={classes.btn}
+                                                        variant="contained"
+                                                        onClick={() => setIsModalUploadOpen(true)}
+                                                    >
+                                                        Upload Csv
+                                                    </Button>
+                                                    <Button
+                                                        style={{ marginLeft: 10 }}
                                                         disabled={values.loc_code === null}
                                                         className={classes.btn}
                                                         variant="contained"

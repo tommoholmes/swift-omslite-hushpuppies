@@ -59,8 +59,23 @@ export const addStockAdjustment = gql`
     }
 `;
 
+export const csvToArrayOfObject = gql`
+    mutation csvToArrayOfObject($binary: String!) {
+        csvToArrayOfObject(binary: $binary) {
+            headers
+            rows {
+                columns {
+                    header
+                    value
+                }
+            }
+        }
+    }
+`;
+
 export default {
     getStockAdjustmentList,
     getStockAdjustmentById,
     addStockAdjustment,
+    csvToArrayOfObject,
 };
