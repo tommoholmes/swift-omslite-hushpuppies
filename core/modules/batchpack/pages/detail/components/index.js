@@ -101,7 +101,9 @@ const BatchListPickListContent = (props) => {
                     <div className={classes.content} key={list.shipment_id}>
                         <div className={classes.gridList}>
                             <div className={clsx(classes.divList, 'start')}>
-                                <img src={list.image_url} alt="item" className={classes.imgList} />
+                                {list.image_url
+                                    ? <img src={list.image_url} alt="item" className={classes.imgList} />
+                                    : <img src="/assets/img/placeholder_image.jpg" className={classes.imgList} alt="item-preview" />}
                             </div>
                             <div style={{ textAlign: 'left', paddingLeft: 10 }}>
                                 <h5
