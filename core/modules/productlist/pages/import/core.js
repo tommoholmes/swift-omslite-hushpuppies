@@ -18,12 +18,15 @@ const Core = (props) => {
 
     const [uploadSource] = gqlService.uploadSource();
     const [downloadList, downloadListRes] = gqlService.downloadSampleCsv({ type: 'product' });
+    const [downloadUpdate, downloadUpdateRes] = gqlService.downloadSampleCsv({ type: 'update_product_attributes' });
 
     useEffect(() => {
         downloadList();
+        downloadUpdate();
     }, []);
 
     const urlDownload = downloadListRes && downloadListRes.data && downloadListRes.data.downloadSampleCsv;
+    const urlDownloadUpdate = downloadUpdateRes && downloadUpdateRes.data && downloadUpdateRes.data.downloadSampleCsv;
 
     const handleSubmit = ({
         binary,
@@ -86,6 +89,7 @@ const Core = (props) => {
     const contentProps = {
         formik,
         urlDownload,
+        urlDownloadUpdate,
         handleDropFile,
     };
 
