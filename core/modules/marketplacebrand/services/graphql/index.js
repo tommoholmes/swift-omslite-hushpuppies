@@ -17,11 +17,11 @@ export const registerMarketplaceBrand = (variables) => useMutation(Schema.regist
     variables, ...context,
 });
 
-export const getAvailableMpToConnect = (variables) => useLazyQuery(Schema.getAvailableMpToConnect, {
+export const getAvailableMpToConnect = (variables) => useQuery(Schema.getAvailableMpToConnect, {
     variables, ...context, ...fetchPolicy,
 });
 
-export const getLocationList = (variables) => useLazyQuery(Schema.getLocationList, {
+export const getLocationList = (variables) => useQuery(Schema.getLocationList, {
     variables, ...context, ...fetchPolicy,
 });
 
