@@ -18,7 +18,7 @@ const RmaStatusesEditContent = (props) => {
 
     return (
         <>
-            <Button className={classes.btnBack} onClick={() => router.push('/sales/rmastatuses')} variant="contained" style={{ marginRight: 16 }}>
+            <Button className={classes.btnBack} onClick={() => router.push('/return/rmastatuses')} variant="contained" style={{ marginRight: 16 }}>
                 <ChevronLeftIcon
                     style={{
                         fontSize: 30,

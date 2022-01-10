@@ -25,6 +25,7 @@ const Layout = (props) => {
     const [activeParentMenu, setActiveParentMenu] = React.useState();
     const [activeChildMenu, setActiveChildMenu] = React.useState();
     const [backdropLoader, setBackdropLoader] = React.useState(false);
+    const [currentLocation, setCurrentLocation] = React.useState('');
     const [toastMessage, setToastMessage] = React.useState({
         open: false,
         variant: '',
@@ -234,19 +235,19 @@ const Layout = (props) => {
                     aclCode: 'oms_lite_credit_memos',
                     key: 'creditmemos',
                     label: 'Credit Memos',
-                    url: '/sales/creditmemos',
+                    url: '/return/creditmemos',
                 },
                 {
                     aclCode: 'oms_lite_rma_manage',
                     key: 'managerma',
                     label: 'Manage RMA',
-                    url: '/sales/managerma',
+                    url: '/return/managerma',
                 },
                 {
                     aclCode: 'oms_lite_rma_statuses',
                     key: 'rmastatuses',
                     label: 'RMA Statuses',
-                    url: '/sales/rmastatuses',
+                    url: '/return/rmastatuses',
                 },
             ],
         },
@@ -690,7 +691,14 @@ const Layout = (props) => {
 
     const getBreadcrumbData = () => {
         const activeMenu = mappedMenuList.find((e) => e.url === router.pathname);
-        const activeMenuBreadcrumb = (activeMenu && activeMenu.breadcrumb) || [];
+        let activeMenuBreadcrumb = [];
+        if (activeMenu) {
+            activeMenuBreadcrumb = (activeMenu && activeMenu.breadcrumb);
+        } else {
+            const activeMenuSecondary = mappedMenuList.find((e) => e.url === router.pathname?.split('/').slice(0, 3).join('/'));
+            activeMenuBreadcrumb = (activeMenuSecondary && activeMenuSecondary.breadcrumb) || [];
+            activeMenuBreadcrumb.push({ url: router.asPath, label: pageConfig?.title ? pageConfig.title : currentLocation });
+        }
         return [{ url: '/', label: 'Home' }, ...activeMenuBreadcrumb];
     };
 
@@ -759,8 +767,6 @@ const Layout = (props) => {
         }
         return pageConfig && pageConfig.sidebar;
     };
-
-    const [currentLocation, setCurrentLocation] = React.useState('');
 
     React.useEffect(() => {
         setCurrentLocation((old) => {

@@ -122,7 +122,7 @@ const ManageRmaListContent = (props) => {
         ...rma,
         id: rma.id,
         actions: () => (
-            <Link href={`/sales/managerma/edit/${rma.id}`}>
+            <Link href={`/return/managerma/edit/${rma.id}`}>
                 <a className="link-button">Edit</a>
             </Link>
         ),

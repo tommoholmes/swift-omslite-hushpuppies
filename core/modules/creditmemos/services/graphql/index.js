@@ -29,10 +29,15 @@ export const calculateCreditMemoTotals = (variables) => useMutation(Schema.calcu
     variables, ...context,
 });
 
+export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getCreditMemoList,
     getCreditMemoById,
     createCreditMemo,
     prepareNewMemo,
     calculateCreditMemoTotals,
+    getStoreConfig,
 };

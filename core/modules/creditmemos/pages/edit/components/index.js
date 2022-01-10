@@ -72,7 +72,7 @@ const creditmemosCreateContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/sales/creditmemos')}
+                onClick={() => router.push('/return/creditmemos')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >

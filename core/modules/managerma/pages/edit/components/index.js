@@ -15,8 +15,8 @@ import { formatPriceNumber } from '@helper_currency';
 
 const ManageRmaEditContent = (props) => {
     const {
-        formik, rmaDetail, dataStatusItem, dataReturnType,
-        dataPackageCondition, dataReason, handleRefund,
+        formik, rmaDetail, dataStatusItem, dataReturnType, dataPackageCondition,
+        dataReason, handleRefund, canCreateMemo, canRefund,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -26,7 +26,10 @@ const ManageRmaEditContent = (props) => {
         { value: 'storecredit ', label: 'Refund to Customer Store Credit' },
         { value: 'giftcard', label: 'Create Customer Giftcard' },
     ];
-
+    const dataReplacementType = [
+        { value: 'pickup', label: 'Pickup in Store' },
+        { value: 'delivery', label: 'Home Delivery' },
+    ];
     const isButtonVisible = () => {
         let buttonToShow = [];
         const loginLocation = JSON.parse(Cookies.get('cdt'))?.customer_loc_code;
@@ -118,7 +121,7 @@ const ManageRmaEditContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push('/sales/managerma')}
+                onClick={() => router.push('/return/managerma')}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -161,7 +164,7 @@ const ManageRmaEditContent = (props) => {
                     </>
                 )
                 : null}
-            {(rmaDetail.status === 'processing') && (
+            {(rmaDetail.status === 'processing' && canRefund) && (
                 <Button
                     className={classes.btn}
                     onClick={() => handleRefund()}
@@ -169,10 +172,10 @@ const ManageRmaEditContent = (props) => {
                     Refund
                 </Button>
             )}
-            {(rmaDetail.status === 'package_received') && (
+            {(rmaDetail.status === 'package_received' && canCreateMemo) && (
                 <Button
                     className={classes.btn}
-                    onClick={() => router.push(`/sales/creditmemos/create/${rmaDetail.id}`)}
+                    onClick={() => router.push(`/return/managerma/creatememos/${rmaDetail.id}`)}
                 >
                     Credit Memo
                 </Button>
@@ -231,16 +234,35 @@ const ManageRmaEditContent = (props) => {
                                         />
                                     </tr>
                                     <tr className={classes.tr}>
-                                        <td className={clsx(classes.td, classes.labelRequired)}>Refund Type</td>
-                                        <Select
-                                            name="request.refund_type"
-                                            value={formik.values.request.refund_type}
-                                            onChange={formik.handleChange}
-                                            dataOptions={dataRefundType}
-                                            disabled={!isFieldEnabled('refund_type')}
-                                            error={!!(formik.touched.request?.refund_type
-                                                && formik.errors.request?.refund_type)}
-                                        />
+                                        {formik.values.request.return_type === 'refund'
+                                            ? (
+                                                <>
+                                                    <td className={clsx(classes.td, classes.labelRequired)}>Refund Type</td>
+                                                    <Select
+                                                        name="request.refund_type"
+                                                        value={formik.values.request.refund_type}
+                                                        onChange={formik.handleChange}
+                                                        dataOptions={dataRefundType}
+                                                        disabled={!isFieldEnabled('refund_type')}
+                                                        error={!!(formik.touched.request?.refund_type
+                                                        && formik.errors.request?.refund_type)}
+                                                    />
+                                                </>
+                                            )
+                                            : (
+                                                <>
+                                                    <td className={clsx(classes.td, classes.labelRequired)}>Replacement Order Type</td>
+                                                    <Select
+                                                        name="request.replacement_order_type"
+                                                        value={formik.values.request.replacement_order_type}
+                                                        onChange={formik.handleChange}
+                                                        dataOptions={dataReplacementType}
+                                                        disabled={!isFieldEnabled('replacement_order_type')}
+                                                        error={!!(formik.touched.request?.replacement_order_type
+                                                        && formik.errors.request?.replacement_order_type)}
+                                                    />
+                                                </>
+                                            )}
                                     </tr>
                                     <tr className={classes.tr} style={{ borderBottom: '0px' }}>
                                         <td className={classes.td}>Package Received</td>
@@ -354,7 +376,15 @@ const ManageRmaEditContent = (props) => {
                                                 <span className={classes.spanLabel}>Attachment:</span>
                                                 {e.attachment?.map((attach, idx) => (
                                                     <div key={idx}>
-                                                        <a href={attach.filepath} download className={classes.link}>{attach.filename}</a>
+                                                        <a
+                                                            href={attach.filepath}
+                                                            download
+                                                            target="_blank"
+                                                            className={classes.link}
+                                                            rel="noreferrer"
+                                                        >
+                                                            {attach.filename}
+                                                        </a>
                                                     </div>
                                                 ))}
                                             </>

@@ -20,6 +20,7 @@ const creditmemosCreateContent = (props) => {
         creditmemoDetail,
         parentId,
         grandTotal,
+        canAdjFee,
     } = props;
     const classes = useStyles();
     const router = useRouter();
@@ -81,7 +82,7 @@ const creditmemosCreateContent = (props) => {
         <>
             <Button
                 className={classes.btnBack}
-                onClick={() => router.push(`/sales/managerma/edit/${parentId}`)}
+                onClick={() => router.push(`/return/managerma/edit/${parentId}`)}
                 variant="contained"
                 style={{ marginRight: 16 }}
             >
@@ -302,46 +303,51 @@ const creditmemosCreateContent = (props) => {
                                             />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td className={classes.td}>Adjusment Refund</td>
-                                        <td className={classes.td}>
-                                            <OutlinedInput
-                                                name="adjustment_positive"
-                                                value={formik.values.adjustment_positive}
-                                                onChange={formik.handleChange}
-                                                classes={{
-                                                    input: classes.fieldInput,
-                                                    root: classes.fieldRoot,
-                                                }}
-                                                startAdornment={(
-                                                    <InputAdornment position="start">
-                                                        <span style={{ fontSize: 14 }}>IDR</span>
-                                                    </InputAdornment>
-                                                )}
-                                                error={!!(formik.touched.adjustment_positive && formik.errors.adjustment_positive)}
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className={classes.td}>Adjusment Fee</td>
-                                        <td className={classes.td}>
-                                            <OutlinedInput
-                                                name="adjustment_negative"
-                                                value={formik.values.adjustment_negative}
-                                                onChange={formik.handleChange}
-                                                classes={{
-                                                    input: classes.fieldInput,
-                                                    root: classes.fieldRoot,
-                                                }}
-                                                startAdornment={(
-                                                    <InputAdornment position="start">
-                                                        <span style={{ fontSize: 14 }}>IDR</span>
-                                                    </InputAdornment>
-                                                )}
-                                                error={!!(formik.touched.adjustment_negative && formik.errors.adjustment_negative)}
-                                            />
-                                        </td>
-                                    </tr>
+                                    {canAdjFee
+                                    && (
+                                        <>
+                                            <tr>
+                                                <td className={classes.td}>Adjustment Refund</td>
+                                                <td className={classes.td}>
+                                                    <OutlinedInput
+                                                        name="adjustment_positive"
+                                                        value={formik.values.adjustment_positive}
+                                                        onChange={formik.handleChange}
+                                                        classes={{
+                                                            input: classes.fieldInput,
+                                                            root: classes.fieldRoot,
+                                                        }}
+                                                        startAdornment={(
+                                                            <InputAdornment position="start">
+                                                                <span style={{ fontSize: 14 }}>IDR</span>
+                                                            </InputAdornment>
+                                                        )}
+                                                        error={!!(formik.touched.adjustment_positive && formik.errors.adjustment_positive)}
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className={classes.td}>Adjustment Fee</td>
+                                                <td className={classes.td}>
+                                                    <OutlinedInput
+                                                        name="adjustment_negative"
+                                                        value={formik.values.adjustment_negative}
+                                                        onChange={formik.handleChange}
+                                                        classes={{
+                                                            input: classes.fieldInput,
+                                                            root: classes.fieldRoot,
+                                                        }}
+                                                        startAdornment={(
+                                                            <InputAdornment position="start">
+                                                                <span style={{ fontSize: 14 }}>IDR</span>
+                                                            </InputAdornment>
+                                                        )}
+                                                        error={!!(formik.touched.adjustment_negative && formik.errors.adjustment_negative)}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </>
+                                    )}
                                     <tr>
                                         <td className={clsx(classes.td, classes.th)} style={{ fontWeight: 600 }}>Grand Total</td>
                                         <td className={clsx(classes.td, classes.th)} style={{ textAlign: 'right', fontWeight: 600 }}>

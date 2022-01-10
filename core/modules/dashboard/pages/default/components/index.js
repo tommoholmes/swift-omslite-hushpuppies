@@ -273,7 +273,7 @@ const DashboardContent = (props) => {
                             <span>Request to Proceed</span>
                         </div>
                     </div>
-                    <a className="link" href="/sales/managerma">
+                    <a className="link" href="/return/managerma">
                         Manage Return
                     </a>
                 </div>

@@ -62,7 +62,7 @@ const Core = (props) => {
 
     if (!data) {
         const errMsg = error?.message ?? 'Data not found!';
-        const redirect = '/sales/creditmemos';
+        const redirect = '/return/creditmemos';
         return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
