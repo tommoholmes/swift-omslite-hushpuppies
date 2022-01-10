@@ -158,7 +158,7 @@ const CreditmemoListContent = (props) => {
         state: item.creditmemo.state_name,
         // grand_total: formatPrice(item.creditmemo.grand_total, 'USD'),
         actions: () => (
-            <Link href={`/sales/creditmemos/edit/${item.creditmemo.entity_id}`}>
+            <Link href={`/return/creditmemos/edit/${item.creditmemo.entity_id}`}>
                 <a className="link-button">View</a>
             </Link>
         ),

@@ -21,7 +21,7 @@ const RmaStatusesListContent = (props) => {
         ...rmaStatuses,
         id: rmaStatuses.status_code,
         actions: () => (
-            <Link href={`/sales/rmastatuses/edit/${rmaStatuses.status_code}`}>
+            <Link href={`/return/rmastatuses/edit/${rmaStatuses.status_code}`}>
                 <a className="link-button">View</a>
             </Link>
         ),

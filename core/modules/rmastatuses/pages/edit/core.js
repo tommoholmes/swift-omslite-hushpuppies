@@ -40,7 +40,7 @@ const ContentWrapper = (props) => {
                     text: 'Success edit Rma Status!',
                     variant: 'success',
                 });
-                setTimeout(() => router.push('/sales/rmastatuses'), 250);
+                setTimeout(() => router.push('/return/rmastatuses'), 250);
             })
             .catch((e) => {
                 window.backdropLoader(false);
@@ -102,7 +102,7 @@ const Core = (props) => {
 
     if (!data) {
         const errMsg = error?.message ?? 'Data not found!';
-        const redirect = '/sales/rmastatuses';
+        const redirect = '/return/rmastatuses';
         return <ErrorRedirect errMsg={errMsg} redirect={redirect} />;
     }
 
