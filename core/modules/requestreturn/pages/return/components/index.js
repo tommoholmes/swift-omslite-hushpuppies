@@ -56,6 +56,11 @@ const RequestReturnEditContent = (props) => {
         return arrQty;
     };
 
+    const returnTypeOptions = (dataReturnType
+        && dataReturnType.getStoreConfig
+        && Object.values(JSON.parse(dataReturnType.getStoreConfig))) || [];
+    const replacementTypeOptions = [{ value: 'pickup', label: 'Pickup in Store' }, { value: 'delivery', label: 'Home Delivery' }];
+
     return (
         <div className={classes.body}>
             <Button
@@ -78,51 +83,70 @@ const RequestReturnEditContent = (props) => {
                 {queryOrder}
             </h2>
             <Paper className={classes.container}>
-                <div className={classes.content}>
-                    <h5 className={clsx(classes.title, classes.labelRequired)}>Return Type</h5>
-                    <Autocomplete
-                        className={classes.autocompleteRootTop}
-                        value={formik.values.return_type}
-                        onChange={(e) => formik.setFieldValue('return_type', e)}
-                        // loading={loadingReturnType}
-                        options={
-                            dataReturnType
-                            && dataReturnType.getStoreConfig
-                            && Object.values(JSON.parse(dataReturnType.getStoreConfig))
-                        }
-                        error={!!(formik.touched.return_type && formik.errors.return_type)}
-                        helperText={(formik.touched.return_type && formik.errors.return_type) || 'Please Select'}
-                        primaryKey="code"
-                        labelKey="title"
-                    />
+                <div className={clsx(classes.content, classes.gridOption)}>
+                    <div>
+                        <h5 className={clsx(classes.title, classes.labelRequired)}>Return Type</h5>
+                        <Autocomplete
+                            className={classes.autocompleteRootTop}
+                            value={returnTypeOptions.find((option) => (option.code === formik.values.return_type))}
+                            onChange={(e) => formik.setFieldValue('return_type', e?.code || '')}
+                            // loading={loadingReturnType}
+                            options={returnTypeOptions}
+                            error={!!(formik.touched.return_type && formik.errors.return_type)}
+                            helperText={(formik.touched.return_type && formik.errors.return_type) || 'Please Select'}
+                            primaryKey="code"
+                            labelKey="title"
+                        />
+                    </div>
+                    {!!(formik.values.return_type === 'replacement')
+                        && (
+                            <div>
+                                <h5 className={clsx(classes.title, classes.labelRequired)}>Replacement Order Type</h5>
+                                <Autocomplete
+                                    className={classes.autocompleteRootTop}
+                                    value={replacementTypeOptions.find((option) => (option.value === formik.values.replacement_order_type))}
+                                    onChange={(e) => formik.setFieldValue('replacement_order_type', e?.value || '')}
+                                    // loading={loadingReturnType}
+                                    options={replacementTypeOptions}
+                                    error={!!(formik.touched.replacement_order_type && formik.errors.replacement_order_type)}
+                                    helperText={(formik.touched.replacement_order_type && formik.errors.replacement_order_type) || 'Please Select'}
+                                    primaryKey="value"
+                                    labelKey="label"
+                                />
+                            </div>
+                        )}
                 </div>
                 <div className={classes.content}>
                     <h5 className={classes.title}>Products To Return</h5>
-                    <table className={classes.table}>
-                        <tbody>
-                            <tr className={classes.tr}>
-                                <th className={classes.th}>Image</th>
-                                <th className={classes.th}>Name</th>
-                                <th className={classes.th}>Price</th>
-                                <th className={clsx(classes.th, classes.center)}>Actions</th>
-                            </tr>
-                            {requestreturn.map(({
-                                entity_id, image_url, name, price, qty,
-                            }, eMap) => (
-                                <tr>
-                                    <td className={classes.td} style={{ width: '15%' }}>
-                                        <input
-                                            checked={checkedState[eMap]}
-                                            onChange={() => handleOnChange(eMap)}
-                                            type="checkbox"
-                                            name={entity_id}
-                                        />
-                                        <img src={`${image_url}`} />
-                                    </td>
-                                    <td className={classes.td} style={{ width: '35%' }}>{name}</td>
-                                    <td className={classes.td} style={{ width: '15%' }}>{convertToRupiah(price)}</td>
-                                    <td className={clsx(classes.td)}>
-                                        {(checkedState[eMap])
+                    <div
+                        style={{ padding: 10 }}
+                        className={formik.touched.items && formik.errors.items ? classes.errorDiv : ''}
+                    >
+                        <table className={classes.table}>
+                            <tbody>
+                                <tr className={classes.tr}>
+                                    <th className={classes.th}>Image</th>
+                                    <th className={classes.th}>Name</th>
+                                    <th className={classes.th}>Price</th>
+                                    <th className={clsx(classes.th, classes.center)}>Actions</th>
+                                </tr>
+                                {requestreturn.map(({
+                                    entity_id, image_url, name, price, qty,
+                                }, eMap) => (
+                                    <tr>
+                                        <td className={classes.td} style={{ width: '15%' }}>
+                                            <input
+                                                checked={checkedState[eMap]}
+                                                onChange={() => handleOnChange(eMap)}
+                                                type="checkbox"
+                                                name={entity_id}
+                                            />
+                                            <img src={`${image_url}`} />
+                                        </td>
+                                        <td className={classes.td} style={{ width: '35%' }}>{name}</td>
+                                        <td className={classes.td} style={{ width: '15%' }}>{convertToRupiah(price)}</td>
+                                        <td className={clsx(classes.td)}>
+                                            {(checkedState[eMap])
                                             && (
                                                 <>
                                                     <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Quantity</strong></span>
@@ -172,11 +196,15 @@ const RequestReturnEditContent = (props) => {
                                                     <span className={classes.spanInfo}>The following file types are allowed: zip, rar, jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx</span>
                                                 </>
                                             )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    {formik.touched.items && formik.errors.items && typeof formik.errors.items === 'string'
+                        ? <span className={classes.errors}>{formik.errors.items}</span>
+                        : null}
                 </div>
                 <div className={classes.content}>
                     <h5 className={classes.title}>Messages</h5>

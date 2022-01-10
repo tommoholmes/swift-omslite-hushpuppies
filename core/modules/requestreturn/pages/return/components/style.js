@@ -75,6 +75,10 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 16,
         marginBottom: 8,
     },
+    gridOption: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+    },
     spanLabel: {
         fontFamily: font,
         display: 'inline-block',
@@ -104,6 +108,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline-block',
         width: '50%',
         verticalAlign: 'top',
+    },
+    errorDiv: {
+        border: '1px solid red',
     },
     table: {
         borderCollapse: 'collapse',
@@ -147,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     autocompleteRootTop: {
-        width: '50%',
+        width: '80%',
     },
     autocompleteRoot: {
         width: '75%',
@@ -159,6 +166,12 @@ const useStyles = makeStyles((theme) => ({
         wordWrap: 'break-word',
         marginTop: 5,
         marginBottom: 10,
+    },
+    errors: {
+        color: 'red',
+        margin: '0 14px',
+        marginTop: 4,
+        fontSize: '0.75rem',
     },
 }));
 
