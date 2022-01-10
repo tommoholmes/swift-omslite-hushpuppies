@@ -200,26 +200,62 @@ const ContentWrapper = (props) => {
     return <Content {...contentProps} />;
 };
 
+const SecondCore = (props) => {
+    const router = useRouter();
+    const pageConfig = {
+        title: `View Marketplace Brand #${router?.query?.id}`,
+    };
+    const { loading: loadingLocation, data: dataLocation } = gqlService.getLocationList();
+    const {
+        loading, data, refetch, error,
+    } = gqlService.getAvailableMpToConnect({
+        store_id: router && router.query && Number(router.query.id),
+        callback_url: router && router.asPath,
+    });
+
+    if (loading || loadingLocation) {
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+            >
+                Loading get Marketplaces . . .
+            </div>
+        );
+    }
+
+    if (!data) {
+        const errMsg = error?.message ?? 'Data not found!';
+        const redirect = '/configurations/marketplacebrand';
+        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
+    }
+
+    const contentProps = {
+        data,
+        dataLocation,
+        refetch,
+    };
+
+    return (
+        <ContentWrapper {...contentProps} {...props} />
+    );
+};
+
 const Core = (props) => {
     const router = useRouter();
     const pageConfig = {
         title: `View Marketplace Brand #${router?.query?.id}`,
     };
     const [updateConnectedMarketplace, { loading }] = gqlService.updateConnectedMarketplace({});
-    const [getLocationList, { loading: loadingLocation, data: dataLocation }] = gqlService.getLocationList();
-    const [getAvailableMpToConnect, {
-        loading: loadingMp, data, refetch, error,
-    }] = gqlService.getAvailableMpToConnect({
-        store_id: router && router.query && Number(router.query.id),
-        callback_url: router && router.asPath,
-    });
 
     React.useEffect(() => {
         updateConnectedMarketplace({
             variables: { store_id: router && router.query && Number(router.query.id) },
-        }).then(() => {
-            getLocationList();
-            getAvailableMpToConnect();
         });
     }, []);
 
@@ -227,7 +263,7 @@ const Core = (props) => {
         acl_code: 'oms_lite_header_mpadapter',
     });
 
-    if (loading || loadingMp || loadingLocation || aclCheckLoading) {
+    if (loading || aclCheckLoading) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div
@@ -239,31 +275,19 @@ const Core = (props) => {
                         padding: '20px 0',
                     }}
                 >
-                    Loading get Marketplaces . . .
+                    Loading update Marketplaces . . .
                 </div>
             </Layout>
         );
-    }
-
-    if (!data) {
-        const errMsg = error?.message ?? 'Data not found!';
-        const redirect = '/configurations/marketplacebrand';
-        return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
         router.push('/');
     }
 
-    const contentProps = {
-        data,
-        dataLocation,
-        refetch,
-    };
-
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper {...contentProps} {...props} />
+            <SecondCore {...props} />
         </Layout>
     );
 };
