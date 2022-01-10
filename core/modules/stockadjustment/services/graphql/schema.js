@@ -73,9 +73,16 @@ export const csvToArrayOfObject = gql`
     }
 `;
 
+export const downloadSampleCsv = gql`
+    mutation downloadSampleCsv($type: String!) {
+        downloadSampleCsv(type: $type)
+    }
+`;
+
 export default {
     getStockAdjustmentList,
     getStockAdjustmentById,
     addStockAdjustment,
     csvToArrayOfObject,
+    downloadSampleCsv,
 };

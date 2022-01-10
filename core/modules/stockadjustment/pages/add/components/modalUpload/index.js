@@ -17,7 +17,7 @@ const STOCK_KEY = 'adj_qty';
 
 const ModalFindProduct = (props) => {
     const {
-        open, handleClose, addProduct, urlDownload, locationId,
+        open, handleClose, addProduct, locationId,
     } = props;
     const classes = useStyles();
     const [csvToArrayOfObject] = gqlService.csvToArrayOfObject();
@@ -160,12 +160,30 @@ const ModalFindProduct = (props) => {
         }
     }, [sourceData, sourceError, sourceLoading]);
 
+    const [downloadSampleCsv] = gqlService.downloadSampleCsv();
+    const [urlDownload, setUrlDownload] = useState(null);
+
+    useEffect(() => {
+        const getSampleCsv = async () => {
+            const res = await downloadSampleCsv({
+                variables: {
+                    type: 'stock_adjustment_products',
+                },
+            });
+            setUrlDownload(res && res.data && res.data.downloadSampleCsv);
+        };
+        getSampleCsv();
+    }, []);
+
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth classes={{ paper: classes.paper }}>
             <div
                 className={clsx(classes.textTitle, classes.content)}
                 style={{
-                    width: '100%', flexDirection: 'row', paddingTop: '20px', fontSize: '26px',
+                    width: '100%',
+                    flexDirection: 'row',
+                    paddingTop: '20px',
+                    fontSize: '26px',
                 }}
             >
                 <div>Upload Products</div>
