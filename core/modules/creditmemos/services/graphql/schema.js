@@ -208,10 +208,21 @@ export const calculateCreditMemoTotals = gql`
     }
 `;
 
+export const getStoreConfig = gql`
+    query getStoreConfig(
+        $path: String!,
+    ){
+        getStoreConfig(
+            path: $path,
+        )
+    }
+`;
+
 export default {
     getCreditMemoList,
     getCreditMemoById,
     createCreditMemo,
     prepareNewMemo,
     calculateCreditMemoTotals,
+    getStoreConfig,
 };

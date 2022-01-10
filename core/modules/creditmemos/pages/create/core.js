@@ -8,7 +8,9 @@ import aclService from '@modules/theme/services/graphql';
 import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const { data, Content, parentId } = props;
+    const {
+        data, Content, parentId, canAdjFee,
+    } = props;
     const router = useRouter();
     const { creditmemo, order } = data.prepareNewMemo;
     const [grandTotal, setGrandTotal] = React.useState(creditmemo.grand_total);
@@ -62,7 +64,7 @@ const ContentWrapper = (props) => {
                     text: 'Creditmemo created',
                     variant: 'success',
                 });
-                router.push(`/sales/managerma/edit/${parentId}`);
+                router.push(`/return/managerma/edit/${parentId}`);
             })
             .catch((e) => {
                 window.backdropLoader(false);
@@ -142,6 +144,7 @@ const ContentWrapper = (props) => {
         handleCalculate,
         parentId,
         grandTotal,
+        canAdjFee,
     };
 
     return <Content {...contentProps} />;
@@ -158,11 +161,19 @@ const Core = (props) => {
         request_id: router && router.query && Number(router.query.request_id),
     });
 
+    const { loading: loadingAdjFee, data: adjFee } = gqlService.getStoreConfig({
+        path: 'swiftoms_rma/creditmemo/allow_adj_fee',
+    });
+
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
         acl_code: 'oms_lite_credit_memos',
     });
 
-    if (loading || aclCheckLoading) {
+    const { loading: aclCheckLoadingCreate, data: aclCheckDataCreate } = aclService.isAccessAllowed({
+        acl_code: 'rma_create_creditmemo',
+    });
+
+    if (loading || aclCheckLoading || aclCheckLoadingCreate || loadingAdjFee) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div
@@ -182,17 +193,23 @@ const Core = (props) => {
 
     if (!data) {
         const errMsg = error?.message ?? 'Data not found!';
-        const redirect = `/sales/managerma/edit/${router && router.query && Number(router.query.request_id)}`;
+        const redirect = `/return/managerma/edit/${router && router.query && Number(router.query.request_id)}`;
         return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
-    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false
+        || (aclCheckDataCreate && aclCheckDataCreate.isAccessAllowed) === false) {
         router.push('/');
     }
 
     return (
         <Layout pageConfig={pageConfig}>
-            <ContentWrapper parentId={router && router.query && Number(router.query.request_id)} data={data} {...props} />
+            <ContentWrapper
+                parentId={router && router.query && Number(router.query.request_id)}
+                canAdjFee={adjFee.getStoreConfig === '1'}
+                data={data}
+                {...props}
+            />
         </Layout>
     );
 };
