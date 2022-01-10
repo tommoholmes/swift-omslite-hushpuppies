@@ -20,6 +20,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import clsx from 'clsx';
 import gqlSource from '@modules/source/services/graphql';
 import * as Yup from 'yup';
+import ModalUpload from '@modules/stockadjustment/pages/edit/components/modalUpload';
 
 const StockAdjustmentEdit = (props) => {
     const [getStoreLocationList, getStoreLocationListRes] = gqlLocation.getStoreLocationList();
@@ -72,12 +73,25 @@ const StockAdjustmentEdit = (props) => {
         const onChangeTimeOut = setTimeout(
             () => {
                 const isExist = searchLocation && locationOption.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchLocation?.toLowerCase()));
+
+                let filter = {};
+                if (firstRenderLocation.current) {
+                    filter = {
+                        loc_name: {
+                            eq: typeof initialValues.loc_code === 'object' ? initialValues.loc_code?.loc_name ?? null : initialValues.loc_code,
+                        },
+                    };
+                } else {
+                    filter = {};
+                }
+
                 if (firstRenderLocation.current || (searchLocation && isExist.length === 0)) {
                     getStoreLocationList({
                         variables: {
                             search: searchLocation,
                             pageSize: 20,
                             currentPage: 1,
+                            filter,
                         },
                     });
                     firstRenderLocation.current = false;
@@ -122,6 +136,8 @@ const StockAdjustmentEdit = (props) => {
             .required('Required!'),
     });
 
+    const [isModalUploadOpen, setIsModalUploadOpen] = React.useState(false);
+
     return (
         <>
             <Button
@@ -157,7 +173,7 @@ Edit Stock Adjustment #
                                     </div>
                                     <Autocomplete
                                         disabled={isDisabled}
-                                        mode={locationOption.length > 0 ? 'default' : 'lazy'}
+                                        mode={locationOption.length > 1 ? 'default' : 'lazy'}
                                         className={classes.autocompleteRoot}
                                         value={values.loc_code}
                                         onChange={(e) => {
@@ -173,6 +189,7 @@ Edit Stock Adjustment #
                                                 search: searchLocation,
                                                 pageSize: 20,
                                                 currentPage: 1,
+                                                filter: {},
                                             },
                                         }}
                                         primaryKey="loc_code"
@@ -193,6 +210,12 @@ Edit Stock Adjustment #
                                     <FieldArray name="items">
                                         {({ remove, push }) => (
                                             <>
+                                                {React.cloneElement(<ModalUpload />, {
+                                                    open: isModalUploadOpen,
+                                                    handleClose: () => setIsModalUploadOpen(false),
+                                                    locationId: locID?.toString() ?? null,
+                                                    addProduct: push,
+                                                })}
                                                 {values.items.length > 0 && (
                                                     <table className={classes.table}>
                                                         <thead className={classes.th}>
@@ -207,7 +230,7 @@ Edit Stock Adjustment #
                                                             {values.items.map((item, idx) => (
                                                                 <tr key={idx}>
                                                                     <td className={classes.td}>
-                                                                        {!item.entity_id ? (
+                                                                        {!item?.entity_id && !item?.from_csv ? (
                                                                             <Autocomplete
                                                                                 name={`items.${idx}.sku`}
                                                                                 mode={baseSkuOption.length > 0 ? 'default' : 'lazy'}
@@ -271,7 +294,17 @@ Edit Stock Adjustment #
                                                 )}
                                                 <div className={`${classes.formFieldButton} ${classes.formFieldButtonRight}`}>
                                                     <Button
-                                                        disabled={isDisabled || values.loc_code === null}
+                                                        style={{ marginRight: 10 }}
+                                                        disabled={values.loc_code === null}
+                                                        className={classes.btn}
+                                                        variant="contained"
+                                                        onClick={() => setIsModalUploadOpen(true)}
+                                                    >
+                                                        Upload Csv
+                                                    </Button>
+                                                    <Button
+                                                        style={{ marginLeft: 10 }}
+                                                        disabled={values.loc_code === null}
                                                         className={classes.btn}
                                                         variant="contained"
                                                         onClick={() => push({

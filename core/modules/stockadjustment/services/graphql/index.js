@@ -26,8 +26,20 @@ export const addStockAdjustment = (variables) => useMutation(Schema.addStockAdju
     ...context,
 });
 
+export const csvToArrayOfObject = (variables) => useMutation(Schema.csvToArrayOfObject, {
+    variables,
+    ...context,
+});
+
+export const downloadSampleCsv = (variables) => useMutation(Schema.downloadSampleCsv, {
+    variables,
+    ...context,
+});
+
 export default {
     getStockAdjustmentList,
     getStockAdjustmentById,
     addStockAdjustment,
+    csvToArrayOfObject,
+    downloadSampleCsv,
 };

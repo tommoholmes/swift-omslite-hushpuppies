@@ -59,8 +59,30 @@ export const addStockAdjustment = gql`
     }
 `;
 
+export const csvToArrayOfObject = gql`
+    mutation csvToArrayOfObject($binary: String!) {
+        csvToArrayOfObject(binary: $binary) {
+            headers
+            rows {
+                columns {
+                    header
+                    value
+                }
+            }
+        }
+    }
+`;
+
+export const downloadSampleCsv = gql`
+    mutation downloadSampleCsv($type: String!) {
+        downloadSampleCsv(type: $type)
+    }
+`;
+
 export default {
     getStockAdjustmentList,
     getStockAdjustmentById,
     addStockAdjustment,
+    csvToArrayOfObject,
+    downloadSampleCsv,
 };

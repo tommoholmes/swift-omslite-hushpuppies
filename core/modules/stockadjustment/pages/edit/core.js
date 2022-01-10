@@ -34,6 +34,9 @@ const ContentWrapper = (props) => {
             if (!temp.entity_id) {
                 delete temp.entity_id;
             }
+            if (temp?.from_csv) {
+                delete temp.from_csv;
+            }
             return { ...temp, sku: typeof temp.sku === 'object' ? temp.sku.sku : temp.sku };
         });
         delete fixValues.status;
