@@ -10,6 +10,7 @@ import ErrorRedirect from '@common_errorredirect';
 const ContentWrapper = (props) => {
     const {
         data, refetch, Content, dataStatusItem, dataReturnType, dataPackageCondition, dataReason,
+        canCreateMemo, canRefund,
     } = props;
     const [refundRma] = gqlService.refundRma();
     const [saveRma] = gqlService.saveRma();
@@ -63,6 +64,7 @@ const ContentWrapper = (props) => {
         channelOrder: rma.channel_order_increment_id,
         return: rma.return_type,
         refund: rma.refund_type,
+        replacement: rma.replacement_order_type,
         package: rma.package_received_by_loc,
         packageName: rma.package_received_by_loc_name,
         creditmemo: rma.creditmemo,
@@ -101,10 +103,11 @@ const ContentWrapper = (props) => {
             request: {
                 return_type: rma.return_type,
                 refund_type: rma.refund_type,
+                replacement_order_type: rma.replacement,
             },
             message: {
                 is_customer_notified: false,
-                is_visible_on_front: false,
+                is_visible_on_front: true,
                 text: '',
             },
             items: rma.rma_item?.map((item) => ({
@@ -119,11 +122,20 @@ const ContentWrapper = (props) => {
             status_code: Yup.string().required('Required!'),
             request: Yup.object().shape({
                 return_type: Yup.string().required('Required!'),
-                refund_type: Yup.string().required('Required!'),
+                refund_type: Yup.string().nullable().when('return_type', {
+                    is: 'refund',
+                    then: Yup.string().required('Required!'),
+                }),
+                replacement_order_type: Yup.string().nullable().when('return_type', {
+                    is: 'replacement',
+                    then: Yup.string().required('Required!'),
+                }),
             }),
         }),
         onSubmit: (values) => {
-            const { items, message, ...valueToSubmit } = values;
+            const {
+                items, message, request, ...valueToSubmit
+            } = values;
             valueToSubmit.items = items.map((item) => ({
                 item_id: item.item_id,
                 package_condition: item.package_condition,
@@ -136,6 +148,18 @@ const ContentWrapper = (props) => {
                 is_visible_on_front: message.is_visible_on_front ? 1 : 0,
                 text: message.text,
             };
+            valueToSubmit.request = {
+                return_type: request.return_type,
+            };
+            if (request.return_type === 'refund') {
+                valueToSubmit.request = {
+                    refund_type: request.refund_type,
+                };
+            } else {
+                valueToSubmit.request = {
+                    replacement_order_type: request.replacement_order_type,
+                };
+            }
             handleSubmit(valueToSubmit);
         },
     });
@@ -148,6 +172,8 @@ const ContentWrapper = (props) => {
         dataPackageCondition,
         dataReason,
         handleRefund,
+        canCreateMemo,
+        canRefund,
     };
 
     return <Content {...contentProps} />;
@@ -157,7 +183,7 @@ const Core = (props) => {
     const router = useRouter();
 
     const pageConfig = {
-        title: `Manage RMA #${router?.query?.id}`,
+        title: `Manage Request #${router?.query?.id}`,
     };
 
     const { loading: loadingStatus, data: dataStatusItem } = gqlService.getRmaItemStatusOptions();
@@ -170,23 +196,33 @@ const Core = (props) => {
     const { loading: loadingReason, data: dataReason } = gqlService.getStoreConfig({
         path: 'swiftoms_rma/rma_request/reason',
     });
+
+    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
+        acl_code: 'oms_lite_rma_manage',
+    });
+
+    const { loading: aclCheckLoadingCreate, data: aclCheckDataCreate } = aclService.isAccessAllowed({
+        acl_code: 'rma_create_creditmemo',
+    });
+
+    const { loading: aclCheckLoadingRefund, data: aclCheckDataRefund } = aclService.isAccessAllowed({
+        acl_code: 'rma_refund',
+    });
+
     const {
         loading, data, refetch, error,
     } = gqlService.getRmaById({
         id: router && router.query && Number(router.query.id),
     });
 
-    const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'oms_lite_rma_manage',
-    });
-
-    if (loading || loadingStatus || loadingReturnType || loadingPackageCondition || loadingReason || aclCheckLoading) {
+    if (loading || loadingStatus || loadingReturnType || loadingPackageCondition
+        || loadingReason || aclCheckLoading || aclCheckLoadingCreate || aclCheckLoadingRefund) {
         return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if (!data) {
         const errMsg = error?.message ?? 'Data not found!';
-        const redirect = '/sales/managerma';
+        const redirect = '/return/managerma';
         return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
@@ -201,6 +237,8 @@ const Core = (props) => {
         dataReturnType: JSON.parse(dataReturnType.getStoreConfig),
         dataPackageCondition: JSON.parse(dataPackageCondition.getStoreConfig),
         dataReason: JSON.parse(dataReason.getStoreConfig),
+        canCreateMemo: aclCheckDataCreate.isAccessAllowed,
+        canRefund: aclCheckDataRefund.isAccessAllowed,
     };
 
     return (
