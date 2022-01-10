@@ -27,7 +27,7 @@ const ProductBundle = (props) => {
             const variables = {
                 binary: values.binary,
             };
-            handleSubmit(variables, uploader);
+            handleSubmit(variables, uploader, gqlUpload.name);
         },
     });
 

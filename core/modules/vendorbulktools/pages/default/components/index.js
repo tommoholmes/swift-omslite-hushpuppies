@@ -47,16 +47,37 @@ const VendorBulkToolsContent = (props) => {
         }
     }, [bulkType]);
 
-    const handleSubmit = async (variables, uploader) => {
+    const handleSubmit = async (variables, uploader, gqlName = null) => {
         window.backdropLoader(true);
 
         try {
-            await uploader({ variables });
+            const res = await uploader({ variables });
+
+            const data = res && res.data && res.data[gqlName];
+            if (
+                data?.status === 'error'
+                || data?.status_pdi === 'error'
+                || data?.status_cpi === 'error'
+                || (!data?.status && !data?.status_pdi && !data?.status_cpi)
+            ) {
+                throw new Error(data?.message || data?.message_pdi || data?.message_cpi || `${bulkType?.name} failed`);
+            }
+
+            if (data?.status === 'success' || data?.status_pdi === 'success' || data?.status_cpi === 'success') {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: `${bulkType?.name} Success. ${data?.message || data?.message_pdi || data?.message_cpi || ''}`,
+                    variant: 'success',
+                });
+                return;
+            }
+
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: `${bulkType?.name} Success`,
-                variant: 'success',
+                text: `${bulkType?.name}: ${data?.message || data?.message_pdi || data?.message_cpi}`,
+                variant: 'warning',
             });
         } catch (error) {
             window.backdropLoader(false);
@@ -101,7 +122,7 @@ const VendorBulkToolsContent = (props) => {
                         isNoTutorial: bulkType?.is_no_tutorial,
                     })
                     : null}
-                {bulkType?.sample && typeof bulkType?.sample === 'function' && bulkType?.sample && (
+                {bulkType?.sample && typeof bulkType?.sample === 'function' && (
                     <GqlDownloadSampleCsv gqlSampleDownloader={bulkType?.sample} setUrlDownload={setUrlDownload} />
                 )}
             </Paper>
