@@ -27,7 +27,7 @@ const ContentWrapper = (props) => {
             window.backdropLoader(false);
             window.toastMessage({
                 open: true,
-                text: 'Success Add New Promotion!',
+                text: 'Success editing Marketplace detail!',
                 variant: 'success',
             });
             setTimeout(() => router.push(`/configurations/marketplacebrand/view/${router?.query?.id}`), 250);

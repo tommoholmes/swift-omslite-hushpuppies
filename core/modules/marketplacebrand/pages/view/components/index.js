@@ -29,12 +29,13 @@ const AdminStoreEditContent = (props) => {
         setMpActive,
         handleDisconnect,
         handleReconnect,
+        getMarketplaceShippingMethods,
+        marketplaceShippingMethodsRes,
+        showModal, setShowModal,
     } = props;
     const classes = useStyles();
     const router = useRouter();
     const jdidUrl = 'https://channel.sirclo-integrations.com.dmmy.me/jdid?secret=eyJicmFuZF9pZCI6NDAyLCJkYXRlIjoiMDAwMS0wMS0wMVQwMDowMDowMFoifQ';
-
-    const [showModal, setShowModal] = React.useState(false);
 
     const buttonCondition = (status) => {
         const button = {
@@ -71,6 +72,7 @@ const AdminStoreEditContent = (props) => {
         case 0:
             formik.handleReset();
             setMpActive(mp);
+            getMarketplaceShippingMethods();
             setTimeout(() => { setShowModal(true); }, 10);
             break;
         case 1:
@@ -206,7 +208,7 @@ const AdminStoreEditContent = (props) => {
                     }}
                 >
                     <Fade in={showModal}>
-                        {mpActive?.marketplace_name
+                        {mpActive?.marketplace_name && !marketplaceShippingMethodsRes.loading
                             ? (
                                 <div className={classes.paper}>
                                     <div style={{ position: 'relative' }}>
@@ -265,9 +267,36 @@ const AdminStoreEditContent = (props) => {
                                             />
                                         </div>
                                         {mpActive?.credentials?.type === 'oauth2' ? null : formComponents()}
+                                        {marketplaceShippingMethodsRes.data.getMarketplaceDefaultShippingMethods.length
+                                            ? (
+                                                <div className={classes.formField}>
+                                                    <div className={classes.divLabel}>
+                                                        <span className={clsx(classes.label, classes.labelRequired)}>Shipping Method</span>
+                                                    </div>
+                                                    <Autocomplete
+                                                        className={classes.autocompleteRoot}
+                                                        name="default_shipping_method"
+                                                        value={marketplaceShippingMethodsRes.data.getMarketplaceDefaultShippingMethods.find(
+                                                            (option) => option.value === formik.values.default_shipping_method,
+                                                        )}
+                                                        onChange={(e) => formik.setFieldValue('default_shipping_method', e.value)}
+                                                        primaryKey="value"
+                                                        labelKey="label"
+                                                        options={marketplaceShippingMethodsRes.data.getMarketplaceDefaultShippingMethods}
+                                                        error={!!(formik.touched.default_shipping_method
+                                                            && formik.errors.default_shipping_method)}
+                                                        helperText={(formik.touched.default_shipping_method
+                                                            && formik.errors.default_shipping_method) || ''}
+                                                        fullWidth
+                                                    />
+                                                </div>
+                                            )
+                                            : null}
                                     </div>
                                     <div className={classes.formFieldButton}>
                                         <Button
+                                            disabled={marketplaceShippingMethodsRes.data.getMarketplaceDefaultShippingMethods.length
+                                                && !formik.values.default_shipping_method}
                                             className={classes.btn}
                                             onClick={formik.handleSubmit}
                                             variant="contained"
@@ -277,7 +306,11 @@ const AdminStoreEditContent = (props) => {
                                     </div>
                                 </div>
                             )
-                            : <CircularProgress className={classes.progress} size={60} />}
+                            : (
+                                <div className={classes.paper} style={{ position: 'relative' }}>
+                                    <CircularProgress className={classes.progress} size={80} />
+                                </div>
+                            )}
                     </Fade>
                 </Modal>
             </Paper>

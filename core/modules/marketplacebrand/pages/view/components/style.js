@@ -217,6 +217,12 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer',
         zIndex: 1,
     },
+    progress: {
+        position: 'absolute',
+        left: '50%',
+        top: '40%',
+        color: colorPurple,
+    },
 }));
 
 export default useStyles;

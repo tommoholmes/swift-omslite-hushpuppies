@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     content: {
         borderBottom: '3px solid #F5F7FB',
         padding: '10px 29px 12px 22px',
+        position: 'relative',
     },
     fieldRoot: {
         verticalAlign: 'middle',
@@ -115,6 +116,12 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 115px)',
         },
+    },
+    progress: {
+        position: 'absolute',
+        left: '50%',
+        top: '40%',
+        color: colorPurple,
     },
 }));
 

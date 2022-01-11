@@ -57,6 +57,10 @@ export const saveMarketplaceCredentials = (variables) => useMutation(Schema.save
     variables, ...context,
 });
 
+export const getMarketplaceShippingMethods = (variables) => useLazyQuery(Schema.getMarketplaceDefaultShippingMethods, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     getStoreList,
     registerMarketplaceBrand,
@@ -70,4 +74,5 @@ export default {
     updateConnectedMarketplace,
     getMarketplaceDefaultShippingMethods,
     saveMarketplaceCredentials,
+    getMarketplaceShippingMethods,
 };
