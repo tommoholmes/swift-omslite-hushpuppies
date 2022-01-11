@@ -73,26 +73,25 @@ const ContentWrapper = (props) => {
         if (return_type === 'replacement') {
             input.replacement_order_type = replacement_order_type;
         }
-        console.log({ input });
-        // window.backdropLoader(true);
-        // saveRequestReturnSubmit({
-        //     variables: { input },
-        // }).then(() => {
-        //     window.backdropLoader(false);
-        //     window.toastMessage({
-        //         open: true,
-        //         text: 'Success Return Order!',
-        //         variant: 'success',
-        //     });
-        //     setTimeout(() => router.push(router.asPath.replace('return/return?', 'request/request?')), 250);
-        // }).catch((e) => {
-        //     window.backdropLoader(false);
-        //     window.toastMessage({
-        //         open: true,
-        //         text: e.message,
-        //         variant: 'error',
-        //     });
-        // });
+        window.backdropLoader(true);
+        saveRequestReturnSubmit({
+            variables: { input },
+        }).then(() => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: 'Success Return Order!',
+                variant: 'success',
+            });
+            setTimeout(() => router.push(router.asPath.replace('return/return?', 'request/request?')), 250);
+        }).catch((e) => {
+            window.backdropLoader(false);
+            window.toastMessage({
+                open: true,
+                text: e.message,
+                variant: 'error',
+            });
+        });
     };
 
     const formik = useFormik({
