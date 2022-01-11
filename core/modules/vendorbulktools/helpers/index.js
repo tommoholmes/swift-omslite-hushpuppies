@@ -43,7 +43,7 @@ export const bulkToolsOptions = [
         name: 'Product Price Upload',
         code: 'product_upload_price',
         acl: 'vendor_manage_product_upload',
-        sample: 'vendor_product_configurable',
+        sample: 'vendor_product_price',
         activity: null,
         gqlUpload: gqlService.vendorProductPriceUpload,
         component: <BaseProductUpload />,
