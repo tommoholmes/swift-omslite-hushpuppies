@@ -15,12 +15,16 @@ const ContentWrapper = (props) => {
     const mpData = data.getAvailableMpToConnect;
 
     const [mpActive, setMpActive] = React.useState({});
+    const [showModal, setShowModal] = React.useState(false);
 
     // mutation
     const [registerMarketplaceChannel] = gqlService.registerMarketplaceChannel();
     const [updateMarketplaceLocation] = gqlService.updateMarketplaceLocation();
     const [reconnectMarketplaceChannel] = gqlService.reconnectMarketplaceChannel();
     const [disconnectMarketplaceChannel] = gqlService.disconnectMarketplaceChannel();
+    const [getMarketplaceShippingMethods, marketplaceShippingMethodsRes] = gqlService.getMarketplaceShippingMethods({
+        marketplace_code: mpActive.marketplace_code,
+    });
 
     const schemaObj = (schemaType) => {
         const initialValue = {};
@@ -41,6 +45,7 @@ const ContentWrapper = (props) => {
     };
 
     const handleSubmit = (input) => {
+        setShowModal(false);
         const variables = { input };
         window.backdropLoader(true);
         registerMarketplaceChannel({
@@ -62,10 +67,12 @@ const ContentWrapper = (props) => {
                     text: e.message,
                     variant: 'error',
                 });
+                setShowModal(true);
             });
     };
 
     const handleUpdateLocation = (variables) => {
+        setShowModal(false);
         window.backdropLoader(true);
         updateMarketplaceLocation({
             variables,
@@ -86,6 +93,7 @@ const ContentWrapper = (props) => {
                     text: e.message,
                     variant: 'error',
                 });
+                setShowModal(true);
             });
     };
 
@@ -168,7 +176,7 @@ const ContentWrapper = (props) => {
             } else {
                 const keys = Object.keys(restValues);
                 if (keys.length) {
-                    const credentials = {};
+                    let credentials = {};
                     keys.forEach((key) => {
                         let data_type = 'string';
                         let value = String(restValues[key]);
@@ -178,6 +186,26 @@ const ContentWrapper = (props) => {
                         }
                         credentials[key] = { data_type, value };
                     });
+                    credentials = {
+                        ...credentials,
+                        type: {
+                            data_type: 'string',
+                            value: mpActive.credentials.type,
+                        },
+                    };
+                    if (mpActive.marketplace_code === 'JDID') {
+                        credentials = {
+                            ...credentials,
+                            callback_success: {
+                                data_type: 'string',
+                                value: `${window.origin}${router.asPath}`,
+                            },
+                            callback_failure: {
+                                data_type: 'string',
+                                value: `${window.origin}${router.asPath}`,
+                            },
+                        };
+                    }
                     valueToSubmit.credentials = JSON.stringify(credentials);
                 } else {
                     valueToSubmit.credentials = '{}';
@@ -195,6 +223,10 @@ const ContentWrapper = (props) => {
         setMpActive,
         handleDisconnect,
         handleReconnect,
+        getMarketplaceShippingMethods,
+        marketplaceShippingMethodsRes,
+        showModal,
+        setShowModal,
     };
 
     return <Content {...contentProps} />;
@@ -210,7 +242,7 @@ const SecondCore = (props) => {
         loading, data, refetch, error,
     } = gqlService.getAvailableMpToConnect({
         store_id: router && router.query && Number(router.query.id),
-        callback_url: router && router.asPath,
+        callback_url: `${window.origin}${router.asPath}`,
     });
 
     if (loading || loadingLocation) {
