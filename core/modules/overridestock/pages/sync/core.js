@@ -70,7 +70,7 @@ const Core = (props) => {
 
             syncOverrideStockToMarketplace({
                 variables: {
-                    store_id: values.channel_store_id.channel_store_id?.toString(),
+                    store_id: Number(values.channel_store_id.channel_store_id),
                 },
             })
                 .then(() => {
@@ -84,6 +84,7 @@ const Core = (props) => {
                 })
                 .catch((err) => {
                     setFinishedAfterSubmit(true);
+                    clearInterval(intervalRef.current);
                     window.toastMessage({
                         open: true,
                         text: err.message,
