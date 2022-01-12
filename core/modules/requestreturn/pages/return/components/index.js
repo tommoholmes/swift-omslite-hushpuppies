@@ -125,78 +125,104 @@ const RequestReturnEditContent = (props) => {
                         <table className={classes.table}>
                             <tbody>
                                 <tr className={classes.tr}>
-                                    <th className={classes.th}>Image</th>
-                                    <th className={classes.th}>Name</th>
-                                    <th className={classes.th}>Price</th>
-                                    <th className={clsx(classes.th, classes.center)}>Actions</th>
+                                    <th className={classes.th} style={{ width: '5%' }}>{' '}</th>
+                                    <th className={classes.th} style={{ width: '10%' }}>Image</th>
+                                    <th className={classes.th} style={{ width: '30%' }}>Name</th>
+                                    <th className={classes.th} style={{ width: '15%' }}>Price</th>
+                                    <th className={clsx(classes.th)}>Actions</th>
                                 </tr>
                                 {requestreturn.map(({
-                                    entity_id, image_url, name, price, qty,
+                                    entity_id, image_url, name, price, qty, is_allowed, is_return_period_expired,
                                 }, eMap) => (
                                     <tr>
-                                        <td className={classes.td} style={{ width: '15%' }}>
-                                            <input
-                                                checked={checkedState[eMap]}
-                                                onChange={() => handleOnChange(eMap)}
-                                                type="checkbox"
-                                                name={entity_id}
-                                            />
+                                        <td className={classes.td} style={{ width: '5%', paddingTop: 20 }}>
+                                            {(is_allowed && is_return_period_expired)
+                                                ? (
+                                                    <input
+                                                        checked={checkedState[eMap]}
+                                                        onChange={() => handleOnChange(eMap)}
+                                                        type="checkbox"
+                                                        name={entity_id}
+                                                        style={{ cursor: 'pointer', width: 15, height: 15 }}
+                                                    />
+                                                ) : <div />}
+                                        </td>
+                                        <td className={classes.td} style={{ width: '10%', display: 'flex', alignItems: 'center' }}>
                                             <img src={`${image_url}`} />
                                         </td>
-                                        <td className={classes.td} style={{ width: '35%' }}>{name}</td>
+                                        <td className={classes.td} style={{ width: '30%' }}>{name}</td>
                                         <td className={classes.td} style={{ width: '15%' }}>{convertToRupiah(price)}</td>
-                                        <td className={clsx(classes.td)}>
-                                            {(checkedState[eMap])
-                                            && (
-                                                <>
-                                                    <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Quantity</strong></span>
-                                                    <br />
-                                                    <Select
-                                                        name={`items[${eMap}].qty`}
-                                                        value={formik.values.items[eMap]?.qty}
-                                                        onChange={formik.handleChange}
-                                                        dataOptions={tampQty(qty)}
-                                                        error={!!(formik.touched.items?.[eMap]?.qty
-                                                            && formik.errors.items?.[eMap]?.qty)}
-                                                        valueToMap="value"
-                                                        labelToMap="label"
-                                                    />
-                                                    <br />
-                                                    <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Package Condition</strong></span>
-                                                    <Select
-                                                        name={`items[${eMap}].package_condition`}
-                                                        value={formik.values.items[eMap]?.package_condition}
-                                                        onChange={formik.handleChange}
-                                                        dataOptions={Object.values(JSON.parse(dataPackageCondition.getStoreConfig))}
-                                                        error={!!(formik.touched.items?.[eMap]?.package_condition
-                                                            && formik.errors.items?.[eMap]?.package_condition)}
-                                                        valueToMap="code"
-                                                        labelToMap="title"
-                                                    />
-                                                    <br />
-                                                    <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Reason</strong></span>
-                                                    <Select
-                                                        name={`items[${eMap}].reason`}
-                                                        value={formik.values.items[eMap]?.reason}
-                                                        onChange={formik.handleChange}
-                                                        dataOptions={Object.values(JSON.parse(dataReason.getStoreConfig))}
-                                                        error={!!(formik.touched.items?.[eMap]?.reason
-                                                            && formik.errors.items?.[eMap]?.reason)}
-                                                        valueToMap="code"
-                                                        labelToMap="title"
-                                                    />
-                                                    <br />
-                                                    {' '}
-                                                    <br />
-                                                    <DropFile
-                                                        formatFile=".zip, .rar, .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx"
-                                                        error={formik.errors.binary && formik.touched.binary}
-                                                        getBase64={(files) => handleDropFile(files, eMap)}
-                                                    />
-                                                    <span className={classes.spanInfo}>The following file types are allowed: zip, rar, jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx</span>
-                                                </>
+                                        {is_allowed && is_return_period_expired
+                                            ? (
+                                                <td className={clsx(classes.td)}>
+                                                    {(checkedState[eMap])
+                                                        && (
+                                                            <>
+                                                                <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Quantity</strong></span>
+                                                                <br />
+                                                                <Select
+                                                                    name={`items[${eMap}].qty`}
+                                                                    value={formik.values.items[eMap]?.qty}
+                                                                    onChange={formik.handleChange}
+                                                                    dataOptions={tampQty(qty)}
+                                                                    error={!!(formik.touched.items?.[eMap]?.qty
+                                                                        && formik.errors.items?.[eMap]?.qty)}
+                                                                    valueToMap="value"
+                                                                    labelToMap="label"
+                                                                />
+                                                                <br />
+                                                                <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Package Condition</strong></span>
+                                                                <Select
+                                                                    name={`items[${eMap}].package_condition`}
+                                                                    value={formik.values.items[eMap]?.package_condition}
+                                                                    onChange={formik.handleChange}
+                                                                    dataOptions={Object.values(JSON.parse(dataPackageCondition.getStoreConfig))}
+                                                                    error={!!(formik.touched.items?.[eMap]?.package_condition
+                                                                        && formik.errors.items?.[eMap]?.package_condition)}
+                                                                    valueToMap="code"
+                                                                    labelToMap="title"
+                                                                />
+                                                                <br />
+                                                                <span className={clsx(classes.spanLabel, classes.labelRequired2)}><strong>Reason</strong></span>
+                                                                <Select
+                                                                    name={`items[${eMap}].reason`}
+                                                                    value={formik.values.items[eMap]?.reason}
+                                                                    onChange={formik.handleChange}
+                                                                    dataOptions={Object.values(JSON.parse(dataReason.getStoreConfig))}
+                                                                    error={!!(formik.touched.items?.[eMap]?.reason
+                                                                        && formik.errors.items?.[eMap]?.reason)}
+                                                                    valueToMap="code"
+                                                                    labelToMap="title"
+                                                                />
+                                                                <br />
+                                                                {' '}
+                                                                <br />
+                                                                <DropFile
+                                                                    formatFile=".zip, .rar, .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx"
+                                                                    error={formik.errors.binary && formik.touched.binary}
+                                                                    getBase64={(files) => handleDropFile(files, eMap)}
+                                                                />
+                                                                <span className={classes.spanInfo}>The following file types are allowed: zip, rar, jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx</span>
+                                                            </>
+                                                        )}
+                                                </td>
+                                            )
+                                            : (
+                                                <td className={clsx(classes.td)}>
+                                                    {!is_allowed
+                                                        ? (
+                                                            <span className={classes.spanInfo}>Rma request for this product is already created.</span>
+                                                        )
+                                                        : !is_return_period_expired
+                                                        && (
+                                                            <span className={classes.spanInfo}>
+                                                                The return for this product can not be processed
+                                                                <br />
+                                                                The return period expired.
+                                                            </span>
+                                                        )}
+                                                </td>
                                             )}
-                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

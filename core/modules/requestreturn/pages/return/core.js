@@ -211,7 +211,10 @@ const Core = (props) => {
     const tampId = searchShipmentToReturnRes.data?.searchShipmentToReturn[0].entity_id;
 
     const { loading, data } = gqlService.getShipmentItemToReturn({
-        shipment_id: tampId,
+        skip: !tampId,
+        variables: {
+            shipment_id: tampId,
+        },
     });
 
     if (loading) {
