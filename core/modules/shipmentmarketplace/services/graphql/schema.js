@@ -69,6 +69,7 @@ export const getStoreShipmentById = gql`
                 value
             }
             marketplace_order_status
+            marketplace_code
             allocation_status
             channel_order_date
             location{
@@ -243,13 +244,14 @@ export const getCourierOption = gql`
     }
 `;
 
-export const getShipmentCancelReason = gql`
-    query{
-        getShipmentCancelReason{
-            label
-            value
-        }
+export const getMarketplaceCancelReason = gql`
+query getMarketplaceCancelReason($code: String) {
+    getMarketplaceCancelReason(code: $code) {
+      label
+      value
     }
+  }
+  
 `;
 
 export const bulkShippedMarketplaceShipment = gql`
@@ -350,7 +352,7 @@ export default {
     exportStoreShipmentToCsv,
     saveShipmentNotes,
     getCourierOption,
-    getShipmentCancelReason,
+    getMarketplaceCancelReason,
     bulkShippedMarketplaceShipment,
     bulkConfirmedMarketplaceShipment,
     getExportStatusHistory,

@@ -57,7 +57,7 @@ export const getCourierOption = (variables) => useLazyQuery(Schema.getCourierOpt
     variables, ...context, ...fetchPolicy,
 });
 
-export const getShipmentCancelReason = (variables) => useLazyQuery(Schema.getShipmentCancelReason, {
+export const getMarketplaceCancelReason = (variables) => useLazyQuery(Schema.getMarketplaceCancelReason, {
     variables, ...context, ...fetchPolicy,
 });
 
@@ -104,7 +104,7 @@ export default {
     exportStoreShipmentToCsv,
     saveShipmentNotes,
     getCourierOption,
-    getShipmentCancelReason,
+    getMarketplaceCancelReason,
     bulkShippedMarketplaceShipment,
     bulkConfirmedMarketplaceShipment,
     getExportStatusHistory,

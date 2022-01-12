@@ -31,7 +31,9 @@ const ShipmentMarketplaceEditContent = (props) => {
     } = props;
     const classes = useStyles();
     const router = useRouter();
-    const [getShipmentCancelReason, getShipmentCancelReasonRes] = gqlService.getShipmentCancelReason();
+    const [getMarketplaceCancelReason, getMarketplaceCancelReasonRes] = gqlService.getMarketplaceCancelReason({
+        code: shipmentMarketplace.marketplaceCode,
+    });
     const [getCourierOption, getCourierOptionRes] = gqlService.getCourierOption();
     const iconFilter = (channel_code) => {
         if (channel_code) {
@@ -285,13 +287,13 @@ const ShipmentMarketplaceEditContent = (props) => {
                                                         mode="lazy"
                                                         value={formikCanceled.values.reason}
                                                         onChange={(e) => formikCanceled.setFieldValue('reason', e)}
-                                                        loading={getShipmentCancelReasonRes.loading}
+                                                        loading={getMarketplaceCancelReasonRes.loading}
                                                         options={
-                                                            getShipmentCancelReasonRes
-                                                                && getShipmentCancelReasonRes.data
-                                                                && getShipmentCancelReasonRes.data.getShipmentCancelReason
+                                                            getMarketplaceCancelReasonRes
+                                                                && getMarketplaceCancelReasonRes.data
+                                                                && getMarketplaceCancelReasonRes.data.getMarketplaceCancelReason
                                                         }
-                                                        getOptions={getShipmentCancelReason}
+                                                        getOptions={getMarketplaceCancelReason}
                                                         error={!!(formikCanceled.touched.reason && formikCanceled.errors.reason)}
                                                         helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
                                                         primaryKey="value"
