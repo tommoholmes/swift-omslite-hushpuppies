@@ -164,6 +164,14 @@ const ContentWrapper = (props) => {
         },
     });
 
+    React.useEffect(() => {
+        if (!(rma.status_code === 'pending_approval'
+            || rma.status_code === 'approved'
+            || rma.status_code === 'package_sent')) {
+            formik.setFieldValue('status_code', rma.status_code);
+        }
+    }, []);
+
     const contentProps = {
         formik,
         rmaDetail,
