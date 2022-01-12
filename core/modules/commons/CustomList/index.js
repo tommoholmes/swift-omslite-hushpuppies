@@ -291,8 +291,8 @@ const CustomList = (props) => {
             const i = accumulator.findIndex((checkedRow) => checkedRow[primaryKey] === currentValue[primaryKey]);
             if (checked && i < 0) {
                 accumulator.push(currentValue);
-                setCheckedRows([...accumulator, currentValue]);
-                handleChecked([...accumulator, currentValue]);
+                setCheckedRows(accumulator);
+                handleChecked(accumulator);
             } else if (!checked && i >= 0) {
                 setCheckedRows(accumulator.filter((checkedRow) => checkedRow[primaryKey] != currentValue[primaryKey]));
                 handleChecked(accumulator.filter((checkedRow) => checkedRow[primaryKey] != currentValue[primaryKey]));
