@@ -111,6 +111,7 @@ const CustomTable = (props) => {
         initialRowsPerPage = 10,
         count,
         actions,
+        allowAppendExistingActions = false,
         hideActions = false,
         hideFilters = false,
         hideColumns = false,
@@ -241,23 +242,22 @@ const CustomTable = (props) => {
     }, [desktop]);
 
     const renderTableToolbar = () => {
-        const toolbarActions = actions || [
-            {
-                title: deleteTitle,
-                label: deleteLabel,
-                message: checkedRows.length ? deleteMessage : deleteMessageAll,
-                confirmDialog: deleteEnableConfirm,
-                onClick: async (_checkedRows) => {
-                    const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
-                    await deleteRows({ variables });
-                    window.toastMessage({
-                        open: true,
-                        text: 'Delete success!',
-                        variant: 'success',
-                    });
-                },
+        const defaultActionDelete = {
+            title: deleteTitle,
+            label: deleteLabel,
+            message: checkedRows.length ? deleteMessage : deleteMessageAll,
+            confirmDialog: deleteEnableConfirm,
+            onClick: async (_checkedRows) => {
+                const variables = { [primaryKey]: _checkedRows.map((checkedRow) => checkedRow[primaryKey]) };
+                await deleteRows({ variables });
+                window.toastMessage({
+                    open: true,
+                    text: 'Delete success!',
+                    variant: 'success',
+                });
             },
-        ];
+        };
+        const toolbarActions = allowAppendExistingActions ? [defaultActionDelete, ...actions] : actions || [defaultActionDelete];
         return (
             <div className={classes.tableToolbar}>
                 <div className="top-buttons-wrapper">

@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import Table from '@common_table';
 import Link from 'next/link';
 import Header from '@modules/overridestock/pages/list/components/Header';
+import gqlService from '@modules/overridestock/services/graphql';
 
 const OverrideStockListContent = (props) => {
     const { data, loading, getVirtualStockQuantityList, multideleteVirtualStockQuantity, deleteAllVirtualStock } = props;
@@ -40,22 +41,20 @@ const OverrideStockListContent = (props) => {
         ),
     }));
 
-    const isDeleteAll = useRef(false);
-    const [isDeleteAllState, setIsDeleteAllState] = useState(false);
-
     const handleDelete = async (dataVar) => {
         if (dataVar?.variables?.id?.length === 0) {
-            isDeleteAll.current = true;
             await deleteAllVirtualStock();
             return;
         }
-        isDeleteAll.current = false;
         await multideleteVirtualStockQuantity({ ...dataVar });
     };
 
+    const [syncOverrideStockToMarketplace] = gqlService.syncOverrideStockToMarketplace();
+    const [syncToMpClicked, setSyncToMpClicked] = useState(true);
+
     return (
         <>
-            <Header />
+            <Header syncToMpClicked={syncToMpClicked} setSyncToMpClicked={setSyncToMpClicked} />
             <Table
                 deleteMessage="Are you sure want to delete all override stock?"
                 filters={filters}
@@ -67,6 +66,33 @@ const OverrideStockListContent = (props) => {
                 deleteRows={handleDelete}
                 showCheckbox
                 allowActionZeroSelected
+                allowAppendExistingActions
+                actions={[
+                    {
+                        title: 'Sync Stock To Marketplace',
+                        label: 'Sync Stock To Marketplace',
+                        message: 'Are you sure want to sync stock to marketplace?',
+                        confirmDialog: 'true',
+                        onClick: async (_checkedRows) => {
+                            const variables = { id: _checkedRows.map((checkedRow) => checkedRow?.id) };
+                            try {
+                                const res = await syncOverrideStockToMarketplace({ variables });
+                                window.toastMessage({
+                                    open: true,
+                                    text: res?.data?.syncOverrideStockToMarketplace ?? 'success sync override stock to marketplace',
+                                    variant: 'success',
+                                });
+                                setSyncToMpClicked(true);
+                            } catch (error) {
+                                window.toastMessage({
+                                    open: true,
+                                    text: error.message,
+                                    variant: 'error',
+                                });
+                            }
+                        },
+                    },
+                ]}
             />
         </>
     );
