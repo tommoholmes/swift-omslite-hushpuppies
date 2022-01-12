@@ -128,7 +128,7 @@ const ContentWrapper = (props) => {
     };
 
     const handleSubmitEdit = (values) => {
-        const mergedValues = [...values.order_items, ...values.deleted_items.map((item) => ({ ...item, qty: 0 }))];
+        const mergedValues = [...values.order_items, ...values.deleted_items.map((item) => ({ ...item }))];
         const fixValues = {
             order_id: values.order_id,
             order_items: mergedValues.map((item, idx) => ({
@@ -143,6 +143,7 @@ const ContentWrapper = (props) => {
                         : orderqueue.order_item[idx].loc_code === item?.loc_code?.loc_code
                         ? null
                         : item?.loc_code?.loc_code ?? null,
+                is_deleted: item?.is_deleted ?? false,
             })),
         };
 
