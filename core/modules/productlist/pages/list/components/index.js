@@ -5,6 +5,7 @@ import Table from '@common_table';
 import Link from 'next/link';
 import Header from '@modules/productlist/pages/list/components/Header';
 import gqlService from '@modules/productlist/services/graphql';
+import aclService from '@modules/theme/services/graphql';
 
 const ProductListContent = (props) => {
     const { data, loading, getProductList, handleFetchManual } = props;
@@ -41,6 +42,11 @@ const ProductListContent = (props) => {
 
     const [deleteProducts] = gqlService.deleteProducts();
 
+    const { loading: aclDeleteProductLoading, data: aclDeleteProductData } = aclService.isAccessAllowed({
+        acl_code: 'product_delete',
+    });
+
+    const isAllowDeleteProduct = (aclDeleteProductData && aclDeleteProductData.isAccessAllowed) || false;
     return (
         <>
             <Header handleFetchManual={handleFetchManual} />
@@ -53,6 +59,7 @@ const ProductListContent = (props) => {
                 columns={columns}
                 count={productTotal}
                 showCheckbox
+                hideActions={aclDeleteProductLoading ? true : !isAllowDeleteProduct}
             />
         </>
     );
