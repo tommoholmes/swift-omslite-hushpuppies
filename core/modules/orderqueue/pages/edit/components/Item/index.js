@@ -24,13 +24,15 @@ const Item = (props) => {
     useEffect(() => {
         const onChangeTimeOut = setTimeout(() => {
             const isExist = searchSource && sourceOptions.filter((elm) => elm?.loc_name?.toLowerCase().includes(searchSource?.toLowerCase()));
-            if (searchSource && isExist.length === 0) {
+            if (searchSource && isExist.length <= 3) {
                 getSourceList({
                     variables: {
-                        search: searchSource,
                         filter: {
                             sku: {
                                 eq: item.sku,
+                            },
+                            loc_name: {
+                                like: searchSource,
                             },
                         },
                         pageSize: 20,
@@ -46,28 +48,38 @@ const Item = (props) => {
     }, [searchSource]);
 
     const firstRender = useRef(true);
+    const actionRemoved = useRef(false);
 
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
             return;
         }
-        setSourceOptions([]);
-        getSourceList({
-            variables: {
-                filter: {
-                    sku: {
-                        eq: item.sku,
-                    },
+
+        if (actionRemoved.current) {
+            actionRemoved.current = false;
+            return;
+        }
+
+        if (item && item?.sku) {
+            setSourceOptions([]);
+            const filter = {
+                sku: {
+                    eq: item.sku,
                 },
-                pageSize: 20,
-                currentPage: 1,
-            },
-        });
-    }, [item]);
+            };
+            getSourceList({
+                variables: {
+                    filter,
+                    pageSize: 20,
+                    currentPage: 1,
+                },
+            });
+        }
+    }, [item?.sku]);
 
     return (
-        <tr key={idx}>
+        <tr>
             <td className={classes.td} style={{ paddingLeft: 0 }}>
                 {item.sku}
             </td>
@@ -83,20 +95,34 @@ const Item = (props) => {
             </td>
             <td className={classes.td} style={{ width: `${isModeEdit ? '300px' : 'auto'}` }}>
                 {!isModeEdit ? (
-                    <td className={classes.td}>{item.loc_code || '-'}</td>
+                    <>{item.loc_code || '-'}</>
                 ) : (
                     <Autocomplete
-                        mode={`${sourceOptions.length > 0 ? 'lazy' : 'lazy'}`}
+                        mode={`${sourceOptions.length > 0 ? 'default' : 'lazy'}`}
                         className={classes.autocompleteRoot}
                         name={`order_items.[${idx}].loc_code`}
                         value={(() => {
                             if (typeof item.loc_code === 'string') {
                                 const loc = listLocation?.find((e) => e.value === item.loc_code);
-                                return { loc_id: loc?.value, loc_name: loc?.label };
+                                const tempVal = {
+                                    loc_id: loc?.value,
+                                    loc_name: loc?.label,
+                                    loc_code: loc?.value,
+                                };
+                                if (sourceOptions.length > 0) {
+                                    const currentVal = sourceOptions.find((elm) => elm.loc_name === loc.label);
+                                    if (!currentVal) {
+                                        setSourceOptions([...sourceOptions, tempVal]);
+                                        return tempVal;
+                                    }
+                                    return currentVal;
+                                }
+                                return tempVal;
                             }
                             return item.loc_code;
                         })()}
                         onChange={(val) => {
+                            setFieldValue(`order_items.[${idx}].loc_code`, val);
                             if (val) {
                                 const loc = listLocation?.find((e) => e.label === val.loc_name);
                                 if (typeof item.loc_code === 'string' && item.loc_code === loc.value) {
@@ -145,8 +171,9 @@ const Item = (props) => {
                             type="button"
                             className={`link-button ${classes.btnClear}`}
                             onClick={() => {
+                                actionRemoved.current = true;
                                 const tempDeletedItems = [...values.deleted_items];
-                                tempDeletedItems.push(values.order_items[idx]);
+                                tempDeletedItems.push({ ...values.order_items[idx], is_deleted: true });
 
                                 setFieldValue('deleted_items', tempDeletedItems);
                                 remove(idx);

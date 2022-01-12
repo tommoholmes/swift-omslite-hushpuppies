@@ -27,8 +27,8 @@ import ConfirmDialog from '@common_confirmdialog';
 
 const OrderQueueEditContent = (props) => {
     const {
-        formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
-    } = props;
+ formikAllocation, formikNew, orderQueue, parent, aclCheckData, initialValueEditItem, handleSubmitEdit, handleCancel,
+} = props;
     const classes = useStyles();
     const router = useRouter();
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
@@ -153,8 +153,8 @@ const OrderQueueEditContent = (props) => {
                         <div style={{ textAlign: 'center', marginBottom: 10 }}>
                             <div className={classes.orderLabel}>
                                 Order status is
-                                {' '}
-                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+{' '}
+<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
                             <Button
                                 className={classes.btn}
@@ -183,8 +183,8 @@ const OrderQueueEditContent = (props) => {
                         <div style={{ textAlign: 'center', marginBottom: 10 }}>
                             <div>
                                 Order status is
-                                {' '}
-                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
+{' '}
+<span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{orderQueue.status}</span>
                             </div>
                             <Button
                                 className={classes.btn}
@@ -256,8 +256,8 @@ const OrderQueueEditContent = (props) => {
                         </div>
                         <Formik initialValues={initialValueEditItem}>
                             {({
-                                values, setFieldValue, setValues, touched, errors,
-                            }) => (
+ values, setFieldValue, setValues, touched, errors,
+}) => (
                                 <>
                                     <ModalFindProduct
                                         open={isModalOpen}
@@ -299,6 +299,7 @@ const OrderQueueEditContent = (props) => {
                                                         <>
                                                             {values.order_items.map((e, idx) => (
                                                                 <Item
+                                                                    key={e?.id}
                                                                     idx={idx}
                                                                     aclCheckData={aclCheckData}
                                                                     classes={classes}
@@ -366,42 +367,28 @@ const OrderQueueEditContent = (props) => {
                     <div className={classes.gridTotal}>
                         <div className="grid-child">
                             <h5 className={classes.titleSmallBlack}>Order Totals</h5>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Shipping Cost</td>
-                                    <td className={classes.td} style={{ textAlign: 'right' }}>
+                            <div>
+                                <div className={classes.orderTotalContainer}>
+                                    <div className={classes.orderTotalItem}>Shipping Cost</div>
+                                    <div className={classes.orderTotalItem} style={{ textAlign: 'right', paddingRight: '20px' }}>
                                         {formatPriceNumber(orderQueue.shippingCost)}
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr className={classes.tr}>
-                                    <td className={classes.td}>Grand Total</td>
-                                    <td className={classes.td} style={{ textAlign: 'right' }}>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div className={classes.orderTotalContainer}>
+                                    <div className={classes.orderTotalItem}>Grand Total</div>
+                                    <div className={classes.orderTotalItem} style={{ textAlign: 'right', paddingRight: '20px' }}>
                                         {formatPriceNumber(orderQueue.grandTotal)}
-                                    </td>
-                                </tr>
-                            </tbody>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="grid-child">
                             <h5 className={classes.titleSmallBlack}>Notes for This Order</h5>
                             <span className={classes.dataSmallBlack}>{orderQueue.notes || '-'}</span>
                         </div>
                     </div>
-                    {/* <div className={classes.gridTotal}>
-                        <div className="grid-child" />
-                        <div className="grid-child" />
-                        <div className="grid-child" style={{ textAlign: 'right' }}>
-                            <Button
-                                className={classes.btn}
-                                type="submit"
-                                variant="contained"
-                                buttonType="primary-rounded"
-                            >
-                                Edit Order
-                            </Button>
-                        </div>
-                    </div> */}
                 </div>
             </Paper>
             <ConfirmDialog

@@ -501,6 +501,14 @@ const useStyles = makeStyles((theme) => ({
         background: 'none',
         border: 'none',
     },
+    orderTotalContainer: {
+        display: 'flex',
+        padding: '3px 0px',
+    },
+    orderTotalItem: {
+        width: '50%',
+        padding: '5px 10px',
+    },
 }));
 
 export default useStyles;
