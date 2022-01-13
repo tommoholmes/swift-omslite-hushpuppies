@@ -25,8 +25,8 @@ export const searchShipmentToReturn = (options) => useLazyQuery(Schema.searchShi
     ...options, ...context, ...fetchPolicy,
 });
 
-export const getShipmentItemToReturn = (variables) => useQuery(Schema.getShipmentItemToReturn, {
-    variables, ...context, ...fetchPolicy,
+export const getShipmentItemToReturn = (options) => useQuery(Schema.getShipmentItemToReturn, {
+    ...options, ...context, ...fetchPolicy,
 });
 
 export const getStoreConfig = (variables) => useQuery(Schema.getStoreConfig, {

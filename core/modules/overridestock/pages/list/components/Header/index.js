@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import useStyles from '@modules/overridestock/pages/list/components/Header/style';
 import gqlService from '@modules/overridestock/services/graphql';
 
-const HeaderContent = () => {
+const HeaderContent = ({ syncToMpClicked, setSyncToMpClicked }) => {
     const [getActivity, getActivityRes] = gqlService.getActivity({
         variables: {
             code: 'sync_vs_qty_to_cnx',
@@ -15,8 +15,11 @@ const HeaderContent = () => {
     });
 
     useEffect(() => {
-        getActivity();
-    }, []);
+        if (syncToMpClicked) {
+            getActivity();
+            setSyncToMpClicked(false);
+        }
+    }, [syncToMpClicked]);
 
     const classes = useStyles();
     const router = useRouter();

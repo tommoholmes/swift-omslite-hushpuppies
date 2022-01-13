@@ -287,6 +287,27 @@ const HomeDeliveryListContent = (props) => {
                 await exportStoreShipmentToCsv({ variables });
             },
         },
+        {
+            label: 'Export With Items',
+            // message: 'Download Csv',
+            onClick: async (checkedRows) => {
+                const incrementIds = checkedRows.map((checkedRow) => String(checkedRow.increment_id));
+                window.backdropLoader(true);
+                await exportStoreShipmentToCsv({
+                    variables: {
+                        type: 'delivery',
+                        with_items: true,
+                        ...varExport,
+                        filter: {
+                            increment_id: {
+                                in: incrementIds,
+                            },
+                            ...varExport.filter,
+                        },
+                    },
+                });
+            },
+        },
     ];
 
     const onChangeTab = async (e, v) => {
