@@ -128,7 +128,7 @@ export const downloadSampleCsv = gql`
     }
 `;
 export const syncOverrideStockToMarketplace = gql`
-    mutation syncOverrideStockToMarketplace($id: [Int], $store_id: Int) {
+    mutation syncOverrideStockToMarketplace($id: [Int], $store_id: String) {
         syncOverrideStockToMarketplace(id: $id, store_id: $store_id)
     }
 `;
