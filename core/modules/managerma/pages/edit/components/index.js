@@ -134,10 +134,15 @@ const ManageRmaEditContent = (props) => {
                 }}
                 />
             </Button>
-            {isButtonVisible() && isButtonVisible().length
-                ? (
-                    <>
-                        {isButtonVisible().includes('cancel')
+            <h2 className={classes.titleTop}>
+                Manage Request #
+                {rmaDetail.incrementId}
+            </h2>
+            <div className={classes.btnContainer}>
+                {isButtonVisible() && isButtonVisible().length
+                    ? (
+                        <>
+                            {isButtonVisible().includes('cancel')
                             && (
                                 <Button
                                     className={clsx(classes.btn, 'reverse')}
@@ -149,7 +154,7 @@ const ManageRmaEditContent = (props) => {
                                     Cancel
                                 </Button>
                             )}
-                        {isButtonVisible().includes('save')
+                            {isButtonVisible().includes('save')
                             && (
                                 <Button
                                     className={classes.btn}
@@ -161,29 +166,26 @@ const ManageRmaEditContent = (props) => {
                                     Save
                                 </Button>
                             )}
-                    </>
-                )
-                : null}
-            {(rmaDetail.status === 'processing' && canRefund) && (
-                <Button
-                    className={classes.btn}
-                    onClick={() => handleRefund()}
-                >
-                    Refund
-                </Button>
-            )}
-            {(rmaDetail.status === 'package_received' && canCreateMemo) && (
-                <Button
-                    className={classes.btn}
-                    onClick={() => router.push(`/return/managerma/creatememos/${rmaDetail.id}`)}
-                >
-                    Credit Memo
-                </Button>
-            )}
-            <h2 className={classes.titleTop}>
-                Manage Request #
-                {rmaDetail.incrementId}
-            </h2>
+                        </>
+                    )
+                    : null}
+                {(rmaDetail.status === 'processing' && canRefund) && (
+                    <Button
+                        className={classes.btn}
+                        onClick={() => handleRefund()}
+                    >
+                        Refund
+                    </Button>
+                )}
+                {(rmaDetail.status === 'package_received' && canCreateMemo) && (
+                    <Button
+                        className={classes.btn}
+                        onClick={() => router.push(`/return/managerma/creatememos/${rmaDetail.id}`)}
+                    >
+                        Credit Memo
+                    </Button>
+                )}
+            </div>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.gridHeader}>

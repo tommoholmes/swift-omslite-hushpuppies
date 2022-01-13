@@ -65,6 +65,7 @@ export const getRmaById = gql`
             channel_order_increment_id
             return_type
             refund_type
+            replacement_order_type
             package_received_by_loc
             package_received_by_loc_name
             creditmemo

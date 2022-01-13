@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     },
     titleTop: {
         fontSize: 24,
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 20,
+        },
         color: colorPurple,
         fontFamily: font,
         display: 'inline-block',
@@ -66,6 +69,11 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 8,
         marginTop: 18,
     },
+    btnContainer: {
+        display: 'flex',
+        justifyContent: 'end',
+        marginBottom: 20,
+    },
     btn: {
         borderRadius: 20,
         boxShadow: 'none',
@@ -75,11 +83,9 @@ const useStyles = makeStyles((theme) => ({
         letterSpacing: 0,
         textTransform: 'capitalize',
         padding: '0 10px',
-        marginTop: 20,
-        float: 'right',
         [theme.breakpoints.down('xs')]: {
-            width: 50,
-            marginRight: 18,
+            width: 'fit-content',
+            marginRight: 10,
         },
         '&.reverse': {
             background: '#FFFFFF',
