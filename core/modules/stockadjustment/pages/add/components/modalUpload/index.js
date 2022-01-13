@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import clsx from 'clsx';
 import Button from '@common_button';
-import useStyles from '@modules/stockadjustment/pages/add/components/modalUpload/style';
+import useStyles from '@modules/stockadjustment/pages/edit/components/modalUpload/style';
 import gqlSource from '@modules/source/services/graphql';
 import gqlService from '@modules/stockadjustment/services/graphql';
 import DropFile from '@common_dropfile';
@@ -140,12 +140,10 @@ const ModalFindProduct = (props) => {
             const mapped = data
                 .map((item) => {
                     const sku = item?.sku ?? null;
-                    const stock = item?.qty_total ?? null;
                     const uploaded = uploadedCsv?.find((itemUploaded) => itemUploaded?.sku === sku);
-                    if (sku && stock && uploaded) {
+                    if (sku && uploaded) {
                         return {
                             sku,
-                            stock_available: stock,
                             stock_adjustment: Number(uploaded?.stock),
                             from_csv: true,
                         };
@@ -194,16 +192,23 @@ const ModalFindProduct = (props) => {
                 </div>
             </div>
             <DialogContent classes={{ root: clsx(classes.content) }}>
-                <div className={classes.formField}>
-                    <span className={classes.label}>
-                        <a href={urlDownload} className={classes.linkDownload}>
-                            Download the Sample CSV
-                        </a>
-                    </span>
+                <div className={classes.uploadContainer}>
+                    <div className={clsx(classes.formField, classes.linkDownloadContainer)}>
+                        <span className={classes.label}>
+                            <a href={urlDownload} className={classes.linkDownload}>
+                                Download the Sample CSV
+                            </a>
+                        </span>
+                    </div>
+                    <div className={clsx(classes.formField, classes.textLeft, classes.dropZone)}>
+                        <DropFile
+                            title="Please select the file : "
+                            error={formik.errors.binary && formik.touched.binary}
+                            getBase64={handleDropFile}
+                        />
+                    </div>
                 </div>
-                <div className={clsx(classes.formField, classes.textLeft)}>
-                    <DropFile title="Please select the file : " error={formik.errors.binary && formik.touched.binary} getBase64={handleDropFile} />
-                </div>
+
                 <div>
                     <Button className={classes.btn} onClick={formik.handleSubmit}>
                         Submit

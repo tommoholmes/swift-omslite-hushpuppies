@@ -171,8 +171,15 @@ const useStyles = makeStyles((theme) => ({
     linkDownload: {
         color: colorBlue,
         fontWeight: 700,
+        fontSize: '16px',
         '&:hover': {
             textDecorationLine: 'underline',
+        },
+    },
+    linkDownloadContainer: {
+        width: '25%',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
         },
     },
     textAttach: {
@@ -182,6 +189,23 @@ const useStyles = makeStyles((theme) => ({
     },
     inputCsv: {
         marginLeft: 5,
+    },
+    uploadContainer: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+            fontSize: '14px',
+        },
+    },
+    dropZone: {
+        display: 'flex',
+        width: '75%',
+        alignItems: 'center',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
     },
 }));
 

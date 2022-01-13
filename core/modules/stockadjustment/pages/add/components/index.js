@@ -200,7 +200,6 @@ const StockAdjustmentAdd = (props) => {
                                                         <thead className={classes.th}>
                                                             <tr className={classes.tr}>
                                                                 <td className={classes.td}>SKU Product</td>
-                                                                <td className={classes.td}>Qty Available</td>
                                                                 <td className={classes.td}>Qty Adjustment</td>
                                                                 <td className={classes.td}>Action</td>
                                                             </tr>
@@ -247,7 +246,6 @@ const StockAdjustmentAdd = (props) => {
                                                                             item.sku
                                                                         )}
                                                                     </td>
-                                                                    <td className={classes.td}>{item.stock_available}</td>
                                                                     <td className={classes.td}>
                                                                         <Field
                                                                             className={classes.fieldQty}
