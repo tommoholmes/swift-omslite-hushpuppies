@@ -196,6 +196,16 @@ export const getUniqueProductFromSource = gql`
     }
 `;
 
+export const getLocationBySourceAndChannel = gql`
+    query getLocationBySourceAndChannel($sku: String!, $channel_code: String!) {
+        getLocationBySourceAndChannel(sku: $sku, channel_code: $channel_code) {
+            loc_code
+            loc_id
+            loc_name
+        }
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -212,4 +222,5 @@ export default {
     cancelOrder,
     getLocationOptions,
     getUniqueProductFromSource,
+    getLocationBySourceAndChannel,
 };

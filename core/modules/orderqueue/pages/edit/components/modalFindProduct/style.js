@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     btn: {
+        width: '100%',
         borderRadius: 20,
         boxShadow: 'none',
         border: '1px solid',
@@ -98,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '7px 0px',
     },
     autocompleteRoot: {
-        width: '80%',
+        width: '100%',
         verticalAlign: 'middle',
         display: 'inline-flex',
         '&.popup': {
@@ -112,10 +113,7 @@ const useStyles = makeStyles((theme) => ({
             padding: '0 9px',
             borderRadius: 20,
         },
-        [theme.breakpoints.down('xs')]: {
-            width: '100%',
-            margin: '10px auto',
-        },
+        margin: '10px auto',
     },
     btnClear: {
         cursor: 'pointer',
@@ -123,6 +121,52 @@ const useStyles = makeStyles((theme) => ({
         background: 'none',
         border: 'none',
         font: titleFont,
+    },
+    fieldQty: {
+        '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            display: 'none',
+        },
+        '&[type=number]': {
+            '-moz-appearance': 'textfield',
+        },
+        verticalAlign: 'middle',
+        display: 'inline-flex',
+        width: '100%',
+        height: 36,
+        textAlign: 'center',
+        borderRadius: 20,
+        padding: '0px 5px',
+        border: '1px solid',
+        borderColor: colorText,
+        margin: '10px auto',
+    },
+    label: {
+        font: textFont,
+        fontSize: '16px',
+        fontWeight: 'bold',
+        padding: '0px 10px',
+    },
+    inputProductContainer: {
+        width: '80%',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingRight: '10px',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+            paddingRight: '0px',
+        },
+    },
+    inputQtyContainer: {
+        width: '20%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0px 10px',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+            padding: '0px 0px',
+            margin: '10px auto',
+        },
     },
 }));
 
