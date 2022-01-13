@@ -16,6 +16,7 @@ const PriceLocationListContent = (props) => {
         { field: 'price_id', headerName: 'ID', sortable: true, hideable: true },
         { field: 'loc_name', headerName: 'Location', sortable: true, hideable: true },
         { field: 'sku', headerName: 'SKU', sortable: true, hideable: true },
+        { field: 'price', headerName: 'Price', sortable: true, hideable: true },
         { field: 'special_price', headerName: 'Special Price', sortable: true, hideable: true },
         { field: 'special_from_date', headerName: 'Special Price From', sortable: true, hideable: true },
         { field: 'special_to_date', headerName: 'Special Price To', sortable: true, hideable: true },
@@ -24,6 +25,7 @@ const PriceLocationListContent = (props) => {
     const filters = [
         { field: 'loc_name', name: 'loc_name', type: 'like', label: 'Location', initialValue: '' },
         { field: 'sku', name: 'sku', type: 'like', label: 'SKU', initialValue: '' },
+        { field: 'price', name: 'price', type: 'like', label: 'Price', initialValue: '' },
         { field: 'special_price', name: 'special_price', type: 'like', label: 'Special Price', initialValue: '' },
         {
             field: 'special_from_date',
