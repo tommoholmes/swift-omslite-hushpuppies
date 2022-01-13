@@ -103,7 +103,7 @@ const ContentWrapper = (props) => {
             request: {
                 return_type: rma.return_type,
                 refund_type: rma.refund_type,
-                replacement_order_type: rma.replacement,
+                replacement_order_type: rma.replacement_order_type,
             },
             message: {
                 is_customer_notified: false,
@@ -136,7 +136,7 @@ const ContentWrapper = (props) => {
             const {
                 items, message, request, ...valueToSubmit
             } = values;
-            valueToSubmit.items = items.map((item) => ({
+            valueToSubmit.items = items?.map((item) => ({
                 item_id: item.item_id,
                 package_condition: item.package_condition,
                 reason: item.reason,
@@ -153,10 +153,12 @@ const ContentWrapper = (props) => {
             };
             if (request.return_type === 'refund') {
                 valueToSubmit.request = {
+                    ...valueToSubmit.request,
                     refund_type: request.refund_type,
                 };
             } else {
                 valueToSubmit.request = {
+                    ...valueToSubmit.request,
                     replacement_order_type: request.replacement_order_type,
                 };
             }
