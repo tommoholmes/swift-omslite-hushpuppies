@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 
 const Core = (props) => {
     const {
-        Content,
+        Content, storeLogo,
     } = props;
     const router = useRouter();
     const pageConfig = {
@@ -87,6 +87,7 @@ const Core = (props) => {
         getRegionRes,
         getCityKecByRegionCode,
         getCityKecByRegionCodeRes,
+        storeLogo,
     };
 
     return (

@@ -31,6 +31,7 @@ const Layout = (props) => {
         variant: '',
         text: '',
     });
+    const storeLogo = Cookies.getJSON('store_logo');
 
     const dataAcl = [];
     const varianAcl = () => {
@@ -815,6 +816,7 @@ const Layout = (props) => {
                         breadcrumbData={getBreadcrumbData()}
                         open={open}
                         setOpen={setOpen}
+                        storeLogo={storeLogo}
                     />
                 )}
                 {showSidebar() && (
@@ -830,6 +832,7 @@ const Layout = (props) => {
                             aclDetail={dataAcl}
                             storeConfigDetailWave={dataStoreConfigWave}
                             storeConfigDetailBatch={dataStoreConfigBatch}
+                            storeLogo={storeLogo}
                         >
                             {varianAcl()}
                             {varianStoreConfigWave()}

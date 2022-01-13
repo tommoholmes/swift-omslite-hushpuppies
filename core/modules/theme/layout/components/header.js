@@ -72,6 +72,7 @@ const Header = ({
     open,
     setOpen,
     notificationRes,
+    storeLogo,
 }) => {
     const classes = useStyles();
 
@@ -82,7 +83,7 @@ const Header = ({
         >
             <Toolbar>
                 <div className={clsx(classes.swiftOmsLogo, open ? 'open' : 'close')}>
-                    <img alt="" src="/assets/img/swiftoms_logo_collapsed.png" />
+                    <img alt="" src={(storeLogo && storeLogo.favicon) || '/assets/img/swiftoms_logo_collapsed.png'} />
                 </div>
                 <IconButton
                     color="inherit"

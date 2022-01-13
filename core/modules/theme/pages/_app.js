@@ -10,6 +10,8 @@ import { getLoginInfo, getLastPathWithoutLogin } from '@helper_auth';
 // import PageProgressLoader from '@common_loaders/PageProgress';
 import routeMiddleware from '@middleware_route';
 import LinearProgress from '@common_loaders/PageProgress';
+import requestGraphInternal from '@graphql_request_internal';
+import helperCookies from '@helper_cookies';
 
 /**
  * Uncomment codes below when firebase push notification configuration is enabled
@@ -49,9 +51,20 @@ class MyApp extends App {
         });
 
         // add get session from server
+        let storeLogo = allcookie.store_logo || {};
+        const getStoreLogo = await requestGraphInternal(`
+                {
+                    getStoreLogo{
+                        favicon
+                        logo
+                    }
+                }
+            `);
+        storeLogo = getStoreLogo && getStoreLogo.getStoreLogo && getStoreLogo.getStoreLogo;
+
         return {
             pageProps: {
-                ...pageProps, isLogin, lastPathNoAuth,
+                ...pageProps, isLogin, lastPathNoAuth, storeLogo,
             },
         };
     }
@@ -102,6 +115,12 @@ class MyApp extends App {
 
     render() {
         const { Component, pageProps } = this.props;
+        if (typeof document !== 'undefined') {
+            // will run in client's browser only
+            const favEl = document.getElementById('favicon');
+            favEl.href = pageProps.storeLogo?.favicon || '/assets/img/swiftoms_logo_collapsed.png';
+            helperCookies.set('store_logo', pageProps.storeLogo);
+        }
         return (
             <>
                 <LinearProgress />

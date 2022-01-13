@@ -127,6 +127,7 @@ const Sidebar = ({
     aclDetail,
     storeConfigDetailBatch,
     storeConfigDetailWave,
+    storeLogo,
 }) => {
     const router = useRouter();
     const classes = useStyles();
@@ -150,7 +151,11 @@ const Sidebar = ({
                 onClick={() => router.push('/')}
                 onKeyDown={() => router.push('/')}
             >
-                <img alt="" src={open ? '/assets/img/swiftoms_logo_expanded.png' : '/assets/img/swiftoms_logo_collapsed.png'} />
+                <img
+                    alt=""
+                    src={open ? storeLogo?.logo || '/assets/img/swiftoms_logo_expanded.png'
+                : storeLogo?.favicon || '/assets/img/swiftoms_logo_collapsed.png'}
+                />
             </div>
             <Hidden smUp>
                 <IconButton

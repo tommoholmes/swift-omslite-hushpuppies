@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
             <Html lang="en">
                 <HeadCustom>
                     {/* PWA primary color */}
-                    <link rel="shortcut icon" href="/assets/img/swiftoms_logo_collapsed.png" />
+                    <link id="favicon" rel="shortcut icon" href="/assets/img/swiftoms_logo_collapsed.png" />
                     <meta name="theme-color" content={theme.palette.primary.main} />
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="apple-touch-icon" href="/assets/img/swiftpwa_apple_touch.png" />

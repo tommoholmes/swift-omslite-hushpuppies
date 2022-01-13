@@ -21,6 +21,7 @@
             "@middleware_route": ["src/middlewares/route", "core/middlewares/route"],
 
             "@graphql_request": ["src/api/graphql/request", "core/api/graphql/request"],
+            "@graphql_request_internal": ["src/api/graphql/request/internal.js", "core/api/graphql/request/internal.js"],
 
             "@lib/*": ["src/lib/*", "core/lib/*"],
             "@lib_apollo": ["src/lib/apollo", "core/lib/apollo"],

@@ -14,7 +14,7 @@ import getConfig from 'next/config';
 
 const ForgotPassword = (props) => {
     const classes = useStyles();
-    const { formik } = props;
+    const { formik, storeLogo } = props;
     const handleCaptchaOnChange = (val) => {
         formik.setFieldValue('g_recaptcha_response', val);
     };
@@ -31,7 +31,7 @@ const ForgotPassword = (props) => {
             <div className={clsx(classes.loginContainer)}>
                 <div className={classes.containLeft}>
                     <div className={classes.headerLogin}>
-                        <img alt="" src="/assets/img/swiftoms_logo_expanded.png" />
+                        <img alt="" src={storeLogo?.logo || '/assets/img/swiftoms_logo_expanded.png'} style={{ maxHeight: 52 }} />
                     </div>
                     <div className={classes.loginContent}>
                         <Typography variant="h6" gutterBottom className={classes.textTitle}>

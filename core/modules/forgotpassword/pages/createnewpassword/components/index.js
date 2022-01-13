@@ -16,7 +16,7 @@ const colorVeryStrong = '#00C853';
 
 const CreateNewPassword = (props) => {
     const classes = useStyles();
-    const { formik } = props;
+    const { formik, storeLogo } = props;
     const [passwordError, setPasswordError] = useState('');
     const [passwordErrorStatus, setPasswordErrorStatus] = useState('');
 
@@ -62,7 +62,7 @@ const CreateNewPassword = (props) => {
         <div className={clsx(classes.loginContainer)}>
             <div className={classes.containLeft}>
                 <div className={classes.headerLogin}>
-                    <img alt="" src="/assets/img/swiftoms_logo_expanded.png" />
+                    <img alt="" src={storeLogo?.logo || '/assets/img/swiftoms_logo_expanded.png'} style={{ maxHeight: 52 }} />
                 </div>
                 <div className={classes.loginContent}>
                     <Typography variant="h6" gutterBottom className={classes.textTitle}>

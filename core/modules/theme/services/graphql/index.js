@@ -21,8 +21,13 @@ export const isAccessAllowed = (variables) => useQuery(Schema.isAccessAllowed, {
     variables, ...context, ...fetchPolicy,
 });
 
+export const getStoreLogo = (variables) => useQuery(Schema.getStoreLogo, {
+    variables, ...context, ...fetchPolicy,
+});
+
 export default {
     customerAccessControlList,
     getStoreConfig,
     isAccessAllowed,
+    getStoreLogo,
 };

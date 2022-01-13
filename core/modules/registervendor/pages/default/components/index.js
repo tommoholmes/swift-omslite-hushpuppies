@@ -18,7 +18,7 @@ const Login = (props) => {
     const classes = useStyles();
     const {
         formik, getCountries, getCountriesRes, getRegion, getRegionRes,
-        getCityKecByRegionCode, getCityKecByRegionCodeRes,
+        getCityKecByRegionCode, getCityKecByRegionCodeRes, storeLogo,
     } = props;
 
     const [passwordError, setPasswordError] = useState('');
@@ -72,7 +72,12 @@ const Login = (props) => {
         <div className={clsx(classes.loginContainer)}>
             <div className={classes.containLeft}>
                 <div className={classes.headerLogin}>
-                    <img alt="" src="/assets/img/swiftoms_logo_expanded.png" />
+                    <img
+                        className="imgIcon"
+                        alt=""
+                        src={storeLogo?.logo || '/assets/img/swiftoms_logo_expanded.png'}
+                        style={{ maxHeight: 52 }}
+                    />
                 </div>
                 <Typography variant="h6" gutterBottom className={classes.textTitle}>
                     Request New Vendor
