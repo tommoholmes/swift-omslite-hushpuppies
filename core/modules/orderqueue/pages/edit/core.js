@@ -133,7 +133,7 @@ const ContentWrapper = (props) => {
             order_id: values.order_id,
             order_items: mergedValues.map((item, idx) => ({
                 id: item?.id ?? null,
-                qty: item.qty,
+                qty: Number(item.qty),
                 replacement_for_sku: item.replacement_for?.sku ?? item.replacement_for,
                 item_id_replacement: item.item_id_replacement,
                 sku: item.name?.sku ?? item.sku,
