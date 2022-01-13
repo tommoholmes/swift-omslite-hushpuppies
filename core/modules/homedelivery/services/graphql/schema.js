@@ -154,8 +154,8 @@ export const deliveredShipment = gql`
 `;
 
 export const exportStoreShipmentToCsv = gql`
-    query exportStoreShipmentToCsv($type: String!, $filter: ShipmentFilterInput, $sort: ShipmentSortInput) {
-        exportStoreShipmentToCsv(type: $type, filter: $filter, sort: $sort)
+    query exportStoreShipmentToCsv($type: String!, $with_items: Boolean, $filter: ShipmentFilterInput, $sort: ShipmentSortInput) {
+        exportStoreShipmentToCsv(type: $type, with_items: $with_items, filter: $filter, sort: $sort)
     }
 `;
 
