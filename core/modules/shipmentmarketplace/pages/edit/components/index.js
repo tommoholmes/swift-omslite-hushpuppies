@@ -31,9 +31,7 @@ const ShipmentMarketplaceEditContent = (props) => {
     } = props;
     const classes = useStyles();
     const router = useRouter();
-    const [getMarketplaceCancelReason, getMarketplaceCancelReasonRes] = gqlService.getMarketplaceCancelReason({
-        code: shipmentMarketplace.marketplaceCode,
-    });
+    const [getMarketplaceCancelReason, getMarketplaceCancelReasonRes] = gqlService.getMarketplaceCancelReason();
     const [getCourierOption, getCourierOptionRes] = gqlService.getCourierOption();
     const iconFilter = (channel_code) => {
         if (channel_code) {
@@ -298,6 +296,11 @@ const ShipmentMarketplaceEditContent = (props) => {
                                                         helperText={(formikCanceled.touched.reason && formikCanceled.errors.reason) || ''}
                                                         primaryKey="value"
                                                         labelKey="label"
+                                                        getOptionsVariables={{
+                                                            variables: {
+                                                                code: shipmentMarketplace.marketplaceCode,
+                                                            },
+                                                        }}
                                                     />
                                                     <div className={classes.formFieldButton}>
                                                         <Button
