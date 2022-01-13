@@ -149,7 +149,7 @@ const ContentWrapper = (props) => {
         }),
         onSubmit: (values) => {
             const { items, ...valueToSubmit } = values;
-            valueToSubmit.items = items.filter((x, i) => checkedState[i]);
+            valueToSubmit.items = items.filter((x, i) => Number(x?.qty) > 0 && checkedState[i]);
             handleSubmit(valueToSubmit);
         },
     });

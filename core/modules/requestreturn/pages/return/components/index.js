@@ -125,7 +125,7 @@ const RequestReturnEditContent = (props) => {
                         <table className={classes.table}>
                             <tbody>
                                 <tr className={classes.tr}>
-                                    <th className={classes.th} style={{ width: '5%' }}>{' '}</th>
+                                    <th className={classes.th} style={{ width: '3%' }}>{' '}</th>
                                     <th className={classes.th} style={{ width: '10%' }}>Image</th>
                                     <th className={classes.th} style={{ width: '30%' }}>Name</th>
                                     <th className={classes.th} style={{ width: '15%' }}>Price</th>
@@ -135,7 +135,7 @@ const RequestReturnEditContent = (props) => {
                                     entity_id, image_url, name, price, qty, is_allowed, is_return_period_expired,
                                 }, eMap) => (
                                     <tr>
-                                        <td className={classes.td} style={{ width: '5%', paddingTop: 20 }}>
+                                        <td className={classes.td} style={{ width: '3%', paddingTop: 20, textAlignLast: 'center' }}>
                                             {(is_allowed && is_return_period_expired)
                                                 ? (
                                                     <input
@@ -147,7 +147,7 @@ const RequestReturnEditContent = (props) => {
                                                     />
                                                 ) : <div />}
                                         </td>
-                                        <td className={classes.td} style={{ width: '10%', display: 'flex', alignItems: 'center' }}>
+                                        <td className={classes.td} style={{ width: '10%' }}>
                                             <img src={`${image_url}`} />
                                         </td>
                                         <td className={classes.td} style={{ width: '30%' }}>{name}</td>
