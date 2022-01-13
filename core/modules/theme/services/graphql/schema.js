@@ -28,6 +28,15 @@ export const isAccessAllowed = gql`
     }
 `;
 
+export const getStoreLogo = gql`
+query{
+    getStoreLogo{
+      favicon
+      logo
+    }
+  }
+`;
+
 export default {
     customerAccessControlList,
     getStoreConfig,

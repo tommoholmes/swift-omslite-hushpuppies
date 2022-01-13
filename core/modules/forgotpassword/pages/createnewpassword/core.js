@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { useEffect } from 'react';
 
 const Core = (props) => {
-    const { Content } = props;
+    const { Content, storeLogo } = props;
     const router = useRouter();
     const { token, email } = router.query;
     const [setNewPassword] = gqlService.setNewPassword();
@@ -86,6 +86,7 @@ const Core = (props) => {
 
     const contentProps = {
         formik,
+        storeLogo,
     };
 
     const pageConfig = {

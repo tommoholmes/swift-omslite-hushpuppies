@@ -5,7 +5,7 @@ import gqlService from '@modules/printoms/services/graphql';
 import ErrorRedirect from '@common_errorredirect';
 
 const ContentWrapper = (props) => {
-    const { data, Content } = props;
+    const { data, Content, storeLogo } = props;
     const invoicelist = data.getInvoice;
 
     const invoiceList = {
@@ -15,6 +15,7 @@ const ContentWrapper = (props) => {
 
     const contentProps = {
         invoiceList,
+        storeLogo,
     };
 
     return <Content {...contentProps} />;

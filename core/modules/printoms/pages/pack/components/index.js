@@ -7,7 +7,7 @@ import useStyles from '@modules/printoms/pages/pack/components/style';
 
 const PrintPickContent = (props) => {
     const {
-        packList,
+        packList, storeLogo,
     } = props;
     const classes = useStyles();
     // const [show, setShow] = useState('non-hide');
@@ -43,7 +43,12 @@ const PrintPickContent = (props) => {
                     {packList.dataPack.map((eParent) => (
                         <Paper className={classes.container}>
                             <div className={classes.content}>
-                                <img className="imgIcon" alt="" src="/assets/img/swiftoms_logo_expanded.png" />
+                                <img
+                                    className="imgIcon"
+                                    alt=""
+                                    src={storeLogo?.logo || '/assets/img/swiftoms_logo_expanded.png'}
+                                    style={{ maxHeight: 52 }}
+                                />
                                 <h2 className={classes.titleTop}>{packList.title}</h2>
                             </div>
                             <div className={clsx(classes.content, classes.wrapperColumn)}>

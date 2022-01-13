@@ -11,7 +11,7 @@ import { useState } from 'react';
 const URL_SET_NEW_PASSWORD = '/forgotpassword/createnewpassword';
 
 const Core = (props) => {
-    const { Content } = props;
+    const { Content, storeLogo } = props;
     const router = useRouter();
     const [requestResetPassword] = gqlService.requestResetPassword();
 
@@ -87,6 +87,7 @@ const Core = (props) => {
 
     const contentProps = {
         formik,
+        storeLogo,
     };
 
     const pageConfig = {

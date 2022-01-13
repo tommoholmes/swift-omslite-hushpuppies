@@ -7,7 +7,7 @@ import Layout from '@layout';
 
 const Core = (props) => {
     const {
-        Content,
+        Content, storeLogo,
     } = props;
     const router = useRouter();
     const pageConfig = {
@@ -51,6 +51,7 @@ const Core = (props) => {
         handleSubmit,
         loadingConfig,
         dataConfig: dataConfig && dataConfig.getStoreConfig && dataConfig.getStoreConfig === '1',
+        storeLogo,
     };
 
     return (
