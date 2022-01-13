@@ -14,7 +14,7 @@ const StockAdjustmentList = (props) => {
             headerName: 'ID',
             hideable: 'true',
             sortable: true,
-            initialSort: 'ASC',
+            initialSort: 'DESC',
         },
         {
             field: 'loc_name',
