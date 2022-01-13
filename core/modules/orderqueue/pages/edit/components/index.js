@@ -11,7 +11,7 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
@@ -22,7 +22,6 @@ import { formatPriceNumber } from '@helper_currency';
 import { Formik, FieldArray } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
 import Item from '@modules/orderqueue/pages/edit/components/Item';
-import gqlLocation from '@modules/orderqueue/services/graphql';
 import ConfirmDialog from '@common_confirmdialog';
 
 const OrderQueueEditContent = (props) => {
@@ -89,11 +88,15 @@ const OrderQueueEditContent = (props) => {
         setIsModalOpen(true);
     };
 
-    const [getLocationOptions, { data: dataLoc }] = gqlLocation.getLocationOptions();
+    const defaultConfirmDialog = {
+        title: 'Cancel Order',
+        message: 'Are you sure want to cancel this order?',
+        onConfirm: async () => {
+            await handleCancel();
+        },
+    };
 
-    useEffect(() => {
-        getLocationOptions();
-    }, []);
+    const [confirmDialogState, setConfirmDialogState] = useState(defaultConfirmDialog);
 
     return (
         <>
@@ -299,6 +302,7 @@ const OrderQueueEditContent = (props) => {
                                                         <>
                                                             {values.order_items.map((e, idx) => (
                                                                 <Item
+                                                                    channelCode={orderQueue.channelCode}
                                                                     key={e?.id}
                                                                     idx={idx}
                                                                     aclCheckData={aclCheckData}
@@ -311,7 +315,6 @@ const OrderQueueEditContent = (props) => {
                                                                     errors={errors}
                                                                     touched={touched}
                                                                     handleOpenModal={handleOpenModal}
-                                                                    listLocation={dataLoc && dataLoc?.getLocationOptions}
                                                                 />
                                                             ))}
                                                         </>
@@ -335,7 +338,22 @@ const OrderQueueEditContent = (props) => {
                                                     <Button
                                                         style={{ height: '30px' }}
                                                         className={classes.btn}
-                                                        onClick={() => (isModeEdit ? handleSubmitEdit(values) : setIsModeEdit(true))}
+                                                        onClick={() => {
+                                                            if (isModeEdit) {
+                                                                setConfirmDialogState({
+                                                                    title: 'Confirmation',
+                                                                    message:
+                                                                        'There will be no salable stock checking for edited items. Are you sure you want to edit the order item?',
+                                                                    onConfirm: async () => {
+                                                                        await handleSubmitEdit(values);
+                                                                    },
+                                                                });
+                                                                setOpenConfirmDialog(true);
+                                                                return;
+                                                            }
+                                                            setConfirmDialogState(defaultConfirmDialog);
+                                                            setIsModeEdit(true);
+                                                        }}
                                                     >
                                                         {isModeEdit ? 'Save' : 'Edit Order'}
                                                     </Button>
@@ -346,6 +364,7 @@ const OrderQueueEditContent = (props) => {
                                                             type="button"
                                                             className={`link-button ${classes.btnClear}`}
                                                             onClick={() => {
+                                                                setConfirmDialogState(defaultConfirmDialog);
                                                                 setFieldValue('deleted_items', []);
                                                                 setValues(initialValueEditItem);
                                                                 setIsModeEdit(false);
@@ -393,13 +412,17 @@ const OrderQueueEditContent = (props) => {
             </Paper>
             <ConfirmDialog
                 open={openConfirmDialog}
-                onCancel={() => setOpenConfirmDialog(false)}
-                onConfirm={async () => {
-                    await handleCancel();
+                onCancel={() => {
                     setOpenConfirmDialog(false);
+                    setTimeout(() => setConfirmDialogState(defaultConfirmDialog), 200);
                 }}
-                title="Cancel Order"
-                message="Are you sure want to cancel this order?"
+                onConfirm={async () => {
+                    await confirmDialogState.onConfirm();
+                    setOpenConfirmDialog(false);
+                    setTimeout(() => setConfirmDialogState(defaultConfirmDialog), 200);
+                }}
+                title={confirmDialogState.title}
+                message={confirmDialogState.message}
             />
         </>
     );
