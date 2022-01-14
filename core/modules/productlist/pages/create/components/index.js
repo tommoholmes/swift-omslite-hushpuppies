@@ -156,9 +156,9 @@ const AttributeComponents = ({
                 name={attribute_code}
                 className={classes.fieldRoot}
                 variant="outlined"
-                type="date"
-                value={formik.values[attribute_code]}
-                onChange={formik.handleChange}
+                type="datetime-local"
+                value={formik.values[attribute_code]?.split(' ')?.join('T')}
+                onChange={(e) => formik.setFieldValue(attribute_code, e.target.value?.split('T')?.join(' '))}
                 InputProps={{
                     className: clsx(classes.fieldInput),
                 }}
