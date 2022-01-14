@@ -166,14 +166,10 @@ const Core = (props) => {
     });
 
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
-        acl_code: 'oms_lite_credit_memos',
-    });
-
-    const { loading: aclCheckLoadingCreate, data: aclCheckDataCreate } = aclService.isAccessAllowed({
         acl_code: 'rma_create_creditmemo',
     });
 
-    if (loading || aclCheckLoading || aclCheckLoadingCreate || loadingAdjFee) {
+    if (loading || aclCheckLoading || loadingAdjFee) {
         return (
             <Layout pageConfig={pageConfig}>
                 <div
@@ -197,8 +193,7 @@ const Core = (props) => {
         return <ErrorRedirect errMsg={errMsg} redirect={redirect} pageConfig={pageConfig} />;
     }
 
-    if ((aclCheckData && aclCheckData.isAccessAllowed) === false
-        || (aclCheckDataCreate && aclCheckDataCreate.isAccessAllowed) === false) {
+    if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
         router.push('/');
     }
 

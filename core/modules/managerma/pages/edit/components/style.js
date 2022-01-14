@@ -26,6 +26,13 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    topContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        [theme.breakpoints.down('md')]: {
+            display: 'block',
+        },
+    },
     btnBack: {
         display: 'inline-block',
         borderRadius: '10px 0px 0px 10px',
@@ -35,12 +42,24 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 6,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 18,
+            height: 24,
+            width: 30,
         },
+    },
+    chevron: {
+        fontSize: 30,
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 20,
+        },
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
     },
     titleTop: {
         fontSize: 24,
         [theme.breakpoints.down('xs')]: {
-            fontSize: 20,
+            fontSize: '1rem',
         },
         color: colorPurple,
         fontFamily: font,
@@ -73,6 +92,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'end',
         marginBottom: 20,
+        alignItems: 'center',
     },
     btn: {
         borderRadius: 20,

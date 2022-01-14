@@ -119,30 +119,26 @@ const ManageRmaEditContent = (props) => {
 
     return (
         <>
-            <Button
-                className={classes.btnBack}
-                onClick={() => router.push('/return/managerma')}
-                variant="contained"
-                style={{ marginRight: 16 }}
-            >
-                <ChevronLeftIcon style={{
-                    fontSize: 30,
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
-                />
-            </Button>
-            <h2 className={classes.titleTop}>
-                Manage Request #
-                {rmaDetail.incrementId}
-            </h2>
-            <div className={classes.btnContainer}>
-                {isButtonVisible() && isButtonVisible().length
-                    ? (
-                        <>
-                            {isButtonVisible().includes('cancel')
+            <div className={classes.topContainer}>
+                <div>
+                    <Button
+                        className={classes.btnBack}
+                        onClick={() => router.push('/return/managerma')}
+                        variant="contained"
+                        style={{ marginRight: 16 }}
+                    >
+                        <ChevronLeftIcon className={classes.chevron} />
+                    </Button>
+                    <h2 className={classes.titleTop}>
+                        Manage Request #
+                        {rmaDetail.incrementId}
+                    </h2>
+                </div>
+                <div className={classes.btnContainer}>
+                    {isButtonVisible() && isButtonVisible().length
+                        ? (
+                            <>
+                                {isButtonVisible().includes('cancel')
                             && (
                                 <Button
                                     className={clsx(classes.btn, 'reverse')}
@@ -154,7 +150,7 @@ const ManageRmaEditContent = (props) => {
                                     Cancel
                                 </Button>
                             )}
-                            {isButtonVisible().includes('save')
+                                {isButtonVisible().includes('save')
                             && (
                                 <Button
                                     className={classes.btn}
@@ -166,25 +162,26 @@ const ManageRmaEditContent = (props) => {
                                     Save
                                 </Button>
                             )}
-                        </>
-                    )
-                    : null}
-                {(rmaDetail.status === 'processing' && canRefund) && (
-                    <Button
-                        className={classes.btn}
-                        onClick={() => handleRefund()}
-                    >
-                        Refund
-                    </Button>
-                )}
-                {(rmaDetail.status === 'package_received' && canCreateMemo) && (
-                    <Button
-                        className={classes.btn}
-                        onClick={() => router.push(`/return/managerma/creatememos/${rmaDetail.id}`)}
-                    >
-                        Credit Memo
-                    </Button>
-                )}
+                            </>
+                        )
+                        : null}
+                    {(rmaDetail.status === 'processing' && canRefund) && (
+                        <Button
+                            className={classes.btn}
+                            onClick={() => handleRefund()}
+                        >
+                            Refund
+                        </Button>
+                    )}
+                    {(rmaDetail.status === 'package_received' && canCreateMemo) && (
+                        <Button
+                            className={classes.btn}
+                            onClick={() => router.push(`/return/managerma/creatememos/${rmaDetail.id}`)}
+                        >
+                            Credit Memo
+                        </Button>
+                    )}
+                </div>
             </div>
             <Paper className={classes.container}>
                 <div className={classes.content}>
