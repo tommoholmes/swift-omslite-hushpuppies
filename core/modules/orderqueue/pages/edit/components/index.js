@@ -441,11 +441,13 @@ const OrderQueueEditContent = (props) => {
                                 <tbody>
                                     {historyOrderItemList.map((e) => (
                                         <tr key={e?.id}>
-                                            <td className={classes.td} style={{ paddingLeft: 0, padding: '10px 0px' }}>
+                                            <td className={classes.td} style={{ paddingLeft: 0, padding: '10px 0px', verticalAlign: 'top' }}>
                                                 {e?.created_at}
                                             </td>
-                                            <td className={classes.td}>{e?.created_by_name}</td>
-                                            <td className={classes.td}>
+                                            <td className={classes.td} style={{ verticalAlign: 'top', padding: '10px 0px' }}>
+                                                {e?.created_by_name}
+                                            </td>
+                                            <td className={classes.td} style={{ verticalAlign: 'top', padding: '10px 0px' }}>
                                                 <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                                                     {e?.comment?.map((elm, i) => (
                                                         <li key={i}>{elm}</li>
