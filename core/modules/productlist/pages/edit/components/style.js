@@ -198,8 +198,11 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
     img: {
-        width: 200,
-        height: 'fit-content',
+        maxWidth: 200,
+        maxHeight: 200,
+        width: 'auto',
+        height: 'auto',
+        display: 'block',
         cursor: 'pointer',
     },
     trashIcon: {
