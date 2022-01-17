@@ -206,6 +206,18 @@ export const getLocationBySourceAndChannel = gql`
     }
 `;
 
+export const getHistoryOrderItemList = gql`
+    query getHistoryOrderItemList($oms_order_id: Int!) {
+        getHistoryOrderItemList(oms_order_id: $oms_order_id) {
+            comment
+            created_at
+            created_by_name
+            id
+            oms_order_id
+        }
+    }
+`;
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -223,4 +235,5 @@ export default {
     getLocationOptions,
     getUniqueProductFromSource,
     getLocationBySourceAndChannel,
+    getHistoryOrderItemList,
 };

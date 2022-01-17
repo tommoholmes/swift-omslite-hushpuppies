@@ -103,6 +103,12 @@ export const getLocationBySourceAndChannel = (variables) => useLazyQuery(Schema.
     ...fetchPolicy,
 });
 
+export const getHistoryOrderItemList = (variables) => useLazyQuery(Schema.getHistoryOrderItemList, {
+    variables,
+    ...context,
+    ...fetchPolicy,
+});
+
 export default {
     getOrderQueueList,
     getOrderQueueById,
@@ -121,4 +127,5 @@ export default {
     getLocationOptions,
     getUniqueProductFromSource,
     getLocationBySourceAndChannel,
+    getHistoryOrderItemList,
 };

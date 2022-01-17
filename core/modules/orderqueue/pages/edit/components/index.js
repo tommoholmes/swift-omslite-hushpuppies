@@ -11,7 +11,7 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@common_button';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
@@ -23,6 +23,7 @@ import { Formik, FieldArray } from 'formik';
 import ModalFindProduct from '@modules/orderqueue/pages/edit/components/modalFindProduct';
 import Item from '@modules/orderqueue/pages/edit/components/Item';
 import ConfirmDialog from '@common_confirmdialog';
+import gqlService from '@modules/orderqueue/services/graphql';
 
 const OrderQueueEditContent = (props) => {
     const {
@@ -97,6 +98,18 @@ const OrderQueueEditContent = (props) => {
     };
 
     const [confirmDialogState, setConfirmDialogState] = useState(defaultConfirmDialog);
+
+    const [getHistoryOrderItemList, getHistoryOrderItemListRes] = gqlService.getHistoryOrderItemList();
+
+    useEffect(() => {
+        getHistoryOrderItemList({
+            variables: {
+                oms_order_id: orderQueue.id,
+            },
+        });
+    }, []);
+
+    const historyOrderItemList = getHistoryOrderItemListRes?.data?.getHistoryOrderItemList ?? [];
 
     return (
         <>
@@ -409,7 +422,45 @@ const OrderQueueEditContent = (props) => {
                         </div>
                     </div>
                 </div>
+                {historyOrderItemList?.length > 0 && (
+                    <div className={classes.content} style={{ marginBottom: '20px' }}>
+                        <div>
+                            <h5 className={classes.titleSmall}>Edit History</h5>
+                        </div>
+                        <div style={{ overflowX: 'auto', overflowY: 'hidden' }}>
+                            <table className={classes.table}>
+                                <thead>
+                                    <tr className={classes.tr}>
+                                        <th className={classes.th} style={{ paddingLeft: 0 }}>
+                                            Date
+                                        </th>
+                                        <th className={classes.th}>User</th>
+                                        <th className={classes.th}>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {historyOrderItemList.map((e) => (
+                                        <tr key={e?.id}>
+                                            <td className={classes.td} style={{ paddingLeft: 0, padding: '10px 0px' }}>
+                                                {e?.created_at}
+                                            </td>
+                                            <td className={classes.td}>{e?.created_by_name}</td>
+                                            <td className={classes.td}>
+                                                <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                                                    {e?.comment?.map((elm, i) => (
+                                                        <li key={i}>{elm}</li>
+                                                    ))}
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
             </Paper>
+
             <ConfirmDialog
                 open={openConfirmDialog}
                 onCancel={() => {
