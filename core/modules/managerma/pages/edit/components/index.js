@@ -34,7 +34,7 @@ const ManageRmaEditContent = (props) => {
     const isButtonVisible = () => {
         let buttonToShow = [];
         const loginLocation = JSON.parse(Cookies.get('cdt'))?.customer_loc_code?.split(',');
-        const isReciever = loginLocation.includes(rmaDetail.package);
+        const isReciever = loginLocation?.length && loginLocation?.includes(rmaDetail.package);
         switch (rmaDetail.status) {
         case 'pending_approval':
             buttonToShow = ['save', 'cancel'];
