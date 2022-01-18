@@ -136,7 +136,7 @@ const RequestReturnEditContent = (props) => {
                                 {requestreturn?.map(({
                                     entity_id, image_url, name, price, qty, is_allowed, is_return_period_expired,
                                 }, eMap) => (
-                                    <tr>
+                                    <tr key={entity_id}>
                                         <td className={classes.td} style={{ width: '3%', paddingTop: 20, textAlignLast: 'center' }}>
                                             {is_allowed && is_return_period_expired ? (
                                                 <input

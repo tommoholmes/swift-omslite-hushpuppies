@@ -223,7 +223,7 @@ const Core = (props) => {
         );
     }
 
-    if (!data || !tampId) {
+    if ((tampId && !data) || searchShipmentToReturnRes?.error) {
         const errMsg = searchShipmentToReturnRes?.error?.message ?? error?.message ?? 'Data not found!';
         return from ? <ErrorRedirect errMsg={errMsg} redirect={from} /> : <ErrorRedirect errMsg={errMsg} />;
     }

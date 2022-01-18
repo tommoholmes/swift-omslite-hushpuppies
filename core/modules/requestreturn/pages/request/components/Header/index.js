@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     const classes = useStyles();
     const router = useRouter();
 
-    const { email, order_number, channel_code } = router.query;
+    const { email, order_number, channel_code, from } = router.query;
 
     return (
         <div className={classes.headerContainer}>
@@ -28,7 +28,11 @@ const HeaderContent = (props) => {
             <h2 className={classes.title}>Request Return</h2>
             <Button
                 className={classes.buttonAdd}
-                onClick={() => router.push(`/requestreturn/return/return?email=${email}&order_number=${order_number}&channel_code=${channel_code}`)}
+                onClick={() => router.push(
+                        `/requestreturn/return/return?email=${email}&order_number=${order_number}&channel_code=${channel_code}${
+                            from ? `&from=${from}` : ''
+                        }`,
+                )}
             >
                 Request Return
             </Button>
