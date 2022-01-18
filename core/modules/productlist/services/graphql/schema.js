@@ -8,8 +8,9 @@ const productList = `
         product_price
         product_special_price
         product_status {
-        label
+            label
         }
+        approval_status
     }
     total_count
     page_info {
