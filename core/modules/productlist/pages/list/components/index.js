@@ -19,6 +19,7 @@ const ProductListContent = (props) => {
         { field: 'product_price', headerName: 'Price', hideable: true },
         { field: 'product_special_price', headerName: 'Special Price', hideable: true },
         { field: 'productStatus', headerName: 'Status', hideable: true },
+        { field: 'approval_status', headerName: 'Approval Status', hideable: true, hidden: true },
         { field: 'actions', headerName: 'Action' },
     ];
 
@@ -33,6 +34,7 @@ const ProductListContent = (props) => {
         ...product,
         id: product.entity_id,
         productStatus: product.product_status.label,
+        approval_status: product.approval_status === '1' ? 'Approved' : 'Pending',
         actions: () => (
             <Link href={`/product/productlist/edit/${product.entity_id}`}>
                 <a className="link-button">view</a>
