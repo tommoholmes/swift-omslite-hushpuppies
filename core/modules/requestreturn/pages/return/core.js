@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import gqlService from '@modules/requestreturn/services/graphql';
+import ErrorRedirect from '@common_errorredirect';
 
 const Loading = dynamic(() => import('@common_loaders/Backdrop'), { ssr: false });
 const Message = dynamic(() => import('@common_toast'), { ssr: false });
@@ -34,21 +35,13 @@ const ContentWrapper = (props) => {
         }
     }, []);
 
-    const requestreturn = data.getShipmentItemToReturn;
+    const requestreturn = data?.getShipmentItemToReturn;
     const [saveRequestReturnSubmit] = gqlService.saveRequestReturnSubmit();
 
-    const [checkedState, setCheckedState] = useState(
-        new Array(requestreturn.length).fill(false),
-    );
+    const [checkedState, setCheckedState] = useState(new Array(requestreturn?.length).fill(false));
 
     const handleSubmit = ({
-        channel_order_increment_id,
-        channel_code,
-        customer_email,
-        return_type,
-        replacement_order_type,
-        message,
-        items,
+        channel_order_increment_id, channel_code, customer_email, return_type, replacement_order_type, message, items,
     }) => {
         const input = {
             channel_order_increment_id,
@@ -56,19 +49,17 @@ const ContentWrapper = (props) => {
             customer_email,
             return_type,
             message,
-            items: items.map((e) => (
-                {
-                    shipment_id: e.shipment_id,
-                    shipment_item_id: e.shipment_item_id,
-                    qty: Number(e.qty),
-                    package_condition: e.package_condition,
-                    reason: e.reason,
-                    attachment: {
-                        binary_data: e.attachment.binary_data || '',
-                        filename: e.attachment.filename || '',
-                    },
-                }
-            )),
+            items: items.map((e) => ({
+                shipment_id: e.shipment_id,
+                shipment_item_id: e.shipment_item_id,
+                qty: Number(e.qty),
+                package_condition: e.package_condition,
+                reason: e.reason,
+                attachment: {
+                    binary_data: e.attachment.binary_data || '',
+                    filename: e.attachment.filename || '',
+                },
+            })),
         };
         if (return_type === 'replacement') {
             input.replacement_order_type = replacement_order_type;
@@ -76,22 +67,24 @@ const ContentWrapper = (props) => {
         window.backdropLoader(true);
         saveRequestReturnSubmit({
             variables: { input },
-        }).then(() => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: 'Success Return Order!',
-                variant: 'success',
+        })
+            .then(() => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: 'Success Return Order!',
+                    variant: 'success',
+                });
+                setTimeout(() => router.push(router.asPath.replace('return/return?', 'request/request?')), 250);
+            })
+            .catch((e) => {
+                window.backdropLoader(false);
+                window.toastMessage({
+                    open: true,
+                    text: e.message,
+                    variant: 'error',
+                });
             });
-            setTimeout(() => router.push(router.asPath.replace('return/return?', 'request/request?')), 250);
-        }).catch((e) => {
-            window.backdropLoader(false);
-            window.toastMessage({
-                open: true,
-                text: e.message,
-                variant: 'error',
-            });
-        });
     };
 
     const formik = useFormik({
@@ -102,20 +95,18 @@ const ContentWrapper = (props) => {
             return_type: '',
             replacement_order_type: '',
             message: '',
-            items: requestreturn.map((e) => (
-                {
-                    checked: false,
-                    shipment_id: e.shipment_id,
-                    shipment_item_id: e.entity_id,
-                    qty: e.qty,
-                    package_condition: '',
-                    reason: '',
-                    attachment: {
-                        binary_data: e.binary,
-                        filename: e.filename,
-                    },
-                }
-            )),
+            items: requestreturn?.map((e) => ({
+                checked: false,
+                shipment_id: e.shipment_id,
+                shipment_item_id: e.entity_id,
+                qty: e.qty,
+                package_condition: '',
+                reason: '',
+                attachment: {
+                    binary_data: e.binary,
+                    filename: e.filename,
+                },
+            })),
         },
         validationSchema: Yup.object().shape({
             return_type: Yup.string().required('Required!'),
@@ -123,29 +114,31 @@ const ContentWrapper = (props) => {
                 is: 'replacement',
                 then: Yup.string().required('Required!'),
             }),
-            items: Yup.array().of(
-                Yup.object().shape({
-                    checked: Yup.boolean().required('required!'),
-                    qty: Yup.string().when('checked', {
-                        is: true,
-                        then: Yup.string().required('required!'),
-                        otherwise: Yup.string(),
+            items: Yup.array()
+                .of(
+                    Yup.object().shape({
+                        checked: Yup.boolean().required('required!'),
+                        qty: Yup.string().when('checked', {
+                            is: true,
+                            then: Yup.string().required('required!'),
+                            otherwise: Yup.string(),
+                        }),
+                        package_condition: Yup.string().when('checked', {
+                            is: true,
+                            then: Yup.string().required('required!'),
+                            otherwise: Yup.string(),
+                        }),
+                        reason: Yup.string().when('checked', {
+                            is: true,
+                            then: Yup.string().required('required!'),
+                            otherwise: Yup.string(),
+                        }),
                     }),
-                    package_condition: Yup.string().when('checked', {
-                        is: true,
-                        then: Yup.string().required('required!'),
-                        otherwise: Yup.string(),
-                    }),
-                    reason: Yup.string().when('checked', {
-                        is: true,
-                        then: Yup.string().required('required!'),
-                        otherwise: Yup.string(),
-                    }),
+                )
+                .test({
+                    message: 'Please choose at least 1 item!',
+                    test: (arr) => !!arr?.filter((item) => item?.checked === true).length,
                 }),
-            ).test({
-                message: 'Please choose at least 1 item!',
-                test: (arr) => !!(arr?.filter((item) => item?.checked === true).length),
-            }),
         }),
         onSubmit: (values) => {
             const { items, ...valueToSubmit } = values;
@@ -185,19 +178,16 @@ const ContentWrapper = (props) => {
         <>
             <Loading open={backdropLoader} />
             <Content {...contentProps} />
-            <Message
-                open={toastMessage.open}
-                variant={toastMessage.variant}
-                setOpen={handleCloseMessage}
-                message={toastMessage.text}
-            />
+            <Message open={toastMessage.open} variant={toastMessage.variant} setOpen={handleCloseMessage} message={toastMessage.text} />
         </>
     );
 };
 
 const Core = (props) => {
     const router = useRouter();
-    const { email, order_number, channel_code } = router.query;
+    const {
+        email, order_number, channel_code, from,
+    } = router.query;
     const [searchShipmentToReturn, searchShipmentToReturnRes] = gqlService.searchShipmentToReturn();
     React.useEffect(() => {
         searchShipmentToReturn({
@@ -208,26 +198,37 @@ const Core = (props) => {
             },
         });
     }, []);
-    const tampId = searchShipmentToReturnRes.data?.searchShipmentToReturn[0].entity_id;
+    const tampId = searchShipmentToReturnRes.data?.searchShipmentToReturn?.[0].entity_id;
 
-    const { loading, data } = gqlService.getShipmentItemToReturn({
+    const { loading, data, error } = gqlService.getShipmentItemToReturn({
         skip: !tampId,
         variables: {
             shipment_id: tampId,
         },
     });
 
-    if (loading) {
-        return <span>Loading...</span>;
+    if (loading || searchShipmentToReturnRes?.loading) {
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    color: '#435179',
+                    fontWeight: 600,
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
+            >
+                Loading...
+            </div>
+        );
     }
 
-    if (!data) {
-        return <span>Data not found!</span>;
+    if ((tampId && !data) || searchShipmentToReturnRes?.error) {
+        const errMsg = searchShipmentToReturnRes?.error?.message ?? error?.message ?? 'Data not found!';
+        return from ? <ErrorRedirect errMsg={errMsg} redirect={from} /> : <ErrorRedirect errMsg={errMsg} />;
     }
 
-    return (
-        <ContentWrapper data={data} {...props} />
-    );
+    return <ContentWrapper data={data} {...props} />;
 };
 
 export default Core;
