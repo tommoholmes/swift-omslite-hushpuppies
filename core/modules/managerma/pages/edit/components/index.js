@@ -30,10 +30,11 @@ const ManageRmaEditContent = (props) => {
         { value: 'pickup', label: 'Pickup in Store' },
         { value: 'delivery', label: 'Home Delivery' },
     ];
+
     const isButtonVisible = () => {
         let buttonToShow = [];
-        const loginLocation = JSON.parse(Cookies.get('cdt'))?.customer_loc_code;
-        const isReciever = loginLocation === rmaDetail.package;
+        const loginLocation = JSON.parse(Cookies.get('cdt'))?.customer_loc_code?.split(',');
+        const isReciever = loginLocation?.length && loginLocation?.includes(rmaDetail.package);
         switch (rmaDetail.status) {
         case 'pending_approval':
             buttonToShow = ['save', 'cancel'];
