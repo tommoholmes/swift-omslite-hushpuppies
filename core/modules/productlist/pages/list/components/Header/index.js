@@ -13,25 +13,14 @@ const HeaderContent = (props) => {
     return (
         <div className={classes.headerContainer}>
             <h2 className={classes.title}>Product List</h2>
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/product/productlist/create')}
-            >
+            <Button className={classes.buttonAdd} onClick={() => router.push('/product/productlist/create')}>
                 Create
             </Button>
-            <Button
-                className={classes.buttonAdd}
-                onClick={() => router.push('/product/productlist/import')}
-                style={{ marginRight: 10 }}
-            >
+            <Button className={classes.buttonAdd} onClick={() => router.push('/product/productlist/import')} style={{ marginRight: 10 }}>
                 Upload
             </Button>
-            <Button
-                className={classes.buttonAdd}
-                onClick={handleFetchManual}
-                style={{ marginRight: 10 }}
-            >
-                Pull From Marketplace
+            <Button className={classes.buttonAdd} onClick={handleFetchManual} style={{ marginRight: 10 }}>
+                Product Fetch
             </Button>
         </div>
     );
