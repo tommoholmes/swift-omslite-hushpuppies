@@ -81,7 +81,6 @@ const useStyles = makeStyles((theme) => ({
     },
     autocompleteRoot: {
         width: 'calc(100% - 300px)',
-        verticalAlign: 'middle',
         display: 'inline-flex',
         '& .MuiOutlinedInput-root': {
             borderColor: colorText,
@@ -89,6 +88,11 @@ const useStyles = makeStyles((theme) => ({
             border: '1px solid',
             minHeight: 36,
             padding: '0 9px',
+        },
+        '& .MuiFormHelperText-root': {
+            fontStyle: 'italic',
+            letterSpacing: 0,
+            marginTop: 0,
         },
         [theme.breakpoints.down('xs')]: {
             width: 'calc(100% - 115px)',

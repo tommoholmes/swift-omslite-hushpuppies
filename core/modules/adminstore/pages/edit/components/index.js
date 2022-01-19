@@ -142,7 +142,7 @@ const AdminStoreEditContent = (props) => {
                     </div>
                     <div className={classes.formField}>
                         <div className={classes.divLabel}>
-                            <span className={classes.label}>Company</span>
+                            <span className={classes.label}>Company (vendor only)</span>
                         </div>
                         <Autocomplete
                             className={classes.autocompleteRoot}
@@ -153,6 +153,7 @@ const AdminStoreEditContent = (props) => {
                             labelKey="label"
                             options={dataCompany}
                             fullWidth
+                            helperText="user can only view Products, Sources, Locations and Shipments belonging to the selected company."
                         />
                     </div>
                 </div>
