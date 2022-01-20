@@ -304,11 +304,6 @@ const OrderQueueEditContent = (props) => {
                                                     {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
                                                         <th className={classes.th}>Replacement For</th>
                                                     )}
-                                                    {orderQueue.isAllowReallocate && isModeEdit && (
-                                                        <th className={classes.th} style={{ textAlign: 'center' }}>
-                                                            Action
-                                                        </th>
-                                                    )}
                                                 </tr>
                                                 <FieldArray name="order_items">
                                                     {({ remove }) => (

@@ -3,7 +3,7 @@ import LocationAutoComplete from '@modules/orderqueue/pages/edit/components/loca
 
 const Item = (props) => {
     const {
-        idx, aclCheckData, classes, setFieldValue, remove, isModeEdit, item, values, errors, touched, handleOpenModal, channelCode,
+        idx, aclCheckData, classes, setFieldValue, isModeEdit, item, errors, touched, channelCode,
     } = props;
 
     return (
@@ -38,32 +38,6 @@ const Item = (props) => {
             </td>
             <td className={classes.td}>{item.pickup_name || '-'}</td>
             {(aclCheckData && aclCheckData.isAccessAllowed) === true && <td className={classes.td}>{item.replacement_for || '-'}</td>}
-            {isModeEdit && (
-                <td className={classes.td} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
-                    <div style={{ margin: 'auto 5px', display: 'flex' }}>
-                        <img src="/assets/img/replace.svg" alt="replace" />
-                        <button type="button" className={`link-button ${classes.btnClear}`} onClick={() => handleOpenModal(idx)}>
-                            replace
-                        </button>
-                    </div>
-                    <div style={{ margin: 'auto 5px', display: 'flex' }}>
-                        <img src="/assets/img/trash.svg" alt="delete" />
-                        <button
-                            type="button"
-                            className={`link-button ${classes.btnClear}`}
-                            onClick={() => {
-                                const tempDeletedItems = [...values.deleted_items];
-                                tempDeletedItems.push({ ...values.order_items[idx], is_deleted: true });
-
-                                setFieldValue('deleted_items', tempDeletedItems);
-                                remove(idx);
-                            }}
-                        >
-                            delete
-                        </button>
-                    </div>
-                </td>
-            )}
         </tr>
     );
 };

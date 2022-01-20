@@ -57,12 +57,16 @@ const Core = (props) => {
         },
     });
 
+    const pageConfig = {
+        title: 'Create Payout',
+    };
+
     const { loading: aclCheckLoading, data: aclCheckData } = aclService.isAccessAllowed({
         acl_code: 'vendor_manage_iris',
     });
 
     if (aclCheckLoading) {
-        return <Layout>Loading...</Layout>;
+        return <Layout pageConfig={pageConfig}>Loading...</Layout>;
     }
 
     if ((aclCheckData && aclCheckData.isAccessAllowed) === false) {
@@ -74,7 +78,7 @@ const Core = (props) => {
     };
 
     return (
-        <Layout>
+        <Layout pageConfig={pageConfig}>
             <Content {...contentProps} />
         </Layout>
     );

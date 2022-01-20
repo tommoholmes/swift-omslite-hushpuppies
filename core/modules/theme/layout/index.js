@@ -254,20 +254,14 @@ const Layout = (props) => {
         },
         {
             aclCode: 'header_product',
-            key: 'product',
-            label: 'Product',
+            key: 'catalog',
+            label: 'Catalog',
             children: [
                 {
                     aclCode: 'oms_lite_product_list',
                     key: 'productlist',
                     label: 'Products',
                     url: '/product/productlist',
-                },
-                {
-                    aclCode: 'oms_netsuite_productassembly_list',
-                    key: 'productassembly',
-                    label: 'Product Assembly',
-                    url: '/product/productassembly',
                 },
                 {
                     aclCode: 'oms_lite_product_bin',
@@ -301,16 +295,16 @@ const Layout = (props) => {
                     url: '/cataloginventory/overridestock',
                 },
                 {
-                    aclCode: 'oms_lite_stock_transfer',
-                    key: 'stocktransfer',
-                    label: 'Stock Transfer',
-                    url: '/cataloginventory/stocktransfer',
-                },
-                {
                     aclCode: 'stock_summary',
                     key: 'stocksummary',
                     label: 'Stock Summary',
                     url: '/cataloginventory/stocksummary',
+                },
+                {
+                    aclCode: 'oms_lite_stock_transfer',
+                    key: 'stocktransfer',
+                    label: 'Stock Transfer',
+                    url: '/cataloginventory/stocktransfer',
                 },
                 {
                     aclCode: 'inventory_adjustment_dashboard',
@@ -329,12 +323,6 @@ const Layout = (props) => {
                     key: 'toolshistory',
                     label: 'Update Stock History',
                     url: '/tools/history',
-                },
-                {
-                    aclCode: 'oms_lite_stock_history',
-                    key: 'updatestockbyfilehistory',
-                    label: 'Update Stock by File History',
-                    url: '/cataloginventory/updatestockbyfilehistory',
                 },
             ],
         },
@@ -384,19 +372,6 @@ const Layout = (props) => {
                     key: 'prioritylocation',
                     label: 'Priority Location',
                     url: '/oms/prioritylocation',
-                },
-            ],
-        },
-        {
-            aclCode: 'header_marketing',
-            key: 'marketing',
-            label: 'Marketing',
-            children: [
-                {
-                    aclCode: 'promotion',
-                    key: 'promotion',
-                    label: 'Promotion',
-                    url: '/marketing/promotion',
                 },
             ],
         },
@@ -493,7 +468,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'vendor_manage_iris',
                     key: 'vendoririspayout',
-                    label: 'Disbursement',
+                    label: 'Iris Payout',
                     url: '/vendorportal/vendoririspayout',
                 },
                 {
@@ -618,12 +593,6 @@ const Layout = (props) => {
                     key: 'marketplacefeature',
                     label: 'Marketplace Feature',
                     url: '/configurations/marketplacefeature',
-                },
-                {
-                    aclCode: 'oms_lite_manage_courier',
-                    key: 'netsuitecourier',
-                    label: 'Netsuite Courier',
-                    url: '/configurations/netsuitecourier',
                 },
                 {
                     aclCode: 'configuration_region_mapping',

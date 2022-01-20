@@ -10,7 +10,7 @@ const HeaderContent = (props) => {
     const router = useRouter();
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Iris History</h2>
+            <h2 className={classes.title}>Iris Payout History</h2>
             <Button
                 className={classes.buttonAdd}
                 onClick={() => router.push('/vendorportal/vendoririspayout/create')}

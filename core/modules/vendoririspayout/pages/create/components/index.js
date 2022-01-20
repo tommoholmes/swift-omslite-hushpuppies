@@ -38,7 +38,7 @@ const CompanyCreateContent = (props) => {
                     }}
                 />
             </Button>
-            <h2 className={classes.titleTop}>Create Iris Payout</h2>
+            <h2 className={classes.titleTop}>Create Payout</h2>
             <Paper className={classes.container}>
                 <div className={classes.content}>
                     <div className={classes.formField}>
