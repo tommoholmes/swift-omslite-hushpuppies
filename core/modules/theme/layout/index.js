@@ -254,8 +254,8 @@ const Layout = (props) => {
         },
         {
             aclCode: 'header_product',
-            key: 'product',
-            label: 'Product',
+            key: 'catalog',
+            label: 'Catalog',
             children: [
                 {
                     aclCode: 'oms_lite_product_list',
@@ -301,16 +301,16 @@ const Layout = (props) => {
                     url: '/cataloginventory/overridestock',
                 },
                 {
-                    aclCode: 'oms_lite_stock_transfer',
-                    key: 'stocktransfer',
-                    label: 'Stock Transfer',
-                    url: '/cataloginventory/stocktransfer',
-                },
-                {
                     aclCode: 'stock_summary',
                     key: 'stocksummary',
                     label: 'Stock Summary',
                     url: '/cataloginventory/stocksummary',
+                },
+                {
+                    aclCode: 'oms_lite_stock_transfer',
+                    key: 'stocktransfer',
+                    label: 'Stock Transfer',
+                    url: '/cataloginventory/stocktransfer',
                 },
                 {
                     aclCode: 'inventory_adjustment_dashboard',
@@ -493,7 +493,7 @@ const Layout = (props) => {
                 {
                     aclCode: 'vendor_manage_iris',
                     key: 'vendoririspayout',
-                    label: 'Disbursement',
+                    label: 'Iris Payout',
                     url: '/vendorportal/vendoririspayout',
                 },
                 {
