@@ -123,8 +123,8 @@ export const getChannelList = gql`
 `;
 
 export const getLocationList = gql`
-    query getLocationList($pageSize: Int!, $currentPage: Int!) {
-        getLocationList(pageSize: $pageSize, currentPage: $currentPage) {
+    query{
+        getLocationList(pageSize: null) {
             items {
                 loc_id
                 loc_code
