@@ -3,7 +3,7 @@ import LocationAutoComplete from '@modules/orderqueue/pages/edit/components/loca
 
 const Item = (props) => {
     const {
-        idx, aclCheckData, classes, setFieldValue, isModeEdit, item, errors, touched, channelCode,
+        idx, classes, setFieldValue, isModeEdit, item, errors, touched, channelCode,
     } = props;
 
     return (
@@ -37,7 +37,6 @@ const Item = (props) => {
                 )}
             </td>
             <td className={classes.td}>{item.pickup_name || '-'}</td>
-            {(aclCheckData && aclCheckData.isAccessAllowed) === true && <td className={classes.td}>{item.replacement_for || '-'}</td>}
         </tr>
     );
 };

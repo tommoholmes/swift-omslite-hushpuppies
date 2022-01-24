@@ -301,9 +301,6 @@ const OrderQueueEditContent = (props) => {
                                                     </th>
                                                     <th className={classes.th}>Location Code</th>
                                                     <th className={classes.th}>Pickup At</th>
-                                                    {(aclCheckData && aclCheckData.isAccessAllowed) === true && (
-                                                        <th className={classes.th}>Replacement For</th>
-                                                    )}
                                                 </tr>
                                                 <FieldArray name="order_items">
                                                     {({ remove }) => (
