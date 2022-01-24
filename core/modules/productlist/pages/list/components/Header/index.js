@@ -12,7 +12,7 @@ const HeaderContent = (props) => {
 
     return (
         <div className={classes.headerContainer}>
-            <h2 className={classes.title}>Product List</h2>
+            <h2 className={classes.title}>Product</h2>
             <Button className={classes.buttonAdd} onClick={() => router.push('/product/productlist/create')}>
                 Create
             </Button>
