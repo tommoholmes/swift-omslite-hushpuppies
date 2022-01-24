@@ -20,7 +20,7 @@ const HeaderContent = (props) => {
                 Upload
             </Button>
             <Button className={classes.buttonAdd} onClick={handleFetchManual} style={{ marginRight: 10 }}>
-                Product Fetch
+                Fetch from Marketplace
             </Button>
         </div>
     );
