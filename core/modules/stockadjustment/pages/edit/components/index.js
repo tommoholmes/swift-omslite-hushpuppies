@@ -280,7 +280,18 @@ Edit Stock Adjustment #
                                                                         className={`${classes.td} ${classes.btnRemove} ${
                                                                             !isDisabled && 'link-button'
                                                                         } `}
-                                                                        onClick={() => !isDisabled && remove(idx)}
+                                                                        onClick={() => {
+                                                                            if (values?.deleted_items) {
+                                                                                setFieldValue('deleted_items', [
+                                                                                    ...values?.deleted_items,
+                                                                                    values?.items?.[idx],
+                                                                                ]);
+                                                                            } else {
+                                                                                setFieldValue('deleted_items', [values?.items?.[idx]]);
+                                                                            }
+
+                                                                            return !isDisabled && remove(idx);
+                                                                        }}
                                                                         disabled={isDisabled}
                                                                     >
                                                                         remove

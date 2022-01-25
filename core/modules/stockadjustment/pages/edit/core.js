@@ -37,11 +37,13 @@ const ContentWrapper = (props) => {
             if (temp?.from_csv) {
                 delete temp.from_csv;
             }
-            return { ...temp, sku: typeof temp.sku === 'object' ? temp.sku.sku : temp.sku };
+            const deleted = values?.deleted_items?.find((delItem) => delItem?.sku && delItem.sku === val.sku && delItem.entity_id);
+            return { ...temp, sku: typeof temp.sku === 'object' ? temp.sku.sku : temp.sku, entity_id: deleted?.entity_id ?? temp?.entity_id ?? null };
         });
         delete fixValues.status;
         fixValues.items = [...items];
         delete fixValues.increment_id;
+        delete fixValues.deleted_items;
 
         try {
             await addStockAdjustment({
