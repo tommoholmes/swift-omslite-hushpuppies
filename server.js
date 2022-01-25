@@ -147,12 +147,13 @@ async function renderAndCache(req, res) {
         const serverGraph = new ApolloServer({
             schema: schemas,
             context: ({ req }) => req,
-            playground: {
-                endpoint: '/graphql',
-                settings: {
-                    'editor.theme': 'light',
-                },
-            },
+            // playground: {
+            //     endpoint: '/graphql',
+            //     settings: {
+            //         'editor.theme': 'light',
+            //     },
+            // },
+            playground: false,
             formatError: (err) => {
                 if (err.message === 'graphql-authorization') {
                     return {
